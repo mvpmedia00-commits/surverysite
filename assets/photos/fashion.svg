@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Fashion concept scene">
+  <defs>
+    <linearGradient id="bg2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#3c1f16"/>
+      <stop offset="100%" stop-color="#7c4e37"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg2)"/>
+  <path d="M0 640C220 560 410 690 600 640s360-180 600-100v260H0z" fill="#f0ddc8" opacity="0.35"/>
+  <rect x="200" y="120" width="800" height="540" rx="30" fill="#fff7ef" opacity="0.16"/>
+  <ellipse cx="600" cy="598" rx="180" ry="62" fill="#2b150f" opacity="0.7"/>
+  <path d="M600 220c52 0 95 43 95 95s-43 95-95 95-95-43-95-95 43-95 95-95z" fill="#e2b18c"/>
+  <path d="M690 320c-18-66-74-114-139-114-46 0-85 20-111 54 30-9 61-14 95-14 61 0 113 20 155 74z" fill="#111"/>
+  <rect x="560" y="400" width="80" height="90" rx="36" fill="#e2b18c"/>
+  <path d="M470 650l52-164h156l52 164H470z" fill="#d84b36"/>
+  <path d="M452 650h296l-18 42H470z" fill="#f6d175"/>
+  <text x="100" y="736" fill="#ffffff" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="40" font-weight="600">Fashion Studio Concept</text>
+</svg>

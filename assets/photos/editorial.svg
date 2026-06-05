@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Editorial style portrait">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#13222f"/>
+      <stop offset="100%" stop-color="#33596f"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f5c9a8"/>
+      <stop offset="100%" stop-color="#d89a73"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="920" cy="120" r="90" fill="#f3f0e8" opacity="0.25"/>
+  <rect x="110" y="130" width="980" height="540" rx="36" fill="#f7efe5" opacity="0.14"/>
+  <ellipse cx="600" cy="600" rx="280" ry="140" fill="#0d1822" opacity="0.6"/>
+  <circle cx="610" cy="370" r="118" fill="url(#skin)"/>
+  <path d="M480 360c22-98 111-170 220-145 74 16 131 91 121 163-58-24-115-37-171-37-58 0-114 14-170 38z" fill="#1b1b1b"/>
+  <rect x="532" y="476" width="160" height="132" rx="64" fill="url(#skin)"/>
+  <path d="M430 680c28-118 124-176 181-176 63 0 153 58 181 176H430z" fill="#d6b28b"/>
+  <text x="100" y="736" fill="#ffffff" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="40" font-weight="600">Editorial Portrait Study</text>
+</svg>

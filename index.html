@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Photography Model Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3efe8;
+      --panel: #fffdf9;
+      --text: #1e1b16;
+      --muted: #5f574d;
+      --accent: #0e6b62;
+      --line: #d8cfc2;
+      --ok: #136f40;
+      --error: #9e1b1b;
+      --shadow: 0 16px 34px rgba(25, 22, 16, 0.12);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 85% 10%, rgba(14, 107, 98, 0.14), transparent 32%),
+        linear-gradient(180deg, #f8f3ea 0%, var(--bg) 64%, #ece6dc 100%);
+    }
+
+    .page {
+      width: min(920px, 94vw);
+      margin: 24px auto 36px;
+      animation: riseIn 420ms ease-out;
+    }
+
+    .hidden { display: none; }
+
+    .lang-gate {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .lang-card {
+      width: min(560px, 94vw);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .lang-card h2 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      line-height: 1.08;
+    }
+
+    .lang-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .lang-actions {
+      margin-top: 16px;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(130deg, rgba(14, 107, 98, 0.14), rgba(200, 113, 70, 0.08));
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .hero-copy {
+      display: grid;
+      align-content: start;
+    }
+
+    .hero-photo {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(30, 27, 22, 0.18);
+      min-height: 220px;
+      box-shadow: 0 18px 28px rgba(30, 27, 22, 0.2);
+      background: #fff;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      line-height: 1.08;
+    }
+
+    .intro { margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
+    .tag { margin-top: 10px; font-size: 0.88rem; color: #0a514a; font-weight: 700; }
+
+
+    form { margin-top: 16px; display: grid; gap: 14px; }
+
+    fieldset {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 16px 14px;
+      margin: 0;
+    }
+
+    legend { color: var(--accent); font-weight: 700; padding: 0 8px; }
+
+    .grid { display: grid; gap: 10px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .field { display: grid; gap: 6px; }
+    label, .sub-label { font-size: 0.93rem; font-weight: 600; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #c8beaf;
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      background: #fff;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14, 107, 98, 0.18);
+    }
+
+    textarea { min-height: 84px; resize: vertical; }
+
+    .choices { display: grid; gap: 8px; margin-top: 2px; }
+    .inline { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+
+    .choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border: 1px solid #dfd6c9;
+      border-radius: 10px;
+      background: #fffcf8;
+      padding: 8px 9px;
+      font-size: 0.92rem;
+    }
+
+    .choice input[type="checkbox"],
+    .choice input[type="radio"] { width: auto; margin-top: 3px; accent-color: var(--accent); }
+
+    .error { min-height: 1em; color: var(--error); font-weight: 600; font-size: 0.88rem; }
+
+    .submit-row { display: flex; justify-content: center; margin-top: 2px; }
+
+    .status {
+      margin: 8px 0 0;
+      text-align: center;
+      min-height: 1.2em;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #08524b);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      padding: 12px 22px;
+      min-width: 210px;
+      cursor: pointer;
+      box-shadow: 0 14px 22px rgba(14, 107, 98, 0.28);
+    }
+
+    .success {
+      display: none;
+      margin-top: 14px;
+      border: 1px solid #9ecfb5;
+      background: #f3fff8;
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .success h2 { margin: 0 0 8px; color: var(--ok); font-size: 1.22rem; }
+    .success p { margin: 0; color: #22442f; line-height: 1.5; }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 820px) {
+      .two { grid-template-columns: 1fr; }
+      .page { margin-top: 14px; }
+      .lang-actions { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 190px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="lang-gate" id="langGate">
+    <div class="lang-card">
+      <h2 id="langTitle">Choose your language / Elige tu idioma</h2>
+      <p id="langIntro">Select English or Spanish before continuing to the survey.</p>
+      <div class="lang-actions">
+        <button type="button" data-lang="en">English</button>
+        <button type="button" data-lang="es">Espanol</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="page hidden" id="surveyRoot">
+    <header class="hero">
+      <div class="hero-copy">
+        <h1 id="pageTitle">MVP Media Photography Model Application</h1>
+        <p class="intro" id="pageIntro">
+          Thank you for your interest in modeling with MVP Media Photography. We work on artistic, editorial, glamour,
+          portrait, fashion, lifestyle, creative, and fine art photography projects. This short application helps us quickly
+          screen interest, comfort levels, and availability.
+        </p>
+        <div class="tag" id="pageTag">Fast Application: 3-5 minutes</div>
+      </div>
+      <div class="hero-photo">
+        <img src="assets/photos/f34f445e-219f-4dab-8e49-cd2ab4e3d506.jpg" id="heroPhoto" alt="MVP Media hero">
+      </div>
+    </header>
+
+    <form id="applicationForm" novalidate>
+      <fieldset>
+        <legend id="legend1">1) Basic Information</legend>
+        <div class="grid two">
+          <div class="field"><label for="fullName">Full Name *</label><input id="fullName" required></div>
+          <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
+          <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
+          <div class="field"><label for="city">City *</label><input id="city" required></div>
+          <div class="field"><label for="country">Country *</label><input id="country" required></div>
+          <div class="field"><label for="instagram">Instagram Profile</label><input id="instagram"></div>
+          <div class="field"><label for="tiktok">TikTok Profile</label><input id="tiktok"></div>
+          <div class="field">
+            <label for="hearAbout">How did you hear about us? *</label>
+            <select id="hearAbout" required>
+              <option value="">Select one</option>
+              <option>Indeed</option><option>Instagram</option><option>Facebook</option>
+              <option>Referral</option><option>Friend</option><option>Website</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="legend2">2) Profile Snapshot</legend>
+        <div class="grid two">
+          <div class="field"><label for="height">Height *</label><input id="height" required></div>
+          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
+          <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
+          <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
+          <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
+          <div class="field"><label for="shoeSize">Shoe Size *</label><input id="shoeSize" required></div>
+          <div class="field"><label for="hairColor">Hair Color *</label><input id="hairColor" required></div>
+          <div class="field"><label for="eyeColor">Eye Color *</label><input id="eyeColor" required></div>
+          <div class="field">
+            <label for="experience">Modeling Experience *</label>
+            <select id="experience" required>
+              <option value="">Select one</option>
+              <option>Never</option><option>Beginner</option><option>Some Experience</option><option>Experienced</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="sub-label">Worked with photographers before? *</span>
+            <div class="choices inline">
+              <label class="choice"><input type="radio" name="worked" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="worked" value="No">No</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="sub-label">Comfortable providing recent snapshots? *</span>
+            <div class="choices inline">
+              <label class="choice"><input type="radio" name="snapshots" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="snapshots" value="No">No</label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="legend3">3) Interests And Comfort</legend>
+        <div class="field">
+          <span class="sub-label">Project interests (select at least one) *</span>
+          <div class="choices inline" id="interestsGroup">
+            <label class="choice"><input type="checkbox" name="interests" value="Portrait">Portrait</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Lifestyle">Lifestyle</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Fashion">Fashion</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Editorial">Editorial</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Commercial">Commercial</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Creative Fine Art">Creative Fine Art</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Artistic Nude Photography">Artistic Nude Photography</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Social Media Content">Social Media Content</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Video Content">Video Content</label>
+          </div>
+          <div class="error" id="interestsError"></div>
+        </div>
+
+        <div class="field">
+          <label for="comfortLevel">Overall comfort level for glamour/swimwear/artistic projects *</label>
+          <select id="comfortLevel" required>
+            <option value="">Select one</option>
+            <option>Not Comfortable</option>
+            <option>Maybe</option>
+            <option>Comfortable</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="avoidConcepts">Any concepts you would not participate in? *</label>
+          <textarea id="avoidConcepts" required></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="legend4">4) Availability, Travel, Compensation</legend>
+        <div class="grid two">
+          <div class="field">
+            <span class="sub-label">Availability (select at least one) *</span>
+            <div class="choices inline" id="availabilityGroup">
+              <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Weekends">Weekends</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
+            </div>
+            <div class="error" id="availabilityError"></div>
+          </div>
+
+          <div class="field">
+            <label for="frequency">How often are you available? *</label>
+            <select id="frequency" required>
+              <option value="">Select one</option>
+              <option>Weekly</option><option>Bi-Weekly</option><option>Monthly</option><option>Occasionally</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="sub-label">Willing to travel for shoots? *</span>
+            <div class="choices inline">
+              <label class="choice"><input type="radio" name="travel" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="travel" value="No">No</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="travelDistance">Maximum travel distance *</label>
+            <select id="travelDistance" required>
+              <option value="">Select one</option>
+              <option>5 km</option><option>10 km</option><option>25 km</option><option>50 km</option><option>100 km+</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="compInterest">Interested in *</label>
+            <select id="compInterest" required>
+              <option value="">Select one</option>
+              <option>Paid Shoots</option><option>Portfolio Building</option><option>Both</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="expectedComp">Expected compensation per session *</label>
+            <select id="expectedComp" required>
+              <option value="">Select one</option>
+              <option>Under 50,000 COP</option>
+              <option>50,000-100,000 COP</option>
+              <option>100,000-200,000 COP</option>
+              <option>200,000+ COP</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="legend5">5) Photos And Final Questions</legend>
+        <div class="grid two">
+          <div class="field"><label for="headshot">Headshot *</label><input id="headshot" type="file" accept="image/*" required></div>
+          <div class="field"><label for="fullBody">Full Body Photo *</label><input id="fullBody" type="file" accept="image/*" required></div>
+          <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
+          <div class="field"><label for="goodFit">What makes you a good fit? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field"><label for="anythingElse">Anything else you would like us to know? (Optional)</label><textarea id="anythingElse"></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="legendConsent">Consent</legend>
+        <div class="field">
+          <div class="choices" id="consentGroup">
+            <label class="choice"><input type="checkbox" name="consent" value="age">I confirm I am at least 18 years old.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="selection">I understand this application does not guarantee selection.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="voluntary">I understand all project participation is voluntary.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="details">I understand project details will be discussed before booking.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to being contacted regarding future opportunities.</label>
+          </div>
+          <div class="error" id="consentError"></div>
+        </div>
+      </fieldset>
+
+      <div class="submit-row"><button type="submit" id="submitBtn">Submit Application</button></div>
+      <p class="status" id="submitStatus" aria-live="polite"></p>
+    </form>
+
+    <section class="success" id="successMessage" aria-live="polite">
+      <h2 id="successTitle">Application Received</h2>
+      <p id="successText">Thank you for applying to MVP Media Photography. We review every application and will contact selected applicants regarding upcoming creative opportunities.</p>
+    </section>
+  </main>
+
+  <script>
+    const langGate = document.getElementById("langGate");
+    const surveyRoot = document.getElementById("surveyRoot");
+    const form = document.getElementById("applicationForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitStatus = document.getElementById("submitStatus");
+    let selectedLanguage = "en";
+
+    const i18n = {
+      en: {
+        langTitle: "Choose your language / Elige tu idioma",
+        langIntro: "Select English or Spanish before continuing to the survey.",
+        btnEnglish: "English",
+        btnSpanish: "Espanol",
+        pageTitle: "MVP Media Photography Model Application",
+        pageIntro: "Thank you for your interest in modeling with MVP Media Photography. We work on artistic, editorial, glamour, portrait, fashion, lifestyle, creative, and fine art photography projects. This short application helps us quickly screen interest, comfort levels, and availability.",
+        pageTag: "Fast Application: 3-5 minutes",
+        legend1: "1) Basic Information",
+        legend2: "2) Profile Snapshot",
+        legend3: "3) Interests And Comfort",
+        legend4: "4) Availability, Travel, Compensation",
+        legend5: "5) Photos And Final Questions",
+        legendConsent: "Consent",
+        submitBtn: "Submit Application",
+        successTitle: "Application Received",
+        successText: "Thank you for applying to MVP Media Photography. We review every application and will contact selected applicants regarding upcoming creative opportunities.",
+        labelFullName: "Full Name *",
+        labelPreferredName: "Preferred Name *",
+        labelAge: "Age (18+) *",
+        labelEmail: "Email Address *",
+        labelCity: "City *",
+        labelCountry: "Country *",
+        labelInstagram: "Instagram Profile",
+        labelTikTok: "TikTok Profile",
+        labelHearAbout: "How did you hear about us? *",
+        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referral", "Friend", "Website", "Other"],
+        labelHeight: "Height *",
+        labelClothingSize: "Clothing Size *",
+        labelBraSize: "Bra Size (Optional)",
+        labelBustMeasurement: "Bust Measurement (Optional)",
+        labelWaistMeasurement: "Waist Measurement (Optional)",
+        labelHipMeasurement: "Hip Measurement (Optional)",
+        labelShoeSize: "Shoe Size *",
+        labelHairColor: "Hair Color *",
+        labelEyeColor: "Eye Color *",
+        labelExperience: "Modeling Experience *",
+        experienceOptions: ["Never", "Beginner", "Some Experience", "Experienced"],
+        labelWorked: "Worked with photographers before? *",
+        labelSnapshots: "Comfortable providing recent snapshots? *",
+        yes: "Yes",
+        no: "No",
+        labelInterests: "Project interests (select at least one) *",
+        interestPortrait: "Portrait",
+        interestLifestyle: "Lifestyle",
+        interestFashion: "Fashion",
+        interestEditorial: "Editorial",
+        interestCommercial: "Commercial",
+        interestFineArt: "Creative Fine Art",
+        interestArtisticNude: "Artistic Nude Photography",
+        interestSocial: "Social Media Content",
+        interestVideo: "Video Content",
+        labelComfortLevel: "Overall comfort level for glamour/swimwear/artistic projects *",
+        comfortOptions: ["Not Comfortable", "Maybe", "Comfortable"],
+        labelAvoidConcepts: "Any concepts you would not participate in? *",
+        labelAvailability: "Availability (select at least one) *",
+        availabilityWeekdays: "Weekdays",
+        availabilityWeeknights: "Weeknights",
+        availabilityWeekends: "Weekends",
+        availabilityFlexible: "Flexible",
+        labelFrequency: "How often are you available? *",
+        frequencyOptions: ["Weekly", "Bi-Weekly", "Monthly", "Occasionally"],
+        labelTravelWilling: "Willing to travel for shoots? *",
+        labelTravelDistance: "Maximum travel distance *",
+        travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "100 km+"],
+        labelCompInterest: "Interested in *",
+        compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
+        labelExpectedComp: "Expected compensation per session *",
+        expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
+        labelHeadshot: "Headshot *",
+        labelFullBody: "Full Body Photo *",
+        labelWhyWork: "Why would you like to work with MVP Media Photography? *",
+        labelGoodFit: "What makes you a good fit? *",
+        labelAnythingElse: "Anything else you would like us to know? (Optional)",
+        consentAge: "I confirm I am at least 18 years old.",
+        consentSelection: "I understand this application does not guarantee selection.",
+        consentVoluntary: "I understand all project participation is voluntary.",
+        consentDetails: "I understand project details will be discussed before booking.",
+        consentContact: "I consent to being contacted regarding future opportunities.",
+        selectOne: "Select one",
+        msg18: "Applicant must be at least 18 years old.",
+        msgInterest: "Please select at least one interest.",
+        msgAvailability: "Please select at least one availability option.",
+        msgConsent: "All consent items must be checked before submission."
+      },
+      es: {
+        langTitle: "Choose your language / Elige tu idioma",
+        langIntro: "Selecciona ingles o espanol antes de continuar a la encuesta.",
+        btnEnglish: "Ingles",
+        btnSpanish: "Espanol",
+        pageTitle: "Solicitud de Modelo de MVP Media Photography",
+        pageIntro: "Gracias por tu interes en modelar con MVP Media Photography. Trabajamos en proyectos de fotografia artistica, editorial, glamour, retrato, moda, estilo de vida, creativa y de bellas artes. Esta solicitud corta nos ayuda a evaluar interes, niveles de comodidad y disponibilidad.",
+        pageTag: "Solicitud rapida: 3-5 minutos",
+        legend1: "1) Informacion Basica",
+        legend2: "2) Perfil General",
+        legend3: "3) Intereses y Comodidad",
+        legend4: "4) Disponibilidad, Viajes y Compensacion",
+        legend5: "5) Fotos y Preguntas Finales",
+        legendConsent: "Consentimiento",
+        submitBtn: "Enviar Solicitud",
+        successTitle: "Solicitud Recibida",
+        successText: "Gracias por aplicar a MVP Media Photography. Revisamos cada solicitud y contactaremos a los perfiles seleccionados para proximas oportunidades creativas.",
+        labelFullName: "Nombre Completo *",
+        labelPreferredName: "Nombre Preferido *",
+        labelAge: "Edad (18+) *",
+        labelEmail: "Correo Electronico *",
+        labelCity: "Ciudad *",
+        labelCountry: "Pais *",
+        labelInstagram: "Perfil de Instagram",
+        labelTikTok: "Perfil de TikTok",
+        labelHearAbout: "Como nos conociste? *",
+        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referido", "Amigo", "Sitio Web", "Otro"],
+        labelHeight: "Altura *",
+        labelClothingSize: "Talla de Ropa *",
+        labelBraSize: "Talla de Brasier (Opcional)",
+        labelBustMeasurement: "Medida de Busto (Opcional)",
+        labelWaistMeasurement: "Medida de Cintura (Opcional)",
+        labelHipMeasurement: "Medida de Cadera (Opcional)",
+        labelShoeSize: "Talla de Zapato *",
+        labelHairColor: "Color de Cabello *",
+        labelEyeColor: "Color de Ojos *",
+        labelExperience: "Experiencia de Modelaje *",
+        experienceOptions: ["Nunca", "Principiante", "Algo de Experiencia", "Con Experiencia"],
+        labelWorked: "Has trabajado con fotografos antes? *",
+        labelSnapshots: "Te sientes comoda/o enviando snapshots recientes? *",
+        yes: "Si",
+        no: "No",
+        labelInterests: "Intereses de proyecto (selecciona al menos uno) *",
+        interestPortrait: "Retrato",
+        interestLifestyle: "Estilo de Vida",
+        interestFashion: "Moda",
+        interestEditorial: "Editorial",
+        interestCommercial: "Comercial",
+        interestFineArt: "Bellas Artes Creativas",
+        interestArtisticNude: "Fotografia de Desnudo Artistico",
+        interestSocial: "Contenido para Redes Sociales",
+        interestVideo: "Contenido en Video",
+        labelComfortLevel: "Nivel general de comodidad para glamour/traje de bano/proyectos artisticos *",
+        comfortOptions: ["No Comoda/o", "Tal Vez", "Comoda/o"],
+        labelAvoidConcepts: "Hay conceptos en los que no participarias? *",
+        labelAvailability: "Disponibilidad (selecciona al menos una) *",
+        availabilityWeekdays: "Dias de Semana",
+        availabilityWeeknights: "Noches de Semana",
+        availabilityWeekends: "Fines de Semana",
+        availabilityFlexible: "Flexible",
+        labelFrequency: "Con que frecuencia estas disponible? *",
+        frequencyOptions: ["Semanal", "Quincenal", "Mensual", "Ocasionalmente"],
+        labelTravelWilling: "Estas dispuesta/o a viajar para sesiones? *",
+        labelTravelDistance: "Distancia maxima de viaje *",
+        travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "100 km+"],
+        labelCompInterest: "Interes en *",
+        compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
+        labelExpectedComp: "Compensacion esperada por sesion *",
+        expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
+        labelHeadshot: "Headshot *",
+        labelFullBody: "Foto de Cuerpo Completo *",
+        labelWhyWork: "Por que te gustaria trabajar con MVP Media Photography? *",
+        labelGoodFit: "Que te hace una buena opcion? *",
+        labelAnythingElse: "Hay algo mas que te gustaria que sepamos? (Opcional)",
+        consentAge: "Confirmo que tengo al menos 18 anos.",
+        consentSelection: "Entiendo que esta solicitud no garantiza seleccion.",
+        consentVoluntary: "Entiendo que toda participacion en proyectos es voluntaria.",
+        consentDetails: "Entiendo que los detalles del proyecto se discutiran antes de reservar.",
+        consentContact: "Acepto ser contactada/o para futuras oportunidades.",
+        selectOne: "Selecciona una opcion",
+        msg18: "La persona solicitante debe tener al menos 18 anos.",
+        msgInterest: "Selecciona al menos un interes.",
+        msgAvailability: "Selecciona al menos una opcion de disponibilidad.",
+        msgConsent: "Debes aceptar todos los consentimientos antes de enviar."
+      }
+    };
+
+    const applyLanguage = (lang) => {
+      const t = i18n[lang] || i18n.en;
+      selectedLanguage = lang;
+      document.documentElement.lang = lang;
+      document.getElementById("langTitle").textContent = t.langTitle;
+      document.getElementById("langIntro").textContent = t.langIntro;
+      document.querySelector("button[data-lang='en']").textContent = t.btnEnglish;
+      document.querySelector("button[data-lang='es']").textContent = t.btnSpanish;
+      document.getElementById("pageTitle").textContent = t.pageTitle;
+      document.getElementById("pageIntro").textContent = t.pageIntro;
+      document.getElementById("pageTag").textContent = t.pageTag;
+      document.getElementById("legend1").textContent = t.legend1;
+      document.getElementById("legend2").textContent = t.legend2;
+      document.getElementById("legend3").textContent = t.legend3;
+      document.getElementById("legend4").textContent = t.legend4;
+      document.getElementById("legend5").textContent = t.legend5;
+      document.getElementById("legendConsent").textContent = t.legendConsent;
+      document.getElementById("submitBtn").textContent = t.submitBtn;
+      document.getElementById("successTitle").textContent = t.successTitle;
+      document.getElementById("successText").textContent = t.successText;
+
+      const setLabel = (forId, text) => {
+        const label = document.querySelector(`label[for='${forId}']`);
+        if (label) {
+          label.textContent = text;
+        }
+      };
+
+      const setChoiceText = (selector, text) => {
+        const input = document.querySelector(selector);
+        if (!input || !input.parentElement) {
+          return;
+        }
+        const label = input.parentElement;
+        label.textContent = "";
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(text));
+      };
+
+      const setOptions = (selectId, options) => {
+        const select = document.getElementById(selectId);
+        if (!select) {
+          return;
+        }
+        for (let i = 1; i < select.options.length && i - 1 < options.length; i++) {
+          select.options[i].textContent = options[i - 1];
+        }
+      };
+
+      setLabel("fullName", t.labelFullName);
+      setLabel("preferredName", t.labelPreferredName);
+      setLabel("age", t.labelAge);
+      setLabel("email", t.labelEmail);
+      setLabel("city", t.labelCity);
+      setLabel("country", t.labelCountry);
+      setLabel("instagram", t.labelInstagram);
+      setLabel("tiktok", t.labelTikTok);
+      setLabel("hearAbout", t.labelHearAbout);
+
+      setLabel("height", t.labelHeight);
+      setLabel("clothingSize", t.labelClothingSize);
+      setLabel("braSize", t.labelBraSize);
+      setLabel("bustMeasurement", t.labelBustMeasurement);
+      setLabel("waistMeasurement", t.labelWaistMeasurement);
+      setLabel("hipMeasurement", t.labelHipMeasurement);
+      setLabel("shoeSize", t.labelShoeSize);
+      setLabel("hairColor", t.labelHairColor);
+      setLabel("eyeColor", t.labelEyeColor);
+      setLabel("experience", t.labelExperience);
+
+      setLabel("comfortLevel", t.labelComfortLevel);
+      setLabel("avoidConcepts", t.labelAvoidConcepts);
+      setLabel("frequency", t.labelFrequency);
+      setLabel("travelDistance", t.labelTravelDistance);
+      setLabel("compInterest", t.labelCompInterest);
+      setLabel("expectedComp", t.labelExpectedComp);
+      setLabel("headshot", t.labelHeadshot);
+      setLabel("fullBody", t.labelFullBody);
+      setLabel("whyWork", t.labelWhyWork);
+      setLabel("goodFit", t.labelGoodFit);
+      setLabel("anythingElse", t.labelAnythingElse);
+
+      const subLabels = document.querySelectorAll(".sub-label");
+      if (subLabels[0]) subLabels[0].textContent = t.labelWorked;
+      if (subLabels[1]) subLabels[1].textContent = t.labelSnapshots;
+      if (subLabels[2]) subLabels[2].textContent = t.labelInterests;
+      if (subLabels[3]) subLabels[3].textContent = t.labelAvailability;
+      if (subLabels[4]) subLabels[4].textContent = t.labelTravelWilling;
+
+      setChoiceText("input[name='worked'][value='Yes']", t.yes);
+      setChoiceText("input[name='worked'][value='No']", t.no);
+      setChoiceText("input[name='snapshots'][value='Yes']", t.yes);
+      setChoiceText("input[name='snapshots'][value='No']", t.no);
+      setChoiceText("input[name='travel'][value='Yes']", t.yes);
+      setChoiceText("input[name='travel'][value='No']", t.no);
+
+      setChoiceText("input[name='interests'][value='Portrait']", t.interestPortrait);
+      setChoiceText("input[name='interests'][value='Lifestyle']", t.interestLifestyle);
+      setChoiceText("input[name='interests'][value='Fashion']", t.interestFashion);
+      setChoiceText("input[name='interests'][value='Editorial']", t.interestEditorial);
+      setChoiceText("input[name='interests'][value='Commercial']", t.interestCommercial);
+      setChoiceText("input[name='interests'][value='Creative Fine Art']", t.interestFineArt);
+      setChoiceText("input[name='interests'][value='Artistic Nude Photography']", t.interestArtisticNude);
+      setChoiceText("input[name='interests'][value='Social Media Content']", t.interestSocial);
+      setChoiceText("input[name='interests'][value='Video Content']", t.interestVideo);
+
+      setChoiceText("input[name='availability'][value='Weekdays']", t.availabilityWeekdays);
+      setChoiceText("input[name='availability'][value='Weeknights']", t.availabilityWeeknights);
+      setChoiceText("input[name='availability'][value='Weekends']", t.availabilityWeekends);
+      setChoiceText("input[name='availability'][value='Flexible']", t.availabilityFlexible);
+
+      setChoiceText("input[name='consent'][value='age']", t.consentAge);
+      setChoiceText("input[name='consent'][value='selection']", t.consentSelection);
+      setChoiceText("input[name='consent'][value='voluntary']", t.consentVoluntary);
+      setChoiceText("input[name='consent'][value='details']", t.consentDetails);
+      setChoiceText("input[name='consent'][value='contact']", t.consentContact);
+
+      setOptions("hearAbout", t.hearAboutOptions);
+      setOptions("experience", t.experienceOptions);
+      setOptions("comfortLevel", t.comfortOptions);
+      setOptions("frequency", t.frequencyOptions);
+      setOptions("travelDistance", t.travelDistanceOptions);
+      setOptions("compInterest", t.compInterestOptions);
+      setOptions("expectedComp", t.expectedCompOptions);
+
+      document.querySelectorAll("select option[value='']").forEach((option) => {
+        option.textContent = t.selectOne;
+      });
+    };
+
+    document.querySelectorAll("button[data-lang]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const lang = button.dataset.lang || "en";
+        applyLanguage(lang);
+        langGate.classList.add("hidden");
+        surveyRoot.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
+    const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
+    const setError = (id, msg) => { document.getElementById(id).textContent = msg; };
+    const clearErrors = () => {
+      setError("interestsError", "");
+      setError("availabilityError", "");
+      setError("consentError", "");
+      submitStatus.textContent = "";
+    };
+
+    const getValue = (id) => {
+      const element = document.getElementById(id);
+      return element ? element.value.trim() : "";
+    };
+
+    const selectedRadioValue = (name) => {
+      const selected = document.querySelector(`input[name='${name}']:checked`);
+      return selected ? selected.value : "";
+    };
+
+    const buildSubmissionPayload = () => {
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+
+      return {
+        full_name: getValue("fullName"),
+        preferred_name: getValue("preferredName"),
+        age: Number(getValue("age")),
+        email: getValue("email"),
+        city: getValue("city"),
+        country: getValue("country"),
+        instagram: getValue("instagram"),
+        tiktok: getValue("tiktok"),
+        hear_about: getValue("hearAbout"),
+        height: getValue("height"),
+        clothing_size: getValue("clothingSize"),
+        bra_size: getValue("braSize"),
+        bust_measurement: getValue("bustMeasurement"),
+        waist_measurement: getValue("waistMeasurement"),
+        hip_measurement: getValue("hipMeasurement"),
+        shoe_size: getValue("shoeSize"),
+        hair_color: getValue("hairColor"),
+        eye_color: getValue("eyeColor"),
+        experience: getValue("experience"),
+        worked_with_photographers: selectedRadioValue("worked"),
+        comfortable_snapshots: selectedRadioValue("snapshots"),
+        interests: checkedValues("input[name='interests']"),
+        comfort_level: getValue("comfortLevel"),
+        avoid_concepts: getValue("avoidConcepts"),
+        availability: checkedValues("input[name='availability']"),
+        frequency: getValue("frequency"),
+        travel_willing: selectedRadioValue("travel"),
+        travel_distance: getValue("travelDistance"),
+        comp_interest: getValue("compInterest"),
+        expected_comp: getValue("expectedComp"),
+        why_work: getValue("whyWork"),
+        good_fit: getValue("goodFit"),
+        anything_else: getValue("anythingElse"),
+        consents: checkedValues("input[name='consent']"),
+        headshot_filename: headshot && headshot.files[0] ? headshot.files[0].name : "",
+        full_body_filename: fullBody && fullBody.files[0] ? fullBody.files[0].name : "",
+        language: selectedLanguage
+      };
+    };
+
+    form.addEventListener("submit", async (event) => {
+      clearErrors();
+      let hasErrors = !form.checkValidity();
+
+      const ageEl = document.getElementById("age");
+      const age = Number(ageEl.value);
+      const t = i18n[selectedLanguage] || i18n.en;
+
+      if (!Number.isFinite(age) || age < 18) {
+        ageEl.setCustomValidity(t.msg18);
+        hasErrors = true;
+      } else {
+        ageEl.setCustomValidity("");
+      }
+
+      if (!checkAtLeastOne("input[name='interests']")) {
+        setError("interestsError", t.msgInterest);
+        hasErrors = true;
+      }
+
+      if (!checkAtLeastOne("input[name='availability']")) {
+        setError("availabilityError", t.msgAvailability);
+        hasErrors = true;
+      }
+
+      const consentOk = Array.from(document.querySelectorAll("input[name='consent']")).every((item) => item.checked);
+      if (!consentOk) {
+        setError("consentError", t.msgConsent);
+        hasErrors = true;
+      }
+
+      if (hasErrors) {
+        event.preventDefault();
+        form.reportValidity();
+        return;
+      }
+
+      event.preventDefault();
+      submitBtn.disabled = true;
+      submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
+
+      try {
+        const response = await fetch("/api/submit-application", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildSubmissionPayload())
+        });
+
+        if (!response.ok) {
+          throw new Error("Submission failed");
+        }
+      } catch (error) {
+        console.error(error);
+        submitBtn.disabled = false;
+        submitStatus.textContent = selectedLanguage === "es"
+          ? "No se pudo enviar. Intenta nuevamente."
+          : "Could not submit. Please try again.";
+        return;
+      }
+
+      form.style.display = "none";
+      document.getElementById("successMessage").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    ["interests", "availability", "consent"].forEach((name) => {
+      document.querySelectorAll(`input[name='${name}']`).forEach((el) => {
+        el.addEventListener("change", clearErrors);
+      });
+    });
+  </script>
+</body>
+</html>
