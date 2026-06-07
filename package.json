@@ -20,5 +20,9 @@
   "homepage": "https://github.com/mvpmedia00-commits/surverysite#readme",
   "devDependencies": {
     "prisma": "^7.8.0"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.107.0"
   }
 }
