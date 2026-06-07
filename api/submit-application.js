@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     return respond(res, 400, { error: "At least one availability option is required" });
   }
 
-  if (!Array.isArray(body.consents) || body.consents.length < 6) {
+  if (!Array.isArray(body.consents) || body.consents.length < 5) {
     return respond(res, 400, { error: "All consent items must be accepted" });
   }
 

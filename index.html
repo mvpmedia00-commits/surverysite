@@ -873,7 +873,19 @@
         });
 
         if (!response.ok) {
-          throw new Error("Submission failed");
+          let serverMessage = "";
+          try {
+            const result = await response.json();
+            serverMessage = result && result.error ? ` (${result.error})` : "";
+          } catch (parseError) {
+            console.error(parseError);
+          }
+
+          submitBtn.disabled = false;
+          submitStatus.textContent = selectedLanguage === "es"
+            ? `No se pudo enviar. Intenta nuevamente.${serverMessage}`
+            : `Could not submit. Please try again.${serverMessage}`;
+          return;
         }
       } catch (error) {
         console.error(error);
