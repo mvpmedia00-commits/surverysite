@@ -37,6 +37,23 @@ const monthlyTrend = (rows) => {
     .map(([month, count]) => ({ month, count }));
 };
 
+const toPhotoUrl = (supabaseUrl, value) => {
+  if (!value) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  const encodedPath = String(value)
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+
+  return `${supabaseUrl}/storage/v1/object/public/applications/${encodedPath}`;
+};
+
 export default async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "PATCH") {
     return respond(res, 405, { error: "Method not allowed" });
@@ -118,8 +135,8 @@ export default async function handler(req, res) {
       hear_about: row.hear_about || "Unknown",
       experience: row.experience || "Unknown",
       review_status: row.review_status || "pending",
-      headshot_url: row.headshot_filename || null,
-      full_body_url: row.full_body_filename || null
+      headshot_url: toPhotoUrl(supabaseUrl, row.headshot_filename),
+      full_body_url: toPhotoUrl(supabaseUrl, row.full_body_filename)
     }));
   const recentPhotos = rows
     .filter((row) => row.headshot_filename || row.full_body_filename)
@@ -127,8 +144,8 @@ export default async function handler(req, res) {
     .map((row) => ({
       created_at: row.created_at,
       full_name: row.full_name || "Unnamed",
-      headshot_url: row.headshot_filename || null,
-      full_body_url: row.full_body_filename || null
+      headshot_url: toPhotoUrl(supabaseUrl, row.headshot_filename),
+      full_body_url: toPhotoUrl(supabaseUrl, row.full_body_filename)
     }));
 
   return respond(res, 200, {
