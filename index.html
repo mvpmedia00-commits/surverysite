@@ -879,6 +879,27 @@
       return formData;
     };
 
+    const submitWithoutFileUploads = async () => {
+      const payload = buildSubmissionPayload();
+      const jsonPayload = {
+        ...payload,
+        interests: payload.interests.join(", "),
+        availability: payload.availability.join(", "),
+        consents: payload.consents.join(", "),
+        _subject: "New MVP Media Photography Application",
+        upload_notice: "Files were selected but not uploaded because file uploads are not enabled for this Formspree form."
+      };
+
+      return fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(jsonPayload)
+      });
+    };
+
     form.addEventListener("submit", async (event) => {
       clearErrors();
       let hasErrors = !form.checkValidity();
@@ -939,11 +960,26 @@
 
         if (!response.ok) {
           let serverMessage = "";
+          let retryWithoutFiles = false;
           try {
             const result = await response.json();
             serverMessage = result && result.error ? ` (${result.error})` : "";
+            retryWithoutFiles = /file uploads not permitted/i.test(result && result.error ? result.error : "");
           } catch (parseError) {
             console.error(parseError);
+          }
+
+          if (retryWithoutFiles) {
+            const retryResponse = await submitWithoutFileUploads();
+            if (retryResponse.ok) {
+              submitStatus.textContent = selectedLanguage === "es"
+                ? "Solicitud enviada sin archivos adjuntos (carga de archivos no disponible en Formspree)."
+                : "Application submitted without file attachments (file uploads are not enabled in Formspree).";
+              form.style.display = "none";
+              document.getElementById("successMessage").style.display = "block";
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              return;
+            }
           }
 
           submitBtn.disabled = false;
