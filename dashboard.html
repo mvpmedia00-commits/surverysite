@@ -55,7 +55,7 @@
 
     .kpis {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
     }
 
@@ -89,6 +89,26 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
+    }
+
+    .filters-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-btn {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--accent);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 8px 12px;
     }
 
     .field {
@@ -179,6 +199,30 @@
       flex-wrap: wrap;
     }
 
+    .photo-previews {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .thumb {
+      width: 96px;
+      height: 96px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #f7f3ec;
+      display: block;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     .photo-links a {
       color: var(--accent);
       text-decoration: none;
@@ -266,11 +310,17 @@
         <div class="kpi"><p class="kpi-label">Top Source</p><p class="kpi-value" id="kpiSource">-</p></div>
         <div class="kpi"><p class="kpi-label">Top Experience</p><p class="kpi-value" id="kpiExperience">-</p></div>
         <div class="kpi"><p class="kpi-label">Top Interest</p><p class="kpi-value" id="kpiInterest">-</p></div>
+        <div class="kpi"><p class="kpi-label">Pending</p><p class="kpi-value" id="kpiPending">0</p></div>
+        <div class="kpi"><p class="kpi-label">Approved</p><p class="kpi-value" id="kpiApproved">0</p></div>
+        <div class="kpi"><p class="kpi-label">Denied</p><p class="kpi-value" id="kpiDenied">0</p></div>
       </div>
     </section>
 
     <section class="card">
-      <p class="status">Candidate Review</p>
+      <div class="filters-head">
+        <p class="status">Candidate Review</p>
+        <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
+      </div>
       <div class="filters">
         <div class="field">
           <label for="filterSearch">Search name/email</label>
@@ -380,14 +430,13 @@
       }
     };
 
-    const renderCandidates = () => {
-      const list = document.getElementById("candidateList");
+    const getFilteredCandidates = () => {
       const search = document.getElementById("filterSearch").value.trim().toLowerCase();
       const status = document.getElementById("filterStatus").value;
       const experience = document.getElementById("filterExperience").value;
       const source = document.getElementById("filterSource").value;
 
-      const filtered = state.candidates.filter((candidate) => {
+      return state.candidates.filter((candidate) => {
         const matchesSearch = !search
           || candidate.full_name.toLowerCase().includes(search)
           || candidate.email.toLowerCase().includes(search);
@@ -396,6 +445,11 @@
         const matchesSource = source === "all" || candidate.hear_about === source;
         return matchesSearch && matchesStatus && matchesExperience && matchesSource;
       });
+    };
+
+    const renderCandidates = () => {
+      const list = document.getElementById("candidateList");
+      const filtered = getFilteredCandidates();
 
       list.innerHTML = "";
 
@@ -422,6 +476,10 @@
           <div class="photo-links">
             ${candidate.headshot_url ? `<a href="${candidate.headshot_url}" target="_blank" rel="noopener noreferrer">Headshot</a>` : ""}
             ${candidate.full_body_url ? `<a href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer">Full Body</a>` : ""}
+          </div>
+          <div class="photo-previews">
+            ${candidate.headshot_url ? `<a class="thumb" href="${candidate.headshot_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.headshot_url}" alt="${candidate.full_name} headshot"></a>` : ""}
+            ${candidate.full_body_url ? `<a class="thumb" href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.full_body_url}" alt="${candidate.full_name} full body"></a>` : ""}
           </div>
           <div class="actions">
             <button class="pending" data-id="${candidate.id}" data-status="pending">Set Pending</button>
@@ -454,6 +512,9 @@
       document.getElementById("kpiSource").textContent = topKey(data.bySource);
       document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
       document.getElementById("kpiInterest").textContent = topKey(data.byInterest);
+      document.getElementById("kpiPending").textContent = String((data.byStatus && data.byStatus.pending) || 0);
+      document.getElementById("kpiApproved").textContent = String((data.byStatus && data.byStatus.approved) || 0);
+      document.getElementById("kpiDenied").textContent = String((data.byStatus && data.byStatus.denied) || 0);
 
       destroyCharts();
 
@@ -538,6 +599,57 @@
     ["filterSearch", "filterStatus", "filterExperience", "filterSource"].forEach((id) => {
       document.getElementById(id).addEventListener("input", renderCandidates);
       document.getElementById(id).addEventListener("change", renderCandidates);
+    });
+
+    const csvEscape = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      const rows = getFilteredCandidates();
+      if (rows.length === 0) {
+        document.getElementById("status").textContent = "No filtered candidates to export.";
+        return;
+      }
+
+      const headers = [
+        "id",
+        "created_at",
+        "full_name",
+        "email",
+        "city",
+        "country",
+        "hear_about",
+        "experience",
+        "review_status",
+        "headshot_url",
+        "full_body_url"
+      ];
+
+      const lines = [headers.join(",")];
+      rows.forEach((candidate) => {
+        lines.push([
+          candidate.id,
+          candidate.created_at,
+          candidate.full_name,
+          candidate.email,
+          candidate.city,
+          candidate.country,
+          candidate.hear_about,
+          candidate.experience,
+          candidate.review_status,
+          candidate.headshot_url,
+          candidate.full_body_url
+        ].map(csvEscape).join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `candidates-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     });
 
     document.getElementById("candidateList").addEventListener("click", async (event) => {
