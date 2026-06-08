@@ -825,16 +825,58 @@
       };
     };
 
-    const buildFormspreePayload = () => {
+    const buildFormspreeFormData = () => {
       const payload = buildSubmissionPayload();
+      const formData = new FormData();
+      const headshotInput = document.getElementById("headshot");
+      const fullBodyInput = document.getElementById("fullBody");
 
-      return {
-        ...payload,
-        interests: payload.interests.join(", "),
-        availability: payload.availability.join(", "),
-        consents: payload.consents.join(", "),
-        _subject: "New MVP Media Photography Application"
-      };
+      formData.append("full_name", payload.full_name);
+      formData.append("preferred_name", payload.preferred_name);
+      formData.append("age", String(payload.age));
+      formData.append("email", payload.email);
+      formData.append("city", payload.city);
+      formData.append("country", payload.country);
+      formData.append("instagram", payload.instagram || "");
+      formData.append("tiktok", payload.tiktok || "");
+      formData.append("hear_about", payload.hear_about);
+      formData.append("height", payload.height);
+      formData.append("clothing_size", payload.clothing_size);
+      formData.append("bra_size", payload.bra_size || "");
+      formData.append("bust_measurement", payload.bust_measurement || "");
+      formData.append("waist_measurement", payload.waist_measurement || "");
+      formData.append("hip_measurement", payload.hip_measurement || "");
+      formData.append("shoe_size", payload.shoe_size);
+      formData.append("hair_color", payload.hair_color);
+      formData.append("eye_color", payload.eye_color);
+      formData.append("experience", payload.experience);
+      formData.append("worked_with_photographers", payload.worked_with_photographers);
+      formData.append("comfortable_snapshots", payload.comfortable_snapshots);
+      formData.append("interests", payload.interests.join(", "));
+      formData.append("comfort_level", payload.comfort_level);
+      formData.append("avoid_concepts", payload.avoid_concepts);
+      formData.append("availability", payload.availability.join(", "));
+      formData.append("frequency", payload.frequency);
+      formData.append("travel_willing", payload.travel_willing);
+      formData.append("travel_distance", payload.travel_distance);
+      formData.append("comp_interest", payload.comp_interest);
+      formData.append("expected_comp", payload.expected_comp);
+      formData.append("why_work", payload.why_work);
+      formData.append("good_fit", payload.good_fit);
+      formData.append("anything_else", payload.anything_else || "");
+      formData.append("consents", payload.consents.join(", "));
+      formData.append("language", payload.language);
+      formData.append("_subject", "New MVP Media Photography Application");
+
+      if (headshotInput && headshotInput.files[0]) {
+        formData.append("headshot", headshotInput.files[0]);
+      }
+
+      if (fullBodyInput && fullBodyInput.files[0]) {
+        formData.append("full_body", fullBodyInput.files[0]);
+      }
+
+      return formData;
     };
 
     form.addEventListener("submit", async (event) => {
@@ -890,10 +932,9 @@
         const response = await fetch(FORMSPREE_ENDPOINT, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Accept: "application/json"
           },
-          body: JSON.stringify(buildFormspreePayload())
+          body: buildFormspreeFormData()
         });
 
         if (!response.ok) {
