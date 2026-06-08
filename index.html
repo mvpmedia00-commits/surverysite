@@ -761,6 +761,7 @@
 
     const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
     const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xaqzokly";
     const setError = (id, msg) => { document.getElementById(id).textContent = msg; };
     const clearErrors = () => {
       setError("interestsError", "");
@@ -824,6 +825,18 @@
       };
     };
 
+    const buildFormspreePayload = () => {
+      const payload = buildSubmissionPayload();
+
+      return {
+        ...payload,
+        interests: payload.interests.join(", "),
+        availability: payload.availability.join(", "),
+        consents: payload.consents.join(", "),
+        _subject: "New MVP Media Photography Application"
+      };
+    };
+
     form.addEventListener("submit", async (event) => {
       clearErrors();
       let hasErrors = !form.checkValidity();
@@ -865,11 +878,22 @@
       submitBtn.disabled = true;
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
 
+      if (FORMSPREE_ENDPOINT.includes("your_form_id")) {
+        submitBtn.disabled = false;
+        submitStatus.textContent = selectedLanguage === "es"
+          ? "Configura tu endpoint de Formspree antes de enviar."
+          : "Set your Formspree endpoint before submitting.";
+        return;
+      }
+
       try {
-        const response = await fetch("/api/submit-application", {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(buildSubmissionPayload())
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify(buildFormspreePayload())
         });
 
         if (!response.ok) {
