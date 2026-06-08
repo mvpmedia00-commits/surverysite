@@ -38,7 +38,7 @@ const monthlyTrend = (rows) => {
 };
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
+  if (req.method !== "GET" && req.method !== "PATCH") {
     return respond(res, 405, { error: "Method not allowed" });
   }
 
@@ -51,8 +51,44 @@ export default async function handler(req, res) {
     });
   }
 
+  if (req.method === "PATCH") {
+    const body = req.body || {};
+    const id = body.id;
+    const status = body.status;
+    const allowed = ["pending", "approved", "denied"];
+
+    if (!id || !allowed.includes(status)) {
+      return respond(res, 400, { error: "Invalid id or status" });
+    }
+
+    const updateResponse = await fetch(
+      `${supabaseUrl}/rest/v1/model_applications?id=eq.${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+          "Content-Type": "application/json",
+          "Content-Profile": "public",
+          Prefer: "return=minimal"
+        },
+        body: JSON.stringify({
+          review_status: status,
+          review_updated_at: new Date().toISOString()
+        })
+      }
+    );
+
+    if (!updateResponse.ok) {
+      const detail = await updateResponse.text();
+      return respond(res, 500, { error: "Failed to update candidate status", detail });
+    }
+
+    return respond(res, 200, { ok: true });
+  }
+
   const query = encodeURI(
-    "created_at,full_name,hear_about,experience,frequency,travel_willing,comp_interest,expected_comp,interests,headshot_filename,full_body_filename"
+    "id,created_at,full_name,email,city,country,hear_about,experience,frequency,travel_willing,comp_interest,expected_comp,interests,headshot_filename,full_body_filename,review_status"
   );
 
   const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=${query}&order=created_at.asc`, {
@@ -69,6 +105,22 @@ export default async function handler(req, res) {
   }
 
   const rows = await response.json();
+  const candidates = rows
+    .slice()
+    .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""))
+    .map((row) => ({
+      id: row.id,
+      created_at: row.created_at,
+      full_name: row.full_name || "Unnamed",
+      email: row.email || "",
+      city: row.city || "",
+      country: row.country || "",
+      hear_about: row.hear_about || "Unknown",
+      experience: row.experience || "Unknown",
+      review_status: row.review_status || "pending",
+      headshot_url: row.headshot_filename || null,
+      full_body_url: row.full_body_filename || null
+    }));
   const recentPhotos = rows
     .filter((row) => row.headshot_filename || row.full_body_filename)
     .slice(-20)
@@ -87,8 +139,10 @@ export default async function handler(req, res) {
     byCompInterest: countBy(rows, "comp_interest"),
     byExpectedComp: countBy(rows, "expected_comp"),
     byTravelWilling: countBy(rows, "travel_willing"),
+    byStatus: countBy(rows, "review_status"),
     byInterest: countArrayField(rows, "interests"),
     trendByMonth: monthlyTrend(rows),
+    candidates,
     recentPhotos
   });
 }

@@ -39,8 +39,17 @@ create table if not exists public.model_applications (
   consents jsonb not null default '[]'::jsonb,
   headshot_filename text,
   full_body_filename text,
-  language text not null default 'en'
+  language text not null default 'en',
+  review_status text not null default 'pending',
+  review_updated_at timestamptz
 );
+
+alter table public.model_applications
+  add column if not exists review_status text not null default 'pending';
+
+alter table public.model_applications
+  add column if not exists review_updated_at timestamptz;
 
 create index if not exists idx_model_applications_created_at on public.model_applications (created_at);
 create index if not exists idx_model_applications_source on public.model_applications (hear_about);
+create index if not exists idx_model_applications_review_status on public.model_applications (review_status);

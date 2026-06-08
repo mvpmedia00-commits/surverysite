@@ -85,6 +85,143 @@
       gap: 12px;
     }
 
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit;
+      background: #fff;
+      width: 100%;
+    }
+
+    .candidate-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .candidate {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .candidate-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .candidate-name {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .candidate-meta {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: 1px solid transparent;
+    }
+
+    .badge.pending {
+      background: #fff5dc;
+      color: #8a6511;
+      border-color: #ecd39a;
+    }
+
+    .badge.approved {
+      background: #eaf8ef;
+      color: #1f6d43;
+      border-color: #bfe5cf;
+    }
+
+    .badge.denied {
+      background: #fdeeee;
+      color: #8f2e2e;
+      border-color: #efc1c1;
+    }
+
+    .photo-links {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .photo-links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      padding: 7px 12px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .actions .approve {
+      border-color: #b9e0c8;
+      color: #1f6d43;
+      background: #f1fbf5;
+    }
+
+    .actions .deny {
+      border-color: #efc1c1;
+      color: #8f2e2e;
+      background: #fff4f4;
+    }
+
+    .actions .pending {
+      border-color: #ecd39a;
+      color: #8a6511;
+      background: #fffbef;
+    }
+
     .chart-box {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -111,6 +248,7 @@
     @media (max-width: 900px) {
       .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .charts { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -129,6 +267,38 @@
         <div class="kpi"><p class="kpi-label">Top Experience</p><p class="kpi-value" id="kpiExperience">-</p></div>
         <div class="kpi"><p class="kpi-label">Top Interest</p><p class="kpi-value" id="kpiInterest">-</p></div>
       </div>
+    </section>
+
+    <section class="card">
+      <p class="status">Candidate Review</p>
+      <div class="filters">
+        <div class="field">
+          <label for="filterSearch">Search name/email</label>
+          <input id="filterSearch" type="text" placeholder="Search candidates">
+        </div>
+        <div class="field">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="denied">Denied</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterExperience">Experience</label>
+          <select id="filterExperience">
+            <option value="all">All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterSource">Source</label>
+          <select id="filterSource">
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+      <div class="candidate-list" id="candidateList"></div>
     </section>
 
     <section class="charts">
@@ -152,6 +322,13 @@
   </main>
 
   <script>
+    const state = {
+      dashboard: null,
+      candidates: []
+    };
+
+    const activeCharts = [];
+
     const topKey = (counts) => {
       const entries = Object.entries(counts || {});
       if (entries.length === 0) {
@@ -165,6 +342,112 @@
 
     const toSortedEntries = (obj) => Object.entries(obj || {}).sort((a, b) => b[1] - a[1]);
 
+    const destroyCharts = () => {
+      activeCharts.forEach((chart) => chart.destroy());
+      activeCharts.length = 0;
+    };
+
+    const addOptions = (selectId, values) => {
+      const select = document.getElementById(selectId);
+      const current = select.value;
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+
+      values
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b))
+        .forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+      if (Array.from(select.options).some((option) => option.value === current)) {
+        select.value = current;
+      }
+    };
+
+    const formatDate = (value) => {
+      if (!value) {
+        return "";
+      }
+      try {
+        return new Date(value).toLocaleString();
+      } catch {
+        return value;
+      }
+    };
+
+    const renderCandidates = () => {
+      const list = document.getElementById("candidateList");
+      const search = document.getElementById("filterSearch").value.trim().toLowerCase();
+      const status = document.getElementById("filterStatus").value;
+      const experience = document.getElementById("filterExperience").value;
+      const source = document.getElementById("filterSource").value;
+
+      const filtered = state.candidates.filter((candidate) => {
+        const matchesSearch = !search
+          || candidate.full_name.toLowerCase().includes(search)
+          || candidate.email.toLowerCase().includes(search);
+        const matchesStatus = status === "all" || candidate.review_status === status;
+        const matchesExperience = experience === "all" || candidate.experience === experience;
+        const matchesSource = source === "all" || candidate.hear_about === source;
+        return matchesSearch && matchesStatus && matchesExperience && matchesSource;
+      });
+
+      list.innerHTML = "";
+
+      if (filtered.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "status";
+        empty.textContent = "No candidates match these filters.";
+        list.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach((candidate) => {
+        const card = document.createElement("article");
+        card.className = "candidate";
+        card.innerHTML = `
+          <div class="candidate-top">
+            <div>
+              <h3 class="candidate-name">${candidate.full_name}</h3>
+              <p class="candidate-meta">${candidate.email} · ${candidate.city}, ${candidate.country} · ${candidate.experience} · ${candidate.hear_about}</p>
+              <p class="candidate-meta">Applied: ${formatDate(candidate.created_at)}</p>
+            </div>
+            <span class="badge ${candidate.review_status}">${candidate.review_status}</span>
+          </div>
+          <div class="photo-links">
+            ${candidate.headshot_url ? `<a href="${candidate.headshot_url}" target="_blank" rel="noopener noreferrer">Headshot</a>` : ""}
+            ${candidate.full_body_url ? `<a href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer">Full Body</a>` : ""}
+          </div>
+          <div class="actions">
+            <button class="pending" data-id="${candidate.id}" data-status="pending">Set Pending</button>
+            <button class="approve" data-id="${candidate.id}" data-status="approved">Approve</button>
+            <button class="deny" data-id="${candidate.id}" data-status="denied">Deny</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    };
+
+    const updateCandidateStatus = async (id, status) => {
+      const response = await fetch("/api/dashboard", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id, status })
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Status update failed");
+      }
+    };
+
     const renderDashboard = (data) => {
       document.getElementById("status").textContent = "Dashboard updated.";
       document.getElementById("kpiTotal").textContent = String(data.totalApplications || 0);
@@ -172,8 +455,10 @@
       document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
       document.getElementById("kpiInterest").textContent = topKey(data.byInterest);
 
+      destroyCharts();
+
       const sourceEntries = toSortedEntries(data.bySource);
-      new Chart(document.getElementById("sourceBar"), {
+      activeCharts.push(new Chart(document.getElementById("sourceBar"), {
         type: "bar",
         data: {
           labels: sourceEntries.map((x) => x[0]),
@@ -184,10 +469,10 @@
           }]
         },
         options: { responsive: true, maintainAspectRatio: false }
-      });
+      }));
 
       const compEntries = toSortedEntries(data.byCompInterest);
-      new Chart(document.getElementById("compPie"), {
+      activeCharts.push(new Chart(document.getElementById("compPie"), {
         type: "pie",
         data: {
           labels: compEntries.map((x) => x[0]),
@@ -197,10 +482,10 @@
           }]
         },
         options: { responsive: true, maintainAspectRatio: false }
-      });
+      }));
 
       const trendEntries = (data.trendByMonth || []).slice();
-      new Chart(document.getElementById("trendLine"), {
+      activeCharts.push(new Chart(document.getElementById("trendLine"), {
         type: "line",
         data: {
           labels: trendEntries.map((x) => x.month),
@@ -214,10 +499,10 @@
           }]
         },
         options: { responsive: true, maintainAspectRatio: false }
-      });
+      }));
 
       const interestEntries = toSortedEntries(data.byInterest).slice(0, 8);
-      new Chart(document.getElementById("interestBar"), {
+      activeCharts.push(new Chart(document.getElementById("interestBar"), {
         type: "bar",
         data: {
           labels: interestEntries.map((x) => x[0]),
@@ -232,17 +517,57 @@
           maintainAspectRatio: false,
           indexAxis: "y"
         }
-      });
+      }));
+
+      state.candidates = data.candidates || [];
+      addOptions("filterExperience", [...new Set(state.candidates.map((candidate) => candidate.experience))]);
+      addOptions("filterSource", [...new Set(state.candidates.map((candidate) => candidate.hear_about))]);
+      renderCandidates();
     };
+
+    const loadDashboard = async () => {
+      const response = await fetch("/api/dashboard");
+      if (!response.ok) {
+        throw new Error("Dashboard load failed");
+      }
+      const data = await response.json();
+      state.dashboard = data;
+      renderDashboard(data);
+    };
+
+    ["filterSearch", "filterStatus", "filterExperience", "filterSource"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", renderCandidates);
+      document.getElementById(id).addEventListener("change", renderCandidates);
+    });
+
+    document.getElementById("candidateList").addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const id = target.dataset.id;
+      const status = target.dataset.status;
+      if (!id || !status) {
+        return;
+      }
+
+      target.disabled = true;
+      try {
+        await updateCandidateStatus(id, status);
+        await loadDashboard();
+      } catch (error) {
+        document.getElementById("status").textContent = error && error.message
+          ? error.message
+          : "Could not update candidate status.";
+      } finally {
+        target.disabled = false;
+      }
+    });
 
     (async () => {
       try {
-        const response = await fetch("/api/dashboard");
-        if (!response.ok) {
-          throw new Error("Dashboard load failed");
-        }
-        const data = await response.json();
-        renderDashboard(data);
+        await loadDashboard();
       } catch (error) {
         document.getElementById("status").textContent = "Could not load dashboard data.";
       }
