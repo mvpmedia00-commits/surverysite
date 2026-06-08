@@ -879,7 +879,10 @@
           let serverMessage = "";
           try {
             const result = await response.json();
-            serverMessage = result && result.error ? ` (${result.error})` : "";
+            const errorText = result && result.error ? result.error : "";
+            const detailText = result && result.detail ? result.detail : "";
+            const combined = [errorText, detailText].filter(Boolean).join(" - ");
+            serverMessage = combined ? ` (${combined})` : "";
           } catch (parseError) {
             console.error(parseError);
           }
