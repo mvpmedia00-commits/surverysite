@@ -46,6 +46,11 @@ const toPhotoUrl = (supabaseUrl, value) => {
     return value;
   }
 
+  // Legacy rows may contain only a filename (no object path), which 404s in storage.
+  if (!String(value).includes("/")) {
+    return null;
+  }
+
   const encodedPath = String(value)
     .split("/")
     .map((part) => encodeURIComponent(part))
