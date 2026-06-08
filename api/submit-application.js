@@ -115,6 +115,7 @@ export default async function handler(req, res) {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
       "Content-Type": "application/json",
+      "Content-Profile": "public",
       Prefer: "return=minimal"
     },
     body: JSON.stringify(row)

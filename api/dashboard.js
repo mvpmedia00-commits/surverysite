@@ -58,7 +58,8 @@ export default async function handler(req, res) {
   const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=${query}&order=created_at.asc`, {
     headers: {
       apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`
+      Authorization: `Bearer ${supabaseKey}`,
+      "Accept-Profile": "public"
     }
   });
 
