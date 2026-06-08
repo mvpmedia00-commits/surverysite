@@ -946,6 +946,9 @@
             serverMessage = combined ? ` (${combined})` : "";
           } catch (parseError) {
             console.error(parseError);
+            const rawText = await response.text().catch(() => "");
+            const fallback = [`HTTP ${response.status}`, rawText].filter(Boolean).join(" - ");
+            serverMessage = fallback ? ` (${fallback})` : "";
           }
 
           submitBtn.disabled = false;
