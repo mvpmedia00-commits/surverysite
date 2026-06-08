@@ -861,16 +861,27 @@
       const payload = buildSubmissionPayload();
       const headshot = document.getElementById("headshot");
       const fullBody = document.getElementById("fullBody");
+      const uploadWarnings = [];
 
       if (headshot && headshot.files[0]) {
-        payload.headshot_filename = await uploadPhotoToSupabase(headshot.files[0], "headshot");
+        try {
+          payload.headshot_filename = await uploadPhotoToSupabase(headshot.files[0], "headshot");
+        } catch (error) {
+          uploadWarnings.push("Headshot upload failed; saved filename only.");
+          console.error(error);
+        }
       }
 
       if (fullBody && fullBody.files[0]) {
-        payload.full_body_filename = await uploadPhotoToSupabase(fullBody.files[0], "full-body");
+        try {
+          payload.full_body_filename = await uploadPhotoToSupabase(fullBody.files[0], "full-body");
+        } catch (error) {
+          uploadWarnings.push("Full body upload failed; saved filename only.");
+          console.error(error);
+        }
       }
 
-      return payload;
+      return { payload, uploadWarnings };
     };
 
     form.addEventListener("submit", async (event) => {
@@ -915,7 +926,7 @@
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
 
       try {
-        const payload = await buildSubmissionPayloadWithUploads();
+        const { payload, uploadWarnings } = await buildSubmissionPayloadWithUploads();
         const response = await fetch("/api/submit-application", {
           method: "POST",
           headers: {
@@ -943,12 +954,20 @@
             : `Could not submit. Please try again.${serverMessage}`;
           return;
         }
+
+        if (uploadWarnings.length > 0) {
+          const successText = document.getElementById("successText");
+          const warning = selectedLanguage === "es"
+            ? " Nota: Las fotos no se pudieron subir; solo se guardaron los nombres de archivo."
+            : " Note: Photo uploads failed; only filenames were saved.";
+          successText.textContent = `${successText.textContent}${warning}`;
+        }
       } catch (error) {
         console.error(error);
         submitBtn.disabled = false;
         submitStatus.textContent = selectedLanguage === "es"
-          ? "No se pudo enviar. Intenta nuevamente."
-          : "Could not submit. Please try again.";
+          ? `No se pudo enviar. Intenta nuevamente. (${error && error.message ? error.message : "Error desconocido"})`
+          : `Could not submit. Please try again. (${error && error.message ? error.message : "Unknown error"})`;
         return;
       }
 
