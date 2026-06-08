@@ -761,6 +761,9 @@
 
     const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
     const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
+    const SUPABASE_STORAGE_URL = "https://yisoqwebwwdqpcsalujo.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_s8DGb8UcdVRD4qMSD2VKiQ_TS0XXUEk";
+    const SUPABASE_STORAGE_BUCKET = "applications";
     const setError = (id, msg) => { document.getElementById(id).textContent = msg; };
     const clearErrors = () => {
       setError("interestsError", "");
@@ -777,6 +780,36 @@
     const selectedRadioValue = (name) => {
       const selected = document.querySelector(`input[name='${name}']:checked`);
       return selected ? selected.value : "";
+    };
+
+    const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const buildPublicObjectUrl = (objectPath) => {
+      const encodedPath = objectPath.split("/").map((part) => encodeURIComponent(part)).join("/");
+      return `${SUPABASE_STORAGE_URL}/storage/v1/object/public/${SUPABASE_STORAGE_BUCKET}/${encodedPath}`;
+    };
+
+    const uploadPhotoToSupabase = async (file, folder) => {
+      const objectPath = `${folder}/${Date.now()}-${sanitizeFileName(file.name)}`;
+      const uploadUrl = `${SUPABASE_STORAGE_URL}/storage/v1/object/${SUPABASE_STORAGE_BUCKET}/${objectPath}`;
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          "Content-Type": file.type || "application/octet-stream",
+          "x-upsert": "false"
+        },
+        body: file
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Photo upload failed");
+      }
+
+      return buildPublicObjectUrl(objectPath);
     };
 
     const buildSubmissionPayload = () => {
@@ -824,6 +857,22 @@
       };
     };
 
+    const buildSubmissionPayloadWithUploads = async () => {
+      const payload = buildSubmissionPayload();
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+
+      if (headshot && headshot.files[0]) {
+        payload.headshot_filename = await uploadPhotoToSupabase(headshot.files[0], "headshot");
+      }
+
+      if (fullBody && fullBody.files[0]) {
+        payload.full_body_filename = await uploadPhotoToSupabase(fullBody.files[0], "full-body");
+      }
+
+      return payload;
+    };
+
     form.addEventListener("submit", async (event) => {
       clearErrors();
       let hasErrors = !form.checkValidity();
@@ -866,13 +915,14 @@
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
 
       try {
+        const payload = await buildSubmissionPayloadWithUploads();
         const response = await fetch("/api/submit-application", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json"
           },
-          body: JSON.stringify(buildSubmissionPayload())
+          body: JSON.stringify(payload)
         });
 
         if (!response.ok) {

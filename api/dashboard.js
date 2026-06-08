@@ -52,7 +52,7 @@ export default async function handler(req, res) {
   }
 
   const query = encodeURI(
-    "created_at,hear_about,experience,frequency,travel_willing,comp_interest,expected_comp,interests"
+    "created_at,full_name,hear_about,experience,frequency,travel_willing,comp_interest,expected_comp,interests,headshot_filename,full_body_filename"
   );
 
   const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=${query}&order=created_at.asc`, {
@@ -69,6 +69,15 @@ export default async function handler(req, res) {
   }
 
   const rows = await response.json();
+  const recentPhotos = rows
+    .filter((row) => row.headshot_filename || row.full_body_filename)
+    .slice(-20)
+    .map((row) => ({
+      created_at: row.created_at,
+      full_name: row.full_name || "Unnamed",
+      headshot_url: row.headshot_filename || null,
+      full_body_url: row.full_body_filename || null
+    }));
 
   return respond(res, 200, {
     totalApplications: rows.length,
@@ -79,6 +88,7 @@ export default async function handler(req, res) {
     byExpectedComp: countBy(rows, "expected_comp"),
     byTravelWilling: countBy(rows, "travel_willing"),
     byInterest: countArrayField(rows, "interests"),
-    trendByMonth: monthlyTrend(rows)
+    trendByMonth: monthlyTrend(rows),
+    recentPhotos
   });
 }
