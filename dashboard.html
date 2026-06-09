@@ -285,6 +285,103 @@
       background: #fffbef;
     }
 
+    .actions .view-profile {
+      border-color: #b8d9d5;
+      color: #0e6b62;
+      background: #eff9f8;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 12, 9, 0.52);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 1000;
+    }
+
+    .modal[open] {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(900px, 96vw);
+      max-height: 90vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 1.18rem;
+    }
+
+    .modal-close {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 7px 10px;
+    }
+
+    .profile-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .profile-section {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .profile-section h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .profile-list {
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .profile-item {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .profile-item strong {
+      color: #3b342b;
+    }
+
+    .profile-section.wide {
+      grid-column: 1 / -1;
+    }
+
     .chart-box {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -312,6 +409,7 @@
       .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .charts { grid-template-columns: 1fr; }
       .filters { grid-template-columns: 1fr; }
+      .profile-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -390,10 +488,24 @@
     </section>
   </main>
 
+  <dialog class="modal" id="profileModal" aria-labelledby="profileTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="profileTitle">Applicant Profile</h2>
+          <p class="status" id="profileSubtitle"></p>
+        </div>
+        <button type="button" class="modal-close" id="closeProfileModal" aria-label="Close profile">Close</button>
+      </div>
+      <div class="profile-grid" id="profileContent"></div>
+    </div>
+  </dialog>
+
   <script>
     const state = {
       dashboard: null,
-      candidates: []
+      candidates: [],
+      activeCandidateId: null
     };
 
     const activeCharts = [];
@@ -446,6 +558,117 @@
         return new Date(value).toLocaleString();
       } catch {
         return value;
+      }
+    };
+
+    const formatList = (value) => {
+      if (Array.isArray(value)) {
+        return value.length ? value.join(", ") : "-";
+      }
+      return value || "-";
+    };
+
+    const lineItem = (label, value) => `<p class="profile-item"><strong>${label}:</strong> ${value || "-"}</p>`;
+
+    const renderProfile = (candidate) => {
+      const subtitle = document.getElementById("profileSubtitle");
+      const content = document.getElementById("profileContent");
+      subtitle.textContent = `${candidate.email || "No email"} · Applied ${formatDate(candidate.created_at)}`;
+
+      content.innerHTML = `
+        <section class="profile-section">
+          <h3>Basic</h3>
+          <div class="profile-list">
+            ${lineItem("Full Name", candidate.full_name)}
+            ${lineItem("Preferred Name", candidate.preferred_name)}
+            ${lineItem("Age", candidate.age ? String(candidate.age) : "-")}
+            ${lineItem("Email", candidate.email)}
+            ${lineItem("City", candidate.city)}
+            ${lineItem("Country", candidate.country)}
+            ${lineItem("Language", candidate.language)}
+            ${lineItem("Source", candidate.hear_about)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Social</h3>
+          <div class="profile-list">
+            ${lineItem("Instagram", candidate.instagram)}
+            ${lineItem("TikTok", candidate.tiktok)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Measurements</h3>
+          <div class="profile-list">
+            ${lineItem("Height", candidate.height)}
+            ${lineItem("Clothing Size", candidate.clothing_size)}
+            ${lineItem("Bra Size", candidate.bra_size)}
+            ${lineItem("Bust", candidate.bust_measurement)}
+            ${lineItem("Waist", candidate.waist_measurement)}
+            ${lineItem("Hip", candidate.hip_measurement)}
+            ${lineItem("Shoe Size", candidate.shoe_size)}
+            ${lineItem("Hair Color", candidate.hair_color)}
+            ${lineItem("Eye Color", candidate.eye_color)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Experience</h3>
+          <div class="profile-list">
+            ${lineItem("Experience", candidate.experience)}
+            ${lineItem("Worked with photographers", candidate.worked_with_photographers)}
+            ${lineItem("Comfortable snapshots", candidate.comfortable_snapshots)}
+            ${lineItem("Project interests", formatList(candidate.interests))}
+            ${lineItem("Comfort level", candidate.comfort_level)}
+            ${lineItem("Avoid concepts", candidate.avoid_concepts)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Availability</h3>
+          <div class="profile-list">
+            ${lineItem("Availability", formatList(candidate.availability))}
+            ${lineItem("Frequency", candidate.frequency)}
+            ${lineItem("Travel willing", candidate.travel_willing)}
+            ${lineItem("Travel distance", candidate.travel_distance)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Compensation</h3>
+          <div class="profile-list">
+            ${lineItem("Compensation interest", candidate.comp_interest)}
+            ${lineItem("Expected compensation", candidate.expected_comp)}
+            ${lineItem("Review status", candidate.review_status)}
+          </div>
+        </section>
+        <section class="profile-section wide">
+          <h3>Written Answers</h3>
+          <div class="profile-list">
+            ${lineItem("Why work with MVP", candidate.why_work)}
+            ${lineItem("Good fit", candidate.good_fit)}
+            ${lineItem("Anything else", candidate.anything_else)}
+            ${lineItem("Consents", formatList(candidate.consents))}
+          </div>
+        </section>
+      `;
+    };
+
+    const openProfileModal = (candidateId) => {
+      const candidate = state.candidates.find((item) => item.id === candidateId);
+      if (!candidate) {
+        return;
+      }
+      state.activeCandidateId = candidateId;
+      document.getElementById("profileTitle").textContent = `${candidate.full_name} - Applicant Profile`;
+      renderProfile(candidate);
+      const modal = document.getElementById("profileModal");
+      if (typeof modal.showModal === "function") {
+        modal.showModal();
+      }
+    };
+
+    const closeProfileModal = () => {
+      state.activeCandidateId = null;
+      const modal = document.getElementById("profileModal");
+      if (modal.open && typeof modal.close === "function") {
+        modal.close();
       }
     };
 
@@ -505,6 +728,7 @@
               : `<span class="thumb placeholder">No Full Body</span>`}
           </div>
           <div class="actions">
+            <button class="view-profile" data-view-id="${candidate.id}">View Profile</button>
             <button class="pending" data-id="${candidate.id}" data-status="pending">Set Pending</button>
             <button class="approve" data-id="${candidate.id}" data-status="approved">Approve</button>
             <button class="deny" data-id="${candidate.id}" data-status="denied">Deny</button>
@@ -624,7 +848,7 @@
       document.getElementById(id).addEventListener("change", renderCandidates);
     });
 
-    const csvEscape = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const csvEscape = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
 
     document.getElementById("exportCsvBtn").addEventListener("click", () => {
       const rows = getFilteredCandidates();
@@ -671,13 +895,19 @@
       link.download = `candidates-${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
       URL.revokeObjectURL(url);
     });
 
     document.getElementById("candidateList").addEventListener("click", async (event) => {
       const target = event.target;
       if (!(target instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const viewId = target.dataset.viewId;
+      if (viewId) {
+        openProfileModal(viewId);
         return;
       }
 
@@ -700,11 +930,25 @@
       }
     });
 
+    document.getElementById("closeProfileModal").addEventListener("click", closeProfileModal);
+    document.getElementById("profileModal").addEventListener("click", (event) => {
+      if (event.target === event.currentTarget) {
+        closeProfileModal();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeProfileModal();
+      }
+    });
+
     (async () => {
       try {
         await loadDashboard();
       } catch (error) {
-        document.getElementById("status").textContent = "Could not load dashboard data.";
+        document.getElementById("status").textContent = error && error.message
+          ? error.message
+          : "Could not load dashboard data.";
       }
     })();
   </script>

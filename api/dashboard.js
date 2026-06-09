@@ -110,7 +110,7 @@ export default async function handler(req, res) {
   }
 
   const query = encodeURI(
-    "id,created_at,full_name,email,city,country,hear_about,experience,frequency,travel_willing,comp_interest,expected_comp,interests,headshot_filename,full_body_filename,review_status"
+    "id,created_at,full_name,preferred_name,age,email,city,country,instagram,tiktok,hear_about,height,clothing_size,bra_size,bust_measurement,waist_measurement,hip_measurement,shoe_size,hair_color,eye_color,experience,worked_with_photographers,comfortable_snapshots,interests,comfort_level,avoid_concepts,availability,frequency,travel_willing,travel_distance,comp_interest,expected_comp,why_work,good_fit,anything_else,consents,headshot_filename,full_body_filename,language,review_status"
   );
 
   const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=${query}&order=created_at.asc`, {
@@ -134,11 +134,40 @@ export default async function handler(req, res) {
       id: row.id,
       created_at: row.created_at,
       full_name: row.full_name || "Unnamed",
+      preferred_name: row.preferred_name || "",
+      age: row.age || null,
       email: row.email || "",
       city: row.city || "",
       country: row.country || "",
+      instagram: row.instagram || "",
+      tiktok: row.tiktok || "",
       hear_about: row.hear_about || "Unknown",
+      height: row.height || "",
+      clothing_size: row.clothing_size || "",
+      bra_size: row.bra_size || "",
+      bust_measurement: row.bust_measurement || "",
+      waist_measurement: row.waist_measurement || "",
+      hip_measurement: row.hip_measurement || "",
+      shoe_size: row.shoe_size || "",
+      hair_color: row.hair_color || "",
+      eye_color: row.eye_color || "",
       experience: row.experience || "Unknown",
+      worked_with_photographers: row.worked_with_photographers || "",
+      comfortable_snapshots: row.comfortable_snapshots || "",
+      interests: Array.isArray(row.interests) ? row.interests : [],
+      comfort_level: row.comfort_level || "",
+      avoid_concepts: row.avoid_concepts || "",
+      availability: Array.isArray(row.availability) ? row.availability : [],
+      frequency: row.frequency || "",
+      travel_willing: row.travel_willing || "",
+      travel_distance: row.travel_distance || "",
+      comp_interest: row.comp_interest || "",
+      expected_comp: row.expected_comp || "",
+      why_work: row.why_work || "",
+      good_fit: row.good_fit || "",
+      anything_else: row.anything_else || "",
+      consents: Array.isArray(row.consents) ? row.consents : [],
+      language: row.language || "en",
       review_status: row.review_status || "pending",
       headshot_url: toPhotoUrl(supabaseUrl, row.headshot_filename),
       full_body_url: toPhotoUrl(supabaseUrl, row.full_body_filename)
