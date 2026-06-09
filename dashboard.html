@@ -223,6 +223,25 @@
       display: block;
     }
 
+    .thumb.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px;
+      line-height: 1.2;
+      background: repeating-linear-gradient(
+        135deg,
+        #f7f3ec,
+        #f7f3ec 8px,
+        #f0e9dd 8px,
+        #f0e9dd 16px
+      );
+    }
+
     .photo-links a {
       color: var(--accent);
       text-decoration: none;
@@ -478,8 +497,12 @@
             ${candidate.full_body_url ? `<a href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer">Full Body</a>` : ""}
           </div>
           <div class="photo-previews">
-            ${candidate.headshot_url ? `<a class="thumb" href="${candidate.headshot_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.headshot_url}" alt="${candidate.full_name} headshot"></a>` : ""}
-            ${candidate.full_body_url ? `<a class="thumb" href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.full_body_url}" alt="${candidate.full_name} full body"></a>` : ""}
+            ${candidate.headshot_url
+              ? `<a class="thumb" href="${candidate.headshot_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.headshot_url}" alt="${candidate.full_name} headshot"></a>`
+              : `<span class="thumb placeholder">No Headshot</span>`}
+            ${candidate.full_body_url
+              ? `<a class="thumb" href="${candidate.full_body_url}" target="_blank" rel="noopener noreferrer"><img src="${candidate.full_body_url}" alt="${candidate.full_name} full body"></a>`
+              : `<span class="thumb placeholder">No Full Body</span>`}
           </div>
           <div class="actions">
             <button class="pending" data-id="${candidate.id}" data-status="pending">Set Pending</button>
