@@ -13,6 +13,7 @@ const requiredFields = [
   "nude_experience_level",
   "height",
   "clothing_size",
+  "waist_measurement",
   "shoe_size",
   "hair_color",
   "eye_color",
@@ -32,9 +33,7 @@ const requiredFields = [
   "expected_comp",
   "why_work",
   "good_fit",
-  "release_understanding",
-  "emergency_contact_name",
-  "emergency_contact_phone"
+  "release_understanding"
 ];
 
 const respond = (res, status, payload) => {
@@ -164,8 +163,8 @@ export default async function handler(req, res) {
       good_fit: body.good_fit,
       release_understanding: body.release_understanding,
       intended_use: body.intended_use,
-      emergency_contact_name: body.emergency_contact_name,
-      emergency_contact_phone: body.emergency_contact_phone,
+      emergency_contact_name: body.emergency_contact_name || null,
+      emergency_contact_phone: body.emergency_contact_phone || null,
       organizer_questions: body.organizer_questions || null,
       confirm_18_truth: body.confirm_18_truth === true,
       anything_else: body.anything_else || null,

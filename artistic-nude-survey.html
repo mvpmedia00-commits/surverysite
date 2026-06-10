@@ -285,7 +285,7 @@
           <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
           <div class="field"><label for="shoeSize">Shoe Size *</label><input id="shoeSize" required></div>
           <div class="field"><label for="hairColor">Hair Color *</label><input id="hairColor" required></div>
@@ -349,6 +349,7 @@
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="interests" value="Artistic Nude Photography">Artistic Nude Photography</label>
             <label class="choice"><input type="checkbox" name="interests" value="Creative Fine Art">Creative Fine Art</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Swimwear / Lingerie">Swimwear / Lingerie</label>
             <label class="choice"><input type="checkbox" name="interests" value="Editorial">Editorial</label>
             <label class="choice"><input type="checkbox" name="interests" value="Portrait">Portrait</label>
           </div>
@@ -520,11 +521,6 @@
           <div class="error" id="intendedUseError"></div>
         </div>
 
-        <div class="grid two">
-          <div class="field"><label for="emergencyContactName">Emergency Contact Name *</label><input id="emergencyContactName" required></div>
-          <div class="field"><label for="emergencyContactPhone">Emergency Contact Phone *</label><input id="emergencyContactPhone" required></div>
-        </div>
-
         <div class="field"><label for="organizerQuestions">Additional information or questions for us</label><textarea id="organizerQuestions"></textarea></div>
 
         <div class="field">
@@ -668,8 +664,6 @@
         good_fit: getValue("goodFit"),
         release_understanding: getValue("releaseUnderstanding"),
         intended_use: checkedValues("input[name='intendedUse']"),
-        emergency_contact_name: getValue("emergencyContactName"),
-        emergency_contact_phone: getValue("emergencyContactPhone"),
         organizer_questions: getValue("organizerQuestions"),
         confirm_18_truth: checkedValues("input[name='confirm18Truth']").length > 0,
         anything_else: getValue("anythingElse"),
