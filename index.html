@@ -53,6 +53,23 @@
       background-repeat: no-repeat;
     }
 
+    .corner-link {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 4;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(10, 11, 13, 0.46);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      backdrop-filter: blur(2px);
+    }
+
     .lang-card {
       width: min(560px, 94vw);
       border: 1px solid rgba(255, 255, 255, 0.28);
@@ -85,6 +102,7 @@
     }
 
     .hero {
+      position: relative;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: linear-gradient(130deg, rgba(14, 107, 98, 0.14), rgba(200, 113, 70, 0.08));
@@ -98,6 +116,21 @@
     .hero-copy {
       display: grid;
       align-content: start;
+    }
+
+    .hero-about-link {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--accent);
+      background: #fff;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
 
     .hero-photo {
@@ -260,6 +293,7 @@
 </head>
 <body>
   <section class="lang-gate" id="langGate">
+    <a class="corner-link" href="/about-mvp-media.html">About MVP Media</a>
     <div class="lang-card">
       <h2 id="langTitle">Choose your language / Elige tu idioma</h2>
       <p id="langIntro">Select English or Spanish before continuing to the survey.</p>
@@ -274,6 +308,7 @@
 
   <main class="page hidden" id="surveyRoot">
     <header class="hero">
+      <a class="hero-about-link" href="/about-mvp-media.html">About MVP Media</a>
       <div class="hero-copy">
         <h1 id="pageTitle">MVP Media Photography Model Application</h1>
         <p class="intro" id="pageIntro">
@@ -318,7 +353,7 @@
           <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
           <div class="field"><label for="shoeSize">Shoe Size *</label><input id="shoeSize" required></div>
           <div class="field"><label for="hairColor">Hair Color *</label><input id="hairColor" required></div>
@@ -517,7 +552,7 @@
         labelClothingSize: "Clothing Size *",
         labelBraSize: "Bra Size (Optional)",
         labelBustMeasurement: "Bust Measurement (Optional)",
-        labelWaistMeasurement: "Waist Measurement (Optional)",
+        labelWaistMeasurement: "Waist Measurement *",
         labelHipMeasurement: "Hip Measurement (Optional)",
         labelShoeSize: "Shoe Size *",
         labelHairColor: "Hair Color *",
@@ -603,7 +638,7 @@
         labelClothingSize: "Talla de Ropa *",
         labelBraSize: "Talla de Brasier (Opcional)",
         labelBustMeasurement: "Medida de Busto (Opcional)",
-        labelWaistMeasurement: "Medida de Cintura (Opcional)",
+        labelWaistMeasurement: "Medida de Cintura *",
         labelHipMeasurement: "Medida de Cadera (Opcional)",
         labelShoeSize: "Talla de Zapato *",
         labelHairColor: "Color de Cabello *",

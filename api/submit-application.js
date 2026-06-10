@@ -8,6 +8,7 @@ const requiredFields = [
   "hear_about",
   "height",
   "clothing_size",
+  "waist_measurement",
   "shoe_size",
   "hair_color",
   "eye_color",
@@ -84,7 +85,7 @@ export default async function handler(req, res) {
       clothing_size: body.clothing_size,
       bra_size: body.bra_size || null,
       bust_measurement: body.bust_measurement || null,
-      waist_measurement: body.waist_measurement || null,
+      waist_measurement: body.waist_measurement,
       hip_measurement: body.hip_measurement || null,
       shoe_size: body.shoe_size,
       hair_color: body.hair_color,
@@ -131,7 +132,7 @@ export default async function handler(req, res) {
   } catch (error) {
     return respond(res, 500, {
       error: "Unhandled submit error",
-      detail: error && error.message ? error.message : "Unknown server error"
+      detail: error?.message || "Unknown server error"
     });
   }
 }
