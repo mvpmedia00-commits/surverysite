@@ -59,6 +59,37 @@ const toPhotoUrl = (supabaseUrl, value) => {
   return `${supabaseUrl}/storage/v1/object/public/applications/${encodedPath}`;
 };
 
+const deleteDeniedOlderThan = async (supabaseUrl, supabaseKey, hours) => {
+  const cutoffIso = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+  const headers = {
+    apikey: supabaseKey,
+    Authorization: `Bearer ${supabaseKey}`,
+    "Content-Profile": "public",
+    Prefer: "return=minimal"
+  };
+
+  // Rows denied before review timestamps were added.
+  const legacyDelete = await fetch(
+    `${supabaseUrl}/rest/v1/model_applications?review_status=eq.denied&review_updated_at=is.null&created_at=lt.${encodeURIComponent(cutoffIso)}`,
+    { method: "DELETE", headers }
+  );
+
+  if (!legacyDelete.ok) {
+    const detail = await legacyDelete.text();
+    throw new Error(`Failed deleting legacy denied rows: ${detail}`);
+  }
+
+  const deniedDelete = await fetch(
+    `${supabaseUrl}/rest/v1/model_applications?review_status=eq.denied&review_updated_at=lt.${encodeURIComponent(cutoffIso)}`,
+    { method: "DELETE", headers }
+  );
+
+  if (!deniedDelete.ok) {
+    const detail = await deniedDelete.text();
+    throw new Error(`Failed deleting denied rows: ${detail}`);
+  }
+};
+
 export default async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "PATCH") {
     return respond(res, 405, { error: "Method not allowed" });
@@ -107,6 +138,15 @@ export default async function handler(req, res) {
     }
 
     return respond(res, 200, { ok: true });
+  }
+
+  try {
+    await deleteDeniedOlderThan(supabaseUrl, supabaseKey, 24);
+  } catch (error) {
+    return respond(res, 500, {
+      error: "Failed to apply denied profile retention policy",
+      detail: error?.message || "Unknown retention error"
+    });
   }
 
   const query = encodeURI(

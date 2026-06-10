@@ -435,7 +435,7 @@
 
     <section class="card">
       <div class="filters-head">
-        <p class="status">Candidate Review</p>
+        <p class="status">Candidate Review - denied profiles auto-delete after 24 hours.</p>
         <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
       </div>
       <div class="filters">
@@ -449,7 +449,6 @@
             <option value="all">All</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
-            <option value="denied">Denied</option>
           </select>
         </div>
         <div class="field">
@@ -679,6 +678,9 @@
       const source = document.getElementById("filterSource").value;
 
       return state.candidates.filter((candidate) => {
+        if (candidate.review_status === "denied") {
+          return false;
+        }
         const matchesSearch = !search
           || candidate.full_name.toLowerCase().includes(search)
           || candidate.email.toLowerCase().includes(search);
