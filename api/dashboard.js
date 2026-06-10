@@ -111,7 +111,7 @@ export default async function handler(req, res) {
   }
 
   const query = encodeURI(
-    "id,created_at,full_name,preferred_name,age,email,city,country,instagram,tiktok,hear_about,height,clothing_size,bra_size,bust_measurement,waist_measurement,hip_measurement,shoe_size,hair_color,eye_color,experience,worked_with_photographers,comfortable_snapshots,interests,comfort_level,avoid_concepts,availability,frequency,travel_willing,travel_distance,comp_interest,expected_comp,why_work,good_fit,anything_else,consents,headshot_filename,full_body_filename,language,review_status"
+    "id,created_at,full_name,preferred_name,age,email,city,country,instagram,tiktok,hear_about,height,clothing_size,bra_size,bust_measurement,waist_measurement,hip_measurement,shoe_size,hair_color,eye_color,experience,worked_with_photographers,comfortable_snapshots,interests,comfort_level,avoid_concepts,availability,frequency,travel_willing,travel_distance,comp_interest,expected_comp,unpaid_tfp_willing,why_work,good_fit,anything_else,consents,headshot_filename,full_body_filename,language,review_status"
   );
 
   const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=${query}&order=created_at.asc`, {
@@ -165,6 +165,7 @@ export default async function handler(req, res) {
       travel_distance: row.travel_distance || "",
       comp_interest: row.comp_interest || "",
       expected_comp: row.expected_comp || "",
+      unpaid_tfp_willing: row.unpaid_tfp_willing === true,
       why_work: row.why_work || "",
       good_fit: row.good_fit || "",
       anything_else: row.anything_else || "",

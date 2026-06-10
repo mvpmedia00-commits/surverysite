@@ -475,8 +475,10 @@
           </div>
 
           <div class="field">
-            <div class="choices">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling" required>I am willing to do unpaid shoots in exchange for edited pictures. *</label>
+            <label for="unpaidTfpWillingYes" id="unpaidTfpLabel">Are you willing to do unpaid shoots in exchange for edited pictures? *</label>
+            <div class="choices inline">
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingYes" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingNo" value="No">No</label>
             </div>
             <div class="error" id="unpaidTfpError"></div>
           </div>
@@ -597,7 +599,7 @@
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
         labelExpectedComp: "Expected compensation per session *",
-        labelUnpaidTfpWilling: "I am willing to do unpaid shoots in exchange for edited pictures. *",
+        labelUnpaidTfpWilling: "Are you willing to do unpaid shoots in exchange for edited pictures? *",
         expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Full Body Photo *",
@@ -614,7 +616,7 @@
         msgInterest: "Please select at least one interest.",
         msgAvailability: "Please select at least one availability option.",
         msgConsent: "All consent items must be checked before submission.",
-        msgUnpaidTfp: "Please confirm if you are willing to do unpaid shoots in exchange for edited pictures."
+        msgUnpaidTfp: "Please select Yes or No for unpaid shoots in exchange for edited pictures."
       },
       es: {
         langTitle: "Choose your language / Elige tu idioma",
@@ -685,7 +687,7 @@
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
         labelExpectedComp: "Compensacion esperada por sesion *",
-        labelUnpaidTfpWilling: "Estoy dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas. *",
+        labelUnpaidTfpWilling: "Estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas? *",
         expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Foto de Cuerpo Completo *",
@@ -702,7 +704,7 @@
         msgInterest: "Selecciona al menos un interes.",
         msgAvailability: "Selecciona al menos una opcion de disponibilidad.",
         msgConsent: "Debes aceptar todos los consentimientos antes de enviar.",
-        msgUnpaidTfp: "Confirma si estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas."
+        msgUnpaidTfp: "Selecciona Si o No para sesiones no pagadas a cambio de fotos editadas."
       }
     };
 
@@ -801,6 +803,8 @@
       setChoiceText("input[name='snapshots'][value='No']", t.no);
       setChoiceText("input[name='travel'][value='Yes']", t.yes);
       setChoiceText("input[name='travel'][value='No']", t.no);
+      setChoiceText("input[name='unpaidTfpWilling'][value='Yes']", t.yes);
+      setChoiceText("input[name='unpaidTfpWilling'][value='No']", t.no);
 
       setChoiceText("input[name='interests'][value='Portrait']", t.interestPortrait);
       setChoiceText("input[name='interests'][value='Lifestyle']", t.interestLifestyle);
@@ -823,7 +827,10 @@
       setChoiceText("input[name='consent'][value='voluntary']", t.consentVoluntary);
       setChoiceText("input[name='consent'][value='details']", t.consentDetails);
       setChoiceText("input[name='consent'][value='contact']", t.consentContact);
-      setChoiceText("#unpaidTfpWilling", t.labelUnpaidTfpWilling);
+      const unpaidTfpLabel = document.getElementById("unpaidTfpLabel");
+      if (unpaidTfpLabel) {
+        unpaidTfpLabel.textContent = t.labelUnpaidTfpWilling;
+      }
 
       setOptions("hearAbout", t.hearAboutOptions);
       setOptions("experience", t.experienceOptions);
@@ -958,7 +965,7 @@
         travel_distance: getValue("travelDistance"),
         comp_interest: getValue("compInterest"),
         expected_comp: getValue("expectedComp"),
-        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
+        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),
         anything_else: getValue("anythingElse"),
@@ -1021,7 +1028,7 @@
         hasErrors = true;
       }
 
-      if (!document.getElementById("unpaidTfpWilling").checked) {
+      if (!selectedRadioValue("unpaidTfpWilling")) {
         setError("unpaidTfpError", t.msgUnpaidTfp);
         hasErrors = true;
       }

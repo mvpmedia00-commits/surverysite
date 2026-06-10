@@ -472,7 +472,8 @@
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
             </div>
             <div class="choices" style="margin-top: 8px;">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling" required>I am willing to do unpaid shoots in exchange for edited pictures. *</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes" required>Yes - I am willing to do unpaid shoots in exchange for edited pictures.</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No - I am not willing to do unpaid shoots in exchange for edited pictures.</label>
             </div>
             <div class="error" id="compensationTypeError"></div>
             <div class="error" id="unpaidTfpError"></div>
@@ -664,7 +665,7 @@
         travel_preference: getValue("travelPreference"),
         comp_interest: getValue("compInterest"),
         compensation_types: checkedValues("input[name='compensationTypes']"),
-        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
+        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
         expected_comp: getValue("expectedComp"),
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),
@@ -732,8 +733,8 @@
         hasErrors = true;
       }
 
-      if (!document.getElementById("unpaidTfpWilling").checked) {
-        setError("unpaidTfpError", "Please confirm if you are willing to do unpaid shoots in exchange for edited pictures.");
+      if (!selectedRadioValue("unpaidTfpWilling")) {
+        setError("unpaidTfpError", "Please select Yes or No for unpaid shoots in exchange for edited pictures.");
         hasErrors = true;
       }
 

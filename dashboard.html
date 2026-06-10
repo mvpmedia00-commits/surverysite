@@ -656,6 +656,7 @@
           <div class="profile-list">
             ${lineItem("Compensation interest", candidate.comp_interest)}
             ${lineItem("Expected compensation", candidate.expected_comp)}
+            ${lineItem("Unpaid for edited pictures", candidate.unpaid_tfp_willing ? "Yes" : "No")}
             ${lineItem("Review status", candidate.review_status)}
           </div>
         </section>
@@ -890,6 +891,7 @@
         "country",
         "hear_about",
         "experience",
+        "unpaid_tfp_willing",
         "review_status",
         "headshot_url",
         "full_body_url"
@@ -906,6 +908,7 @@
           candidate.country,
           candidate.hear_about,
           candidate.experience,
+          candidate.unpaid_tfp_willing ? "Yes" : "No",
           candidate.review_status,
           candidate.headshot_url,
           candidate.full_body_url
