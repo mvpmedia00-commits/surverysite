@@ -471,6 +471,9 @@
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Content collaboration">Content collaboration</label>
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
             </div>
+            <div class="choices" style="margin-top: 8px;">
+              <label class="choice"><input type="checkbox" id="unpaidTfpWilling">I am willing to do unpaid shoots in exchange for edited pictures.</label>
+            </div>
             <div class="error" id="compensationTypeError"></div>
           </div>
 
@@ -659,6 +662,7 @@
         travel_preference: getValue("travelPreference"),
         comp_interest: getValue("compInterest"),
         compensation_types: checkedValues("input[name='compensationTypes']"),
+        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
         expected_comp: getValue("expectedComp"),
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),

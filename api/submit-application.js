@@ -102,6 +102,7 @@ export default async function handler(req, res) {
       travel_distance: body.travel_distance,
       comp_interest: body.comp_interest,
       expected_comp: body.expected_comp,
+      unpaid_tfp_willing: body.unpaid_tfp_willing === true,
       why_work: body.why_work,
       good_fit: body.good_fit,
       anything_else: body.anything_else || null,

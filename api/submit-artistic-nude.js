@@ -158,6 +158,7 @@ export default async function handler(req, res) {
       travel_preference: body.travel_preference,
       comp_interest: body.comp_interest,
       compensation_types: body.compensation_types,
+      unpaid_tfp_willing: body.unpaid_tfp_willing === true,
       expected_comp: body.expected_comp,
       why_work: body.why_work,
       good_fit: body.good_fit,

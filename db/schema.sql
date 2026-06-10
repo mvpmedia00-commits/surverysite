@@ -33,6 +33,7 @@ create table if not exists public.model_applications (
   travel_distance text not null,
   comp_interest text not null,
   expected_comp text not null,
+  unpaid_tfp_willing boolean not null default false,
   why_work text not null,
   good_fit text not null,
   anything_else text,
@@ -49,6 +50,9 @@ alter table public.model_applications
 
 alter table public.model_applications
   add column if not exists review_updated_at timestamptz;
+
+alter table public.model_applications
+  add column if not exists unpaid_tfp_willing boolean not null default false;
 
 create index if not exists idx_model_applications_created_at on public.model_applications (created_at);
 create index if not exists idx_model_applications_source on public.model_applications (hear_about);

@@ -49,6 +49,7 @@ create table if not exists public.artistic_nude_applications (
   travel_preference text,
   comp_interest text not null,
   compensation_types jsonb not null default '[]'::jsonb,
+  unpaid_tfp_willing boolean not null default false,
   expected_comp text not null,
   why_work text not null,
   good_fit text not null,
@@ -84,6 +85,7 @@ alter table public.artistic_nude_applications add column if not exists special_c
 alter table public.artistic_nude_applications add column if not exists availability_notes text;
 alter table public.artistic_nude_applications add column if not exists travel_preference text;
 alter table public.artistic_nude_applications add column if not exists compensation_types jsonb not null default '[]'::jsonb;
+alter table public.artistic_nude_applications add column if not exists unpaid_tfp_willing boolean not null default false;
 alter table public.artistic_nude_applications add column if not exists release_understanding text;
 alter table public.artistic_nude_applications add column if not exists intended_use jsonb not null default '[]'::jsonb;
 alter table public.artistic_nude_applications add column if not exists emergency_contact_name text;
