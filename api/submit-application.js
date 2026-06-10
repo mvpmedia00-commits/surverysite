@@ -71,18 +71,9 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "All consent items must be accepted" });
     }
 
-    if (typeof body.unpaid_tfp_willing !== "boolean") {
+    if (body.unpaid_tfp_willing !== true) {
       return respond(res, 400, {
-        error: "Unpaid shoots in exchange for edited pictures must be Yes or No"
-      });
-    }
-
-    const hasInstagram = typeof body.instagram === "string" && body.instagram.trim() !== "";
-    const hasHeadshot = typeof body.headshot_filename === "string" && body.headshot_filename.trim() !== "";
-    const hasFullBody = typeof body.full_body_filename === "string" && body.full_body_filename.trim() !== "";
-    if (!hasInstagram && !hasHeadshot && !hasFullBody) {
-      return respond(res, 400, {
-        error: "Upload at least one photo or provide an Instagram profile"
+        error: "Unpaid shoots in exchange for edited pictures confirmation is required"
       });
     }
 

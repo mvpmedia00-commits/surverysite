@@ -54,8 +54,18 @@ alter table public.model_applications
 alter table public.model_applications
   add column if not exists unpaid_tfp_willing boolean not null default false;
 
-alter table public.model_applications
-  drop constraint if exists model_applications_unpaid_tfp_required;
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'model_applications_unpaid_tfp_required'
+  ) then
+    alter table public.model_applications
+      add constraint model_applications_unpaid_tfp_required
+      check (unpaid_tfp_willing = true) not valid;
+  end if;
+end $$;
 
 create index if not exists idx_model_applications_created_at on public.model_applications (created_at);
 create index if not exists idx_model_applications_source on public.model_applications (hear_about);

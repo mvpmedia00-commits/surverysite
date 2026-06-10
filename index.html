@@ -475,10 +475,8 @@
           </div>
 
           <div class="field">
-            <label for="unpaidTfpWillingYes" id="unpaidTfpLabel">Are you willing to do unpaid shoots in exchange for edited pictures? *</label>
-            <div class="choices inline">
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingYes" value="Yes" required>Yes</label>
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingNo" value="No">No</label>
+            <div class="choices">
+              <label class="choice"><input type="checkbox" id="unpaidTfpWilling" required>I am willing to do unpaid shoots in exchange for edited pictures. *</label>
             </div>
             <div class="error" id="unpaidTfpError"></div>
           </div>
@@ -488,9 +486,8 @@
       <fieldset>
         <legend id="legend5">5) Photos And Final Questions</legend>
         <div class="grid two">
-          <div class="field"><label for="headshot">Headshot</label><input id="headshot" type="file" accept="image/*"></div>
-          <div class="field"><label for="fullBody">Full Body Photo</label><input id="fullBody" type="file" accept="image/*"></div>
-          <div class="field"><div class="error" id="photoRequirementError"></div></div>
+          <div class="field"><label for="headshot">Headshot *</label><input id="headshot" type="file" accept="image/*" required></div>
+          <div class="field"><label for="fullBody">Full Body Photo *</label><input id="fullBody" type="file" accept="image/*" required></div>
           <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
           <div class="field"><label for="goodFit">What makes you a good fit? *</label><textarea id="goodFit" required></textarea></div>
           <div class="field"><label for="anythingElse">Anything else you would like us to know? (Optional)</label><textarea id="anythingElse"></textarea></div>
@@ -600,10 +597,10 @@
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
         labelExpectedComp: "Expected compensation per session *",
-        labelUnpaidTfpWilling: "Are you willing to do unpaid shoots in exchange for edited pictures? *",
+        labelUnpaidTfpWilling: "I am willing to do unpaid shoots in exchange for edited pictures. *",
         expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
-        labelHeadshot: "Headshot",
-        labelFullBody: "Full Body Photo",
+        labelHeadshot: "Headshot *",
+        labelFullBody: "Full Body Photo *",
         labelWhyWork: "Why would you like to work with MVP Media Photography? *",
         labelGoodFit: "What makes you a good fit? *",
         labelAnythingElse: "Anything else you would like us to know? (Optional)",
@@ -617,9 +614,7 @@
         msgInterest: "Please select at least one interest.",
         msgAvailability: "Please select at least one availability option.",
         msgConsent: "All consent items must be checked before submission.",
-        msgUnpaidTfp: "Please select Yes or No for unpaid shoots in exchange for edited pictures.",
-        msgPhotoRequirement: "Please upload at least one photo, or provide your Instagram profile if you prefer not to upload photos.",
-        msgPhotoWarning: " Note: You submitted without photos. We will review your Instagram profile instead."
+        msgUnpaidTfp: "Please confirm if you are willing to do unpaid shoots in exchange for edited pictures."
       },
       es: {
         langTitle: "Choose your language / Elige tu idioma",
@@ -690,10 +685,10 @@
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
         labelExpectedComp: "Compensacion esperada por sesion *",
-        labelUnpaidTfpWilling: "Estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas? *",
+        labelUnpaidTfpWilling: "Estoy dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas. *",
         expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
-        labelHeadshot: "Headshot",
-        labelFullBody: "Foto de Cuerpo Completo",
+        labelHeadshot: "Headshot *",
+        labelFullBody: "Foto de Cuerpo Completo *",
         labelWhyWork: "Por que te gustaria trabajar con MVP Media Photography? *",
         labelGoodFit: "Que te hace una buena opcion? *",
         labelAnythingElse: "Hay algo mas que te gustaria que sepamos? (Opcional)",
@@ -707,9 +702,7 @@
         msgInterest: "Selecciona al menos un interes.",
         msgAvailability: "Selecciona al menos una opcion de disponibilidad.",
         msgConsent: "Debes aceptar todos los consentimientos antes de enviar.",
-        msgUnpaidTfp: "Selecciona Si o No para sesiones no pagadas a cambio de fotos editadas.",
-        msgPhotoRequirement: "Sube al menos una foto, o proporciona tu perfil de Instagram si prefieres no subir fotos.",
-        msgPhotoWarning: " Nota: Enviaste la solicitud sin fotos. Revisaremos tu perfil de Instagram en su lugar."
+        msgUnpaidTfp: "Confirma si estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas."
       }
     };
 
@@ -808,8 +801,6 @@
       setChoiceText("input[name='snapshots'][value='No']", t.no);
       setChoiceText("input[name='travel'][value='Yes']", t.yes);
       setChoiceText("input[name='travel'][value='No']", t.no);
-      setChoiceText("input[name='unpaidTfpWilling'][value='Yes']", t.yes);
-      setChoiceText("input[name='unpaidTfpWilling'][value='No']", t.no);
 
       setChoiceText("input[name='interests'][value='Portrait']", t.interestPortrait);
       setChoiceText("input[name='interests'][value='Lifestyle']", t.interestLifestyle);
@@ -832,10 +823,7 @@
       setChoiceText("input[name='consent'][value='voluntary']", t.consentVoluntary);
       setChoiceText("input[name='consent'][value='details']", t.consentDetails);
       setChoiceText("input[name='consent'][value='contact']", t.consentContact);
-      const unpaidTfpLabel = document.getElementById("unpaidTfpLabel");
-      if (unpaidTfpLabel) {
-        unpaidTfpLabel.textContent = t.labelUnpaidTfpWilling;
-      }
+      setChoiceText("#unpaidTfpWilling", t.labelUnpaidTfpWilling);
 
       setOptions("hearAbout", t.hearAboutOptions);
       setOptions("experience", t.experienceOptions);
@@ -897,7 +885,6 @@
       setError("interestsError", "");
       setError("availabilityError", "");
       setError("unpaidTfpError", "");
-      setError("photoRequirementError", "");
       setError("consentError", "");
       submitStatus.textContent = "";
     };
@@ -971,7 +958,7 @@
         travel_distance: getValue("travelDistance"),
         comp_interest: getValue("compInterest"),
         expected_comp: getValue("expectedComp"),
-        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
+        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),
         anything_else: getValue("anythingElse"),
@@ -1034,16 +1021,8 @@
         hasErrors = true;
       }
 
-      if (!selectedRadioValue("unpaidTfpWilling")) {
+      if (!document.getElementById("unpaidTfpWilling").checked) {
         setError("unpaidTfpError", t.msgUnpaidTfp);
-        hasErrors = true;
-      }
-
-      const hasInstagram = Boolean(getValue("instagram"));
-      const hasHeadshot = Boolean(document.getElementById("headshot")?.files?.[0]);
-      const hasFullBody = Boolean(document.getElementById("fullBody")?.files?.[0]);
-      if (!hasInstagram && !hasHeadshot && !hasFullBody) {
-        setError("photoRequirementError", t.msgPhotoRequirement);
         hasErrors = true;
       }
 
@@ -1065,7 +1044,6 @@
 
       try {
         const { payload, uploadWarnings } = await buildSubmissionPayloadWithUploads();
-        const noPhotosProvided = !payload.headshot_filename && !payload.full_body_filename;
         const response = await fetch("/api/submit-application", {
           method: "POST",
           headers: {
@@ -1103,11 +1081,6 @@
             ? " Nota: Las fotos no se pudieron subir; solo se guardaron los nombres de archivo."
             : " Note: Photo uploads failed; only filenames were saved.";
           successText.textContent = `${successText.textContent}${warning}`;
-        }
-
-        if (noPhotosProvided && payload.instagram) {
-          const successText = document.getElementById("successText");
-          successText.textContent = `${successText.textContent}${t.msgPhotoWarning}`;
         }
       } catch (error) {
         console.error(error);
