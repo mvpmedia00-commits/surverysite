@@ -44,16 +44,24 @@
       display: grid;
       place-items: center;
       padding: 20px;
+      position: relative;
+      background-image:
+        linear-gradient(rgba(10, 9, 8, 0.54), rgba(10, 9, 8, 0.54)),
+        url("assets/photos/f34f445e-219f-4dab-8e49-cd2ab4e3d506.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .lang-card {
       width: min(560px, 94vw);
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: var(--radius);
-      background: var(--panel);
+      background: rgba(255, 253, 249, 0.9);
       box-shadow: var(--shadow);
       padding: 22px 18px;
       text-align: center;
+      backdrop-filter: blur(2px);
     }
 
     .lang-card h2 {
@@ -197,6 +205,33 @@
       box-shadow: 0 14px 22px rgba(14, 107, 98, 0.28);
     }
 
+    .scroll-cue {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 20;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(14, 107, 98, 0.92);
+      min-width: auto;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 20px rgba(8, 7, 6, 0.28);
+      display: none;
+      animation: floatCue 1.3s ease-in-out infinite;
+    }
+
+    .scroll-cue.show {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @keyframes floatCue {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-6px); }
+    }
+
     .success {
       display: none;
       margin-top: 14px;
@@ -234,6 +269,8 @@
       </div>
     </div>
   </section>
+
+  <button type="button" class="scroll-cue" id="scrollCue" aria-label="Scroll Down ↓">Scroll Down ↓</button>
 
   <main class="page hidden" id="surveyRoot">
     <header class="hero">
@@ -441,6 +478,7 @@
   <script>
     const langGate = document.getElementById("langGate");
     const surveyRoot = document.getElementById("surveyRoot");
+    const scrollCue = document.getElementById("scrollCue");
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
@@ -747,6 +785,20 @@
       document.querySelectorAll("select option[value='']").forEach((option) => {
         option.textContent = t.selectOne;
       });
+
+      if (scrollCue) {
+        scrollCue.textContent = lang === "es" ? "Desliza hacia abajo ↓" : "Scroll Down ↓";
+      }
+    };
+
+    const showScrollCue = () => {
+      if (!scrollCue) {
+        return;
+      }
+      scrollCue.classList.add("show");
+      globalThis.setTimeout(() => {
+        scrollCue.classList.remove("show");
+      }, 5000);
     };
 
     document.querySelectorAll("button[data-lang]").forEach((button) => {
@@ -755,9 +807,23 @@
         applyLanguage(lang);
         langGate.classList.add("hidden");
         surveyRoot.classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        surveyRoot.scrollIntoView({ behavior: "smooth", block: "start" });
+        showScrollCue();
       });
     });
+
+    if (scrollCue) {
+      scrollCue.addEventListener("click", () => {
+        surveyRoot.scrollIntoView({ behavior: "smooth", block: "start" });
+        scrollCue.classList.remove("show");
+      });
+    }
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 120 && scrollCue) {
+        scrollCue.classList.remove("show");
+      }
+    }, { passive: true });
 
     const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
     const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
