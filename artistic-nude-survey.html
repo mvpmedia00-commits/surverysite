@@ -471,9 +471,10 @@
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Content collaboration">Content collaboration</label>
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
             </div>
-            <div class="choices" style="margin-top: 8px;">
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes" required>Yes - I am willing to do unpaid shoots in exchange for edited pictures.</label>
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No - I am not willing to do unpaid shoots in exchange for edited pictures.</label>
+            <label for="unpaidTfpWillingYes">Are you willing to do unpaid shoots in exchange for edited pictures? *</label>
+            <div class="choices inline" style="margin-top: 8px;">
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingYes" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingNo" value="No">No</label>
             </div>
             <div class="error" id="compensationTypeError"></div>
             <div class="error" id="unpaidTfpError"></div>
