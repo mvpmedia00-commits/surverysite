@@ -471,9 +471,9 @@
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Content collaboration">Content collaboration</label>
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
             </div>
-            <label for="unpaidTfpWillingYes">Are you willing to do unpaid shoots in exchange for edited pictures? *</label>
+            <label for="unpaidTfpWillingYes">Are you willing to do unpaid shoots in exchange for edited pictures? / Estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas? *</label>
             <div class="choices inline" style="margin-top: 8px;">
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingYes" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingYes" value="Yes" required>Yes / Si</label>
               <label class="choice"><input type="radio" name="unpaidTfpWilling" id="unpaidTfpWillingNo" value="No">No</label>
             </div>
             <div class="error" id="compensationTypeError"></div>
@@ -735,7 +735,7 @@
       }
 
       if (!selectedRadioValue("unpaidTfpWilling")) {
-        setError("unpaidTfpError", "Please select Yes or No for unpaid shoots in exchange for edited pictures.");
+        setError("unpaidTfpError", "Please select Yes or No / Selecciona Si o No para sesiones no pagadas a cambio de fotos editadas.");
         hasErrors = true;
       }
 
