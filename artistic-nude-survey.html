@@ -496,8 +496,9 @@
       <fieldset>
         <legend>5) Photos And Intent</legend>
         <div class="grid two">
-          <div class="field"><label for="headshot">Headshot *</label><input id="headshot" type="file" accept="image/*" required></div>
-          <div class="field"><label for="fullBody">Full Body Photo *</label><input id="fullBody" type="file" accept="image/*" required></div>
+          <div class="field"><label for="headshot">Headshot</label><input id="headshot" type="file" accept="image/*"></div>
+          <div class="field"><label for="fullBody">Full Body Photo</label><input id="fullBody" type="file" accept="image/*"></div>
+          <div class="field"><div class="error" id="photoRequirementError"></div></div>
           <div class="field"><label for="whyWork">Why do you want to work on artistic nude projects with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
           <div class="field"><label for="goodFit">What makes you a strong fit for this type of project? *</label><textarea id="goodFit" required></textarea></div>
           <div class="field"><label for="anythingElse">Anything else we should know? (Optional)</label><textarea id="anythingElse"></textarea></div>
@@ -572,6 +573,7 @@
       setError("availabilityError", "");
       setError("compensationTypeError", "");
       setError("unpaidTfpError", "");
+      setError("photoRequirementError", "");
       setError("intendedUseError", "");
       setError("consentError", "");
       setError("confirm18Error", "");
@@ -739,6 +741,14 @@
         hasErrors = true;
       }
 
+      const hasInstagram = Boolean(getValue("instagram"));
+      const hasHeadshot = Boolean(document.getElementById("headshot")?.files?.[0]);
+      const hasFullBody = Boolean(document.getElementById("fullBody")?.files?.[0]);
+      if (!hasInstagram && !hasHeadshot && !hasFullBody) {
+        setError("photoRequirementError", "Please upload at least one photo, or provide your Instagram profile if you prefer not to upload photos.");
+        hasErrors = true;
+      }
+
       if (!checkAtLeastOne("input[name='intendedUse']")) {
         setError("intendedUseError", "Please select at least one intended use option.");
         hasErrors = true;
@@ -766,6 +776,7 @@
 
       try {
         const payload = await buildPayloadWithUploads();
+        const noPhotosProvided = !payload.headshot_filename && !payload.full_body_filename;
         const response = await fetch("/api/submit-artistic-nude", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -776,6 +787,13 @@
 
         if (!response.ok) {
           throw new Error(data.error || "Submission failed");
+        }
+
+        if (noPhotosProvided && payload.instagram) {
+          const successText = document.querySelector("#successMessage p");
+          if (successText) {
+            successText.textContent = `${successText.textContent} Note: You submitted without photos. We will review your Instagram profile instead.`;
+          }
         }
 
         form.style.display = "none";

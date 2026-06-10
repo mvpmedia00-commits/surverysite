@@ -113,6 +113,15 @@ export default async function handler(req, res) {
       });
     }
 
+    const hasInstagram = typeof body.instagram === "string" && body.instagram.trim() !== "";
+    const hasHeadshot = typeof body.headshot_filename === "string" && body.headshot_filename.trim() !== "";
+    const hasFullBody = typeof body.full_body_filename === "string" && body.full_body_filename.trim() !== "";
+    if (!hasInstagram && !hasHeadshot && !hasFullBody) {
+      return respond(res, 400, {
+        error: "Upload at least one photo or provide an Instagram profile"
+      });
+    }
+
     if (body.confirm_18_truth !== true) {
       return respond(res, 400, { error: "18+ accuracy confirmation is required" });
     }
