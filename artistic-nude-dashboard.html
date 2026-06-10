@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media Photography - Application Dashboard</title>
+  <title>MVP Media Photography - Artistic Nude Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -48,11 +48,6 @@
       font-size: clamp(1.4rem, 4vw, 2rem);
     }
 
-    .head p {
-      margin: 8px 0 0;
-      color: var(--muted);
-    }
-
     .head-actions {
       margin-top: 10px;
       display: flex;
@@ -70,6 +65,11 @@
       font-size: 0.88rem;
       font-weight: 700;
       padding: 7px 12px;
+    }
+
+    .head p {
+      margin: 8px 0 0;
+      color: var(--muted);
     }
 
     .kpis {
@@ -435,10 +435,10 @@
 <body>
   <main class="wrap">
     <section class="head">
-      <h1>MVP Media Photography - Applicant Dashboard</h1>
-      <p>Live aggregate view of model application intake.</p>
+      <h1>MVP Media Photography - Artistic Nude Dashboard</h1>
+      <p>Live aggregate view of artistic nude survey intake.</p>
       <div class="head-actions">
-        <a class="nav-btn" href="/artistic-nude-dashboard.html">Open Artistic Nude Dashboard</a>
+        <a class="nav-btn" href="/dashboard.html">Open Main Dashboard</a>
       </div>
     </section>
 
@@ -457,7 +457,7 @@
 
     <section class="card">
       <div class="filters-head">
-        <p class="status">Candidate Review - denied profiles are hidden and excluded from dashboard stats.</p>
+        <p class="status">Artistic Nude Candidate Review - denied profiles are hidden and excluded from dashboard stats.</p>
         <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
       </div>
       <div class="filters">
@@ -602,9 +602,12 @@
           <div class="profile-list">
             ${lineItem("Full Name", candidate.full_name)}
             ${lineItem("Preferred Name", candidate.preferred_name)}
+            ${lineItem("Pronouns", candidate.pronouns)}
             ${lineItem("Age", candidate.age ? String(candidate.age) : "-")}
             ${lineItem("Email", candidate.email)}
+            ${lineItem("Phone", candidate.phone)}
             ${lineItem("City", candidate.city)}
+            ${lineItem("State/Province", candidate.state_province)}
             ${lineItem("Country", candidate.country)}
             ${lineItem("Language", candidate.language)}
             ${lineItem("Source", candidate.hear_about)}
@@ -621,6 +624,7 @@
           <h3>Measurements</h3>
           <div class="profile-list">
             ${lineItem("Height", candidate.height)}
+            ${lineItem("Body Type", candidate.body_type)}
             ${lineItem("Clothing Size", candidate.clothing_size)}
             ${lineItem("Bra Size", candidate.bra_size)}
             ${lineItem("Bust", candidate.bust_measurement)}
@@ -629,33 +633,49 @@
             ${lineItem("Shoe Size", candidate.shoe_size)}
             ${lineItem("Hair Color", candidate.hair_color)}
             ${lineItem("Eye Color", candidate.eye_color)}
+            ${lineItem("Notable Features", candidate.notable_features)}
+            ${lineItem("Visible Marks", candidate.visible_marks)}
+            ${lineItem("Health Notes", candidate.health_notes)}
           </div>
         </section>
         <section class="profile-section">
           <h3>Experience</h3>
           <div class="profile-list">
             ${lineItem("Experience", candidate.experience)}
+            ${lineItem("Previous Modeling Experience", candidate.previous_modeling_experience)}
+            ${lineItem("Experience Types", formatList(candidate.experience_types))}
+            ${lineItem("Nude Experience", candidate.nude_experience_level)}
+            ${lineItem("Portfolio", candidate.portfolio_link)}
             ${lineItem("Worked with photographers", candidate.worked_with_photographers)}
             ${lineItem("Comfortable snapshots", candidate.comfortable_snapshots)}
             ${lineItem("Project interests", formatList(candidate.interests))}
+            ${lineItem("Nudity Comfort", formatList(candidate.nudity_comfort_levels))}
             ${lineItem("Comfort level", candidate.comfort_level)}
             ${lineItem("Avoid concepts", candidate.avoid_concepts)}
+            ${lineItem("Hard limits", candidate.hard_limits)}
+            ${lineItem("Special conditions", candidate.special_conditions)}
           </div>
         </section>
         <section class="profile-section">
           <h3>Availability</h3>
           <div class="profile-list">
             ${lineItem("Availability", formatList(candidate.availability))}
+            ${lineItem("Availability notes", candidate.availability_notes)}
             ${lineItem("Frequency", candidate.frequency)}
             ${lineItem("Travel willing", candidate.travel_willing)}
             ${lineItem("Travel distance", candidate.travel_distance)}
+            ${lineItem("Travel preference", candidate.travel_preference)}
           </div>
         </section>
         <section class="profile-section">
           <h3>Compensation</h3>
           <div class="profile-list">
             ${lineItem("Compensation interest", candidate.comp_interest)}
+            ${lineItem("Compensation types", formatList(candidate.compensation_types))}
+            ${lineItem("Unpaid for pictures", candidate.unpaid_tfp_willing ? "Yes" : "No")}
             ${lineItem("Expected compensation", candidate.expected_comp)}
+            ${lineItem("Release understanding", candidate.release_understanding)}
+            ${lineItem("Intended use", formatList(candidate.intended_use))}
             ${lineItem("Review status", candidate.review_status)}
           </div>
         </section>
@@ -664,6 +684,10 @@
           <div class="profile-list">
             ${lineItem("Why work with MVP", candidate.why_work)}
             ${lineItem("Good fit", candidate.good_fit)}
+            ${lineItem("Emergency contact name", candidate.emergency_contact_name)}
+            ${lineItem("Emergency contact phone", candidate.emergency_contact_phone)}
+            ${lineItem("Organizer questions", candidate.organizer_questions)}
+            ${lineItem("18+ truth confirmation", candidate.confirm_18_truth ? "Yes" : "No")}
             ${lineItem("Anything else", candidate.anything_else)}
             ${lineItem("Consents", formatList(candidate.consents))}
           </div>
@@ -763,7 +787,7 @@
     };
 
     const updateCandidateStatus = async (id, status) => {
-      const response = await fetch("/api/dashboard", {
+      const response = await fetch("/api/dashboard-artistic-nude", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -858,7 +882,7 @@
     };
 
     const loadDashboard = async () => {
-      const response = await fetch("/api/dashboard");
+      const response = await fetch("/api/dashboard-artistic-nude");
       if (!response.ok) {
         throw new Error("Dashboard load failed");
       }
@@ -916,7 +940,7 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `candidates-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = `artistic-nude-candidates-${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(link);
       link.click();
       link.remove();
