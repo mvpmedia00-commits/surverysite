@@ -128,6 +128,7 @@ export default async function handler(req, res) {
   }
 
   const rows = await response.json();
+  const analyticsRows = rows.filter((row) => (row.review_status || "pending") !== "denied");
   const candidates = rows
     .slice()
     .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""))
@@ -184,16 +185,16 @@ export default async function handler(req, res) {
     }));
 
   return respond(res, 200, {
-    totalApplications: rows.length,
-    bySource: countBy(rows, "hear_about"),
-    byExperience: countBy(rows, "experience"),
-    byFrequency: countBy(rows, "frequency"),
-    byCompInterest: countBy(rows, "comp_interest"),
-    byExpectedComp: countBy(rows, "expected_comp"),
-    byTravelWilling: countBy(rows, "travel_willing"),
-    byStatus: countBy(rows, "review_status"),
-    byInterest: countArrayField(rows, "interests"),
-    trendByMonth: monthlyTrend(rows),
+    totalApplications: analyticsRows.length,
+    bySource: countBy(analyticsRows, "hear_about"),
+    byExperience: countBy(analyticsRows, "experience"),
+    byFrequency: countBy(analyticsRows, "frequency"),
+    byCompInterest: countBy(analyticsRows, "comp_interest"),
+    byExpectedComp: countBy(analyticsRows, "expected_comp"),
+    byTravelWilling: countBy(analyticsRows, "travel_willing"),
+    byStatus: countBy(analyticsRows, "review_status"),
+    byInterest: countArrayField(analyticsRows, "interests"),
+    trendByMonth: monthlyTrend(analyticsRows),
     candidates,
     recentPhotos
   });
