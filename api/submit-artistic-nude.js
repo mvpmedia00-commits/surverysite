@@ -1,11 +1,16 @@
 const requiredFields = [
   "full_name",
   "preferred_name",
+  "pronouns",
   "age",
   "email",
+  "phone",
   "city",
+  "state_province",
   "country",
   "hear_about",
+  "previous_modeling_experience",
+  "nude_experience_level",
   "height",
   "clothing_size",
   "shoe_size",
@@ -16,18 +21,36 @@ const requiredFields = [
   "comfortable_snapshots",
   "comfort_level",
   "avoid_concepts",
+  "hard_limits",
+  "special_conditions",
+  "availability_notes",
   "frequency",
   "travel_willing",
   "travel_distance",
+  "travel_preference",
   "comp_interest",
   "expected_comp",
   "why_work",
-  "good_fit"
+  "good_fit",
+  "release_understanding",
+  "emergency_contact_name",
+  "emergency_contact_phone"
 ];
 
 const respond = (res, status, payload) => {
   res.status(status).setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
+};
+
+const ensureArrayWithValues = (value) => Array.isArray(value) && value.length > 0;
+
+const getMissingRequiredField = (body) => {
+  for (const field of requiredFields) {
+    if (body[field] === undefined || body[field] === null || body[field] === "") {
+      return field;
+    }
+  }
+  return "";
 };
 
 export default async function handler(req, res) {
@@ -47,10 +70,9 @@ export default async function handler(req, res) {
 
     const body = req.body || {};
 
-    for (const field of requiredFields) {
-      if (body[field] === undefined || body[field] === null || body[field] === "") {
-        return respond(res, 400, { error: `Missing required field: ${field}` });
-      }
+    const missingField = getMissingRequiredField(body);
+    if (missingField) {
+      return respond(res, 400, { error: `Missing required field: ${missingField}` });
     }
 
     const age = Number(body.age);
@@ -58,29 +80,57 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "Applicant must be at least 18 years old" });
     }
 
-    if (!Array.isArray(body.interests) || body.interests.length === 0) {
+    if (!ensureArrayWithValues(body.interests)) {
       return respond(res, 400, { error: "At least one interest is required" });
     }
 
-    if (!Array.isArray(body.availability) || body.availability.length === 0) {
+    if (!ensureArrayWithValues(body.experience_types)) {
+      return respond(res, 400, { error: "At least one experience type is required" });
+    }
+
+    if (!ensureArrayWithValues(body.nudity_comfort_levels)) {
+      return respond(res, 400, { error: "At least one nudity comfort level is required" });
+    }
+
+    if (!ensureArrayWithValues(body.availability)) {
       return respond(res, 400, { error: "At least one availability option is required" });
+    }
+
+    if (!ensureArrayWithValues(body.compensation_types)) {
+      return respond(res, 400, { error: "At least one compensation type is required" });
+    }
+
+    if (!ensureArrayWithValues(body.intended_use)) {
+      return respond(res, 400, { error: "At least one intended use is required" });
     }
 
     if (!Array.isArray(body.consents) || body.consents.length < 5) {
       return respond(res, 400, { error: "All consent items must be accepted" });
     }
 
+    if (body.confirm_18_truth !== true) {
+      return respond(res, 400, { error: "18+ accuracy confirmation is required" });
+    }
+
     const row = {
       full_name: body.full_name,
       preferred_name: body.preferred_name,
+      pronouns: body.pronouns,
       age,
       email: body.email,
+      phone: body.phone,
       city: body.city,
+      state_province: body.state_province,
       country: body.country,
       instagram: body.instagram || null,
       tiktok: body.tiktok || null,
       hear_about: body.hear_about,
+      previous_modeling_experience: body.previous_modeling_experience,
+      experience_types: body.experience_types,
+      nude_experience_level: body.nude_experience_level,
+      portfolio_link: body.portfolio_link || null,
       height: body.height,
+      body_type: body.body_type || null,
       clothing_size: body.clothing_size,
       bra_size: body.bra_size || null,
       bust_measurement: body.bust_measurement || null,
@@ -89,20 +139,35 @@ export default async function handler(req, res) {
       shoe_size: body.shoe_size,
       hair_color: body.hair_color,
       eye_color: body.eye_color,
+      notable_features: body.notable_features || null,
+      visible_marks: body.visible_marks || null,
+      health_notes: body.health_notes || null,
       experience: body.experience,
       worked_with_photographers: body.worked_with_photographers,
       comfortable_snapshots: body.comfortable_snapshots,
       interests: body.interests,
+      nudity_comfort_levels: body.nudity_comfort_levels,
       comfort_level: body.comfort_level,
       avoid_concepts: body.avoid_concepts,
+      hard_limits: body.hard_limits,
+      special_conditions: body.special_conditions,
       availability: body.availability,
+      availability_notes: body.availability_notes,
       frequency: body.frequency,
       travel_willing: body.travel_willing,
       travel_distance: body.travel_distance,
+      travel_preference: body.travel_preference,
       comp_interest: body.comp_interest,
+      compensation_types: body.compensation_types,
       expected_comp: body.expected_comp,
       why_work: body.why_work,
       good_fit: body.good_fit,
+      release_understanding: body.release_understanding,
+      intended_use: body.intended_use,
+      emergency_contact_name: body.emergency_contact_name,
+      emergency_contact_phone: body.emergency_contact_phone,
+      organizer_questions: body.organizer_questions || null,
+      confirm_18_truth: body.confirm_18_truth === true,
       anything_else: body.anything_else || null,
       consents: body.consents,
       headshot_filename: body.headshot_filename || null,
