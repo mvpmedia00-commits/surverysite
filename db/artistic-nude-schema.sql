@@ -93,6 +93,19 @@ alter table public.artistic_nude_applications add column if not exists emergency
 alter table public.artistic_nude_applications add column if not exists organizer_questions text;
 alter table public.artistic_nude_applications add column if not exists confirm_18_truth boolean not null default false;
 
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'artistic_nude_unpaid_tfp_required'
+  ) then
+    alter table public.artistic_nude_applications
+      add constraint artistic_nude_unpaid_tfp_required
+      check (unpaid_tfp_willing = true) not valid;
+  end if;
+end $$;
+
 create index if not exists idx_artistic_nude_created_at on public.artistic_nude_applications (created_at);
 create index if not exists idx_artistic_nude_review_status on public.artistic_nude_applications (review_status);
 create index if not exists idx_artistic_nude_source on public.artistic_nude_applications (hear_about);

@@ -476,8 +476,9 @@
 
           <div class="field">
             <div class="choices">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling">I am willing to do unpaid shoots in exchange for edited pictures.</label>
+              <label class="choice"><input type="checkbox" id="unpaidTfpWilling" required>I am willing to do unpaid shoots in exchange for edited pictures. *</label>
             </div>
+            <div class="error" id="unpaidTfpError"></div>
           </div>
         </div>
       </fieldset>
@@ -596,7 +597,7 @@
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
         labelExpectedComp: "Expected compensation per session *",
-        labelUnpaidTfpWilling: "I am willing to do unpaid shoots in exchange for edited pictures.",
+        labelUnpaidTfpWilling: "I am willing to do unpaid shoots in exchange for edited pictures. *",
         expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Full Body Photo *",
@@ -612,7 +613,8 @@
         msg18: "Applicant must be at least 18 years old.",
         msgInterest: "Please select at least one interest.",
         msgAvailability: "Please select at least one availability option.",
-        msgConsent: "All consent items must be checked before submission."
+        msgConsent: "All consent items must be checked before submission.",
+        msgUnpaidTfp: "Please confirm if you are willing to do unpaid shoots in exchange for edited pictures."
       },
       es: {
         langTitle: "Choose your language / Elige tu idioma",
@@ -683,7 +685,7 @@
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
         labelExpectedComp: "Compensacion esperada por sesion *",
-        labelUnpaidTfpWilling: "Estoy dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas.",
+        labelUnpaidTfpWilling: "Estoy dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas. *",
         expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Foto de Cuerpo Completo *",
@@ -699,7 +701,8 @@
         msg18: "La persona solicitante debe tener al menos 18 anos.",
         msgInterest: "Selecciona al menos un interes.",
         msgAvailability: "Selecciona al menos una opcion de disponibilidad.",
-        msgConsent: "Debes aceptar todos los consentimientos antes de enviar."
+        msgConsent: "Debes aceptar todos los consentimientos antes de enviar.",
+        msgUnpaidTfp: "Confirma si estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas."
       }
     };
 
@@ -881,6 +884,7 @@
     const clearErrors = () => {
       setError("interestsError", "");
       setError("availabilityError", "");
+      setError("unpaidTfpError", "");
       setError("consentError", "");
       submitStatus.textContent = "";
     };
@@ -1014,6 +1018,11 @@
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", t.msgAvailability);
+        hasErrors = true;
+      }
+
+      if (!document.getElementById("unpaidTfpWilling").checked) {
+        setError("unpaidTfpError", t.msgUnpaidTfp);
         hasErrors = true;
       }
 

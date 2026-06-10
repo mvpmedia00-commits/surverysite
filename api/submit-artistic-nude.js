@@ -107,6 +107,12 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "All consent items must be accepted" });
     }
 
+    if (body.unpaid_tfp_willing !== true) {
+      return respond(res, 400, {
+        error: "Unpaid shoots in exchange for edited pictures confirmation is required"
+      });
+    }
+
     if (body.confirm_18_truth !== true) {
       return respond(res, 400, { error: "18+ accuracy confirmation is required" });
     }
