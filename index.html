@@ -197,17 +197,15 @@
     form { margin-top: 18px; display: grid; gap: 16px; }
 
     .progress-panel {
-      position: sticky;
-      top: 10px;
-      z-index: 8;
-      border: 1px solid rgba(61, 53, 43, 0.12);
-      border-radius: 24px;
-      background: rgba(255, 253, 248, 0.86);
-      box-shadow: var(--shadow);
-      padding: 16px;
+      border: 1px solid rgba(12, 117, 104, 0.18);
+      border-left: 5px solid var(--accent);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 253, 248, 0.72), rgba(255, 247, 235, 0.52));
+      box-shadow: none;
+      padding: 16px 18px;
       display: grid;
       gap: 10px;
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(10px);
     }
 
     .progress-meta {
@@ -220,10 +218,7 @@
     }
 
     .progress-track {
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(98, 90, 78, 0.16);
-      overflow: hidden;
+      display: none;
     }
 
     .progress-fill {
@@ -262,13 +257,13 @@
     }
 
     fieldset {
-      border: 1px solid rgba(61, 53, 43, 0.12);
-      border-radius: 24px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 3vw, 26px);
+      border: 0;
+      border-top: 1px solid rgba(61, 53, 43, 0.16);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: clamp(22px, 4vw, 34px) 0 0;
       margin: 0;
-      backdrop-filter: blur(10px);
     }
 
     legend {
@@ -366,6 +361,10 @@
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 2px;
+    }
+
+    .wizard-actions {
+      display: none;
     }
 
     .status {
@@ -518,10 +517,10 @@
     <form id="applicationForm" novalidate>
       <div class="progress-panel" aria-live="polite">
         <div class="progress-meta">
-          <span id="stepLabel">Step 1 of 6</span>
+          <span id="stepLabel">Full survey visible below</span>
           <span id="autosaveStatus">Autosaved as you type</span>
         </div>
-        <p class="step-title" id="stepTitle">Basic Information</p>
+        <p class="step-title" id="stepTitle">Take your time. You can review every section before submitting.</p>
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note">Your application is reviewed privately by MVP Media. Contact details and photos are used only for casting, scheduling, and portfolio review.</p>
         <div class="draft-actions">
@@ -1138,17 +1137,19 @@
     }, { passive: true });
 
     const updateStep = () => {
-      fieldsets.forEach((fieldset, index) => {
-        fieldset.hidden = index !== currentStep;
+      fieldsets.forEach((fieldset) => {
+        fieldset.hidden = false;
       });
 
-      stepLabel.textContent = `Step ${currentStep + 1} of ${fieldsets.length}`;
-      const names = stepNamesByLang[selectedLanguage] || stepNamesByLang.en;
-      stepTitle.textContent = names[currentStep] || "";
-      progressFill.style.width = `${((currentStep + 1) / fieldsets.length) * 100}%`;
-      prevStepBtn.hidden = currentStep === 0;
-      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
-      submitBtn.hidden = currentStep !== fieldsets.length - 1;
+      const isSpanish = selectedLanguage === "es";
+      stepLabel.textContent = isSpanish ? "Encuesta completa visible abajo" : "Full survey visible below";
+      stepTitle.textContent = isSpanish
+        ? "Toma tu tiempo. Puedes revisar todas las secciones antes de enviar."
+        : "Take your time. You can review every section before submitting.";
+      progressFill.style.width = "100%";
+      prevStepBtn.hidden = true;
+      nextStepBtn.hidden = true;
+      submitBtn.hidden = false;
       submitStatus.textContent = "";
     };
 
