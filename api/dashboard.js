@@ -109,11 +109,13 @@ export default async function handler(req, res) {
     return respond(res, 200, { ok: true });
   }
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=*&order=created_at.asc`, {
+  const response = await fetch(`${supabaseUrl}/rest/v1/model_applications?select=*&order=created_at.desc`, {
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
-      "Accept-Profile": "public"
+      "Accept-Profile": "public",
+      "Range-Unit": "items",
+      "Range": "0-999999"
     }
   });
 
