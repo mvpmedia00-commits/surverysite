@@ -1,3 +1,5 @@
+import { validateAdminRequest } from "./_admin-auth.js";
+
 const respond = (res, status, payload) => {
   res.status(status).setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
@@ -65,6 +67,11 @@ export default async function handler(req, res) {
     return respond(res, 405, { error: "Method not allowed" });
   }
 
+  const auth = validateAdminRequest(req);
+  if (!auth.ok) {
+    return respond(res, auth.status, { error: auth.error });
+  }
+
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -78,7 +85,7 @@ export default async function handler(req, res) {
     const body = req.body || {};
     const id = body.id;
     const status = body.status;
-    const allowed = ["pending", "approved", "denied"];
+    const allowed = ["pending", "contacted", "scheduled", "approved", "archived", "denied"];
 
     if (!id || !allowed.includes(status)) {
       return respond(res, 400, { error: "Invalid id or status" });

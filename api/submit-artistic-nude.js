@@ -42,6 +42,32 @@ const respond = (res, status, payload) => {
 };
 
 const ensureArrayWithValues = (value) => Array.isArray(value) && value.length > 0;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const hasRecentApplication = async (supabaseUrl, supabaseKey, email) => {
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const params = new URLSearchParams({
+    select: "id",
+    email: `eq.${email}`,
+    created_at: `gte.${since}`,
+    limit: "1"
+  });
+
+  const response = await fetch(`${supabaseUrl}/rest/v1/artistic_nude_applications?${params.toString()}`, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      "Accept-Profile": "public"
+    }
+  });
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const rows = await response.json();
+  return Array.isArray(rows) && rows.length > 0;
+};
 
 const getMissingRequiredField = (body) => {
   for (const field of requiredFields) {
@@ -69,6 +95,10 @@ export default async function handler(req, res) {
 
     const body = req.body || {};
 
+    if (body.website) {
+      return respond(res, 400, { error: "Invalid submission" });
+    }
+
     const missingField = getMissingRequiredField(body);
     if (missingField) {
       return respond(res, 400, { error: `Missing required field: ${missingField}` });
@@ -77,6 +107,15 @@ export default async function handler(req, res) {
     const age = Number(body.age);
     if (!Number.isFinite(age) || age < 18) {
       return respond(res, 400, { error: "Applicant must be at least 18 years old" });
+    }
+
+    const email = String(body.email || "").trim().toLowerCase();
+    if (!emailPattern.test(email)) {
+      return respond(res, 400, { error: "A valid email address is required" });
+    }
+
+    if (await hasRecentApplication(supabaseUrl, supabaseKey, email)) {
+      return respond(res, 409, { error: "An application from this email was already received recently" });
     }
 
     if (!ensureArrayWithValues(body.interests)) {
@@ -107,12 +146,6 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "All consent items must be accepted" });
     }
 
-    if (body.unpaid_tfp_willing !== true) {
-      return respond(res, 400, {
-        error: "Unpaid shoots in exchange for edited pictures confirmation is required"
-      });
-    }
-
     if (body.confirm_18_truth !== true) {
       return respond(res, 400, { error: "18+ accuracy confirmation is required" });
     }
@@ -122,7 +155,7 @@ export default async function handler(req, res) {
       preferred_name: body.preferred_name,
       pronouns: body.pronouns,
       age,
-      email: body.email,
+      email,
       phone: body.phone,
       city: body.city,
       state_province: body.state_province,

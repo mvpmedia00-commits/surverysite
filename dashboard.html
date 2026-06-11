@@ -205,6 +205,19 @@
       border-color: #bfe5cf;
     }
 
+    .badge.contacted,
+    .badge.scheduled {
+      background: #eaf2fb;
+      color: #285d8f;
+      border-color: #bfd6ef;
+    }
+
+    .badge.archived {
+      background: #f1eef8;
+      color: #5d438a;
+      border-color: #d8cceb;
+    }
+
     .badge.denied {
       background: #fdeeee;
       color: #8f2e2e;
@@ -296,6 +309,14 @@
       border-color: #efc1c1;
       color: #8f2e2e;
       background: #fff4f4;
+    }
+
+    .actions .contacted,
+    .actions .scheduled,
+    .actions .archived {
+      border-color: #bfd6ef;
+      color: #285d8f;
+      background: #f2f7fd;
     }
 
     .actions .pending {
@@ -470,7 +491,10 @@
           <select id="filterStatus">
             <option value="all">All</option>
             <option value="pending">Pending</option>
+            <option value="contacted">Contacted</option>
+            <option value="scheduled">Scheduled</option>
             <option value="approved">Approved</option>
+            <option value="archived">Archived</option>
           </select>
         </div>
         <div class="field">
@@ -530,6 +554,45 @@
     };
 
     const activeCharts = [];
+    const adminTokenKey = "mvp-admin-dashboard-token";
+
+    const getAdminToken = async () => {
+      const cached = sessionStorage.getItem(adminTokenKey);
+      if (cached) {
+        return cached;
+      }
+
+      const password = globalThis.prompt("Admin dashboard password");
+      if (!password) {
+        throw new Error("Admin authentication required.");
+      }
+
+      const response = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.token) {
+        throw new Error(data.error || "Admin login failed.");
+      }
+
+      sessionStorage.setItem(adminTokenKey, data.token);
+      return data.token;
+    };
+
+    const adminFetch = async (url, options = {}) => {
+      const token = await getAdminToken();
+      const headers = new Headers(options.headers || {});
+      headers.set("Authorization", `Bearer ${token}`);
+
+      const response = await fetch(url, { ...options, headers });
+      if (response.status === 401) {
+        sessionStorage.removeItem(adminTokenKey);
+      }
+      return response;
+    };
 
     const topKey = (counts) => {
       const entries = Object.entries(counts || {});
@@ -656,7 +719,6 @@
           <div class="profile-list">
             ${lineItem("Compensation interest", candidate.comp_interest)}
             ${lineItem("Expected compensation", candidate.expected_comp)}
-            ${lineItem("Unpaid for edited pictures", candidate.unpaid_tfp_willing ? "Yes" : "No")}
             ${lineItem("Review status", candidate.review_status)}
           </div>
         </section>
@@ -755,7 +817,10 @@
           <div class="actions">
             <button class="view-profile" data-view-id="${candidate.id}">View Profile</button>
             <button class="pending" data-id="${candidate.id}" data-status="pending">Set Pending</button>
+            <button class="contacted" data-id="${candidate.id}" data-status="contacted">Contacted</button>
+            <button class="scheduled" data-id="${candidate.id}" data-status="scheduled">Scheduled</button>
             <button class="approve" data-id="${candidate.id}" data-status="approved">Approve</button>
+            <button class="archived" data-id="${candidate.id}" data-status="archived">Archive</button>
             <button class="deny" data-id="${candidate.id}" data-status="denied">Deny</button>
           </div>
         `;
@@ -764,7 +829,7 @@
     };
 
     const updateCandidateStatus = async (id, status) => {
-      const response = await fetch("/api/dashboard", {
+      const response = await adminFetch("/api/dashboard", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -859,7 +924,7 @@
     };
 
     const loadDashboard = async () => {
-      const response = await fetch("/api/dashboard");
+      const response = await adminFetch("/api/dashboard");
       if (!response.ok) {
         throw new Error("Dashboard load failed");
       }
@@ -891,7 +956,6 @@
         "country",
         "hear_about",
         "experience",
-        "unpaid_tfp_willing",
         "review_status",
         "headshot_url",
         "full_body_url"
@@ -908,7 +972,6 @@
           candidate.country,
           candidate.hear_about,
           candidate.experience,
-          candidate.unpaid_tfp_willing ? "Yes" : "No",
           candidate.review_status,
           candidate.headshot_url,
           candidate.full_body_url

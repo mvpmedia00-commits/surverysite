@@ -162,6 +162,47 @@
 
     form { margin-top: 16px; display: grid; gap: 14px; }
 
+    .progress-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 249, 0.92);
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #ded4c6;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--accent), #da7c4f);
+      transition: width 180ms ease;
+    }
+
+    .trust-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
     fieldset {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -215,7 +256,22 @@
 
     .error { min-height: 1em; color: var(--error); font-weight: 600; font-size: 0.88rem; }
 
-    .submit-row { display: flex; justify-content: center; margin-top: 2px; }
+    .bot-field {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .wizard-actions,
+    .submit-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
 
     .status {
       margin: 8px 0 0;
@@ -236,6 +292,13 @@
       min-width: 210px;
       cursor: pointer;
       box-shadow: 0 14px 22px rgba(14, 107, 98, 0.28);
+    }
+
+    button.secondary {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--accent);
+      box-shadow: none;
     }
 
     .scroll-cue {
@@ -324,6 +387,18 @@
     </header>
 
     <form id="applicationForm" novalidate>
+      <div class="progress-panel" aria-live="polite">
+        <div class="progress-meta">
+          <span id="stepLabel">Step 1 of 6</span>
+          <span id="autosaveStatus">Autosaved as you type</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="trust-note">Your application is reviewed privately by MVP Media. Contact details and photos are used only for casting, scheduling, and portfolio review.</p>
+      </div>
+      <div class="bot-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
       <fieldset>
         <legend id="legend1">1) Basic Information</legend>
         <div class="grid two">
@@ -476,7 +551,7 @@
 
           <div class="field">
             <div class="choices">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling" required>I am willing to do unpaid shoots in exchange for edited pictures. *</label>
+              <label class="choice"><input type="checkbox" id="unpaidTfpWilling">I am open to unpaid shoots in exchange for edited pictures.</label>
             </div>
             <div class="error" id="unpaidTfpError"></div>
           </div>
@@ -508,6 +583,10 @@
         </div>
       </fieldset>
 
+      <div class="wizard-actions">
+        <button type="button" class="secondary" id="prevStepBtn">Previous</button>
+        <button type="button" id="nextStepBtn">Next</button>
+      </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Submit Application</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
     </form>
@@ -525,6 +604,15 @@
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
+    const prevStepBtn = document.getElementById("prevStepBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const stepLabel = document.getElementById("stepLabel");
+    const progressFill = document.getElementById("progressFill");
+    const autosaveStatus = document.getElementById("autosaveStatus");
+    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
+    const autosaveKey = "mvp-main-application-draft";
+    const maxPhotoSize = 8 * 1024 * 1024;
+    let currentStep = 0;
     let selectedLanguage = "en";
 
     const i18n = {
@@ -597,7 +685,7 @@
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
         labelExpectedComp: "Expected compensation per session *",
-        labelUnpaidTfpWilling: "I am willing to do unpaid shoots in exchange for edited pictures. *",
+        labelUnpaidTfpWilling: "I am open to unpaid shoots in exchange for edited pictures.",
         expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Full Body Photo *",
@@ -614,7 +702,7 @@
         msgInterest: "Please select at least one interest.",
         msgAvailability: "Please select at least one availability option.",
         msgConsent: "All consent items must be checked before submission.",
-        msgUnpaidTfp: "Please confirm if you are willing to do unpaid shoots in exchange for edited pictures."
+        msgUnpaidTfp: ""
       },
       es: {
         langTitle: "Choose your language / Elige tu idioma",
@@ -685,7 +773,7 @@
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
         labelExpectedComp: "Compensacion esperada por sesion *",
-        labelUnpaidTfpWilling: "Estoy dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas. *",
+        labelUnpaidTfpWilling: "Estoy abierta/o a sesiones no pagadas a cambio de fotos editadas.",
         expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
         labelHeadshot: "Headshot *",
         labelFullBody: "Foto de Cuerpo Completo *",
@@ -702,7 +790,7 @@
         msgInterest: "Selecciona al menos un interes.",
         msgAvailability: "Selecciona al menos una opcion de disponibilidad.",
         msgConsent: "Debes aceptar todos los consentimientos antes de enviar.",
-        msgUnpaidTfp: "Confirma si estas dispuesta/o a realizar sesiones no pagadas a cambio de fotos editadas."
+        msgUnpaidTfp: ""
       }
     };
 
@@ -876,6 +964,129 @@
       }
     }, { passive: true });
 
+    const updateStep = () => {
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
+      });
+
+      stepLabel.textContent = `Step ${currentStep + 1} of ${fieldsets.length}`;
+      progressFill.style.width = `${((currentStep + 1) / fieldsets.length) * 100}%`;
+      prevStepBtn.hidden = currentStep === 0;
+      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+      submitBtn.hidden = currentStep !== fieldsets.length - 1;
+      submitStatus.textContent = "";
+    };
+
+    const validateCurrentStep = () => {
+      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"));
+      const invalid = controls.find((control) => !control.checkValidity());
+      if (invalid) {
+        invalid.reportValidity();
+        invalid.focus();
+        return false;
+      }
+      return true;
+    };
+
+    const serializeDraft = () => {
+      const draft = {};
+      Array.from(form.elements).forEach((element) => {
+        if (!element.id || element.type === "file" || element.id === "website") {
+          return;
+        }
+
+        if (element.type === "checkbox") {
+          draft[element.id || `${element.name}:${element.value}`] = element.checked;
+          return;
+        }
+
+        if (element.type === "radio") {
+          if (element.checked) {
+            draft[element.name] = element.value;
+          }
+          return;
+        }
+
+        draft[element.id] = element.value;
+      });
+      draft.selectedLanguage = selectedLanguage;
+      draft.currentStep = currentStep;
+      return draft;
+    };
+
+    const saveDraft = () => {
+      localStorage.setItem(autosaveKey, JSON.stringify(serializeDraft()));
+      autosaveStatus.textContent = "Draft saved";
+    };
+
+    const restoreDraft = () => {
+      const raw = localStorage.getItem(autosaveKey);
+      if (!raw) {
+        return;
+      }
+
+      try {
+        const draft = JSON.parse(raw);
+        Object.entries(draft).forEach(([key, value]) => {
+          if (key === "selectedLanguage" || key === "currentStep") {
+            return;
+          }
+
+          const byId = document.getElementById(key);
+          if (byId && byId.type === "checkbox") {
+            byId.checked = Boolean(value);
+            return;
+          }
+          if (byId && byId.type !== "file") {
+            byId.value = value;
+            return;
+          }
+
+          if (key.includes(":")) {
+            const [name, checkboxValue] = key.split(":");
+            const checkbox = form.querySelector(`input[type="checkbox"][name="${CSS.escape(name)}"][value="${CSS.escape(checkboxValue)}"]`);
+            if (checkbox) {
+              checkbox.checked = Boolean(value);
+            }
+            return;
+          }
+
+          const radio = form.querySelector(`input[type="radio"][name="${key}"][value="${CSS.escape(String(value))}"]`);
+          if (radio) {
+            radio.checked = true;
+          }
+        });
+
+        if (draft.selectedLanguage) {
+          applyLanguage(draft.selectedLanguage);
+        }
+        currentStep = Math.min(Math.max(Number(draft.currentStep) || 0, 0), fieldsets.length - 1);
+        autosaveStatus.textContent = "Draft restored";
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    prevStepBtn.addEventListener("click", () => {
+      currentStep = Math.max(currentStep - 1, 0);
+      updateStep();
+      saveDraft();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    nextStepBtn.addEventListener("click", () => {
+      if (!validateCurrentStep()) {
+        return;
+      }
+      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
+      updateStep();
+      saveDraft();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    form.addEventListener("input", saveDraft);
+    form.addEventListener("change", saveDraft);
+
     const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
     const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
     const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
@@ -900,6 +1111,18 @@
     };
 
     const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const validatePhotoFile = (file, label) => {
+      if (!file) {
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        throw new Error(`${label} must be an image file.`);
+      }
+      if (file.size > maxPhotoSize) {
+        throw new Error(`${label} must be 8MB or smaller.`);
+      }
+    };
 
     const uploadPhotoToSupabase = async (file, folder) => {
       const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
@@ -965,7 +1188,8 @@
         consents: checkedValues("input[name='consent']"),
         headshot_filename: headshot && headshot.files[0] ? headshot.files[0].name : "",
         full_body_filename: fullBody && fullBody.files[0] ? fullBody.files[0].name : "",
-        language: selectedLanguage
+        language: selectedLanguage,
+        website: getValue("website")
       };
     };
 
@@ -974,6 +1198,9 @@
       const headshot = document.getElementById("headshot");
       const fullBody = document.getElementById("fullBody");
       const uploadWarnings = [];
+
+      validatePhotoFile(headshot && headshot.files[0], "Headshot");
+      validatePhotoFile(fullBody && fullBody.files[0], "Full body photo");
 
       if (headshot && headshot.files[0]) {
         try {
@@ -1018,11 +1245,6 @@
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", t.msgAvailability);
-        hasErrors = true;
-      }
-
-      if (!document.getElementById("unpaidTfpWilling").checked) {
-        setError("unpaidTfpError", t.msgUnpaidTfp);
         hasErrors = true;
       }
 
@@ -1093,6 +1315,7 @@
 
       form.style.display = "none";
       document.getElementById("successMessage").style.display = "block";
+      localStorage.removeItem(autosaveKey);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
@@ -1101,6 +1324,9 @@
         el.addEventListener("change", clearErrors);
       });
     });
+
+    restoreDraft();
+    updateStep();
   </script>
 </body>
 </html>

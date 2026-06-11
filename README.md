@@ -10,6 +10,7 @@ This project now supports:
 ## 1) Create database table
 
 Run the SQL in [db/schema.sql](db/schema.sql) in your Supabase SQL editor.
+If you already ran an older version of the schema, run it again so the old required-unpaid/TFP constraint is dropped.
 
 ## 2) Configure Vercel environment variables
 
@@ -17,6 +18,9 @@ Add these in your Vercel project settings:
 
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_DASHBOARD_PASSWORD`
+
+`ADMIN_DASHBOARD_PASSWORD` protects `/dashboard.html`, `/artistic-nude-dashboard.html`, and their backing API endpoints. Choose a long private password and set it only in Vercel environment variables.
 
 ## 3) Deploy
 
@@ -35,5 +39,5 @@ After deployment:
 
 ## Notes
 
-- File uploads are currently captured as filenames only (`headshot_filename`, `full_body_filename`).
-- To store actual images, use Supabase Storage, Cloudinary, or S3 in a follow-up step.
+- Photo uploads are sent to the configured Cloudinary unsigned upload preset in the browser. If an upload fails on the main form, the application still saves the original filename as a fallback.
+- Both public forms include local draft autosave, image file checks, duplicate-email protection, and a hidden spam trap.
