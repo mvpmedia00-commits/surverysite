@@ -555,44 +555,9 @@
     };
 
     const activeCharts = [];
-    const adminTokenKey = "mvp-admin-dashboard-token";
-
-    const getAdminToken = async () => {
-      const cached = sessionStorage.getItem(adminTokenKey);
-      if (cached) {
-        return cached;
-      }
-
-      const password = globalThis.prompt("Admin dashboard password");
-      if (!password) {
-        throw new Error("Admin authentication required.");
-      }
-
-      const response = await fetch("/api/admin-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok || !data.token) {
-        throw new Error(data.error || "Admin login failed.");
-      }
-
-      sessionStorage.setItem(adminTokenKey, data.token);
-      return data.token;
-    };
 
     const adminFetch = async (url, options = {}) => {
-      const token = await getAdminToken();
-      const headers = new Headers(options.headers || {});
-      headers.set("Authorization", `Bearer ${token}`);
-
-      const response = await fetch(url, { ...options, headers });
-      if (response.status === 401) {
-        sessionStorage.removeItem(adminTokenKey);
-      }
-      return response;
+      return fetch(url, options);
     };
 
     const topKey = (counts) => {
@@ -867,7 +832,6 @@
     };
 
     const renderDashboard = (data) => {
-      document.getElementById("status").textContent = "Dashboard updated.";
       document.getElementById("kpiTotal").textContent = String(data.totalApplications || 0);
       document.getElementById("kpiSource").textContent = topKey(data.bySource);
       document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
@@ -941,6 +905,7 @@
       }));
 
       state.candidates = data.candidates || [];
+      document.getElementById("status").textContent = `Dashboard updated. ${state.candidates.length} applicant${state.candidates.length === 1 ? "" : "s"} returned.`;
       addOptions("filterExperience", [...new Set(state.candidates.map((candidate) => candidate.experience))]);
       addOptions("filterSource", [...new Set(state.candidates.map((candidate) => candidate.hear_about))]);
       renderCandidates();

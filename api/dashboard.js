@@ -1,4 +1,4 @@
-import { validateAdminRequest } from "./_admin-auth.js";
+import { getSupabaseConfig } from "./_supabase.js";
 
 const respond = (res, status, payload) => {
   res.status(status).setHeader("Content-Type", "application/json");
@@ -67,19 +67,11 @@ export default async function handler(req, res) {
     return respond(res, 405, { error: "Method not allowed" });
   }
 
-  const auth = validateAdminRequest(req);
-  if (!auth.ok) {
-    return respond(res, auth.status, { error: auth.error });
+  const supabaseConfig = getSupabaseConfig();
+  if (supabaseConfig.error) {
+    return respond(res, 500, { error: supabaseConfig.error });
   }
-
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return respond(res, 500, {
-      error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
-    });
-  }
+  const { supabaseUrl, supabaseKey } = supabaseConfig;
 
   if (req.method === "PATCH") {
     const body = req.body || {};
