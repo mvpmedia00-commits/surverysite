@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Photography - Model Application</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #fafafa;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0e6b62 0%, #1a8c80 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+    }
+
+    .intro-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .intro-card h3 {
+      color: #0e6b62;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .intro-card p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .trust-signals {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      margin: 40px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .trust-signals h2 {
+      color: #0e6b62;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .signal-icon {
+      width: 24px;
+      height: 24px;
+      background: #0e6b62;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .signal-text {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .process {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      margin: 40px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .process h2 {
+      color: #0e6b62;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: #0e6b62;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin: 0 auto 12px;
+    }
+
+    .step p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .cta-section {
+      background: white;
+      padding: 60px 40px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 60px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cta-section h2 {
+      color: #0e6b62;
+      margin-bottom: 12px;
+      font-size: 2rem;
+    }
+
+    .cta-section p {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: #0e6b62;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0a5448;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(14, 107, 98, 0.3);
+    }
+
+    .btn-secondary {
+      background: #da7c4f;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #c96a3a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(218, 124, 79, 0.3);
+    }
+
+    .disclaimer {
+      background: #f0f7f6;
+      padding: 20px;
+      border-left: 4px solid #0e6b62;
+      margin: 30px 0;
+      border-radius: 4px;
+    }
+
+    .disclaimer p {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 8px 0;
+    }
+
+    .social-links {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 0 15px;
+      color: #0e6b62;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: #da7c4f;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="container">
+      <h1>MVP Media Photography</h1>
+      <p>Apply for paid, TFP, artistic, editorial, glamour, portrait, lifestyle, and creative photography opportunities.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Who We Are / What We Do -->
+    <div class="intro-grid">
+      <div class="intro-card">
+        <h3>Who We Are</h3>
+        <p>MVP Media Photography is a professional photography collective specializing in modeling, portraiture, and creative editorial work. We work with models of all experience levels to create stunning imagery.</p>
+      </div>
+      <div class="intro-card">
+        <h3>Where We Shoot</h3>
+        <p>Los Angeles area, with flexibility for travel. We have access to professional studios, outdoor locations, and creative venues for diverse shoots.</p>
+      </div>
+      <div class="intro-card">
+        <h3>What You Receive</h3>
+        <p>Professional edited images for your portfolio, faster turnaround on paid shoots, networking opportunities, and the option to use photos for commercial or personal projects.</p>
+      </div>
+    </div>
+
+    <!-- Trust Signals -->
+    <div class="trust-signals">
+      <h2>Why Models Choose Us</h2>
+      <div class="signals-grid">
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">No experience required</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">18+ only (your safety first)</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">All boundaries respected</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">You can decline any concept</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">No pressure for nude work</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">Paid & TFP options</div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p><strong>Your Safety & Privacy:</strong> We take consent, boundaries, and privacy seriously. All contracts and release terms are reviewed before any session. You maintain full control over how your images are used.</p>
+      </div>
+
+      <div class="social-links">
+        <a href="https://instagram.com/mvpmediaphotography" target="_blank">📸 Instagram</a>
+        <a href="https://mvpmediaphotography.com/portfolio" target="_blank">🎨 Portfolio</a>
+        <a href="mailto:hello@mvpmedia.com">📧 Email</a>
+      </div>
+    </div>
+
+    <!-- What Happens Next -->
+    <div class="process">
+      <h2>What Happens Next?</h2>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <p><strong>Submit Application</strong><br>Tell us about yourself in 3–5 minutes</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <p><strong>We Review</strong><br>We review your profile and photos</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <p><strong>Get Selected</strong><br>If it's a fit, we reach out via email/IG</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <p><strong>Discuss Details</strong><br>Concept, pay/TFP, wardrobe, boundaries</p>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <p><strong>Schedule & Shoot</strong><br>Pick a date and create together</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <h2>Ready to Apply?</h2>
+      <p>Choose your application type below. Takes 3–5 minutes.</p>
+      <div class="button-group">
+        <a href="index.html" class="btn btn-primary">General Modeling Application</a>
+        <a href="artistic-nude-survey.html" class="btn btn-secondary">Artistic Nude Application</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 MVP Media Photography. All rights reserved.</p>
+    <p>
+      <a href="https://instagram.com/mvpmediaphotography" target="_blank" style="color: inherit; text-decoration: none;">Instagram</a> |
+      <a href="mailto:hello@mvpmedia.com" style="color: inherit; text-decoration: none;">Contact</a>
+    </p>
+  </footer>
+</body>
+</html>

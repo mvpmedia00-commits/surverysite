@@ -133,6 +133,9 @@ alter table public.artistic_nude_applications add column if not exists review_st
 alter table public.artistic_nude_applications add column if not exists review_updated_at timestamptz;
 
 alter table public.artistic_nude_applications
+  add column if not exists admin_notes text;
+
+alter table public.artistic_nude_applications
   drop constraint if exists artistic_nude_unpaid_tfp_required;
 
 create index if not exists idx_artistic_nude_created_at on public.artistic_nude_applications (created_at);

@@ -90,6 +90,9 @@ alter table public.model_applications
   add column if not exists review_updated_at timestamptz;
 
 alter table public.model_applications
+  add column if not exists admin_notes text;
+
+alter table public.model_applications
   drop constraint if exists model_applications_unpaid_tfp_required;
 
 create index if not exists idx_model_applications_created_at on public.model_applications (created_at);
