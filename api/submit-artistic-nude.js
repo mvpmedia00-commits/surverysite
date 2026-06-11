@@ -1,36 +1,22 @@
 const requiredFields = [
   "full_name",
   "preferred_name",
-  "pronouns",
   "age",
   "email",
-  "phone",
   "city",
-  "state_province",
   "country",
   "hear_about",
-  "previous_modeling_experience",
   "nude_experience_level",
-  "height",
-  "clothing_size",
-  "waist_measurement",
-  "shoe_size",
-  "hair_color",
-  "eye_color",
   "experience",
-  "worked_with_photographers",
-  "comfortable_snapshots",
   "comfort_level",
   "avoid_concepts",
   "hard_limits",
   "special_conditions",
-  "availability_notes",
   "frequency",
   "travel_willing",
   "comp_interest",
   "expected_comp",
   "why_work",
-  "good_fit",
   "release_understanding"
 ];
 
@@ -120,10 +106,6 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "At least one interest is required" });
     }
 
-    if (!ensureArrayWithValues(body.experience_types)) {
-      return respond(res, 400, { error: "At least one experience type is required" });
-    }
-
     if (!ensureArrayWithValues(body.nudity_comfort_levels)) {
       return respond(res, 400, { error: "At least one nudity comfort level is required" });
     }
@@ -132,8 +114,8 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "At least one availability option is required" });
     }
 
-    if (body.travel_willing !== "No" && (!body.travel_distance || !body.travel_preference)) {
-      return respond(res, 400, { error: "Travel distance and preference are required" });
+    if (body.travel_willing !== "No" && !body.travel_distance) {
+      return respond(res, 400, { error: "Travel distance is required" });
     }
 
     if (!ensureArrayWithValues(body.compensation_types)) {
@@ -155,36 +137,36 @@ export default async function handler(req, res) {
     const row = {
       full_name: body.full_name,
       preferred_name: body.preferred_name,
-      pronouns: body.pronouns,
+      pronouns: body.pronouns || null,
       age,
       email,
-      phone: body.phone,
+      phone: body.phone || null,
       city: body.city,
-      state_province: body.state_province,
+      state_province: body.state_province || null,
       country: body.country,
       instagram: body.instagram || null,
       tiktok: body.tiktok || null,
       hear_about: body.hear_about,
-      previous_modeling_experience: body.previous_modeling_experience,
-      experience_types: body.experience_types,
+      previous_modeling_experience: body.previous_modeling_experience || null,
+      experience_types: Array.isArray(body.experience_types) ? body.experience_types : [],
       nude_experience_level: body.nude_experience_level,
       portfolio_link: body.portfolio_link || null,
-      height: body.height,
+      height: body.height || "",
       body_type: body.body_type || null,
-      clothing_size: body.clothing_size,
+      clothing_size: body.clothing_size || "",
       bra_size: body.bra_size || null,
       bust_measurement: body.bust_measurement || null,
       waist_measurement: body.waist_measurement || null,
       hip_measurement: body.hip_measurement || null,
-      shoe_size: body.shoe_size,
-      hair_color: body.hair_color,
-      eye_color: body.eye_color,
+      shoe_size: body.shoe_size || "",
+      hair_color: body.hair_color || "",
+      eye_color: body.eye_color || "",
       notable_features: body.notable_features || null,
       visible_marks: body.visible_marks || null,
       health_notes: body.health_notes || null,
       experience: body.experience,
-      worked_with_photographers: body.worked_with_photographers,
-      comfortable_snapshots: body.comfortable_snapshots,
+      worked_with_photographers: body.worked_with_photographers || "",
+      comfortable_snapshots: body.comfortable_snapshots || "",
       interests: body.interests,
       nudity_comfort_levels: body.nudity_comfort_levels,
       comfort_level: body.comfort_level,
@@ -192,17 +174,17 @@ export default async function handler(req, res) {
       hard_limits: body.hard_limits,
       special_conditions: body.special_conditions,
       availability: body.availability,
-      availability_notes: body.availability_notes,
+      availability_notes: body.availability_notes || null,
       frequency: body.frequency,
       travel_willing: body.travel_willing,
       travel_distance: body.travel_willing === "No" ? "Not applicable" : body.travel_distance,
-      travel_preference: body.travel_willing === "No" ? "Not applicable" : body.travel_preference,
+      travel_preference: body.travel_willing === "No" ? "Not applicable" : body.travel_preference || null,
       comp_interest: body.comp_interest,
       compensation_types: body.compensation_types,
       unpaid_tfp_willing: body.unpaid_tfp_willing === true,
       expected_comp: body.expected_comp,
       why_work: body.why_work,
-      good_fit: body.good_fit,
+      good_fit: body.good_fit || "",
       release_understanding: body.release_understanding,
       intended_use: body.intended_use,
       emergency_contact_name: body.emergency_contact_name || null,

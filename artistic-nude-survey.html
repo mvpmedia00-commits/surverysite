@@ -9,16 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1114;
-      --panel: rgba(22, 24, 28, 0.9);
+      --bg: #101115;
+      --panel: rgba(24, 25, 30, 0.82);
       --line: rgba(255, 255, 255, 0.14);
       --text: #f4f1eb;
-      --muted: #c6c0b4;
-      --accent: #cfb073;
+      --muted: #c8c0b3;
+      --accent: #d8b86f;
+      --accent-2: #8ad4a2;
       --ok: #8ad4a2;
       --error: #ff9c9c;
-      --radius: 16px;
-      --shadow: 0 20px 36px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
     }
 
     * { box-sizing: border-box; }
@@ -28,68 +29,88 @@
       color: var(--text);
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 85% 15%, rgba(207, 176, 115, 0.18), transparent 34%),
-        linear-gradient(180deg, #13161a 0%, var(--bg) 100%);
+        linear-gradient(90deg, rgba(216, 184, 111, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(138, 212, 162, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 84% 9%, rgba(216, 184, 111, 0.22), transparent 31%),
+        radial-gradient(circle at 12% 22%, rgba(138, 212, 162, 0.09), transparent 27%),
+        linear-gradient(180deg, #17191f 0%, var(--bg) 100%);
+      background-size: 46px 46px, 46px 46px, auto, auto, auto;
     }
 
     .page {
-      width: min(980px, 94vw);
-      margin: 24px auto 40px;
+      width: min(1040px, 94vw);
+      margin: 28px auto 48px;
     }
 
     .hero {
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 30px;
       box-shadow: var(--shadow);
       overflow: hidden;
       background:
-        linear-gradient(rgba(9, 10, 12, 0.45), rgba(9, 10, 12, 0.45)),
+        linear-gradient(90deg, rgba(9, 10, 12, 0.78), rgba(9, 10, 12, 0.36)),
         url("assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg") center/cover;
-      min-height: 320px;
+      min-height: min(680px, calc(100vh - 56px));
       display: grid;
       align-content: end;
-      padding: 24px;
+      padding: clamp(24px, 5vw, 56px);
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      pointer-events: none;
     }
 
     .hero h1 {
       margin: 0;
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1.04;
+      font-size: clamp(2.8rem, 7vw, 5.7rem);
+      line-height: 0.94;
       max-width: 720px;
+      position: relative;
+      letter-spacing: 0;
     }
 
     .hero p {
       margin: 10px 0 0;
       color: #eee5d6;
-      max-width: 720px;
-      line-height: 1.5;
+      max-width: 680px;
+      line-height: 1.65;
+      font-size: clamp(1rem, 1.8vw, 1.12rem);
+      position: relative;
     }
 
     form {
-      margin-top: 14px;
+      margin-top: 18px;
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
     fieldset {
       margin: 0;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 26px;
       background: var(--panel);
       box-shadow: var(--shadow);
-      padding: 16px;
+      padding: clamp(18px, 3vw, 28px);
+      backdrop-filter: blur(16px);
     }
 
     legend {
       color: var(--accent);
-      font-weight: 700;
-      padding: 0 8px;
+      font-weight: 800;
+      padding: 0 10px;
+      font-size: 1.02rem;
     }
 
     .grid {
       display: grid;
-      gap: 10px;
+      gap: 14px;
     }
 
     .two {
@@ -104,7 +125,7 @@
     label,
     .sub-label {
       font-size: 0.92rem;
-      font-weight: 600;
+      font-weight: 800;
       color: #eee7dc;
     }
 
@@ -112,12 +133,13 @@
     select,
     textarea {
       width: 100%;
-      border: 1px solid #4d4f56;
-      border-radius: 10px;
-      background: #191c20;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      background: rgba(13, 15, 19, 0.68);
       color: var(--text);
       font: inherit;
-      padding: 10px 11px;
+      padding: 12px 13px;
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
 
     input:focus,
@@ -125,11 +147,12 @@
     textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(207, 176, 115, 0.2);
+      background: rgba(13, 15, 19, 0.9);
+      box-shadow: 0 0 0 4px rgba(216, 184, 111, 0.18);
     }
 
     textarea {
-      min-height: 86px;
+      min-height: 112px;
       resize: vertical;
     }
 
@@ -147,11 +170,20 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      border: 1px solid #454850;
-      border-radius: 10px;
-      background: #1b1f25;
-      padding: 8px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      background: rgba(13, 15, 19, 0.52);
+      padding: 10px 11px;
       font-size: 0.9rem;
+      transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    .choice:hover,
+    .choice:has(input:checked) {
+      transform: translateY(-1px);
+      border-color: rgba(216, 184, 111, 0.42);
+      background: rgba(25, 28, 34, 0.92);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
     }
 
     .choice input[type="checkbox"],
@@ -179,20 +211,25 @@
       display: none;
       width: 92px;
       height: 92px;
-      border: 1px solid #454850;
-      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
       object-fit: cover;
       background: #191c20;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
     }
 
     .progress-panel {
-      border: 1px solid #333741;
-      border-radius: var(--radius);
-      background: rgba(24, 27, 32, 0.92);
+      position: sticky;
+      top: 10px;
+      z-index: 8;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 26px;
+      background: rgba(24, 27, 32, 0.82);
       box-shadow: var(--shadow);
-      padding: 12px 14px;
+      padding: 16px;
       display: grid;
-      gap: 8px;
+      gap: 10px;
+      backdrop-filter: blur(18px);
     }
 
     .progress-meta {
@@ -207,7 +244,7 @@
     .progress-track {
       height: 8px;
       border-radius: 999px;
-      background: #30343b;
+      background: rgba(255, 255, 255, 0.1);
       overflow: hidden;
     }
 
@@ -215,7 +252,7 @@
       height: 100%;
       width: 0;
       border-radius: inherit;
-      background: linear-gradient(135deg, var(--accent), #8ad4a2);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       transition: width 180ms ease;
     }
 
@@ -279,19 +316,31 @@
     button {
       border: 0;
       border-radius: 999px;
-      padding: 12px 22px;
+      padding: 13px 24px;
       min-width: 220px;
       cursor: pointer;
       font: inherit;
       font-weight: 700;
       color: #14161a;
-      background: linear-gradient(135deg, #d6be90, #b99456);
-      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
+      background: linear-gradient(135deg, #ead29a, #c69b4f);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32);
+      transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.36);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+      transform: none;
     }
 
     button.secondary {
-      border: 1px solid #4d4f56;
-      background: #191c20;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(13, 15, 19, 0.68);
       color: var(--text);
       box-shadow: none;
     }
@@ -299,11 +348,12 @@
     .success {
       display: none;
       border: 1px solid rgba(138, 212, 162, 0.5);
-      border-radius: var(--radius);
+      border-radius: 26px;
       background: rgba(31, 54, 40, 0.55);
       color: #e8ffe8;
-      padding: 14px;
-      margin-top: 12px;
+      padding: 20px;
+      margin-top: 14px;
+      box-shadow: var(--shadow);
     }
 
     .success h2 {
@@ -319,7 +369,23 @@
 
     @media (max-width: 860px) {
       .two { grid-template-columns: 1fr; }
-      .hero { min-height: 260px; }
+      .hero {
+        min-height: 520px;
+        padding: 28px;
+      }
+      .hero::before {
+        inset: 12px;
+      }
+      .progress-panel {
+        position: static;
+      }
+      button {
+        width: 100%;
+        min-width: 0;
+      }
+      .draft-actions button {
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -357,8 +423,8 @@
           <div class="field"><label for="fullName">Full Name *</label><input id="fullName" required></div>
           <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
           <div class="field">
-            <label for="pronouns">Pronouns *</label>
-            <select id="pronouns" required>
+            <label for="pronouns">Pronouns (Optional)</label>
+            <select id="pronouns">
               <option value="">Select one</option>
               <option>She/Her</option>
               <option>He/Him</option>
@@ -368,9 +434,9 @@
           </div>
           <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
           <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
-          <div class="field"><label for="phone">Phone Number (with country code) *</label><input id="phone" required></div>
+          <div class="field"><label for="phone">Phone Number (Optional)</label><input id="phone"></div>
           <div class="field"><label for="city">City *</label><input id="city" required></div>
-          <div class="field"><label for="stateProvince">State / Province *</label><input id="stateProvince" required></div>
+          <div class="field"><label for="stateProvince">State / Province (Optional)</label><input id="stateProvince"></div>
           <div class="field"><label for="country">Country *</label><input id="country" required></div>
           <div class="field"><label for="instagram">Instagram Profile</label><input id="instagram"></div>
           <div class="field"><label for="tiktok">TikTok Profile</label><input id="tiktok"></div>
@@ -393,22 +459,22 @@
         <legend>2) Profile Snapshot</legend>
         <div class="grid two">
           <div class="field">
-            <span class="sub-label">Do you have previous modeling experience? *</span>
+            <span class="sub-label">Do you have previous modeling experience?</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="previousModelingExperience" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="previousModelingExperience" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="previousModelingExperience" value="No">No</label>
             </div>
           </div>
-          <div class="field"><label for="height">Height *</label><input id="height" required></div>
+          <div class="field"><label for="height">Height (Optional)</label><input id="height"></div>
           <div class="field"><label for="bodyType">Body Type / Build (Optional)</label><input id="bodyType"></div>
-          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
+          <div class="field"><label for="clothingSize">Clothing Size (Optional)</label><input id="clothingSize"></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
-          <div class="field"><label for="shoeSize">Shoe Size *</label><input id="shoeSize" required></div>
-          <div class="field"><label for="hairColor">Hair Color *</label><input id="hairColor" required></div>
-          <div class="field"><label for="eyeColor">Eye Color *</label><input id="eyeColor" required></div>
+          <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
+          <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
+          <div class="field"><label for="eyeColor">Eye Color (Optional)</label><input id="eyeColor"></div>
           <div class="field"><label for="notableFeatures">Notable Features (Optional)</label><input id="notableFeatures"></div>
           <div class="field"><label for="visibleMarks">Visible Tattoos/Piercings/Scars (Optional)</label><input id="visibleMarks"></div>
           <div class="field"><label for="healthNotes">Allergies / Skin Conditions / Medical Notes (Optional)</label><textarea id="healthNotes"></textarea></div>
@@ -423,21 +489,21 @@
             </select>
           </div>
           <div class="field">
-            <span class="sub-label">Worked with photographers before? *</span>
+            <span class="sub-label">Have you worked with photographers before?</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="worked" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="worked" value="No">No</label>
             </div>
           </div>
           <div class="field">
-            <span class="sub-label">Comfortable providing recent snapshots? *</span>
+            <span class="sub-label">Can you provide recent snapshots later if selected?</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="snapshots" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="snapshots" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="snapshots" value="No">No</label>
             </div>
           </div>
           <div class="field">
-            <span class="sub-label">What type of modeling? (select at least one) *</span>
+            <span class="sub-label">What type of modeling have you done? (Optional)</span>
             <div class="choices inline">
               <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
               <label class="choice"><input type="checkbox" name="experienceTypes" value="Commercial">Commercial</label>
@@ -481,7 +547,7 @@
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Artistic / tasteful nude">Artistic / tasteful nude</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless only">Topless only</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Full nude (non-explicit)">Full nude (non-explicit)</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Explicit poses / close-ups">Explicit poses / close-ups</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="More revealing fine-art poses, discussed first">More revealing fine-art poses, discussed first</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Body painting / artistic makeup">Body painting / artistic makeup</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Oiled / glistening skin">Oiled / glistening skin</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Outdoor / location shoots">Outdoor / location shoots</label>
@@ -500,17 +566,17 @@
         </div>
 
         <div class="field">
-          <label for="avoidConcepts">List concepts, poses, or themes you will not do *</label>
+          <label for="avoidConcepts">Any concepts, poses, or themes you already know are off-limits? *</label>
           <textarea id="avoidConcepts" required></textarea>
         </div>
 
         <div class="field">
-          <label for="hardLimits">Any hard limits or triggers? *</label>
+          <label for="hardLimits">Any important boundaries we should know before discussing a shoot? *</label>
           <textarea id="hardLimits" required></textarea>
         </div>
 
         <div class="field">
-          <label for="specialConditions">Comfort with body paint/oils/props/light physical direction *</label>
+          <label for="specialConditions">Are body paint, oils, props, or light pose direction okay? *</label>
           <select id="specialConditions" required>
             <option value="">Select one</option>
             <option>Yes</option>
@@ -535,8 +601,8 @@
           </div>
 
           <div class="field">
-            <label for="availabilityNotes">Days/times generally available *</label>
-            <textarea id="availabilityNotes" required></textarea>
+            <label for="availabilityNotes">Days/times generally available (Optional)</label>
+            <textarea id="availabilityNotes"></textarea>
           </div>
 
           <div class="field">
@@ -570,7 +636,7 @@
             </select>
           </div>
 
-          <div class="field"><label for="travelPreference">Travel preference *</label><input id="travelPreference" placeholder="Local only / Within X miles / Open to travel" required></div>
+          <div class="field"><label for="travelPreference">Travel preference (Optional)</label><input id="travelPreference" placeholder="Local only / Within X miles / Open to travel"></div>
 
           <div class="field">
             <label for="compInterest">Interested in *</label>
@@ -626,7 +692,7 @@
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
           <div class="field"><label for="whyWork">Why do you want to work on artistic nude projects with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field"><label for="goodFit">What makes you a strong fit for this type of project? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field"><label for="goodFit">Anything you want us to know about your style or experience? (Optional)</label><textarea id="goodFit"></textarea></div>
           <div class="field"><label for="anythingElse">Anything else we should know? (Optional)</label><textarea id="anythingElse"></textarea></div>
         </div>
       </fieldset>
@@ -648,7 +714,6 @@
             <label class="choice"><input type="checkbox" name="intendedUse" value="Personal portfolio / artistic use">Personal portfolio / artistic use</label>
             <label class="choice"><input type="checkbox" name="intendedUse" value="Social media / promotional">Social media / promotional</label>
             <label class="choice"><input type="checkbox" name="intendedUse" value="Commercial / paid content">Commercial / paid content</label>
-            <label class="choice"><input type="checkbox" name="intendedUse" value="AI reference / training material">AI reference / training material</label>
             <label class="choice"><input type="checkbox" name="intendedUse" value="Other">Other</label>
           </div>
           <div class="error" id="intendedUseError"></div>
@@ -1059,11 +1124,6 @@
 
       if (!checkAtLeastOne("input[name='interests']")) {
         setError("interestsError", "Please select at least one project interest.");
-        hasErrors = true;
-      }
-
-      if (!checkAtLeastOne("input[name='experienceTypes']")) {
-        setError("experienceTypesError", "Please select at least one modeling type.");
         hasErrors = true;
       }
 

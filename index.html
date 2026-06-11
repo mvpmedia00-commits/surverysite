@@ -9,16 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f3efe8;
-      --panel: #fffdf9;
-      --text: #1e1b16;
-      --muted: #5f574d;
-      --accent: #0e6b62;
-      --line: #d8cfc2;
+      --bg: #f5f1e9;
+      --panel: rgba(255, 253, 248, 0.92);
+      --text: #181714;
+      --muted: #625a4e;
+      --accent: #0c7568;
+      --accent-2: #c56f48;
+      --ink: #102b28;
+      --line: rgba(61, 53, 43, 0.14);
       --ok: #136f40;
       --error: #9e1b1b;
-      --shadow: 0 16px 34px rgba(25, 22, 16, 0.12);
-      --radius: 16px;
+      --shadow: 0 24px 70px rgba(30, 25, 15, 0.14);
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
@@ -27,13 +29,18 @@
       margin: 0;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--text);
-      background: radial-gradient(circle at 85% 10%, rgba(14, 107, 98, 0.14), transparent 32%),
-        linear-gradient(180deg, #f8f3ea 0%, var(--bg) 64%, #ece6dc 100%);
+      background:
+        linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 82% 8%, rgba(12, 117, 104, 0.2), transparent 30%),
+        radial-gradient(circle at 12% 18%, rgba(197, 111, 72, 0.13), transparent 28%),
+        linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
     }
 
     .page {
-      width: min(920px, 94vw);
-      margin: 24px auto 36px;
+      width: min(1040px, 94vw);
+      margin: 28px auto 44px;
       animation: riseIn 420ms ease-out;
     }
 
@@ -73,12 +80,12 @@
     .lang-card {
       width: min(560px, 94vw);
       border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: var(--radius);
-      background: rgba(255, 253, 249, 0.9);
+      border-radius: 24px;
+      background: rgba(255, 253, 249, 0.86);
       box-shadow: var(--shadow);
-      padding: 22px 18px;
+      padding: 30px 24px;
       text-align: center;
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(14px);
     }
 
     .lang-card h2 {
@@ -103,19 +110,25 @@
 
     .hero {
       position: relative;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(130deg, rgba(14, 107, 98, 0.14), rgba(200, 113, 70, 0.08));
+      border: 1px solid rgba(61, 53, 43, 0.12);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 249, 0.96), rgba(255, 250, 240, 0.82)),
+        linear-gradient(130deg, rgba(12, 117, 104, 0.18), rgba(197, 111, 72, 0.11));
       box-shadow: var(--shadow);
-      padding: 22px 18px;
+      padding: clamp(22px, 4vw, 42px);
       display: grid;
-      gap: 16px;
-      grid-template-columns: 1.2fr 0.8fr;
+      gap: clamp(18px, 3vw, 32px);
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.8fr);
+      min-height: min(650px, calc(100vh - 56px));
+      align-items: center;
+      overflow: hidden;
     }
 
     .hero-copy {
       display: grid;
       align-content: start;
+      gap: 12px;
     }
 
     .hero-about-link {
@@ -126,20 +139,22 @@
       border: 1px solid var(--line);
       border-radius: 999px;
       color: var(--accent);
-      background: #fff;
+      background: rgba(255, 255, 255, 0.84);
       padding: 8px 12px;
       font-size: 0.82rem;
       font-weight: 700;
       letter-spacing: 0.01em;
+      backdrop-filter: blur(10px);
     }
 
     .hero-photo {
-      border-radius: 14px;
+      border-radius: 24px;
       overflow: hidden;
       border: 1px solid rgba(30, 27, 22, 0.18);
-      min-height: 220px;
-      box-shadow: 0 18px 28px rgba(30, 27, 22, 0.2);
+      min-height: clamp(280px, 48vw, 520px);
+      box-shadow: 0 30px 70px rgba(30, 27, 22, 0.25);
       background: #fff;
+      transform: rotate(1.3deg);
     }
 
     .hero-photo img {
@@ -152,24 +167,47 @@
     h1 {
       margin: 0;
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2rem, 4vw, 2.6rem);
-      line-height: 1.08;
+      font-size: clamp(2.6rem, 6vw, 5.2rem);
+      line-height: 0.94;
+      letter-spacing: 0;
+      max-width: 780px;
     }
 
-    .intro { margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
-    .tag { margin-top: 10px; font-size: 0.88rem; color: #0a514a; font-weight: 700; }
+    .intro {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 680px;
+      font-size: clamp(1rem, 1.8vw, 1.12rem);
+    }
+
+    .tag {
+      width: fit-content;
+      margin-top: 4px;
+      font-size: 0.84rem;
+      color: var(--ink);
+      font-weight: 800;
+      padding: 8px 12px;
+      border: 1px solid rgba(12, 117, 104, 0.2);
+      border-radius: 999px;
+      background: rgba(12, 117, 104, 0.08);
+    }
 
 
-    form { margin-top: 16px; display: grid; gap: 14px; }
+    form { margin-top: 18px; display: grid; gap: 16px; }
 
     .progress-panel {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 253, 249, 0.92);
+      position: sticky;
+      top: 10px;
+      z-index: 8;
+      border: 1px solid rgba(61, 53, 43, 0.12);
+      border-radius: 24px;
+      background: rgba(255, 253, 248, 0.86);
       box-shadow: var(--shadow);
-      padding: 12px 14px;
+      padding: 16px;
       display: grid;
-      gap: 8px;
+      gap: 10px;
+      backdrop-filter: blur(16px);
     }
 
     .progress-meta {
@@ -184,7 +222,7 @@
     .progress-track {
       height: 8px;
       border-radius: 999px;
-      background: #ded4c6;
+      background: rgba(98, 90, 78, 0.16);
       overflow: hidden;
     }
 
@@ -192,7 +230,7 @@
       height: 100%;
       width: 0;
       border-radius: inherit;
-      background: linear-gradient(135deg, var(--accent), #da7c4f);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       transition: width 180ms ease;
     }
 
@@ -224,38 +262,48 @@
     }
 
     fieldset {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border: 1px solid rgba(61, 53, 43, 0.12);
+      border-radius: 24px;
       background: var(--panel);
       box-shadow: var(--shadow);
-      padding: 16px 14px;
+      padding: clamp(18px, 3vw, 26px);
       margin: 0;
+      backdrop-filter: blur(10px);
     }
 
-    legend { color: var(--accent); font-weight: 700; padding: 0 8px; }
+    legend {
+      color: var(--accent);
+      font-weight: 800;
+      padding: 0 10px;
+      letter-spacing: 0;
+      font-size: 1.02rem;
+    }
 
-    .grid { display: grid; gap: 10px; }
+    .grid { display: grid; gap: 14px; }
     .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-    .field { display: grid; gap: 6px; }
-    label, .sub-label { font-size: 0.93rem; font-weight: 600; }
+    .field { display: grid; gap: 7px; }
+    label, .sub-label { font-size: 0.9rem; font-weight: 800; color: #2a261f; }
 
     input, select, textarea {
       width: 100%;
-      border: 1px solid #c8beaf;
-      border-radius: 10px;
-      padding: 10px 11px;
+      border: 1px solid rgba(61, 53, 43, 0.16);
+      border-radius: 14px;
+      padding: 12px 13px;
       font: inherit;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
 
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(14, 107, 98, 0.18);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(12, 117, 104, 0.14);
     }
 
-    textarea { min-height: 84px; resize: vertical; }
+    textarea { min-height: 108px; resize: vertical; }
 
     .choices { display: grid; gap: 8px; margin-top: 2px; }
     .inline { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
@@ -264,11 +312,20 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      border: 1px solid #dfd6c9;
-      border-radius: 10px;
-      background: #fffcf8;
-      padding: 8px 9px;
+      border: 1px solid rgba(61, 53, 43, 0.13);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.62);
+      padding: 10px 11px;
       font-size: 0.92rem;
+      transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    .choice:hover,
+    .choice:has(input:checked) {
+      transform: translateY(-1px);
+      border-color: rgba(12, 117, 104, 0.36);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 24px rgba(30, 25, 15, 0.08);
     }
 
     .choice input[type="checkbox"],
@@ -285,12 +342,13 @@
 
     .photo-preview {
       display: none;
-      width: 92px;
-      height: 92px;
+      width: 112px;
+      height: 112px;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 16px;
       object-fit: cover;
       background: #f7f3ec;
+      box-shadow: 0 12px 26px rgba(30, 25, 15, 0.12);
     }
 
     .bot-field {
@@ -321,19 +379,31 @@
     button {
       border: 0;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #08524b);
+      background: linear-gradient(135deg, var(--accent), #09584f);
       color: #fff;
       font: inherit;
       font-weight: 700;
-      padding: 12px 22px;
+      padding: 13px 24px;
       min-width: 210px;
       cursor: pointer;
-      box-shadow: 0 14px 22px rgba(14, 107, 98, 0.28);
+      box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26);
+      transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 34px rgba(12, 117, 104, 0.3);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+      transform: none;
     }
 
     button.secondary {
       border: 1px solid var(--line);
-      background: #fff;
+      background: rgba(255, 255, 255, 0.78);
       color: var(--accent);
       box-shadow: none;
     }
@@ -368,10 +438,11 @@
     .success {
       display: none;
       margin-top: 14px;
-      border: 1px solid #9ecfb5;
-      background: #f3fff8;
-      border-radius: var(--radius);
-      padding: 16px;
+      border: 1px solid rgba(19, 111, 64, 0.24);
+      background: rgba(243, 255, 248, 0.94);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
     }
 
     .success h2 { margin: 0 0 8px; color: var(--ok); font-size: 1.22rem; }
@@ -386,8 +457,29 @@
       .two { grid-template-columns: 1fr; }
       .page { margin-top: 14px; }
       .lang-actions { grid-template-columns: 1fr; }
-      .hero { grid-template-columns: 1fr; }
-      .hero-photo { min-height: 190px; }
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 52px;
+      }
+      .hero-about-link {
+        left: 18px;
+        right: auto;
+      }
+      .hero-photo {
+        min-height: 240px;
+        transform: none;
+      }
+      .progress-panel {
+        position: static;
+      }
+      button {
+        width: 100%;
+        min-width: 0;
+      }
+      .draft-actions button {
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -466,15 +558,15 @@
       <fieldset>
         <legend id="legend2">2) Profile Snapshot</legend>
         <div class="grid two">
-          <div class="field"><label for="height">Height *</label><input id="height" required></div>
-          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
+          <div class="field"><label for="height">Height (Optional)</label><input id="height"></div>
+          <div class="field"><label for="clothingSize">Clothing Size (Optional)</label><input id="clothingSize"></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
-          <div class="field"><label for="shoeSize">Shoe Size *</label><input id="shoeSize" required></div>
-          <div class="field"><label for="hairColor">Hair Color *</label><input id="hairColor" required></div>
-          <div class="field"><label for="eyeColor">Eye Color *</label><input id="eyeColor" required></div>
+          <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
+          <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
+          <div class="field"><label for="eyeColor">Eye Color (Optional)</label><input id="eyeColor"></div>
           <div class="field">
             <label for="experience">Modeling Experience *</label>
             <select id="experience" required>
@@ -483,16 +575,16 @@
             </select>
           </div>
           <div class="field">
-            <span class="sub-label">Worked with photographers before? *</span>
+            <span class="sub-label">Have you worked with photographers before?</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="worked" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="worked" value="No">No</label>
             </div>
           </div>
           <div class="field">
-            <span class="sub-label">Comfortable providing recent snapshots? *</span>
+            <span class="sub-label">Can you provide recent snapshots later if selected?</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="snapshots" value="Yes" required>Yes</label>
+              <label class="choice"><input type="radio" name="snapshots" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="snapshots" value="No">No</label>
             </div>
           </div>
@@ -616,7 +708,7 @@
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
           <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field"><label for="goodFit">What makes you a good fit? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field"><label for="goodFit">Anything you want us to know about your style or experience? (Optional)</label><textarea id="goodFit"></textarea></div>
           <div class="field"><label for="anythingElse">Anything else you would like us to know? (Optional)</label><textarea id="anythingElse"></textarea></div>
         </div>
       </fieldset>
@@ -718,19 +810,19 @@
         labelTikTok: "TikTok Profile",
         labelHearAbout: "How did you hear about us? *",
         hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referral", "Friend", "Website", "Other"],
-        labelHeight: "Height *",
-        labelClothingSize: "Clothing Size *",
+        labelHeight: "Height (Optional)",
+        labelClothingSize: "Clothing Size (Optional)",
         labelBraSize: "Bra Size (Optional)",
         labelBustMeasurement: "Bust Measurement (Optional)",
-        labelWaistMeasurement: "Waist Measurement *",
+        labelWaistMeasurement: "Waist Measurement (Optional)",
         labelHipMeasurement: "Hip Measurement (Optional)",
-        labelShoeSize: "Shoe Size *",
-        labelHairColor: "Hair Color *",
-        labelEyeColor: "Eye Color *",
+        labelShoeSize: "Shoe Size (Optional)",
+        labelHairColor: "Hair Color (Optional)",
+        labelEyeColor: "Eye Color (Optional)",
         labelExperience: "Modeling Experience *",
         experienceOptions: ["Never", "Beginner", "Some Experience", "Experienced"],
-        labelWorked: "Worked with photographers before? *",
-        labelSnapshots: "Comfortable providing recent snapshots? *",
+        labelWorked: "Have you worked with photographers before?",
+        labelSnapshots: "Can you provide recent snapshots later if selected?",
         yes: "Yes",
         no: "No",
         labelInterests: "Project interests (select at least one) *",
@@ -765,7 +857,7 @@
         labelHeadshot: "Headshot *",
         labelFullBody: "Full Body Photo *",
         labelWhyWork: "Why would you like to work with MVP Media Photography? *",
-        labelGoodFit: "What makes you a good fit? *",
+        labelGoodFit: "Anything you want us to know about your style or experience? (Optional)",
         labelAnythingElse: "Anything else you would like us to know? (Optional)",
         consentAge: "I confirm I am at least 18 years old.",
         consentSelection: "I understand this application does not guarantee selection.",
@@ -808,19 +900,19 @@
         labelTikTok: "Perfil de TikTok",
         labelHearAbout: "Como nos conociste? *",
         hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referido", "Amigo", "Sitio Web", "Otro"],
-        labelHeight: "Altura *",
-        labelClothingSize: "Talla de Ropa *",
+        labelHeight: "Altura (Opcional)",
+        labelClothingSize: "Talla de Ropa (Opcional)",
         labelBraSize: "Talla de Brasier (Opcional)",
         labelBustMeasurement: "Medida de Busto (Opcional)",
-        labelWaistMeasurement: "Medida de Cintura *",
+        labelWaistMeasurement: "Medida de Cintura (Opcional)",
         labelHipMeasurement: "Medida de Cadera (Opcional)",
-        labelShoeSize: "Talla de Zapato *",
-        labelHairColor: "Color de Cabello *",
-        labelEyeColor: "Color de Ojos *",
+        labelShoeSize: "Talla de Zapato (Opcional)",
+        labelHairColor: "Color de Cabello (Opcional)",
+        labelEyeColor: "Color de Ojos (Opcional)",
         labelExperience: "Experiencia de Modelaje *",
         experienceOptions: ["Nunca", "Principiante", "Algo de Experiencia", "Con Experiencia"],
-        labelWorked: "Has trabajado con fotografos antes? *",
-        labelSnapshots: "Te sientes comoda/o enviando snapshots recientes? *",
+        labelWorked: "Has trabajado con fotografos antes?",
+        labelSnapshots: "Puedes compartir snapshots recientes mas adelante si eres seleccionada/o?",
         yes: "Si",
         no: "No",
         labelInterests: "Intereses de proyecto (selecciona al menos uno) *",
@@ -855,7 +947,7 @@
         labelHeadshot: "Headshot *",
         labelFullBody: "Foto de Cuerpo Completo *",
         labelWhyWork: "Por que te gustaria trabajar con MVP Media Photography? *",
-        labelGoodFit: "Que te hace una buena opcion? *",
+        labelGoodFit: "Algo sobre tu estilo o experiencia que quieras compartir? (Opcional)",
         labelAnythingElse: "Hay algo mas que te gustaria que sepamos? (Opcional)",
         consentAge: "Confirmo que tengo al menos 18 anos.",
         consentSelection: "Entiendo que esta solicitud no garantiza seleccion.",
