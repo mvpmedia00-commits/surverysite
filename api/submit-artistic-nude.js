@@ -1,3 +1,5 @@
+import { getSupabaseConfig } from "./_supabase.js";
+
 const requiredFields = [
   "full_name",
   "preferred_name",
@@ -67,18 +69,25 @@ const getMissingRequiredField = (body) => {
 
 export default async function handler(req, res) {
   try {
+    if (req.method === "OPTIONS") {
+      res.setHeader("Allow", "POST, OPTIONS, GET");
+      return res.status(204).end();
+    }
+
+    if (req.method === "GET") {
+      return respond(res, 200, { ok: true, endpoint: "submit-artistic-nude", method: "POST" });
+    }
+
     if (req.method !== "POST") {
+      res.setHeader("Allow", "POST, OPTIONS, GET");
       return respond(res, 405, { error: "Method not allowed" });
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return respond(res, 500, {
-        error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
-      });
+    const supabaseConfig = getSupabaseConfig();
+    if (supabaseConfig.error) {
+      return respond(res, 500, { error: supabaseConfig.error });
     }
+    const { supabaseUrl, supabaseKey } = supabaseConfig;
 
     const body = req.body || {};
 

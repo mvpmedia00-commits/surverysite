@@ -6,7 +6,17 @@ const respond = (res, status, payload) => {
 };
 
 export default async function handler(req, res) {
+  if (req.method === "OPTIONS") {
+    res.setHeader("Allow", "POST, OPTIONS, GET");
+    return res.status(204).end();
+  }
+
+  if (req.method === "GET") {
+    return respond(res, 200, { ok: true, endpoint: "admin-login", method: "POST" });
+  }
+
   if (req.method !== "POST") {
+    res.setHeader("Allow", "POST, OPTIONS, GET");
     return respond(res, 405, { error: "Method not allowed" });
   }
 

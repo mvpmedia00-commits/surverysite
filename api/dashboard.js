@@ -63,7 +63,13 @@ const toPhotoUrl = (supabaseUrl, value) => {
 
 
 export default async function handler(req, res) {
+  if (req.method === "OPTIONS") {
+    res.setHeader("Allow", "GET, PATCH, OPTIONS");
+    return res.status(204).end();
+  }
+
   if (req.method !== "GET" && req.method !== "PATCH") {
+    res.setHeader("Allow", "GET, PATCH, OPTIONS");
     return respond(res, 405, { error: "Method not allowed" });
   }
 
