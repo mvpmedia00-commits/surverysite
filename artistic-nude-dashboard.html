@@ -495,6 +495,7 @@
             <option value="scheduled">Scheduled</option>
             <option value="approved">Approved</option>
             <option value="archived">Archived</option>
+            <option value="denied">Denied</option>
           </select>
         </div>
         <div class="field">
@@ -787,7 +788,7 @@
       const source = document.getElementById("filterSource").value;
 
       return state.candidates.filter((candidate) => {
-        if (candidate.review_status === "denied") {
+        if (candidate.review_status === "denied" && status !== "denied") {
           return false;
         }
         const matchesSearch = !search
@@ -809,7 +810,10 @@
       if (filtered.length === 0) {
         const empty = document.createElement("p");
         empty.className = "status";
-        empty.textContent = "No candidates match these filters.";
+        const deniedCount = state.candidates.filter((candidate) => candidate.review_status === "denied").length;
+        empty.textContent = deniedCount > 0 && state.candidates.length === deniedCount && document.getElementById("filterStatus").value !== "denied"
+          ? "All profiles are currently denied. Set Status to Denied to view them."
+          : "No candidates match these filters.";
         list.appendChild(empty);
         return;
       }
