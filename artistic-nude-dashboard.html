@@ -478,7 +478,7 @@
 
     <section class="card">
       <div class="filters-head">
-        <p class="status">Artistic Nude Candidate Review - denied profiles are hidden and excluded from dashboard stats.</p>
+        <p class="status">Artistic Nude Candidate Review - all profiles are visible in the list. KPIs exclude denied profiles.</p>
         <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
       </div>
       <div class="filters">
@@ -788,9 +788,6 @@
       const source = document.getElementById("filterSource").value;
 
       return state.candidates.filter((candidate) => {
-        if (candidate.review_status === "denied" && status !== "denied") {
-          return false;
-        }
         const matchesSearch = !search
           || candidate.full_name.toLowerCase().includes(search)
           || candidate.email.toLowerCase().includes(search);
@@ -810,10 +807,7 @@
       if (filtered.length === 0) {
         const empty = document.createElement("p");
         empty.className = "status";
-        const deniedCount = state.candidates.filter((candidate) => candidate.review_status === "denied").length;
-        empty.textContent = deniedCount > 0 && state.candidates.length === deniedCount && document.getElementById("filterStatus").value !== "denied"
-          ? "All profiles are currently denied. Set Status to Denied to view them."
-          : "No candidates match these filters.";
+        empty.textContent = "No candidates match these filters.";
         list.appendChild(empty);
         return;
       }
