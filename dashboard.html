@@ -794,6 +794,7 @@
       filtered.forEach((candidate) => {
         const card = document.createElement("article");
         card.className = "candidate";
+        card.dataset.candidateId = candidate.id;
         card.innerHTML = `
           <div class="candidate-top">
             <div>
@@ -994,24 +995,33 @@
     });
 
     document.getElementById("candidateList").addEventListener("click", async (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLButtonElement)) {
+      const clicked = event.target;
+      if (!(clicked instanceof Element)) {
         return;
       }
 
-      const viewId = target.dataset.viewId;
+      const actionButton = clicked.closest("button");
+      if (!actionButton) {
+        const card = clicked.closest(".candidate");
+        if (card && card.dataset.candidateId) {
+          openProfileModal(card.dataset.candidateId);
+        }
+        return;
+      }
+
+      const viewId = actionButton.dataset.viewId;
       if (viewId) {
         openProfileModal(viewId);
         return;
       }
 
-      const id = target.dataset.id;
-      const status = target.dataset.status;
+      const id = actionButton.dataset.id;
+      const status = actionButton.dataset.status;
       if (!id || !status) {
         return;
       }
 
-      target.disabled = true;
+      actionButton.disabled = true;
       try {
         await updateCandidateStatus(id, status);
         await loadDashboard();
@@ -1020,7 +1030,7 @@
           ? error.message
           : "Could not update candidate status.";
       } finally {
-        target.disabled = false;
+        actionButton.disabled = false;
       }
     });
 
