@@ -169,6 +169,7 @@ export default async function handler(req, res) {
       consents: Array.isArray(row.consents) ? row.consents : [],
       language: row.language || "en",
       review_status: row.review_status || "pending",
+        admin_notes: row.admin_notes || "",
       headshot_url: toPhotoUrl(supabaseUrl, row.headshot_filename),
       full_body_url: toPhotoUrl(supabaseUrl, row.full_body_filename)
     }));
