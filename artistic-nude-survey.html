@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media - Artistic Nude Model Survey</title>
+  <title>MVP Media Adult Creative Model Application</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
@@ -391,10 +391,18 @@
 <body>
   <main class="page">
     <header class="hero">
-      <h1>Artistic Nude Model Application</h1>
+      <h1>MVP Media Adult Creative Model Application</h1>
       <p>
-        This intake is for artistic nude and conceptual fine-art projects with MVP Media Photography.
-        We review comfort, boundaries, professionalism, and availability before scheduling.
+        This application is for adults 18+ interested in nude, erotic, boudoir, nude bodypaint, glamour,
+        sensual, and subscription-style content projects with MVP Media Photography.
+      </p>
+      <p>
+        This form helps us understand your interests, comfort levels, boundaries, availability, compensation
+        expectations, and what types of adult creative content you may be open to discussing.
+      </p>
+      <p>
+        Submitting this form does not guarantee selection. All concepts, boundaries, image usage, compensation,
+        and release terms are discussed before any shoot is scheduled.
       </p>
     </header>
 
@@ -417,9 +425,9 @@
         <input id="website" name="website" tabindex="-1" autocomplete="off">
       </div>
       <fieldset>
-        <legend>1) Basic Information</legend>
+        <legend>1) Basic Contact Information</legend>
         <div class="grid two">
-          <div class="field"><label for="fullName">Full Name *</label><input id="fullName" required></div>
+          <div class="field"><label for="fullName">Full Legal Name *</label><input id="fullName" required></div>
           <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
           <div class="field">
             <label for="pronouns">Pronouns (Optional)</label>
@@ -432,22 +440,28 @@
             </select>
           </div>
           <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
+          <div class="field"><label for="dateOfBirth">Date of Birth *</label><input id="dateOfBirth" type="date" required></div>
           <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
-          <div class="field"><label for="phone">Phone Number (Optional)</label><input id="phone"></div>
+          <div class="field"><label for="phone">Phone Number *</label><input id="phone" required></div>
           <div class="field"><label for="city">City *</label><input id="city" required></div>
           <div class="field"><label for="stateProvince">State / Province (Optional)</label><input id="stateProvince"></div>
           <div class="field"><label for="country">Country *</label><input id="country" required></div>
           <div class="field"><label for="instagram">Instagram Profile</label><input id="instagram"></div>
           <div class="field"><label for="tiktok">TikTok Profile</label><input id="tiktok"></div>
+          <div class="field"><label for="fanPlatformLink">OnlyFans / Fan Platform Link (Optional)</label><input id="fanPlatformLink"></div>
+          <div class="field"><label for="portfolioLink">Portfolio / Website / Linktree</label><input id="portfolioLink"></div>
           <div class="field">
-            <label for="hearAbout">How did you hear about this survey? *</label>
+            <label for="hearAbout">How did you hear about MVP Media? *</label>
             <select id="hearAbout" required>
               <option value="">Select one</option>
               <option>Instagram</option>
-              <option>Website</option>
+              <option>TikTok</option>
+              <option>Facebook</option>
               <option>Referral</option>
-              <option>Model Community</option>
-              <option>Artistic Nude Survey Page</option>
+              <option>Casting post</option>
+              <option>Modeling group</option>
+              <option>Google</option>
+              <option>WhatsApp</option>
               <option>Other</option>
             </select>
           </div>
@@ -455,13 +469,15 @@
       </fieldset>
 
       <fieldset>
-        <legend>2) Profile Snapshot</legend>
+        <legend>2) Adult Modeling Experience</legend>
         <div class="grid two">
           <div class="field">
-            <span class="sub-label">Do you have previous modeling experience?</span>
+            <span class="sub-label">Have you modeled before?</span>
             <div class="choices inline">
               <label class="choice"><input type="radio" name="previousModelingExperience" value="Yes">Yes</label>
               <label class="choice"><input type="radio" name="previousModelingExperience" value="No">No</label>
+              <label class="choice"><input type="radio" name="previousModelingExperience" value="A little">A little</label>
+              <label class="choice"><input type="radio" name="previousModelingExperience" value="I am new but interested">I am new but interested</label>
             </div>
           </div>
           <div class="field"><label for="height">Height *</label><input id="height" required></div>
@@ -502,13 +518,22 @@
             </div>
           </div>
           <div class="field">
-            <span class="sub-label">What type of modeling have you done? (Optional)</span>
+            <span class="sub-label">What type of modeling or content have you done before? (Select all that apply)</span>
             <div class="choices inline">
               <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Commercial">Commercial</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic / Fine Art">Artistic / Fine Art</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude / Implied Nude">Nude / Implied Nude</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir / Sensual">Boudoir / Sensual</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Glamour">Glamour</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / paid fan content">OnlyFans / paid fan content</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Couples content">Couples content</label>
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
               <label class="choice"><input type="checkbox" name="experienceTypes" value="Other">Other</label>
             </div>
             <div class="error" id="experienceTypesError"></div>
@@ -522,20 +547,26 @@
               <option>A few times</option>
             </select>
           </div>
-          <div class="field"><label for="portfolioLink">Portfolio / Instagram / References Link</label><input id="portfolioLink"></div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>3) Artistic Nude Focus</legend>
+        <legend>3) Content Interest And Comfort</legend>
         <div class="field">
-          <span class="sub-label">Project interests (select at least one) *</span>
+          <span class="sub-label">What type of projects are you interested in? (Select all that apply) *</span>
           <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="interests" value="Artistic Nude Photography">Artistic Nude Photography</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Creative Fine Art">Creative Fine Art</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Swimwear / Lingerie">Swimwear / Lingerie</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Editorial">Editorial</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Portrait">Portrait</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Boudoir photography">Boudoir photography</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Lingerie content">Lingerie content</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Artistic nude">Artistic nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Glamour nude">Glamour nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Fine-art nude">Fine-art nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Adult subscription photos">Adult subscription photos</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Adult subscription videos">Adult subscription videos</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Themed fantasy concepts">Themed fantasy concepts</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Other">Other</label>
           </div>
           <div class="error" id="interestsError"></div>
         </div>
@@ -586,7 +617,7 @@
       </fieldset>
 
       <fieldset>
-        <legend>4) Availability And Compensation</legend>
+        <legend>4) Availability, Travel And Compensation</legend>
         <div class="grid two">
           <div class="field">
             <span class="sub-label">Availability (select at least one) *</span>
@@ -605,21 +636,26 @@
           </div>
 
           <div class="field">
-            <label for="frequency">How often are you available? *</label>
+            <label for="frequency">How often are you available for shoots? *</label>
             <select id="frequency" required>
               <option value="">Select one</option>
+              <option>One-time project</option>
+              <option>Once per month</option>
+              <option>A few times per month</option>
               <option>Weekly</option>
-              <option>Bi-Weekly</option>
-              <option>Monthly</option>
-              <option>Occasionally</option>
+              <option>Ongoing content creation</option>
+              <option>Depends on pay and schedule</option>
             </select>
           </div>
 
           <div class="field">
-            <span class="sub-label">Willing to travel for shoots? *</span>
+            <span class="sub-label">Are you willing to travel for shoots? *</span>
             <div class="choices inline">
               <label class="choice"><input type="radio" name="travel" value="Yes" required>Yes</label>
               <label class="choice"><input type="radio" name="travel" value="No">No</label>
+              <label class="choice"><input type="radio" name="travel" value="Local only">Local only</label>
+              <label class="choice"><input type="radio" name="travel" value="Maybe with travel covered">Maybe with travel covered</label>
+              <label class="choice"><input type="radio" name="travel" value="Open to destination projects">Open to destination projects</label>
             </div>
           </div>
 
@@ -665,20 +701,24 @@
           </div>
 
           <div class="field">
-            <label for="expectedComp">Expected compensation per session *</label>
+            <label for="expectedComp">Expected compensation per shoot *</label>
             <select id="expectedComp" required>
               <option value="">Select one</option>
-              <option>Under 50,000 COP</option>
-              <option>50,000-100,000 COP</option>
-              <option>100,000-200,000 COP</option>
-              <option>200,000+ COP</option>
+              <option>Under $100</option>
+              <option>$100-$200</option>
+              <option>$200-$400</option>
+              <option>$400-$700</option>
+              <option>$700+</option>
+              <option>Depends on content level</option>
+              <option>Depends on usage rights</option>
+              <option>Open to discussion</option>
             </select>
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>5) Photos And Intent</legend>
+        <legend>5) Photos, Final Questions And Confirmations</legend>
         <div class="grid two">
           <div class="field">
             <label for="headshot">Headshot *</label>
@@ -692,14 +732,14 @@
             <p class="file-hint" id="fullBodyHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
-          <div class="field"><label for="whyWork">Why do you want to work on artistic nude projects with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field"><label for="goodFit">Anything you want us to know about your style or experience? (Optional)</label><textarea id="goodFit"></textarea></div>
-          <div class="field"><label for="anythingElse">Anything else we should know? (Optional)</label><textarea id="anythingElse"></textarea></div>
+          <div class="field"><label for="whyWork">Why are you interested in adult creative modeling with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
+          <div class="field"><label for="goodFit">What type of content would you be most excited to create? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field"><label for="anythingElse">What would make you feel safe, respected, and comfortable during a shoot? *</label><textarea id="anythingElse" required></textarea></div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Consent</legend>
+        <legend>Required Confirmations</legend>
         <div class="field">
           <label for="releaseUnderstanding">Do you understand a signed model release is required? *</label>
           <select id="releaseUnderstanding" required>
@@ -725,10 +765,14 @@
         <div class="field">
           <div class="choices">
             <label class="choice"><input type="checkbox" name="consent" value="age">I confirm I am at least 18 years old.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="selection">I understand this application does not guarantee selection.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="voluntary">I understand participation is voluntary and concept details are discussed before shooting.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="boundaries">I understand I can state boundaries and no-go concepts in advance.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to being contacted for scheduling and future opportunities.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="accurate">I confirm all information I provided is accurate.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="adult-content">I understand this application is for adult nude, erotic, boudoir, nude bodypaint, glamour, and subscription-style content opportunities.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="selection">I understand submitting this form does not guarantee selection.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="voluntary">I understand participation is voluntary.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="boundaries">I understand I can decline any concept before a shoot is scheduled.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="terms">I understand boundaries, compensation, image usage, and release terms must be discussed before shooting.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="release">I understand a signed model release and/or adult-content agreement may be required.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to MVP Media Photography contacting me about casting, scheduling, and future opportunities.</label>
             <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">I confirm I am 18+ and all answers are accurate.</label>
           </div>
           <div class="error" id="consentError"></div>
@@ -740,13 +784,13 @@
         <button type="button" class="secondary" id="prevStepBtn">Previous</button>
         <button type="button" id="nextStepBtn">Next</button>
       </div>
-      <div class="submit-row"><button type="submit" id="submitBtn">Submit Artistic Nude Application</button></div>
+      <div class="submit-row"><button type="submit" id="submitBtn">Submit Adult Creative Model Application</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
     </form>
 
     <section class="success" id="successMessage" aria-live="polite">
       <h2>Application Received</h2>
-      <p>Thank you. Your artistic nude application has been received. We will review and contact selected applicants.</p>
+      <p>Thank you. Your adult creative model application has been received. We will review and contact selected applicants.</p>
     </section>
   </main>
 
