@@ -203,6 +203,26 @@
       line-height: 1.45;
     }
 
+    .step-title {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.98rem;
+    }
+
+    .draft-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .draft-actions button {
+      min-width: auto;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      box-shadow: none;
+    }
+
     fieldset {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -255,6 +275,23 @@
     .choice input[type="radio"] { width: auto; margin-top: 3px; accent-color: var(--accent); }
 
     .error { min-height: 1em; color: var(--error); font-weight: 600; font-size: 0.88rem; }
+
+    .file-hint {
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .photo-preview {
+      display: none;
+      width: 92px;
+      height: 92px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      object-fit: cover;
+      background: #f7f3ec;
+    }
 
     .bot-field {
       position: absolute;
@@ -392,8 +429,13 @@
           <span id="stepLabel">Step 1 of 6</span>
           <span id="autosaveStatus">Autosaved as you type</span>
         </div>
+        <p class="step-title" id="stepTitle">Basic Information</p>
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note">Your application is reviewed privately by MVP Media. Contact details and photos are used only for casting, scheduling, and portfolio review.</p>
+        <div class="draft-actions">
+          <button type="button" class="secondary" id="restoreDraftBtn">Restore Draft</button>
+          <button type="button" class="secondary" id="clearDraftBtn">Delete Draft</button>
+        </div>
       </div>
       <div class="bot-field" aria-hidden="true">
         <label for="website">Website</label>
@@ -561,8 +603,18 @@
       <fieldset>
         <legend id="legend5">5) Photos And Final Questions</legend>
         <div class="grid two">
-          <div class="field"><label for="headshot">Headshot *</label><input id="headshot" type="file" accept="image/*" required></div>
-          <div class="field"><label for="fullBody">Full Body Photo *</label><input id="fullBody" type="file" accept="image/*" required></div>
+          <div class="field">
+            <label for="headshot">Headshot *</label>
+            <input id="headshot" type="file" accept="image/*" required>
+            <p class="file-hint">Image only, up to 8MB. A clear phone photo is fine.</p>
+            <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
+          </div>
+          <div class="field">
+            <label for="fullBody">Full Body Photo *</label>
+            <input id="fullBody" type="file" accept="image/*" required>
+            <p class="file-hint">Image only, up to 8MB. Good lighting helps review.</p>
+            <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
+          </div>
           <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
           <div class="field"><label for="goodFit">What makes you a good fit? *</label><textarea id="goodFit" required></textarea></div>
           <div class="field"><label for="anythingElse">Anything else you would like us to know? (Optional)</label><textarea id="anythingElse"></textarea></div>
@@ -607,11 +659,32 @@
     const prevStepBtn = document.getElementById("prevStepBtn");
     const nextStepBtn = document.getElementById("nextStepBtn");
     const stepLabel = document.getElementById("stepLabel");
+    const stepTitle = document.getElementById("stepTitle");
     const progressFill = document.getElementById("progressFill");
     const autosaveStatus = document.getElementById("autosaveStatus");
+    const restoreDraftBtn = document.getElementById("restoreDraftBtn");
+    const clearDraftBtn = document.getElementById("clearDraftBtn");
     const fieldsets = Array.from(form.querySelectorAll("fieldset"));
     const autosaveKey = "mvp-main-application-draft";
     const maxPhotoSize = 8 * 1024 * 1024;
+    const stepNamesByLang = {
+      en: [
+        "Basic Information",
+        "Profile Snapshot",
+        "Interests And Comfort",
+        "Availability, Travel, Compensation",
+        "Photos And Final Questions",
+        "Consent"
+      ],
+      es: [
+        "Informacion Basica",
+        "Perfil General",
+        "Intereses y Comodidad",
+        "Disponibilidad, Viajes y Compensacion",
+        "Fotos y Preguntas Finales",
+        "Consentimiento"
+      ]
+    };
     let currentStep = 0;
     let selectedLanguage = "en";
 
@@ -622,9 +695,11 @@
         btnEnglish: "English",
         btnSpanish: "Espanol",
         pageTitle: "MVP Media Photography Model Application",
-        pageIntro: "Thank you for your interest in modeling with MVP Media Photography. We work on artistic, editorial, glamour, portrait, fashion, lifestyle, creative, and fine art photography projects. This short application helps us quickly screen interest, comfort levels, and availability.",
-        pageTag: "Fast Application: 3-5 minutes",
-        legend1: "1) Basic Information",
+      pageIntro: "Thank you for your interest in modeling with MVP Media Photography. We work on artistic, editorial, glamour, portrait, fashion, lifestyle, creative, and fine art photography projects. This short application helps us quickly screen interest, comfort levels, and availability.",
+      pageTag: "Fast Application: 3-5 minutes",
+        restoreDraft: "Restore Draft",
+        deleteDraft: "Delete Draft",
+      legend1: "1) Basic Information",
         legend2: "2) Profile Snapshot",
         legend3: "3) Interests And Comfort",
         legend4: "4) Availability, Travel, Compensation",
@@ -710,9 +785,11 @@
         btnEnglish: "Ingles",
         btnSpanish: "Espanol",
         pageTitle: "Solicitud de Modelo de MVP Media Photography",
-        pageIntro: "Gracias por tu interes en modelar con MVP Media Photography. Trabajamos en proyectos de fotografia artistica, editorial, glamour, retrato, moda, estilo de vida, creativa y de bellas artes. Esta solicitud corta nos ayuda a evaluar interes, niveles de comodidad y disponibilidad.",
-        pageTag: "Solicitud rapida: 3-5 minutos",
-        legend1: "1) Informacion Basica",
+      pageIntro: "Gracias por tu interes en modelar con MVP Media Photography. Trabajamos en proyectos de fotografia artistica, editorial, glamour, retrato, moda, estilo de vida, creativa y de bellas artes. Esta solicitud corta nos ayuda a evaluar interes, niveles de comodidad y disponibilidad.",
+      pageTag: "Solicitud rapida: 3-5 minutos",
+        restoreDraft: "Restaurar Borrador",
+        deleteDraft: "Eliminar Borrador",
+      legend1: "1) Informacion Basica",
         legend2: "2) Perfil General",
         legend3: "3) Intereses y Comodidad",
         legend4: "4) Disponibilidad, Viajes y Compensacion",
@@ -805,6 +882,8 @@
       document.getElementById("pageTitle").textContent = t.pageTitle;
       document.getElementById("pageIntro").textContent = t.pageIntro;
       document.getElementById("pageTag").textContent = t.pageTag;
+      restoreDraftBtn.textContent = t.restoreDraft;
+      clearDraftBtn.textContent = t.deleteDraft;
       document.getElementById("legend1").textContent = t.legend1;
       document.getElementById("legend2").textContent = t.legend2;
       document.getElementById("legend3").textContent = t.legend3;
@@ -928,6 +1007,8 @@
       if (scrollCue) {
         scrollCue.textContent = lang === "es" ? "Desliza hacia abajo ↓" : "Scroll Down ↓";
       }
+
+      updateStep();
     };
 
     const showScrollCue = () => {
@@ -970,6 +1051,8 @@
       });
 
       stepLabel.textContent = `Step ${currentStep + 1} of ${fieldsets.length}`;
+      const names = stepNamesByLang[selectedLanguage] || stepNamesByLang.en;
+      stepTitle.textContent = names[currentStep] || "";
       progressFill.style.width = `${((currentStep + 1) / fieldsets.length) * 100}%`;
       prevStepBtn.hidden = currentStep === 0;
       nextStepBtn.hidden = currentStep === fieldsets.length - 1;
@@ -1067,6 +1150,19 @@
       }
     };
 
+    const clearDraft = () => {
+      localStorage.removeItem(autosaveKey);
+      autosaveStatus.textContent = "Draft deleted";
+    };
+
+    restoreDraftBtn.addEventListener("click", () => {
+      restoreDraft();
+      updateStep();
+      autosaveStatus.textContent = "Draft restored";
+    });
+
+    clearDraftBtn.addEventListener("click", clearDraft);
+
     prevStepBtn.addEventListener("click", () => {
       currentStep = Math.max(currentStep - 1, 0);
       updateStep();
@@ -1124,6 +1220,51 @@
       }
     };
 
+    const setupPhotoPreview = (inputId, previewId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if (!input || !preview) {
+        return;
+      }
+
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        if (!file) {
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          return;
+        }
+
+        try {
+          validatePhotoFile(file, inputId === "headshot" ? "Headshot" : "Full body photo");
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        } catch (error) {
+          input.value = "";
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          submitStatus.textContent = error && error.message ? error.message : "Photo file is not valid.";
+        }
+      });
+    };
+
+    const setTravelFields = () => {
+      const travelAnswer = selectedRadioValue("travel");
+      const travelDistance = document.getElementById("travelDistance");
+      const travelDistanceField = travelDistance ? travelDistance.closest(".field") : null;
+      const hideTravelDetails = travelAnswer === "No";
+
+      if (travelDistanceField) {
+        travelDistanceField.hidden = hideTravelDetails;
+      }
+      if (travelDistance) {
+        travelDistance.disabled = hideTravelDetails;
+        if (hideTravelDetails) {
+          travelDistance.value = "";
+        }
+      }
+    };
+
     const uploadPhotoToSupabase = async (file, folder) => {
       const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
       const formData = new FormData();
@@ -1178,7 +1319,7 @@
         availability: checkedValues("input[name='availability']"),
         frequency: getValue("frequency"),
         travel_willing: selectedRadioValue("travel"),
-        travel_distance: getValue("travelDistance"),
+        travel_distance: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelDistance"),
         comp_interest: getValue("compInterest"),
         expected_comp: getValue("expectedComp"),
         unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
@@ -1325,8 +1466,18 @@
       });
     });
 
+    document.querySelectorAll("input[name='travel']").forEach((el) => {
+      el.addEventListener("change", () => {
+        setTravelFields();
+        saveDraft();
+      });
+    });
+
     restoreDraft();
     updateStep();
+    setTravelFields();
+    setupPhotoPreview("headshot", "headshotPreview");
+    setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>
 </body>
 </html>

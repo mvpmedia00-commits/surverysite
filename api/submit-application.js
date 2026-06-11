@@ -19,7 +19,6 @@ const requiredFields = [
   "avoid_concepts",
   "frequency",
   "travel_willing",
-  "travel_distance",
   "comp_interest",
   "expected_comp",
   "why_work",
@@ -107,6 +106,10 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "At least one availability option is required" });
     }
 
+    if (body.travel_willing !== "No" && !body.travel_distance) {
+      return respond(res, 400, { error: "Maximum travel distance is required" });
+    }
+
     if (!Array.isArray(body.consents) || body.consents.length < 5) {
       return respond(res, 400, { error: "All consent items must be accepted" });
     }
@@ -139,7 +142,7 @@ export default async function handler(req, res) {
       availability: body.availability,
       frequency: body.frequency,
       travel_willing: body.travel_willing,
-      travel_distance: body.travel_distance,
+      travel_distance: body.travel_willing === "No" ? "Not applicable" : body.travel_distance,
       comp_interest: body.comp_interest,
       expected_comp: body.expected_comp,
       unpaid_tfp_willing: body.unpaid_tfp_willing === true,

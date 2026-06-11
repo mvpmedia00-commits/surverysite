@@ -168,6 +168,23 @@
       font-weight: 600;
     }
 
+    .file-hint {
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .photo-preview {
+      display: none;
+      width: 92px;
+      height: 92px;
+      border: 1px solid #454850;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #191c20;
+    }
+
     .progress-panel {
       border: 1px solid #333741;
       border-radius: var(--radius);
@@ -207,6 +224,26 @@
       color: var(--muted);
       font-size: 0.9rem;
       line-height: 1.45;
+    }
+
+    .step-title {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.98rem;
+    }
+
+    .draft-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .draft-actions button {
+      min-width: auto;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      box-shadow: none;
     }
 
     .status {
@@ -302,8 +339,13 @@
           <span id="stepLabel">Step 1 of 6</span>
           <span id="autosaveStatus">Autosaved as you type</span>
         </div>
+        <p class="step-title" id="stepTitle">Basic Information</p>
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note">Your answers, photos, boundaries, and contact details are reviewed privately by MVP Media for casting and scheduling. Boundaries are discussed before any shoot is booked.</p>
+        <div class="draft-actions">
+          <button type="button" class="secondary" id="restoreDraftBtn">Restore Draft</button>
+          <button type="button" class="secondary" id="clearDraftBtn">Delete Draft</button>
+        </div>
       </div>
       <div class="bot-field" aria-hidden="true">
         <label for="website">Website</label>
@@ -571,8 +613,18 @@
       <fieldset>
         <legend>5) Photos And Intent</legend>
         <div class="grid two">
-          <div class="field"><label for="headshot">Headshot *</label><input id="headshot" type="file" accept="image/*" required></div>
-          <div class="field"><label for="fullBody">Full Body Photo *</label><input id="fullBody" type="file" accept="image/*" required></div>
+          <div class="field">
+            <label for="headshot">Headshot *</label>
+            <input id="headshot" type="file" accept="image/*" required>
+            <p class="file-hint">Image only, up to 8MB. A clear phone photo is fine.</p>
+            <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
+          </div>
+          <div class="field">
+            <label for="fullBody">Full Body Photo *</label>
+            <input id="fullBody" type="file" accept="image/*" required>
+            <p class="file-hint">Image only, up to 8MB. Good lighting helps review.</p>
+            <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
+          </div>
           <div class="field"><label for="whyWork">Why do you want to work on artistic nude projects with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
           <div class="field"><label for="goodFit">What makes you a strong fit for this type of project? *</label><textarea id="goodFit" required></textarea></div>
           <div class="field"><label for="anythingElse">Anything else we should know? (Optional)</label><textarea id="anythingElse"></textarea></div>
@@ -639,11 +691,22 @@
     const prevStepBtn = document.getElementById("prevStepBtn");
     const nextStepBtn = document.getElementById("nextStepBtn");
     const stepLabel = document.getElementById("stepLabel");
+    const stepTitle = document.getElementById("stepTitle");
     const progressFill = document.getElementById("progressFill");
     const autosaveStatus = document.getElementById("autosaveStatus");
+    const restoreDraftBtn = document.getElementById("restoreDraftBtn");
+    const clearDraftBtn = document.getElementById("clearDraftBtn");
     const fieldsets = Array.from(form.querySelectorAll("fieldset"));
     const autosaveKey = "mvp-artistic-nude-application-draft";
     const maxPhotoSize = 8 * 1024 * 1024;
+    const stepNames = [
+      "Basic Information",
+      "Profile Snapshot",
+      "Artistic Nude Focus",
+      "Availability And Compensation",
+      "Photos And Intent",
+      "Consent"
+    ];
     let currentStep = 0;
 
     const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
@@ -672,6 +735,7 @@
       });
 
       stepLabel.textContent = `Step ${currentStep + 1} of ${fieldsets.length}`;
+      stepTitle.textContent = stepNames[currentStep] || "";
       progressFill.style.width = `${((currentStep + 1) / fieldsets.length) * 100}%`;
       prevStepBtn.hidden = currentStep === 0;
       nextStepBtn.hidden = currentStep === fieldsets.length - 1;
@@ -765,6 +829,19 @@
       }
     };
 
+    const clearDraft = () => {
+      localStorage.removeItem(autosaveKey);
+      autosaveStatus.textContent = "Draft deleted";
+    };
+
+    restoreDraftBtn.addEventListener("click", () => {
+      restoreDraft();
+      updateStep();
+      autosaveStatus.textContent = "Draft restored";
+    });
+
+    clearDraftBtn.addEventListener("click", clearDraft);
+
     prevStepBtn.addEventListener("click", () => {
       currentStep = Math.max(currentStep - 1, 0);
       updateStep();
@@ -810,6 +887,54 @@
       if (file.size > maxPhotoSize) {
         throw new Error(`${label} must be 8MB or smaller.`);
       }
+    };
+
+    const setupPhotoPreview = (inputId, previewId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if (!input || !preview) {
+        return;
+      }
+
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        if (!file) {
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          return;
+        }
+
+        try {
+          validatePhotoFile(file, inputId === "headshot" ? "Headshot" : "Full body photo");
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        } catch (error) {
+          input.value = "";
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          submitStatus.textContent = error && error.message ? error.message : "Photo file is not valid.";
+        }
+      });
+    };
+
+    const setTravelFields = () => {
+      const travelAnswer = selectedRadioValue("travel");
+      const travelDistance = document.getElementById("travelDistance");
+      const travelPreference = document.getElementById("travelPreference");
+      const hideTravelDetails = travelAnswer === "No";
+
+      [travelDistance, travelPreference].forEach((element) => {
+        const field = element ? element.closest(".field") : null;
+        if (field) {
+          field.hidden = hideTravelDetails;
+        }
+        if (element) {
+          element.disabled = hideTravelDetails;
+          if (hideTravelDetails) {
+            element.value = "";
+          }
+        }
+      });
     };
 
     const uploadPhoto = async (file, folder) => {
@@ -881,8 +1006,8 @@
         availability_notes: getValue("availabilityNotes"),
         frequency: getValue("frequency"),
         travel_willing: selectedRadioValue("travel"),
-        travel_distance: getValue("travelDistance"),
-        travel_preference: getValue("travelPreference"),
+        travel_distance: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelDistance"),
+        travel_preference: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelPreference"),
         comp_interest: getValue("compInterest"),
         compensation_types: checkedValues("input[name='compensationTypes']"),
         unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
@@ -1008,8 +1133,18 @@
       }
     });
 
+    document.querySelectorAll("input[name='travel']").forEach((el) => {
+      el.addEventListener("change", () => {
+        setTravelFields();
+        saveDraft();
+      });
+    });
+
     restoreDraft();
     updateStep();
+    setTravelFields();
+    setupPhotoPreview("headshot", "headshotPreview");
+    setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>
 </body>
 </html>

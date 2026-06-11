@@ -27,8 +27,6 @@ const requiredFields = [
   "availability_notes",
   "frequency",
   "travel_willing",
-  "travel_distance",
-  "travel_preference",
   "comp_interest",
   "expected_comp",
   "why_work",
@@ -134,6 +132,10 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "At least one availability option is required" });
     }
 
+    if (body.travel_willing !== "No" && (!body.travel_distance || !body.travel_preference)) {
+      return respond(res, 400, { error: "Travel distance and preference are required" });
+    }
+
     if (!ensureArrayWithValues(body.compensation_types)) {
       return respond(res, 400, { error: "At least one compensation type is required" });
     }
@@ -193,8 +195,8 @@ export default async function handler(req, res) {
       availability_notes: body.availability_notes,
       frequency: body.frequency,
       travel_willing: body.travel_willing,
-      travel_distance: body.travel_distance,
-      travel_preference: body.travel_preference,
+      travel_distance: body.travel_willing === "No" ? "Not applicable" : body.travel_distance,
+      travel_preference: body.travel_willing === "No" ? "Not applicable" : body.travel_preference,
       comp_interest: body.comp_interest,
       compensation_types: body.compensation_types,
       unpaid_tfp_willing: body.unpaid_tfp_willing === true,
