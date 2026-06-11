@@ -425,31 +425,15 @@
         <input id="website" name="website" tabindex="-1" autocomplete="off">
       </div>
       <fieldset>
-        <legend>1) Basic Contact Information</legend>
+        <legend>1) Basic Info</legend>
         <div class="grid two">
-          <div class="field"><label for="fullName">Full Legal Name *</label><input id="fullName" required></div>
           <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
-          <div class="field">
-            <label for="pronouns">Pronouns (Optional)</label>
-            <select id="pronouns">
-              <option value="">Select one</option>
-              <option>She/Her</option>
-              <option>He/Him</option>
-              <option>They/Them</option>
-              <option>Other</option>
-            </select>
-          </div>
           <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
-          <div class="field"><label for="dateOfBirth">Date of Birth *</label><input id="dateOfBirth" type="date" required></div>
           <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
-          <div class="field"><label for="phone">Phone Number *</label><input id="phone" required></div>
+          <div class="field"><label for="phone">Phone / WhatsApp *</label><input id="phone" required></div>
           <div class="field"><label for="city">City *</label><input id="city" required></div>
-          <div class="field"><label for="stateProvince">State / Province (Optional)</label><input id="stateProvince"></div>
           <div class="field"><label for="country">Country *</label><input id="country" required></div>
-          <div class="field"><label for="instagram">Instagram Profile</label><input id="instagram"></div>
-          <div class="field"><label for="tiktok">TikTok Profile</label><input id="tiktok"></div>
-          <div class="field"><label for="fanPlatformLink">OnlyFans / Fan Platform Link (Optional)</label><input id="fanPlatformLink"></div>
-          <div class="field"><label for="portfolioLink">Portfolio / Website / Linktree</label><input id="portfolioLink"></div>
+          <div class="field"><label for="instagram">Instagram / Portfolio / Fan Platform Link *</label><input id="instagram" placeholder="@handle or https://..." required></div>
           <div class="field">
             <label for="hearAbout">How did you hear about MVP Media? *</label>
             <select id="hearAbout" required>
@@ -469,311 +453,160 @@
       </fieldset>
 
       <fieldset>
-        <legend>2) Adult Modeling Experience</legend>
-        <div class="grid two">
-          <div class="field">
-            <span class="sub-label">Have you modeled before?</span>
-            <div class="choices inline">
-              <label class="choice"><input type="radio" name="previousModelingExperience" value="Yes">Yes</label>
-              <label class="choice"><input type="radio" name="previousModelingExperience" value="No">No</label>
-              <label class="choice"><input type="radio" name="previousModelingExperience" value="A little">A little</label>
-              <label class="choice"><input type="radio" name="previousModelingExperience" value="I am new but interested">I am new but interested</label>
-            </div>
+        <legend>2) Experience</legend>
+        <div class="field">
+          <span class="sub-label">What modeling or content experience do you have? (Select all that apply)</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / fan content">OnlyFans / fan content</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
           </div>
-          <div class="field"><label for="height">Height *</label><input id="height" required></div>
-          <div class="field"><label for="bodyType">Body Type / Build (Optional)</label><input id="bodyType"></div>
-          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
-          <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
-          <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
-          <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
-          <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
-          <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
-          <div class="field"><label for="eyeColor">Eye Color (Optional)</label><input id="eyeColor"></div>
-          <div class="field"><label for="notableFeatures">Notable Features (Optional)</label><input id="notableFeatures"></div>
-          <div class="field"><label for="visibleMarks">Visible Tattoos/Piercings/Scars (Optional)</label><input id="visibleMarks"></div>
-          <div class="field"><label for="healthNotes">Allergies / Skin Conditions / Medical Notes (Optional)</label><textarea id="healthNotes"></textarea></div>
-          <div class="field">
-            <label for="experience">Modeling Experience *</label>
-            <select id="experience" required>
-              <option value="">Select one</option>
-              <option>Never</option>
-              <option>Beginner</option>
-              <option>Some Experience</option>
-              <option>Experienced</option>
-            </select>
-          </div>
-          <div class="field">
-            <span class="sub-label">Have you worked with photographers before?</span>
-            <div class="choices inline">
-              <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
-              <label class="choice"><input type="radio" name="worked" value="No">No</label>
-            </div>
-          </div>
-          <div class="field">
-            <span class="sub-label">Can you provide recent snapshots later if selected?</span>
-            <div class="choices inline">
-              <label class="choice"><input type="radio" name="snapshots" value="Yes">Yes</label>
-              <label class="choice"><input type="radio" name="snapshots" value="No">No</label>
-            </div>
-          </div>
-          <div class="field">
-            <span class="sub-label">What type of modeling or content have you done before? (Select all that apply)</span>
-            <div class="choices inline">
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Glamour">Glamour</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / paid fan content">OnlyFans / paid fan content</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Couples content">Couples content</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
-              <label class="choice"><input type="checkbox" name="experienceTypes" value="Other">Other</label>
-            </div>
-            <div class="error" id="experienceTypesError"></div>
-          </div>
-          <div class="field">
-            <label for="nudeExperienceLevel">Have you done nude or implied-nude modeling before? *</label>
-            <select id="nudeExperienceLevel" required>
-              <option value="">Select one</option>
-              <option>Yes</option>
-              <option>No</option>
-              <option>A few times</option>
-            </select>
+        </div>
+        <div class="field">
+          <span class="sub-label">Have you worked with photographers before?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="worked" value="No">No</label>
+            <label class="choice"><input type="radio" name="worked" value="A little">A little</label>
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>3) Content Interest And Comfort</legend>
+        <legend>3) Content Interest</legend>
         <div class="field">
-          <span class="sub-label">What type of projects are you interested in? (Select all that apply) *</span>
+          <span class="sub-label">What types of projects are you interested in? (Select at least one) *</span>
           <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="interests" value="Boudoir photography">Boudoir photography</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Lingerie content">Lingerie content</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Boudoir">Boudoir</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Lingerie">Lingerie</label>
             <label class="choice"><input type="checkbox" name="interests" value="Implied nude">Implied nude</label>
             <label class="choice"><input type="checkbox" name="interests" value="Artistic nude">Artistic nude</label>
             <label class="choice"><input type="checkbox" name="interests" value="Erotic nude">Erotic nude</label>
             <label class="choice"><input type="checkbox" name="interests" value="Nude bodypaint">Nude bodypaint</label>
             <label class="choice"><input type="checkbox" name="interests" value="Glamour nude">Glamour nude</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Fine-art nude">Fine-art nude</label>
             <label class="choice"><input type="checkbox" name="interests" value="Adult subscription photos">Adult subscription photos</label>
             <label class="choice"><input type="checkbox" name="interests" value="Adult subscription videos">Adult subscription videos</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Themed fantasy concepts">Themed fantasy concepts</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Other">Other</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Social media teaser content">Social media teaser content</label>
           </div>
           <div class="error" id="interestsError"></div>
         </div>
-
         <div class="field">
-          <span class="sub-label">What levels of nudity are you comfortable with? (select at least one) *</span>
+          <span class="sub-label">Are you open to paid-platform or subscription content?</span>
           <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Artistic / tasteful nude">Artistic / tasteful nude</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless only">Topless only</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Full nude (non-explicit)">Full nude (non-explicit)</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="More revealing fine-art poses, discussed first">More revealing fine-art poses, discussed first</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Body painting / artistic makeup">Body painting / artistic makeup</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Oiled / glistening skin">Oiled / glistening skin</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="No">No</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Maybe">Maybe</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Only with separate agreement">Only with separate agreement</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4) Comfort &amp; Boundaries</legend>
+        <div class="field">
+          <span class="sub-label">What levels are you comfortable discussing? (Select at least one) *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Lingerie">Lingerie</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless">Topless</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Full nude non-explicit">Full nude non-explicit</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Video content">Video content</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Outdoor / location shoots">Outdoor / location shoots</label>
           </div>
           <div class="error" id="nudityComfortError"></div>
         </div>
-
         <div class="field">
-          <label for="comfortLevel">Comfort level for artistic nude shoots *</label>
-          <select id="comfortLevel" required>
-            <option value="">Select one</option>
-            <option>Not Comfortable</option>
-            <option>Maybe</option>
-            <option>Comfortable</option>
-          </select>
+          <label for="avoidConcepts">What is completely off-limits for you? *</label>
+          <textarea id="avoidConcepts" required placeholder="List anything you do not want to do"></textarea>
         </div>
-
         <div class="field">
-          <label for="avoidConcepts">Any concepts, poses, or themes you already know are off-limits? *</label>
-          <textarea id="avoidConcepts" required></textarea>
-        </div>
-
-        <div class="field">
-          <label for="hardLimits">Any important boundaries we should know before discussing a shoot? *</label>
-          <textarea id="hardLimits" required></textarea>
-        </div>
-
-        <div class="field">
-          <label for="specialConditions">Are body paint, oils, props, or light pose direction okay? *</label>
-          <select id="specialConditions" required>
-            <option value="">Select one</option>
-            <option>Yes</option>
-            <option>No</option>
-            <option>With conditions</option>
-          </select>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>4) Availability, Travel And Compensation</legend>
-        <div class="grid two">
-          <div class="field">
-            <span class="sub-label">Availability (select at least one) *</span>
-            <div class="choices inline">
-              <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
-              <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
-              <label class="choice"><input type="checkbox" name="availability" value="Weekends">Weekends</label>
-              <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
-            </div>
-            <div class="error" id="availabilityError"></div>
-          </div>
-
-          <div class="field">
-            <label for="availabilityNotes">Days/times generally available (Optional)</label>
-            <textarea id="availabilityNotes"></textarea>
-          </div>
-
-          <div class="field">
-            <label for="frequency">How often are you available for shoots? *</label>
-            <select id="frequency" required>
-              <option value="">Select one</option>
-              <option>One-time project</option>
-              <option>Once per month</option>
-              <option>A few times per month</option>
-              <option>Weekly</option>
-              <option>Ongoing content creation</option>
-              <option>Depends on pay and schedule</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <span class="sub-label">Are you willing to travel for shoots? *</span>
-            <div class="choices inline">
-              <label class="choice"><input type="radio" name="travel" value="Yes" required>Yes</label>
-              <label class="choice"><input type="radio" name="travel" value="No">No</label>
-              <label class="choice"><input type="radio" name="travel" value="Local only">Local only</label>
-              <label class="choice"><input type="radio" name="travel" value="Maybe with travel covered">Maybe with travel covered</label>
-              <label class="choice"><input type="radio" name="travel" value="Open to destination projects">Open to destination projects</label>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="travelDistance">Maximum travel distance *</label>
-            <select id="travelDistance" required>
-              <option value="">Select one</option>
-              <option>5 km</option>
-              <option>10 km</option>
-              <option>25 km</option>
-              <option>50 km</option>
-              <option>100 km+</option>
-            </select>
-          </div>
-
-          <div class="field"><label for="travelPreference">Travel preference (Optional)</label><input id="travelPreference" placeholder="Local only / Within X miles / Open to travel"></div>
-
-          <div class="field">
-            <label for="compInterest">Interested in *</label>
-            <select id="compInterest" required>
-              <option value="">Select one</option>
-              <option>Paid Shoots</option>
-              <option>Portfolio Building</option>
-              <option>Both</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <span class="sub-label">Preferred compensation type (select at least one) *</span>
-            <div class="choices inline">
-              <label class="choice"><input type="checkbox" name="compensationTypes" value="Paid shoot">Paid shoot</label>
-              <label class="choice"><input type="checkbox" name="compensationTypes" value="Trade for Print (TFP)">Trade for Print (TFP)</label>
-              <label class="choice"><input type="checkbox" name="compensationTypes" value="Content collaboration">Content collaboration</label>
-              <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
-            </div>
-            <div class="choices" style="margin-top: 8px;">
-              <span class="sub-label">Open to unpaid shoots in exchange for edited pictures?</span>
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes">Yes</label>
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No</label>
-            </div>
-            <div class="error" id="compensationTypeError"></div>
-            <div class="error" id="unpaidTfpError"></div>
-          </div>
-
-          <div class="field">
-            <label for="expectedComp">Expected compensation per shoot *</label>
-            <select id="expectedComp" required>
-              <option value="">Select one</option>
-              <option>Under $100</option>
-              <option>$100-$200</option>
-              <option>$200-$400</option>
-              <option>$400-$700</option>
-              <option>$700+</option>
-              <option>Depends on content level</option>
-              <option>Depends on usage rights</option>
-              <option>Open to discussion</option>
-            </select>
+          <span class="sub-label">Do you want your face visible in images/videos?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="faceVisible" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="faceVisible" value="No">No</label>
+            <label class="choice"><input type="radio" name="faceVisible" value="Maybe">Maybe</label>
+            <label class="choice"><input type="radio" name="faceVisible" value="Depends on usage">Depends on usage</label>
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>5) Photos, Final Questions And Confirmations</legend>
+        <legend>5) Availability &amp; Pay</legend>
+        <div class="field">
+          <span class="sub-label">When are you available? (Select at least one) *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Weekends">Weekends</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
+          </div>
+          <div class="error" id="availabilityError"></div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Are you willing to travel for shoots?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="travel" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="travel" value="No">No</label>
+            <label class="choice"><input type="radio" name="travel" value="Local only">Local only</label>
+            <label class="choice"><input type="radio" name="travel" value="With travel covered">With travel covered</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="expectedComp">Expected compensation per shoot *</label>
+          <select id="expectedComp" required>
+            <option value="">Select one</option>
+            <option>Under $100</option>
+            <option>$100–$200</option>
+            <option>$200–$400</option>
+            <option>$400–$700</option>
+            <option>$700+</option>
+            <option>Depends on content / usage</option>
+            <option>Open to discussion</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>6) Photos</legend>
         <div class="grid two">
           <div class="field">
-            <label for="headshot">Headshot *</label>
-            <input id="headshot" type="file" accept="image/*" required>
-            <p class="file-hint" id="headshotHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
+            <label for="headshot">Headshot</label>
+            <input id="headshot" type="file" accept="image/*">
+            <p class="file-hint" id="headshotHint">Upload a headshot, or make sure your Instagram / portfolio link is filled in above. Up to 8MB.</p>
             <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
           </div>
           <div class="field">
-            <label for="fullBody">Full Body Photo *</label>
-            <input id="fullBody" type="file" accept="image/*" required>
-            <p class="file-hint" id="fullBodyHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
-            <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
+            <label for="fullBody">Full Body Photo</label>
+            <input id="fullBody" type="file" accept="image/*">
+            <p class="file-hint" id="fullBodyHint">Upload a full-body photo or provide portfolio link above. Up to 8MB.</p>
+            <img class="photo-preview" id="fullBodyPreview" alt="Full body preview">
           </div>
-          <div class="field"><label for="whyWork">Why are you interested in adult creative modeling with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field"><label for="goodFit">What type of content would you be most excited to create? *</label><textarea id="goodFit" required></textarea></div>
-          <div class="field"><label for="anythingElse">What would make you feel safe, respected, and comfortable during a shoot? *</label><textarea id="anythingElse" required></textarea></div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Required Confirmations</legend>
-        <div class="field">
-          <label for="releaseUnderstanding">Do you understand a signed model release is required? *</label>
-          <select id="releaseUnderstanding" required>
-            <option value="">Select one</option>
-            <option>Yes</option>
-            <option>I have questions</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <span class="sub-label">Intended use of images/videos (select at least one) *</span>
-          <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="intendedUse" value="Personal portfolio / artistic use">Personal portfolio / artistic use</label>
-            <label class="choice"><input type="checkbox" name="intendedUse" value="Social media / promotional">Social media / promotional</label>
-            <label class="choice"><input type="checkbox" name="intendedUse" value="Commercial / paid content">Commercial / paid content</label>
-            <label class="choice"><input type="checkbox" name="intendedUse" value="Other">Other</label>
-          </div>
-          <div class="error" id="intendedUseError"></div>
-        </div>
-
-        <div class="field"><label for="organizerQuestions">Additional information or questions for us</label><textarea id="organizerQuestions"></textarea></div>
-
+        <legend>7) Final</legend>
+        <div class="field"><label for="whyWork">Why are you interested in adult creative modeling with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
+        <div class="field"><label for="anythingElse">What would make you feel safe and comfortable on a shoot? *</label><textarea id="anythingElse" required></textarea></div>
         <div class="field">
           <div class="choices">
-            <label class="choice"><input type="checkbox" name="consent" value="age">I confirm I am at least 18 years old.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="accurate">I confirm all information I provided is accurate.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="adult-content">I understand this application is for adult nude, erotic, boudoir, nude bodypaint, glamour, and subscription-style content opportunities.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="selection">I understand submitting this form does not guarantee selection.</label>
+            <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">I confirm I am at least 18 years old.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="adult-content">I understand this is for adult nude, erotic, boudoir, bodypaint, and subscription-style content.</label>
             <label class="choice"><input type="checkbox" name="consent" value="voluntary">I understand participation is voluntary.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="boundaries">I understand I can decline any concept before a shoot is scheduled.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="terms">I understand boundaries, compensation, image usage, and release terms must be discussed before shooting.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="release">I understand a signed model release and/or adult-content agreement may be required.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to MVP Media Photography contacting me about casting, scheduling, and future opportunities.</label>
-            <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">I confirm I am 18+ and all answers are accurate.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="boundaries">I understand I can decline any concept before scheduling.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="terms">I understand compensation, usage, and release terms are discussed before shooting.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to be contacted by MVP Media.</label>
           </div>
           <div class="error" id="consentError"></div>
           <div class="error" id="confirm18Error"></div>
@@ -1105,64 +938,41 @@
     const buildPayload = () => {
       const headshot = document.getElementById("headshot");
       const fullBody = document.getElementById("fullBody");
+      const travelAnswer = selectedRadioValue("travel");
 
       return {
-        full_name: getValue("fullName"),
+        full_name: getValue("preferredName"),
         preferred_name: getValue("preferredName"),
-        pronouns: getValue("pronouns"),
         age: Number(getValue("age")),
         email: getValue("email"),
         phone: getValue("phone"),
         city: getValue("city"),
-        state_province: getValue("stateProvince"),
         country: getValue("country"),
         instagram: getValue("instagram"),
-        tiktok: getValue("tiktok"),
         hear_about: getValue("hearAbout"),
-        previous_modeling_experience: selectedRadioValue("previousModelingExperience"),
         experience_types: checkedValues("input[name='experienceTypes']"),
-        nude_experience_level: getValue("nudeExperienceLevel"),
-        portfolio_link: getValue("portfolioLink"),
-        height: getValue("height"),
-        body_type: getValue("bodyType"),
-        clothing_size: getValue("clothingSize"),
-        bra_size: getValue("braSize"),
-        bust_measurement: getValue("bustMeasurement"),
-        waist_measurement: getValue("waistMeasurement"),
-        hip_measurement: getValue("hipMeasurement"),
-        shoe_size: getValue("shoeSize"),
-        hair_color: getValue("hairColor"),
-        eye_color: getValue("eyeColor"),
-        notable_features: getValue("notableFeatures"),
-        visible_marks: getValue("visibleMarks"),
-        health_notes: getValue("healthNotes"),
-        experience: getValue("experience"),
-        worked_with_photographers: selectedRadioValue("worked"),
-        comfortable_snapshots: selectedRadioValue("snapshots"),
+        nude_experience_level: "Provided via experience checkboxes",
+        worked_with_photographers: selectedRadioValue("worked") || "",
+        comfortable_snapshots: "Yes",
+        experience: checkedValues("input[name='experienceTypes']").join(", ") || "Not specified",
         interests: checkedValues("input[name='interests']"),
         nudity_comfort_levels: checkedValues("input[name='nudityComfortLevels']"),
-        comfort_level: getValue("comfortLevel"),
+        comfort_level: selectedRadioValue("faceVisible") ? `Face: ${selectedRadioValue("faceVisible")}` : "Not specified",
         avoid_concepts: getValue("avoidConcepts"),
-        hard_limits: getValue("hardLimits"),
-        special_conditions: getValue("specialConditions"),
+        hard_limits: getValue("avoidConcepts"),
+        special_conditions: selectedRadioValue("paidPlatformOpen") ? `Paid platform: ${selectedRadioValue("paidPlatformOpen")}` : "Not specified",
         availability: checkedValues("input[name='availability']"),
-        availability_notes: getValue("availabilityNotes"),
-        frequency: getValue("frequency"),
-        travel_willing: selectedRadioValue("travel"),
-        travel_distance: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelDistance"),
-        travel_preference: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelPreference"),
-        comp_interest: getValue("compInterest"),
-        compensation_types: checkedValues("input[name='compensationTypes']"),
-        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
+        frequency: "Not specified",
+        travel_willing: travelAnswer || "Not specified",
+        travel_distance: travelAnswer === "No" ? "Not applicable" : "Not specified",
+        comp_interest: "Provided via expected comp",
+        compensation_types: [],
+        unpaid_tfp_willing: false,
         expected_comp: getValue("expectedComp"),
         why_work: getValue("whyWork"),
-        good_fit: getValue("goodFit"),
-        release_understanding: getValue("releaseUnderstanding"),
-        intended_use: checkedValues("input[name='intendedUse']"),
-        organizer_questions: getValue("organizerQuestions"),
-        confirm_18_truth: checkedValues("input[name='confirm18Truth']").length > 0,
-        anything_else: getValue("anythingElse"),
-        consents: checkedValues("input[name='consent']"),
+        good_fit: getValue("anythingElse"),
+        release_understanding: "Discussed before shooting",
+        intended_use: [],
         headshot_filename: headshot && headshot.files[0] ? headshot.files[0].name : "",
         full_body_filename: fullBody && fullBody.files[0] ? fullBody.files[0].name : "",
         language: "en",
@@ -1207,22 +1017,12 @@
       }
 
       if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
-        setError("nudityComfortError", "Please select at least one nudity comfort level.");
+        setError("nudityComfortError", "Please select at least one comfort level.");
         hasErrors = true;
       }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Please select at least one availability option.");
-        hasErrors = true;
-      }
-
-      if (!checkAtLeastOne("input[name='compensationTypes']")) {
-        setError("compensationTypeError", "Please select at least one compensation type.");
-        hasErrors = true;
-      }
-
-      if (!checkAtLeastOne("input[name='intendedUse']")) {
-        setError("intendedUseError", "Please select at least one intended use option.");
         hasErrors = true;
       }
 
@@ -1232,7 +1032,7 @@
       }
 
       if (checkedValues("input[name='confirm18Truth']").length === 0) {
-        setError("confirm18Error", "Please confirm you are 18+ and answers are accurate.");
+        setError("confirm18Error", "Please confirm you are 18+.");
         hasErrors = true;
       }
 

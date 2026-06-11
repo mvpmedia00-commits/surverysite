@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
-    const required = ["full_name", "preferred_name", "age", "email", "city", "country", "hear_about", "nude_experience_level", "height", "clothing_size", "waist_measurement", "experience", "comfort_level", "avoid_concepts", "frequency", "travel_willing", "comp_interest", "expected_comp", "why_work", "release_understanding"];
+    const required = ["preferred_name", "age", "email", "city", "country", "hear_about", "avoid_concepts", "expected_comp", "why_work"];
 
     for (const field of required) {
       if (body[field] === undefined || body[field] === null || body[field] === "") {
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
     }
 
     const row = {
-      full_name: body.full_name,
+      full_name: body.full_name || body.preferred_name,
       preferred_name: body.preferred_name,
       pronouns: body.pronouns || "",
       age,
@@ -75,14 +75,14 @@ export default async function handler(req, res) {
       hear_about: body.hear_about,
       previous_modeling_experience: body.previous_modeling_experience || "",
       experience_types: Array.isArray(body.experience_types) ? body.experience_types : [],
-      nude_experience_level: body.nude_experience_level,
+      nude_experience_level: body.nude_experience_level || "Not specified",
       portfolio_link: body.portfolio_link || "",
-      height: body.height,
+      height: body.height || "",
       body_type: body.body_type || "",
-      clothing_size: body.clothing_size,
+      clothing_size: body.clothing_size || "",
       bra_size: body.bra_size || "",
       bust_measurement: body.bust_measurement || "",
-      waist_measurement: body.waist_measurement,
+      waist_measurement: body.waist_measurement || "",
       hip_measurement: body.hip_measurement || "",
       shoe_size: body.shoe_size || "",
       hair_color: body.hair_color || "",
@@ -90,28 +90,28 @@ export default async function handler(req, res) {
       notable_features: body.notable_features || "",
       visible_marks: body.visible_marks || "",
       health_notes: body.health_notes || "",
-      experience: body.experience,
+      experience: body.experience || "Not specified",
       worked_with_photographers: body.worked_with_photographers || "",
-      comfortable_snapshots: body.comfortable_snapshots || "",
+      comfortable_snapshots: body.comfortable_snapshots || "Yes",
       interests: Array.isArray(body.interests) ? body.interests : [],
       nudity_comfort_levels: Array.isArray(body.nudity_comfort_levels) ? body.nudity_comfort_levels : [],
-      comfort_level: body.comfort_level,
+      comfort_level: body.comfort_level || "Not specified",
       avoid_concepts: body.avoid_concepts,
-      hard_limits: body.hard_limits || "",
+      hard_limits: body.hard_limits || body.avoid_concepts || "",
       special_conditions: body.special_conditions || "",
       availability: Array.isArray(body.availability) ? body.availability : [],
       availability_notes: body.availability_notes || "",
-      frequency: body.frequency,
-      travel_willing: body.travel_willing,
-      travel_distance: body.travel_distance || "",
+      frequency: body.frequency || "Not specified",
+      travel_willing: body.travel_willing || "Not specified",
+      travel_distance: body.travel_distance || "Not specified",
       travel_preference: body.travel_preference || "",
-      comp_interest: body.comp_interest,
+      comp_interest: body.comp_interest || "Not specified",
       compensation_types: Array.isArray(body.compensation_types) ? body.compensation_types : [],
       unpaid_tfp_willing: body.unpaid_tfp_willing === true,
       expected_comp: body.expected_comp,
       why_work: body.why_work,
       good_fit: body.good_fit || "",
-      release_understanding: body.release_understanding,
+      release_understanding: body.release_understanding || "Discussed before shooting",
       intended_use: Array.isArray(body.intended_use) ? body.intended_use : [],
       emergency_contact_name: body.emergency_contact_name || "",
       emergency_contact_phone: body.emergency_contact_phone || "",
