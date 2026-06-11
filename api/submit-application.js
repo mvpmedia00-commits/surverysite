@@ -6,6 +6,9 @@ const requiredFields = [
   "city",
   "country",
   "hear_about",
+  "height",
+  "clothing_size",
+  "waist_measurement",
   "experience",
   "comfort_level",
   "avoid_concepts",
@@ -86,6 +89,12 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "A valid email address is required" });
     }
 
+    const hasInstagram = String(body.instagram || "").trim() !== "";
+    const hasRequiredPhotos = String(body.headshot_filename || "").trim() !== "" && String(body.full_body_filename || "").trim() !== "";
+    if (!hasInstagram && !hasRequiredPhotos) {
+      return respond(res, 400, { error: "Headshot and full body photo are required when Instagram is not provided" });
+    }
+
     if (await hasRecentApplication(supabaseUrl, supabaseKey, email)) {
       return respond(res, 409, { error: "An application from this email was already received recently" });
     }
@@ -116,11 +125,11 @@ export default async function handler(req, res) {
       instagram: body.instagram || null,
       tiktok: body.tiktok || null,
       hear_about: body.hear_about,
-      height: body.height || "",
-      clothing_size: body.clothing_size || "",
+      height: body.height,
+      clothing_size: body.clothing_size,
       bra_size: body.bra_size || null,
       bust_measurement: body.bust_measurement || null,
-      waist_measurement: body.waist_measurement || null,
+      waist_measurement: body.waist_measurement,
       hip_measurement: body.hip_measurement || null,
       shoe_size: body.shoe_size || "",
       hair_color: body.hair_color || "",

@@ -464,12 +464,12 @@
               <label class="choice"><input type="radio" name="previousModelingExperience" value="No">No</label>
             </div>
           </div>
-          <div class="field"><label for="height">Height (Optional)</label><input id="height"></div>
+          <div class="field"><label for="height">Height *</label><input id="height" required></div>
           <div class="field"><label for="bodyType">Body Type / Build (Optional)</label><input id="bodyType"></div>
-          <div class="field"><label for="clothingSize">Clothing Size (Optional)</label><input id="clothingSize"></div>
+          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
           <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
           <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
@@ -656,7 +656,9 @@
               <label class="choice"><input type="checkbox" name="compensationTypes" value="Other">Other</label>
             </div>
             <div class="choices" style="margin-top: 8px;">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling">I am open to unpaid shoots in exchange for edited pictures.</label>
+              <span class="sub-label">Open to unpaid shoots in exchange for edited pictures?</span>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes">Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No</label>
             </div>
             <div class="error" id="compensationTypeError"></div>
             <div class="error" id="unpaidTfpError"></div>
@@ -681,13 +683,13 @@
           <div class="field">
             <label for="headshot">Headshot *</label>
             <input id="headshot" type="file" accept="image/*" required>
-            <p class="file-hint">Image only, up to 8MB. A clear phone photo is fine.</p>
+            <p class="file-hint" id="headshotHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
           </div>
           <div class="field">
             <label for="fullBody">Full Body Photo *</label>
             <input id="fullBody" type="file" accept="image/*" required>
-            <p class="file-hint">Image only, up to 8MB. Good lighting helps review.</p>
+            <p class="file-hint" id="fullBodyHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
           <div class="field"><label for="whyWork">Why do you want to work on artistic nude projects with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
@@ -821,7 +823,7 @@
     const serializeDraft = () => {
       const draft = {};
       Array.from(form.elements).forEach((element) => {
-        if (!element.id || element.type === "file" || element.id === "website") {
+        if ((!element.id && element.type !== "radio") || element.type === "file" || element.id === "website") {
           return;
         }
 
@@ -937,6 +939,39 @@
     const selectedRadioValue = (name) => {
       const selected = document.querySelector(`input[name='${name}']:checked`);
       return selected ? selected.value : "";
+    };
+
+    const updatePhotoRequirement = () => {
+      const instagramProvided = getValue("instagram").length > 0;
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+      const headshotHint = document.getElementById("headshotHint");
+      const fullBodyHint = document.getElementById("fullBodyHint");
+
+      [headshot, fullBody].forEach((input) => {
+        if (input) {
+          input.required = !instagramProvided;
+          input.setCustomValidity("");
+        }
+      });
+
+      const headshotLabel = document.querySelector("label[for='headshot']");
+      const fullBodyLabel = document.querySelector("label[for='fullBody']");
+      if (headshotLabel) {
+        headshotLabel.textContent = instagramProvided ? "Headshot (Suggested)" : "Headshot *";
+      }
+      if (fullBodyLabel) {
+        fullBodyLabel.textContent = instagramProvided ? "Full Body Photo (Suggested)" : "Full Body Photo *";
+      }
+      const hint = instagramProvided
+        ? "Suggested because you provided Instagram. Image only, up to 8MB."
+        : "Required if you do not provide Instagram. Image only, up to 8MB.";
+      if (headshotHint) {
+        headshotHint.textContent = hint;
+      }
+      if (fullBodyHint) {
+        fullBodyHint.textContent = hint;
+      }
     };
 
     const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -1074,7 +1109,7 @@
         travel_preference: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelPreference"),
         comp_interest: getValue("compInterest"),
         compensation_types: checkedValues("input[name='compensationTypes']"),
-        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
+        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
         expected_comp: getValue("expectedComp"),
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),
@@ -1113,6 +1148,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearErrors();
+      updatePhotoRequirement();
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
@@ -1199,9 +1235,12 @@
       });
     });
 
+    document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+
     restoreDraft();
     updateStep();
     setTravelFields();
+    updatePhotoRequirement();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>

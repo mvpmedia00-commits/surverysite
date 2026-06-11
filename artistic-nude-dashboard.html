@@ -950,7 +950,8 @@
     const loadDashboard = async () => {
       const response = await adminFetch("/api/dashboard-artistic-nude");
       if (!response.ok) {
-        throw new Error("Dashboard load failed");
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.detail || detail.error || "Dashboard load failed");
       }
       const data = await response.json();
       state.dashboard = data;
@@ -980,6 +981,7 @@
         "country",
         "hear_about",
         "experience",
+        "unpaid_tfp_willing",
         "review_status",
         "headshot_url",
         "full_body_url"
@@ -996,6 +998,7 @@
           candidate.country,
           candidate.hear_about,
           candidate.experience,
+          candidate.unpaid_tfp_willing ? "Yes" : "No",
           candidate.review_status,
           candidate.headshot_url,
           candidate.full_body_url

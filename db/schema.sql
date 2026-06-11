@@ -46,13 +46,48 @@ create table if not exists public.model_applications (
 );
 
 alter table public.model_applications
+  add column if not exists full_name text not null default '',
+  add column if not exists preferred_name text not null default '',
+  add column if not exists age int not null default 18,
+  add column if not exists email text not null default '',
+  add column if not exists city text not null default '',
+  add column if not exists country text not null default '',
+  add column if not exists instagram text,
+  add column if not exists tiktok text,
+  add column if not exists hear_about text not null default '',
+  add column if not exists height text not null default '',
+  add column if not exists clothing_size text not null default '',
+  add column if not exists bra_size text,
+  add column if not exists bust_measurement text,
+  add column if not exists waist_measurement text not null default '',
+  add column if not exists hip_measurement text,
+  add column if not exists shoe_size text not null default '',
+  add column if not exists hair_color text not null default '',
+  add column if not exists eye_color text not null default '',
+  add column if not exists experience text not null default '',
+  add column if not exists worked_with_photographers text not null default '',
+  add column if not exists comfortable_snapshots text not null default '',
+  add column if not exists interests jsonb not null default '[]'::jsonb,
+  add column if not exists comfort_level text not null default '',
+  add column if not exists avoid_concepts text not null default '',
+  add column if not exists availability jsonb not null default '[]'::jsonb,
+  add column if not exists frequency text not null default '',
+  add column if not exists travel_willing text not null default '',
+  add column if not exists travel_distance text not null default '',
+  add column if not exists comp_interest text not null default '',
+  add column if not exists expected_comp text not null default '',
+  add column if not exists unpaid_tfp_willing boolean not null default false,
+  add column if not exists why_work text not null default '',
+  add column if not exists good_fit text not null default '',
+  add column if not exists anything_else text,
+  add column if not exists consents jsonb not null default '[]'::jsonb,
+  add column if not exists headshot_filename text,
+  add column if not exists full_body_filename text,
+  add column if not exists language text not null default 'en',
   add column if not exists review_status text not null default 'pending';
 
 alter table public.model_applications
   add column if not exists review_updated_at timestamptz;
-
-alter table public.model_applications
-  add column if not exists unpaid_tfp_willing boolean not null default false;
 
 alter table public.model_applications
   drop constraint if exists model_applications_unpaid_tfp_required;

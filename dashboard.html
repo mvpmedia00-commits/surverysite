@@ -718,6 +718,7 @@
           <h3>Compensation</h3>
           <div class="profile-list">
             ${lineItem("Compensation interest", candidate.comp_interest)}
+            ${lineItem("Open to unpaid shoots", candidate.unpaid_tfp_willing ? "Yes" : "No")}
             ${lineItem("Expected compensation", candidate.expected_comp)}
             ${lineItem("Review status", candidate.review_status)}
           </div>
@@ -926,7 +927,8 @@
     const loadDashboard = async () => {
       const response = await adminFetch("/api/dashboard");
       if (!response.ok) {
-        throw new Error("Dashboard load failed");
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.detail || detail.error || "Dashboard load failed");
       }
       const data = await response.json();
       state.dashboard = data;
@@ -956,6 +958,7 @@
         "country",
         "hear_about",
         "experience",
+        "unpaid_tfp_willing",
         "review_status",
         "headshot_url",
         "full_body_url"
@@ -972,6 +975,7 @@
           candidate.country,
           candidate.hear_about,
           candidate.experience,
+          candidate.unpaid_tfp_willing ? "Yes" : "No",
           candidate.review_status,
           candidate.headshot_url,
           candidate.full_body_url

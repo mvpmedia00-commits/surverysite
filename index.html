@@ -557,11 +557,11 @@
       <fieldset>
         <legend id="legend2">2) Profile Snapshot</legend>
         <div class="grid two">
-          <div class="field"><label for="height">Height (Optional)</label><input id="height"></div>
-          <div class="field"><label for="clothingSize">Clothing Size (Optional)</label><input id="clothingSize"></div>
+          <div class="field"><label for="height">Height *</label><input id="height" required></div>
+          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
           <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
           <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement (Optional)</label><input id="waistMeasurement"></div>
+          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
           <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
           <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
           <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
@@ -683,8 +683,10 @@
           </div>
 
           <div class="field">
+            <span class="sub-label" id="unpaidTfpLabel">Open to unpaid shoots in exchange for edited pictures?</span>
             <div class="choices">
-              <label class="choice"><input type="checkbox" id="unpaidTfpWilling">I am open to unpaid shoots in exchange for edited pictures.</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes">Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No</label>
             </div>
             <div class="error" id="unpaidTfpError"></div>
           </div>
@@ -697,13 +699,13 @@
           <div class="field">
             <label for="headshot">Headshot *</label>
             <input id="headshot" type="file" accept="image/*" required>
-            <p class="file-hint">Image only, up to 8MB. A clear phone photo is fine.</p>
+            <p class="file-hint" id="headshotHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
           </div>
           <div class="field">
             <label for="fullBody">Full Body Photo *</label>
             <input id="fullBody" type="file" accept="image/*" required>
-            <p class="file-hint">Image only, up to 8MB. Good lighting helps review.</p>
+            <p class="file-hint" id="fullBodyHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
           <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
@@ -809,11 +811,11 @@
         labelTikTok: "TikTok Profile",
         labelHearAbout: "How did you hear about us? *",
         hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referral", "Friend", "Website", "Other"],
-        labelHeight: "Height (Optional)",
-        labelClothingSize: "Clothing Size (Optional)",
+        labelHeight: "Height *",
+        labelClothingSize: "Clothing Size *",
         labelBraSize: "Bra Size (Optional)",
         labelBustMeasurement: "Bust Measurement (Optional)",
-        labelWaistMeasurement: "Waist Measurement (Optional)",
+        labelWaistMeasurement: "Waist Measurement *",
         labelHipMeasurement: "Hip Measurement (Optional)",
         labelShoeSize: "Shoe Size (Optional)",
         labelHairColor: "Hair Color (Optional)",
@@ -851,10 +853,14 @@
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
         labelExpectedComp: "Expected compensation per session *",
-        labelUnpaidTfpWilling: "I am open to unpaid shoots in exchange for edited pictures.",
+        labelUnpaidTfpWilling: "Open to unpaid shoots in exchange for edited pictures?",
         expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
-        labelHeadshot: "Headshot *",
-        labelFullBody: "Full Body Photo *",
+        labelHeadshotRequired: "Headshot *",
+        labelHeadshotSuggested: "Headshot (Suggested)",
+        labelFullBodyRequired: "Full Body Photo *",
+        labelFullBodySuggested: "Full Body Photo (Suggested)",
+        photoRequiredHint: "Required if you do not provide Instagram. Image only, up to 8MB.",
+        photoSuggestedHint: "Suggested because you provided Instagram. Image only, up to 8MB.",
         labelWhyWork: "Why would you like to work with MVP Media Photography? *",
         labelGoodFit: "Anything you want us to know about your style or experience? (Optional)",
         labelAnythingElse: "Anything else you would like us to know? (Optional)",
@@ -899,11 +905,11 @@
         labelTikTok: "Perfil de TikTok",
         labelHearAbout: "Como nos conociste? *",
         hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referido", "Amigo", "Sitio Web", "Otro"],
-        labelHeight: "Altura (Opcional)",
-        labelClothingSize: "Talla de Ropa (Opcional)",
+        labelHeight: "Altura *",
+        labelClothingSize: "Talla de Ropa *",
         labelBraSize: "Talla de Brasier (Opcional)",
         labelBustMeasurement: "Medida de Busto (Opcional)",
-        labelWaistMeasurement: "Medida de Cintura (Opcional)",
+        labelWaistMeasurement: "Medida de Cintura *",
         labelHipMeasurement: "Medida de Cadera (Opcional)",
         labelShoeSize: "Talla de Zapato (Opcional)",
         labelHairColor: "Color de Cabello (Opcional)",
@@ -941,10 +947,14 @@
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
         labelExpectedComp: "Compensacion esperada por sesion *",
-        labelUnpaidTfpWilling: "Estoy abierta/o a sesiones no pagadas a cambio de fotos editadas.",
+        labelUnpaidTfpWilling: "Estas abierta/o a sesiones no pagadas a cambio de fotos editadas?",
         expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
-        labelHeadshot: "Headshot *",
-        labelFullBody: "Foto de Cuerpo Completo *",
+        labelHeadshotRequired: "Headshot *",
+        labelHeadshotSuggested: "Headshot (Sugerido)",
+        labelFullBodyRequired: "Foto de Cuerpo Completo *",
+        labelFullBodySuggested: "Foto de Cuerpo Completo (Sugerida)",
+        photoRequiredHint: "Requerida si no compartes Instagram. Solo imagen, hasta 8MB.",
+        photoSuggestedHint: "Sugerida porque compartiste Instagram. Solo imagen, hasta 8MB.",
         labelWhyWork: "Por que te gustaria trabajar con MVP Media Photography? *",
         labelGoodFit: "Algo sobre tu estilo o experiencia que quieras compartir? (Opcional)",
         labelAnythingElse: "Hay algo mas que te gustaria que sepamos? (Opcional)",
@@ -1040,11 +1050,10 @@
       setLabel("travelDistance", t.labelTravelDistance);
       setLabel("compInterest", t.labelCompInterest);
       setLabel("expectedComp", t.labelExpectedComp);
-      setLabel("headshot", t.labelHeadshot);
-      setLabel("fullBody", t.labelFullBody);
       setLabel("whyWork", t.labelWhyWork);
       setLabel("goodFit", t.labelGoodFit);
       setLabel("anythingElse", t.labelAnythingElse);
+      updatePhotoRequirement();
 
       const subLabels = document.querySelectorAll(".sub-label");
       if (subLabels[0]) subLabels[0].textContent = t.labelWorked;
@@ -1081,7 +1090,12 @@
       setChoiceText("input[name='consent'][value='voluntary']", t.consentVoluntary);
       setChoiceText("input[name='consent'][value='details']", t.consentDetails);
       setChoiceText("input[name='consent'][value='contact']", t.consentContact);
-      setChoiceText("#unpaidTfpWilling", t.labelUnpaidTfpWilling);
+      const unpaidTfpLabel = document.getElementById("unpaidTfpLabel");
+      if (unpaidTfpLabel) {
+        unpaidTfpLabel.textContent = t.labelUnpaidTfpWilling;
+      }
+      setChoiceText("input[name='unpaidTfpWilling'][value='Yes']", t.yes);
+      setChoiceText("input[name='unpaidTfpWilling'][value='No']", t.no);
 
       setOptions("hearAbout", t.hearAboutOptions);
       setOptions("experience", t.experienceOptions);
@@ -1167,7 +1181,7 @@
     const serializeDraft = () => {
       const draft = {};
       Array.from(form.elements).forEach((element) => {
-        if (!element.id || element.type === "file" || element.id === "website") {
+        if ((!element.id && element.type !== "radio") || element.type === "file" || element.id === "website") {
           return;
         }
 
@@ -1299,6 +1313,37 @@
       return selected ? selected.value : "";
     };
 
+    const updatePhotoRequirement = () => {
+      const t = i18n[selectedLanguage] || i18n.en;
+      const instagramProvided = getValue("instagram").length > 0;
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+      const headshotHint = document.getElementById("headshotHint");
+      const fullBodyHint = document.getElementById("fullBodyHint");
+
+      [headshot, fullBody].forEach((input) => {
+        if (input) {
+          input.required = !instagramProvided;
+          input.setCustomValidity("");
+        }
+      });
+
+      const headshotLabel = document.querySelector("label[for='headshot']");
+      const fullBodyLabel = document.querySelector("label[for='fullBody']");
+      if (headshotLabel) {
+        headshotLabel.textContent = instagramProvided ? t.labelHeadshotSuggested : t.labelHeadshotRequired;
+      }
+      if (fullBodyLabel) {
+        fullBodyLabel.textContent = instagramProvided ? t.labelFullBodySuggested : t.labelFullBodyRequired;
+      }
+      if (headshotHint) {
+        headshotHint.textContent = instagramProvided ? t.photoSuggestedHint : t.photoRequiredHint;
+      }
+      if (fullBodyHint) {
+        fullBodyHint.textContent = instagramProvided ? t.photoSuggestedHint : t.photoRequiredHint;
+      }
+    };
+
     const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
 
     const validatePhotoFile = (file, label) => {
@@ -1415,7 +1460,7 @@
         travel_distance: selectedRadioValue("travel") === "No" ? "Not applicable" : getValue("travelDistance"),
         comp_interest: getValue("compInterest"),
         expected_comp: getValue("expectedComp"),
-        unpaid_tfp_willing: document.getElementById("unpaidTfpWilling").checked,
+        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
         why_work: getValue("whyWork"),
         good_fit: getValue("goodFit"),
         anything_else: getValue("anythingElse"),
@@ -1459,6 +1504,7 @@
 
     form.addEventListener("submit", async (event) => {
       clearErrors();
+      updatePhotoRequirement();
       let hasErrors = !form.checkValidity();
 
       const ageEl = document.getElementById("age");
@@ -1566,9 +1612,12 @@
       });
     });
 
+    document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+
     restoreDraft();
     updateStep();
     setTravelFields();
+    updatePhotoRequirement();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>

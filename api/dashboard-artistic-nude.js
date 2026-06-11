@@ -117,11 +117,7 @@ export default async function handler(req, res) {
     return respond(res, 200, { ok: true });
   }
 
-  const query = encodeURI(
-    "id,created_at,full_name,preferred_name,pronouns,age,email,phone,city,state_province,country,instagram,tiktok,hear_about,previous_modeling_experience,experience_types,nude_experience_level,portfolio_link,height,body_type,clothing_size,bra_size,bust_measurement,waist_measurement,hip_measurement,shoe_size,hair_color,eye_color,notable_features,visible_marks,health_notes,experience,worked_with_photographers,comfortable_snapshots,interests,nudity_comfort_levels,comfort_level,avoid_concepts,hard_limits,special_conditions,availability,availability_notes,frequency,travel_willing,travel_distance,travel_preference,comp_interest,compensation_types,unpaid_tfp_willing,expected_comp,why_work,good_fit,release_understanding,intended_use,emergency_contact_name,emergency_contact_phone,organizer_questions,confirm_18_truth,anything_else,consents,headshot_filename,full_body_filename,language,review_status"
-  );
-
-  const response = await fetch(`${supabaseUrl}/rest/v1/artistic_nude_applications?select=${query}&order=created_at.asc`, {
+  const response = await fetch(`${supabaseUrl}/rest/v1/artistic_nude_applications?select=*&order=created_at.asc`, {
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`,
