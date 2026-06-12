@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Artistic Nude Application - Language Selection</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #fafafa;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0e6b62 0%, #1a8c80 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+    }
+
+    .intro-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .intro-card h3 {
+      color: #0e6b62;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .intro-card p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .trust-signals {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      margin: 40px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .trust-signals h2 {
+      color: #0e6b62;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .signal-icon {
+      width: 24px;
+      height: 24px;
+      background: #0e6b62;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .signal-text {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .cta-section {
+      background: white;
+      padding: 60px 40px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 60px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cta-section h2 {
+      color: #0e6b62;
+      margin-bottom: 12px;
+      font-size: 2rem;
+    }
+
+    .cta-section p {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      min-width: 240px;
+    }
+
+    .btn-primary {
+      background: #0e6b62;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0a5448;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(14, 107, 98, 0.3);
+    }
+
+    .btn-secondary {
+      background: #da7c4f;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #c96a3a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(218, 124, 79, 0.3);
+    }
+
+    .btn-tertiary {
+      background: #3c6fcf;
+      color: white;
+    }
+
+    .btn-tertiary:hover {
+      background: #325eb0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(60, 111, 207, 0.3);
+    }
+
+    .disclaimer {
+      background: #f0f7f6;
+      padding: 20px;
+      border-left: 4px solid #0e6b62;
+      margin: 30px 0;
+      border-radius: 4px;
+    }
+
+    .disclaimer p {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 8px 0;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    footer p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="container">
+      <h1>MVP Media Artistic Nude Application</h1>
+      <p>Choose your preferred language to begin the artistic nude model application.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="intro-grid">
+      <div class="intro-card">
+        <h3>English</h3>
+        <p>Complete the application in English with full details about your interests, boundaries, and availability.</p>
+      </div>
+      <div class="intro-card">
+        <h3>Espanol</h3>
+        <p>Completa la solicitud en espanol con todos los detalles sobre tus intereses, limites y disponibilidad.</p>
+      </div>
+      <div class="intro-card">
+        <h3>Portugues</h3>
+        <p>Preencha a aplicacao em portugues com detalhes sobre seus interesses, limites e disponibilidade.</p>
+      </div>
+    </div>
+
+    <div class="trust-signals">
+      <h2>Before You Apply</h2>
+      <div class="signals-grid">
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">18+ applicants only</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">Boundaries are discussed and respected</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">No guaranteed selection</div>
+        </div>
+        <div class="signal">
+          <div class="signal-icon">✓</div>
+          <div class="signal-text">Paid and collaboration opportunities</div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p><strong>Privacy & Consent:</strong> Your information is reviewed privately by MVP Media. Concepts, usage rights, compensation, and release terms are discussed before any shoot is scheduled.</p>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2>Select Your Language</h2>
+      <p>Pick the version you are most comfortable with.</p>
+      <div class="button-group">
+        <a href="artistic-nude-survey-en.html" class="btn btn-primary">English Application</a>
+        <a href="artistic-nude-survey-es.html" class="btn btn-secondary">Solicitud En Espanol</a>
+        <a href="artistic-nude-survey-pt.html" class="btn btn-tertiary">Aplicacao Em Portugues</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 MVP Media Photography. All rights reserved.</p>
+    <p><a href="landing.html" style="color: inherit; text-decoration: none;">Main Landing</a></p>
+  </footer>
+</body>
+</html>

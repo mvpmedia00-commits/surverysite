@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Adult Creative Model Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #101115;
+      --panel: rgba(24, 25, 30, 0.82);
+      --line: rgba(255, 255, 255, 0.14);
+      --text: #f4f1eb;
+      --muted: #c8c0b3;
+      --accent: #d8b86f;
+      --accent-2: #8ad4a2;
+      --ok: #8ad4a2;
+      --error: #ff9c9c;
+      --radius: 20px;
+      --shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      background:
+        linear-gradient(90deg, rgba(216, 184, 111, 0.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(138, 212, 162, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 84% 9%, rgba(216, 184, 111, 0.22), transparent 31%),
+        radial-gradient(circle at 12% 22%, rgba(138, 212, 162, 0.09), transparent 27%),
+        linear-gradient(180deg, #17191f 0%, var(--bg) 100%);
+      background-size: 46px 46px, 46px 46px, auto, auto, auto;
+    }
+
+    .page {
+      width: min(1040px, 94vw);
+      margin: 28px auto 48px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(9, 10, 12, 0.78), rgba(9, 10, 12, 0.36)),
+        url("https://res.cloudinary.com/dale5sd8p/image/upload/v1781224106/1cff99f8-5c1e-47c1-8f18-057c48b4b2c0_rwqfys.jpg") center/cover;
+      min-height: min(680px, calc(100vh - 56px));
+      display: grid;
+      align-content: end;
+      padding: clamp(24px, 5vw, 56px);
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.8rem, 7vw, 5.7rem);
+      line-height: 0.94;
+      max-width: 720px;
+      position: relative;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: #eee5d6;
+      max-width: 680px;
+      line-height: 1.65;
+      font-size: clamp(1rem, 1.8vw, 1.12rem);
+      position: relative;
+    }
+
+    form {
+      margin-top: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    fieldset {
+      margin: 0;
+      border: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: clamp(22px, 4vw, 34px) 0 0;
+    }
+
+    legend {
+      color: var(--accent);
+      font-weight: 800;
+      padding: 0 10px;
+      font-size: 1.02rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label,
+    .sub-label {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #eee7dc;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      background: rgba(13, 15, 19, 0.68);
+      color: var(--text);
+      font: inherit;
+      padding: 12px 13px;
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(13, 15, 19, 0.9);
+      box-shadow: 0 0 0 4px rgba(216, 184, 111, 0.18);
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .choices {
+      display: grid;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .inline {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      background: rgba(13, 15, 19, 0.52);
+      padding: 10px 11px;
+      font-size: 0.9rem;
+      transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    .choice:hover,
+    .choice:has(input:checked) {
+      transform: translateY(-1px);
+      border-color: rgba(216, 184, 111, 0.42);
+      background: rgba(25, 28, 34, 0.92);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .choice input[type="checkbox"],
+    .choice input[type="radio"] {
+      width: auto;
+      margin-top: 2px;
+      accent-color: var(--accent);
+    }
+
+    .error {
+      min-height: 1em;
+      color: var(--error);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .file-hint {
+      margin: -2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .photo-preview {
+      display: none;
+      width: 92px;
+      height: 92px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      object-fit: cover;
+      background: #191c20;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    .progress-panel {
+      border: 1px solid rgba(216, 184, 111, 0.22);
+      border-left: 5px solid var(--accent);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(24, 27, 32, 0.72), rgba(16, 17, 21, 0.52));
+      box-shadow: none;
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+      backdrop-filter: blur(12px);
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      display: none;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      transition: width 180ms ease;
+    }
+
+    .trust-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .step-title {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.98rem;
+    }
+
+    .draft-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .draft-actions button {
+      min-width: auto;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      box-shadow: none;
+    }
+
+    .status {
+      margin: 8px 0 0;
+      text-align: center;
+      min-height: 1.2em;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .submit-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wizard-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wizard-actions {
+      display: none;
+    }
+
+    .bot-field {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 24px;
+      min-width: 220px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      color: #14161a;
+      background: linear-gradient(135deg, #ead29a, #c69b4f);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32);
+      transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.36);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+      transform: none;
+    }
+
+    button.secondary {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(13, 15, 19, 0.68);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    .success {
+      display: none;
+      border: 1px solid rgba(138, 212, 162, 0.5);
+      border-radius: 26px;
+      background: rgba(31, 54, 40, 0.55);
+      color: #e8ffe8;
+      padding: 20px;
+      margin-top: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .success h2 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: var(--ok);
+    }
+
+    .success p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      .two { grid-template-columns: 1fr; }
+      .hero {
+        min-height: 520px;
+        padding: 28px;
+      }
+      .hero::before {
+        inset: 12px;
+      }
+      .progress-panel {
+        position: static;
+      }
+      button {
+        width: 100%;
+        min-width: 0;
+      }
+      .draft-actions button {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>MVP Media Adult Creative Model Application</h1>
+      <p>
+        This application is for adults 18+ interested in nude, erotic, boudoir, nude bodypaint, glamour,
+        sensual, and subscription-style content projects with MVP Media Photography.
+      </p>
+      <p>
+        This form helps us understand your interests, comfort levels, boundaries, availability, compensation
+        expectations, and what types of adult creative content you may be open to discussing.
+      </p>
+      <p>
+        Submitting this form does not guarantee selection. All concepts, boundaries, image usage, compensation,
+        and release terms are discussed before any shoot is scheduled.
+      </p>
+    </header>
+
+    <form id="applicationForm" novalidate>
+      <div class="progress-panel" aria-live="polite">
+        <div class="progress-meta">
+          <span id="stepLabel">Full survey visible below</span>
+          <span id="autosaveStatus">Autosaved as you type</span>
+        </div>
+        <p class="step-title" id="stepTitle">Take your time. Boundaries and comfort levels can be reviewed before submitting.</p>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="trust-note">Your answers, photos, boundaries, and contact details are reviewed privately by MVP Media for casting and scheduling. Boundaries are discussed before any shoot is booked.</p>
+        <div class="draft-actions">
+          <button type="button" class="secondary" id="restoreDraftBtn">Restore Draft</button>
+          <button type="button" class="secondary" id="clearDraftBtn">Delete Draft</button>
+        </div>
+      </div>
+      <div class="bot-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <fieldset>
+        <legend>1) Basic Info</legend>
+        <div class="grid two">
+          <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
+          <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
+          <div class="field"><label for="phone">Phone / WhatsApp *</label><input id="phone" required></div>
+          <div class="field"><label for="city">City *</label><input id="city" required></div>
+          <div class="field"><label for="country">Country *</label><input id="country" required></div>
+          <div class="field"><label for="instagram">Instagram / Portfolio / Fan Platform Link *</label><input id="instagram" placeholder="@handle or https://..." required></div>
+          <div class="field">
+            <label for="hearAbout">How did you hear about MVP Media? *</label>
+            <select id="hearAbout" required>
+              <option value="">Select one</option>
+              <option>Instagram</option>
+              <option>TikTok</option>
+              <option>Facebook</option>
+              <option>Referral</option>
+              <option>Casting post</option>
+              <option>Modeling group</option>
+              <option>Google</option>
+              <option>WhatsApp</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2) Experience</legend>
+        <div class="field">
+          <span class="sub-label">What modeling or content experience do you have? (Select all that apply)</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / fan content">OnlyFans / fan content</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Have you worked with photographers before?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="worked" value="No">No</label>
+            <label class="choice"><input type="radio" name="worked" value="A little">A little</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3) Content Interest</legend>
+        <div class="field">
+          <span class="sub-label">What types of projects are you interested in? (Select at least one) *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="interests" value="Boudoir">Boudoir</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Lingerie">Lingerie</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Artistic nude">Artistic nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Glamour nude">Glamour nude</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Adult subscription photos">Adult subscription photos</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Adult subscription videos">Adult subscription videos</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Social media teaser content">Social media teaser content</label>
+          </div>
+          <div class="error" id="interestsError"></div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Are you open to paid-platform or subscription content?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="No">No</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Maybe">Maybe</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Only with separate agreement">Only with separate agreement</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4) Comfort &amp; Boundaries</legend>
+        <div class="field">
+          <span class="sub-label">What levels are you comfortable discussing? (Select at least one) *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Lingerie">Lingerie</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Implied nude">Implied nude</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless">Topless</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Full nude non-explicit">Full nude non-explicit</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Erotic nude">Erotic nude</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Nude bodypaint">Nude bodypaint</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Video content">Video content</label>
+            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Outdoor / location shoots">Outdoor / location shoots</label>
+          </div>
+          <div class="error" id="nudityComfortError"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>5) Availability &amp; Pay</legend>
+        <div class="field">
+          <span class="sub-label">When are you available? (Select at least one) *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Weekends">Weekends</label>
+            <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
+          </div>
+          <div class="error" id="availabilityError"></div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Are you willing to travel for shoots?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="travel" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="travel" value="No">No</label>
+            <label class="choice"><input type="radio" name="travel" value="Local only">Local only</label>
+            <label class="choice"><input type="radio" name="travel" value="With travel covered">With travel covered</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="expectedComp">Expected compensation per shoot *</label>
+          <select id="expectedComp" required>
+            <option value="">Select one</option>
+            <option>Under $100</option>
+            <option>$100–$200</option>
+            <option>$200–$400</option>
+            <option>$400–$700</option>
+            <option>$700+</option>
+            <option>Depends on content / usage</option>
+            <option>Open to discussion</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>6) Photos</legend>
+        <div class="grid two">
+          <div class="field">
+            <label for="headshot">Headshot</label>
+            <input id="headshot" type="file" accept="image/*">
+            <p class="file-hint" id="headshotHint">Upload a headshot, or make sure your Instagram / portfolio link is filled in above. Up to 8MB.</p>
+            <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
+          </div>
+          <div class="field">
+            <label for="fullBody">Full Body Photo</label>
+            <input id="fullBody" type="file" accept="image/*">
+            <p class="file-hint" id="fullBodyHint">Upload a full-body photo or provide portfolio link above. Up to 8MB.</p>
+            <img class="photo-preview" id="fullBodyPreview" alt="Full body preview">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>7) Final</legend>
+        <div class="field"><label for="whyWork">Why are you interested in adult creative modeling with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
+        <div class="field"><label for="anythingElse">What would make you feel safe and comfortable on a shoot? *</label><textarea id="anythingElse" required></textarea></div>
+        <div class="field">
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">I confirm I am at least 18 years old.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="adult-content">I understand this is for adult nude, erotic, boudoir, bodypaint, and subscription-style content.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="voluntary">I understand participation is voluntary.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="boundaries">I understand I can decline any concept before scheduling.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="terms">I understand compensation, usage, and release terms are discussed before shooting.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to be contacted by MVP Media.</label>
+          </div>
+          <div class="error" id="consentError"></div>
+          <div class="error" id="confirm18Error"></div>
+        </div>
+      </fieldset>
+
+      <div class="wizard-actions">
+        <button type="button" class="secondary" id="prevStepBtn">Previous</button>
+        <button type="button" id="nextStepBtn">Next</button>
+      </div>
+      <div class="submit-row"><button type="submit" id="submitBtn">Submit Adult Creative Model Application</button></div>
+      <p class="status" id="submitStatus" aria-live="polite"></p>
+    </form>
+
+    <section class="success" id="successMessage" aria-live="polite">
+      <h2>Application Received</h2>
+      <p>Thank you. Your adult creative model application has been received. We will review and contact selected applicants.</p>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("applicationForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitStatus = document.getElementById("submitStatus");
+    const prevStepBtn = document.getElementById("prevStepBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const stepLabel = document.getElementById("stepLabel");
+    const stepTitle = document.getElementById("stepTitle");
+    const progressFill = document.getElementById("progressFill");
+    const autosaveStatus = document.getElementById("autosaveStatus");
+    const restoreDraftBtn = document.getElementById("restoreDraftBtn");
+    const clearDraftBtn = document.getElementById("clearDraftBtn");
+    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
+    const autosaveKey = "mvp-artistic-nude-application-draft-en";
+    const maxPhotoSize = 8 * 1024 * 1024;
+    const stepNames = [
+      "Basic Information",
+      "Profile Snapshot",
+      "Artistic Nude Focus",
+      "Availability And Compensation",
+      "Photos And Intent",
+      "Consent"
+    ];
+    let currentStep = 0;
+
+    const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
+    const CLOUDINARY_UPLOAD_PRESET = "jobstats";
+
+    const setError = (id, msg) => {
+      document.getElementById(id).textContent = msg;
+    };
+
+    const clearErrors = () => {
+      setError("experienceTypesError", "");
+      setError("interestsError", "");
+      setError("nudityComfortError", "");
+      setError("availabilityError", "");
+      setError("compensationTypeError", "");
+      setError("unpaidTfpError", "");
+      setError("intendedUseError", "");
+      setError("consentError", "");
+      setError("confirm18Error", "");
+      submitStatus.textContent = "";
+    };
+
+    const updateStep = () => {
+      fieldsets.forEach((fieldset) => {
+        fieldset.hidden = false;
+      });
+
+      stepLabel.textContent = "Full survey visible below";
+      stepTitle.textContent = "Take your time. Boundaries and comfort levels can be reviewed before submitting.";
+      progressFill.style.width = "100%";
+      prevStepBtn.hidden = true;
+      nextStepBtn.hidden = true;
+      submitBtn.hidden = false;
+      submitStatus.textContent = "";
+    };
+
+    const validateCurrentStep = () => {
+      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"));
+      const invalid = controls.find((control) => !control.checkValidity());
+      if (invalid) {
+        invalid.reportValidity();
+        invalid.focus();
+        return false;
+      }
+      return true;
+    };
+
+    const serializeDraft = () => {
+      const draft = {};
+      Array.from(form.elements).forEach((element) => {
+        if ((!element.id && element.type !== "radio") || element.type === "file" || element.id === "website") {
+          return;
+        }
+
+        if (element.type === "checkbox") {
+          draft[element.id || `${element.name}:${element.value}`] = element.checked;
+          return;
+        }
+
+        if (element.type === "radio") {
+          if (element.checked) {
+            draft[element.name] = element.value;
+          }
+          return;
+        }
+
+        draft[element.id] = element.value;
+      });
+      draft.currentStep = currentStep;
+      return draft;
+    };
+
+    const saveDraft = () => {
+      localStorage.setItem(autosaveKey, JSON.stringify(serializeDraft()));
+      autosaveStatus.textContent = "Draft saved";
+    };
+
+    const restoreDraft = () => {
+      const raw = localStorage.getItem(autosaveKey);
+      if (!raw) {
+        return;
+      }
+
+      try {
+        const draft = JSON.parse(raw);
+        Object.entries(draft).forEach(([key, value]) => {
+          if (key === "currentStep") {
+            return;
+          }
+
+          const byId = document.getElementById(key);
+          if (byId && byId.type === "checkbox") {
+            byId.checked = Boolean(value);
+            return;
+          }
+          if (byId && byId.type !== "file") {
+            byId.value = value;
+            return;
+          }
+
+          if (key.includes(":")) {
+            const [name, checkboxValue] = key.split(":");
+            const checkbox = form.querySelector(`input[type="checkbox"][name="${CSS.escape(name)}"][value="${CSS.escape(checkboxValue)}"]`);
+            if (checkbox) {
+              checkbox.checked = Boolean(value);
+            }
+            return;
+          }
+
+          const radio = form.querySelector(`input[type="radio"][name="${key}"][value="${CSS.escape(String(value))}"]`);
+          if (radio) {
+            radio.checked = true;
+          }
+        });
+
+        currentStep = Math.min(Math.max(Number(draft.currentStep) || 0, 0), fieldsets.length - 1);
+        autosaveStatus.textContent = "Draft restored";
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const clearDraft = () => {
+      localStorage.removeItem(autosaveKey);
+      autosaveStatus.textContent = "Draft deleted";
+    };
+
+    restoreDraftBtn.addEventListener("click", () => {
+      restoreDraft();
+      updateStep();
+      autosaveStatus.textContent = "Draft restored";
+    });
+
+    clearDraftBtn.addEventListener("click", clearDraft);
+
+    prevStepBtn.addEventListener("click", () => {
+      currentStep = Math.max(currentStep - 1, 0);
+      updateStep();
+      saveDraft();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    nextStepBtn.addEventListener("click", () => {
+      if (!validateCurrentStep()) {
+        return;
+      }
+      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
+      updateStep();
+      saveDraft();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    form.addEventListener("input", saveDraft);
+    form.addEventListener("change", saveDraft);
+
+    const checkAtLeastOne = (selector) => Array.from(document.querySelectorAll(selector)).some((item) => item.checked);
+    const checkedValues = (selector) => Array.from(document.querySelectorAll(selector)).filter((item) => item.checked).map((item) => item.value);
+
+    const getValue = (id) => {
+      const element = document.getElementById(id);
+      return element ? element.value.trim() : "";
+    };
+
+    const selectedRadioValue = (name) => {
+      const selected = document.querySelector(`input[name='${name}']:checked`);
+      return selected ? selected.value : "";
+    };
+
+    const updatePhotoRequirement = () => {
+      const instagramProvided = getValue("instagram").length > 0;
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+      const headshotHint = document.getElementById("headshotHint");
+      const fullBodyHint = document.getElementById("fullBodyHint");
+
+      [headshot, fullBody].forEach((input) => {
+        if (input) {
+          input.required = !instagramProvided;
+          input.setCustomValidity("");
+        }
+      });
+
+      const headshotLabel = document.querySelector("label[for='headshot']");
+      const fullBodyLabel = document.querySelector("label[for='fullBody']");
+      if (headshotLabel) {
+        headshotLabel.textContent = instagramProvided ? "Headshot (Suggested)" : "Headshot *";
+      }
+      if (fullBodyLabel) {
+        fullBodyLabel.textContent = instagramProvided ? "Full Body Photo (Suggested)" : "Full Body Photo *";
+      }
+      const hint = instagramProvided
+        ? "Suggested because you provided Instagram. Image only, up to 8MB."
+        : "Required if you do not provide Instagram. Image only, up to 8MB.";
+      if (headshotHint) {
+        headshotHint.textContent = hint;
+      }
+      if (fullBodyHint) {
+        fullBodyHint.textContent = hint;
+      }
+    };
+
+    const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const validatePhotoFile = (file, label) => {
+      if (!file) {
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        throw new Error(`${label} must be an image file.`);
+      }
+      if (file.size > maxPhotoSize) {
+        throw new Error(`${label} must be 8MB or smaller.`);
+      }
+    };
+
+    const setupPhotoPreview = (inputId, previewId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if (!input || !preview) {
+        return;
+      }
+
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        if (!file) {
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          return;
+        }
+
+        try {
+          validatePhotoFile(file, inputId === "headshot" ? "Headshot" : "Full body photo");
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        } catch (error) {
+          input.value = "";
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          submitStatus.textContent = error && error.message ? error.message : "Photo file is not valid.";
+        }
+      });
+    };
+
+    const setTravelFields = () => {
+      const travelAnswer = selectedRadioValue("travel");
+      const travelDistance = document.getElementById("travelDistance");
+      const travelPreference = document.getElementById("travelPreference");
+      const hideTravelDetails = travelAnswer === "No";
+
+      [travelDistance, travelPreference].forEach((element) => {
+        const field = element ? element.closest(".field") : null;
+        if (field) {
+          field.hidden = hideTravelDetails;
+        }
+        if (element) {
+          element.disabled = hideTravelDetails;
+          if (hideTravelDetails) {
+            element.value = "";
+          }
+        }
+      });
+    };
+
+    const uploadPhoto = async (file, folder) => {
+      const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      formData.append("folder", `mvp-applications/${folder}`);
+      formData.append("public_id", `${Date.now()}-${sanitizeFileName(file.name)}`);
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Photo upload failed");
+      }
+
+      const result = await response.json();
+      return result && result.secure_url ? result.secure_url : "";
+    };
+
+    const buildPayload = () => {
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+      const travelAnswer = selectedRadioValue("travel");
+
+      return {
+        full_name: getValue("preferredName"),
+        preferred_name: getValue("preferredName"),
+        age: Number(getValue("age")),
+        email: getValue("email"),
+        phone: getValue("phone"),
+        city: getValue("city"),
+        country: getValue("country"),
+        instagram: getValue("instagram"),
+        hear_about: getValue("hearAbout"),
+        experience_types: checkedValues("input[name='experienceTypes']"),
+        nude_experience_level: "Provided via experience checkboxes",
+        worked_with_photographers: selectedRadioValue("worked") || "",
+        comfortable_snapshots: "Yes",
+        experience: checkedValues("input[name='experienceTypes']").join(", ") || "Not specified",
+        interests: checkedValues("input[name='interests']"),
+        nudity_comfort_levels: checkedValues("input[name='nudityComfortLevels']"),
+        comfort_level: "Not specified",
+        avoid_concepts: "",
+        hard_limits: "",
+        special_conditions: selectedRadioValue("paidPlatformOpen") ? `Paid platform: ${selectedRadioValue("paidPlatformOpen")}` : "Not specified",
+        availability: checkedValues("input[name='availability']"),
+        frequency: "Not specified",
+        travel_willing: travelAnswer || "Not specified",
+        travel_distance: travelAnswer === "No" ? "Not applicable" : "Not specified",
+        comp_interest: "Provided via expected comp",
+        compensation_types: [],
+        unpaid_tfp_willing: false,
+        expected_comp: getValue("expectedComp"),
+        why_work: getValue("whyWork"),
+        good_fit: getValue("anythingElse"),
+        release_understanding: "Discussed before shooting",
+        intended_use: [],
+        headshot_filename: headshot && headshot.files[0] ? headshot.files[0].name : "",
+        full_body_filename: fullBody && fullBody.files[0] ? fullBody.files[0].name : "",
+        language: "en",
+        website: getValue("website")
+      };
+    };
+
+    const buildPayloadWithUploads = async () => {
+      const payload = buildPayload();
+      const headshot = document.getElementById("headshot");
+      const fullBody = document.getElementById("fullBody");
+
+      validatePhotoFile(headshot && headshot.files[0], "Headshot");
+      validatePhotoFile(fullBody && fullBody.files[0], "Full body photo");
+
+      if (headshot && headshot.files[0]) {
+        payload.headshot_filename = await uploadPhoto(headshot.files[0], "artistic-nude-headshot");
+      }
+
+      if (fullBody && fullBody.files[0]) {
+        payload.full_body_filename = await uploadPhoto(fullBody.files[0], "artistic-nude-full-body");
+      }
+
+      return payload;
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearErrors();
+      updatePhotoRequirement();
+
+      let hasErrors = !form.checkValidity();
+      const age = Number(getValue("age"));
+
+      if (!Number.isFinite(age) || age < 18) {
+        hasErrors = true;
+      }
+
+      if (!checkAtLeastOne("input[name='interests']")) {
+        setError("interestsError", "Please select at least one project interest.");
+        hasErrors = true;
+      }
+
+      if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
+        setError("nudityComfortError", "Please select at least one comfort level.");
+        hasErrors = true;
+      }
+
+      if (!checkAtLeastOne("input[name='availability']")) {
+        setError("availabilityError", "Please select at least one availability option.");
+        hasErrors = true;
+      }
+
+      if (checkedValues("input[name='consent']").length < 5) {
+        setError("consentError", "All consent items are required.");
+        hasErrors = true;
+      }
+
+      if (checkedValues("input[name='confirm18Truth']").length === 0) {
+        setError("confirm18Error", "Please confirm you are 18+.");
+        hasErrors = true;
+      }
+
+      if (hasErrors) {
+        submitStatus.textContent = "Please review required fields and try again.";
+        form.reportValidity();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+      submitStatus.textContent = "Uploading photos and sending application...";
+
+      try {
+        const payload = await buildPayloadWithUploads();
+        const response = await fetch("/api/submit-artistic-nude", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "Submission failed");
+        }
+
+        form.style.display = "none";
+        document.getElementById("successMessage").style.display = "block";
+        localStorage.removeItem(autosaveKey);
+        globalThis.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (error) {
+        submitStatus.textContent = `Could not submit. Please try again. (${error?.message || "Unknown error"})`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Artistic Nude Application";
+      }
+    });
+
+    document.querySelectorAll("input[name='travel']").forEach((el) => {
+      el.addEventListener("change", () => {
+        setTravelFields();
+        saveDraft();
+      });
+    });
+
+    document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+
+    restoreDraft();
+    updateStep();
+    setTravelFields();
+    updatePhotoRequirement();
+    setupPhotoPreview("headshot", "headshotPreview");
+    setupPhotoPreview("fullBody", "fullBodyPreview");
+  </script>
+</body>
+</html>
