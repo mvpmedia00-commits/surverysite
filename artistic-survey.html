@@ -92,6 +92,14 @@
       font-size: 0.98rem;
     }
 
+    .lang-card .multi-lang {
+      display: block;
+      margin-top: 4px;
+      color: #4b4339;
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
     .lang-actions {
       margin-top: 18px;
       display: grid;
@@ -480,8 +488,12 @@
 <body>
   <section class="lang-gate" id="langGate">
     <div class="lang-card">
-      <h2>Choose Your Language</h2>
-      <p>Select a language before continuing to the survey.</p>
+      <h2>Choose Your Language / Elige Tu Idioma / Escolha Seu Idioma</h2>
+      <p>
+        Select a language before continuing to the survey.
+        <span class="multi-lang">Selecciona un idioma antes de continuar con la encuesta.</span>
+        <span class="multi-lang">Selecione um idioma antes de continuar para a pesquisa.</span>
+      </p>
       <div class="lang-actions">
         <button type="button" data-lang="en">English</button>
         <button type="button" data-lang="es">Espanol</button>
