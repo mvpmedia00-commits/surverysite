@@ -4,6 +4,17 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "surverysite.vercel.app"
+        }
+      ],
+      "destination": "https://mvpstats.xyz/$1",
+      "permanent": true
+    },
+    {
       "source": "/artistic-nude-landing",
       "destination": "/artistic-survey",
       "permanent": true
