@@ -4,8 +4,8 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/artistic-survey",
-      "destination": "/artistic-nude-landing",
+      "source": "/artistic-nude-landing",
+      "destination": "/artistic-survey",
       "permanent": true
     },
     {
