@@ -193,6 +193,39 @@
       accent-color: var(--accent);
     }
 
+    .choice-with-help {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .choice-with-help .choice {
+      flex: 1;
+    }
+
+    .help-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(216, 184, 111, 0.4);
+      background: rgba(25, 28, 34, 0.9);
+      color: var(--accent);
+      font-weight: 700;
+      line-height: 1;
+      cursor: help;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 140ms ease, background 140ms ease;
+    }
+
+    .help-dot:hover,
+    .help-dot:focus-visible {
+      border-color: rgba(216, 184, 111, 0.82);
+      background: rgba(39, 43, 50, 0.95);
+      outline: none;
+    }
+
     .error {
       min-height: 1em;
       color: var(--error);
@@ -457,18 +490,54 @@
         <div class="field">
           <span class="sub-label">What modeling or content experience do you have? (Select all that apply)</span>
           <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / fan content">OnlyFans / fan content</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Fashion</label>
+              <button type="button" class="help-dot" title="Fashion: Editorial, catalog, runway, and brand campaign styling work." aria-label="Fashion explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Portrait</label>
+              <button type="button" class="help-dot" title="Portrait: Face-focused or upper-body photo sessions for personal or professional use." aria-label="Portrait explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
+              <button type="button" class="help-dot" title="Boudoir: Intimate, sensual posing in lingerie or styled wardrobe, usually non-explicit." aria-label="Boudoir explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lingerie</label>
+              <button type="button" class="help-dot" title="Lingerie: Product or editorial shoots featuring underwear/lingerie looks." aria-label="Lingerie explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Swimwear</label>
+              <button type="button" class="help-dot" title="Swimwear: Bikini, one-piece, or resort style shoots for campaigns or social media." aria-label="Swimwear explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Implied nude</label>
+              <button type="button" class="help-dot" title="Implied nude: Nudity is suggested through pose, props, or framing without explicit exposure." aria-label="Implied nude explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Artistic nude</label>
+              <button type="button" class="help-dot" title="Artistic nude: Fine-art nude work focused on shape, light, composition, and storytelling." aria-label="Artistic nude explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Erotic nude</label>
+              <button type="button" class="help-dot" title="Erotic nude: Adult-oriented nude content with an intentionally provocative tone." aria-label="Erotic nude explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Nude bodypaint</label>
+              <button type="button" class="help-dot" title="Nude bodypaint: Full or partial body paint art on skin, often photographed or filmed." aria-label="Nude bodypaint explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / fan content">OnlyFans / fan content</label>
+              <button type="button" class="help-dot" title="OnlyFans / fan content: Subscription-platform photos or videos created for paying fans." aria-label="OnlyFans fan content explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Video content</label>
+              <button type="button" class="help-dot" title="Video content: Motion shoots for reels, clips, social platforms, or paid content libraries." aria-label="Video content explanation">?</button>
+            </div>
+            <div class="choice-with-help">
+              <label class="choice"><input type="checkbox" name="experienceTypes" value="No experience yet">No experience yet</label>
+              <button type="button" class="help-dot" title="No experience yet: You are new to modeling/content and open to beginner-friendly direction." aria-label="No experience yet explanation">?</button>
+            </div>
           </div>
         </div>
         <div class="field">
