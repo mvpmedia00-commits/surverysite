@@ -2,6 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/artistic-nude-survey",
+      "destination": "/artistic-survey",
+      "permanent": true
+    },
+    {
+      "source": "/artistic-nude-survey.html",
+      "destination": "/artistic-survey",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
