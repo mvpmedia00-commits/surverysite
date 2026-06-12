@@ -495,9 +495,9 @@
         <span class="multi-lang">Selecione um idioma antes de continuar para a pesquisa.</span>
       </p>
       <div class="lang-actions">
-        <button type="button" data-lang="en">English</button>
-        <button type="button" data-lang="es">Espanol</button>
-        <button type="button" data-lang="pt">Portugues</button>
+        <button type="button" id="langEnBtn" data-lang="en" onclick="selectSurveyLanguage('en')">English</button>
+        <button type="button" id="langEsBtn" data-lang="es" onclick="selectSurveyLanguage('es')">Espanol</button>
+        <button type="button" id="langPtBtn" data-lang="pt" onclick="selectSurveyLanguage('pt')">Portugues</button>
       </div>
     </div>
   </section>
@@ -1201,24 +1201,27 @@
       globalThis.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    document.querySelectorAll("[data-lang]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const lang = button.dataset.lang;
-        if (lang === "en") {
-          showEnglishSurvey();
-          return;
-        }
+    const selectSurveyLanguage = (lang) => {
+      if (lang === "en") {
+        showEnglishSurvey();
+        return;
+      }
 
-        if (lang === "es") {
-          globalThis.location.href = "/artistic-nude-survey-es";
-          return;
-        }
+      if (lang === "es") {
+        globalThis.location.href = "/artistic-nude-survey-es";
+        return;
+      }
 
-        if (lang === "pt") {
-          globalThis.location.href = "/artistic-nude-survey-pt";
-        }
-      });
-    });
+      if (lang === "pt") {
+        globalThis.location.href = "/artistic-nude-survey-pt";
+      }
+    };
+
+    globalThis.selectSurveyLanguage = selectSurveyLanguage;
+
+    document.getElementById("langEnBtn")?.addEventListener("click", () => selectSurveyLanguage("en"));
+    document.getElementById("langEsBtn")?.addEventListener("click", () => selectSurveyLanguage("es"));
+    document.getElementById("langPtBtn")?.addEventListener("click", () => selectSurveyLanguage("pt"));
   </script>
 </body>
 </html>
