@@ -473,6 +473,12 @@
         <div class="kpi"><p class="kpi-label">Pending</p><p class="kpi-value" id="kpiPending">0</p></div>
         <div class="kpi"><p class="kpi-label">Approved</p><p class="kpi-value" id="kpiApproved">0</p></div>
         <div class="kpi"><p class="kpi-label">Denied</p><p class="kpi-value" id="kpiDenied">0</p></div>
+        <div class="kpi"><p class="kpi-label">Page Visits</p><p class="kpi-value" id="kpiVisits">0</p></div>
+        <div class="kpi"><p class="kpi-label">Language Clicks</p><p class="kpi-value" id="kpiLangClicks">0</p></div>
+        <div class="kpi"><p class="kpi-label">Application Starts</p><p class="kpi-value" id="kpiStarts">0</p></div>
+        <div class="kpi"><p class="kpi-label">Save Errors</p><p class="kpi-value" id="kpiSaveErrors">0</p></div>
+        <div class="kpi"><p class="kpi-label">Completion Rate</p><p class="kpi-value" id="kpiCompletionRate">0%</p></div>
+        <div class="kpi"><p class="kpi-label">Top Language</p><p class="kpi-value" id="kpiTopLanguage">-</p></div>
       </div>
     </section>
 
@@ -832,6 +838,13 @@
     };
 
     const renderDashboard = (data) => {
+      const tracking = data.tracking || {};
+      const languageSelections = tracking.languageSelections || {};
+      const topLanguage = topKey(languageSelections);
+      const starts = Number(tracking.applicationStarts || 0);
+      const successes = Number(tracking.submitSuccess || 0);
+      const completionRate = starts > 0 ? Math.round((successes / starts) * 100) : 0;
+
       document.getElementById("kpiTotal").textContent = String(data.totalApplications || 0);
       document.getElementById("kpiSource").textContent = topKey(data.bySource);
       document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
@@ -839,6 +852,12 @@
       document.getElementById("kpiPending").textContent = String((data.byStatus && data.byStatus.pending) || 0);
       document.getElementById("kpiApproved").textContent = String((data.byStatus && data.byStatus.approved) || 0);
       document.getElementById("kpiDenied").textContent = String((data.byStatus && data.byStatus.denied) || 0);
+      document.getElementById("kpiVisits").textContent = String(tracking.totalVisits || 0);
+      document.getElementById("kpiLangClicks").textContent = String(tracking.languageClicks || 0);
+      document.getElementById("kpiStarts").textContent = String(starts);
+      document.getElementById("kpiSaveErrors").textContent = String(tracking.submitErrors || 0);
+      document.getElementById("kpiCompletionRate").textContent = `${completionRate}%`;
+      document.getElementById("kpiTopLanguage").textContent = topLanguage;
 
       destroyCharts();
 

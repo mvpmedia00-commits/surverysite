@@ -196,6 +196,74 @@
 
     form { margin-top: 18px; display: grid; gap: 16px; }
 
+    .about-section {
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86));
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 3.2vw, 30px);
+      display: grid;
+      gap: 14px;
+    }
+
+    .about-section h2 {
+      margin: 0;
+      color: var(--accent);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
+      line-height: 1.06;
+    }
+
+    .about-section p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 900px;
+    }
+
+    .about-grid {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .about-card {
+      border: 1px solid rgba(61, 53, 43, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      padding: 14px 14px 12px;
+      box-shadow: 0 10px 24px rgba(30, 25, 15, 0.08);
+    }
+
+    .about-card h3 {
+      margin: 0 0 6px;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    .about-card p {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .about-notice {
+      border-left: 4px solid var(--accent);
+      background: #d9efe9;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #123129;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .about-section .about-start {
+      justify-self: start;
+      margin-top: 2px;
+      min-width: 230px;
+    }
+
     .progress-panel {
       border: 1px solid rgba(12, 117, 104, 0.18);
       border-left: 5px solid var(--accent);
@@ -456,6 +524,7 @@
       .two { grid-template-columns: 1fr; }
       .page { margin-top: 14px; }
       .lang-actions { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
       .hero {
         grid-template-columns: 1fr;
         min-height: auto;
@@ -513,6 +582,32 @@
         <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" id="heroPhoto" alt="MVP Media hero">
       </div>
     </header>
+
+    <section class="about-section" id="aboutMvpGeneral">
+      <h2>About MVP Media Photography</h2>
+      <p>MVP Media Photography is a creative photography brand focused on portrait, fashion, glamour, editorial, lifestyle, branding, social media content, and creative visual storytelling.</p>
+      <p>We work with new and experienced models, creators, artists, entrepreneurs, and everyday people who want strong professional images for portfolios, personal branding, social media, creative projects, and long-term collaboration.</p>
+      <p>Our goal is to create images that feel confident, expressive, polished, and memorable while keeping the process clear, respectful, and professional from start to finish.</p>
+      <div class="about-grid">
+        <article class="about-card">
+          <h3>Creative Direction</h3>
+          <p>MVP Media creates visual concepts with a balance of style, story, and personality. Before each shoot, we discuss the concept, wardrobe, location, comfort level, image goals, and final usage.</p>
+        </article>
+        <article class="about-card">
+          <h3>Professional Process</h3>
+          <p>Every project is handled with planning, communication, and expectation-setting. This may include mood boards, shot ideas, wardrobe guidance, scheduling details, compensation terms, image delivery expectations, and written agreements.</p>
+        </article>
+        <article class="about-card">
+          <h3>Talent Opportunities</h3>
+          <p>MVP Media works with both beginner and experienced models. Opportunities may include portfolio-building shoots, paid projects, TFP collaborations, fashion concepts, editorial looks, lifestyle shoots, commercial content, and creative portraits.</p>
+        </article>
+        <article class="about-card">
+          <h3>Respect and Boundaries</h3>
+          <p>We believe every creative project should be built on respect, communication, and consent. Models are encouraged to share comfort levels, preferences, and boundaries before a shoot is scheduled.</p>
+        </article>
+      </div>
+      <button type="button" class="about-start" id="startGeneralApplicationBtn">Start General Application</button>
+    </section>
 
     <form id="applicationForm" novalidate>
       <div class="progress-panel" aria-live="polite">
@@ -757,6 +852,7 @@
     const autosaveStatus = document.getElementById("autosaveStatus");
     const restoreDraftBtn = document.getElementById("restoreDraftBtn");
     const clearDraftBtn = document.getElementById("clearDraftBtn");
+    const startGeneralApplicationBtn = document.getElementById("startGeneralApplicationBtn");
     const fieldsets = Array.from(form.querySelectorAll("fieldset"));
     const autosaveKey = "mvp-main-application-draft";
     const maxPhotoSize = 8 * 1024 * 1024;
@@ -780,6 +876,18 @@
     };
     let currentStep = 0;
     let selectedLanguage = "en";
+    const trackingSessionKey = "mvp-main-tracking-session-id";
+    const trackingStartedKey = "mvp-main-tracking-started";
+    const trackingSessionId = (() => {
+      const existing = localStorage.getItem(trackingSessionKey);
+      if (existing) {
+        return existing;
+      }
+      const created = `main-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+      localStorage.setItem(trackingSessionKey, created);
+      return created;
+    })();
+    let hasTrackedApplicationStart = localStorage.getItem(trackingStartedKey) === "1";
 
     const i18n = {
       en: {
@@ -972,6 +1080,21 @@
       }
     };
 
+    const trackEvent = (eventType, extras = {}) => {
+      fetch("/api/track-application-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_type: eventType,
+          form_type: "main",
+          session_id: trackingSessionId,
+          language: selectedLanguage,
+          source_page: String(globalThis.location && globalThis.location.pathname ? globalThis.location.pathname : ""),
+          ...extras
+        })
+      }).catch(() => {});
+    };
+
     const applyLanguage = (lang) => {
       const t = i18n[lang] || i18n.en;
       selectedLanguage = lang;
@@ -1129,6 +1252,7 @@
     document.querySelectorAll("button[data-lang]").forEach((button) => {
       button.addEventListener("click", () => {
         const lang = button.dataset.lang || "en";
+        trackEvent("language_selected", { language: lang });
         applyLanguage(lang);
         langGate.classList.add("hidden");
         surveyRoot.classList.remove("hidden");
@@ -1270,6 +1394,15 @@
 
     clearDraftBtn.addEventListener("click", clearDraft);
 
+    if (startGeneralApplicationBtn) {
+      startGeneralApplicationBtn.addEventListener("click", () => {
+        const firstFieldset = form.querySelector("fieldset");
+        if (firstFieldset) {
+          firstFieldset.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
+
     prevStepBtn.addEventListener("click", () => {
       currentStep = Math.max(currentStep - 1, 0);
       updateStep();
@@ -1306,6 +1439,23 @@
     const getValue = (id) => {
       const element = document.getElementById(id);
       return element ? element.value.trim() : "";
+    };
+
+    const trackApplicationStartedOnce = () => {
+      if (hasTrackedApplicationStart) {
+        return;
+      }
+      hasTrackedApplicationStart = true;
+      localStorage.setItem(trackingStartedKey, "1");
+      trackEvent("application_started", {
+        draft_data: {
+          preferred_name: getValue("preferredName"),
+          email: getValue("email"),
+          city: getValue("city"),
+          country: getValue("country"),
+          instagram: getValue("instagram")
+        }
+      });
     };
 
     const selectedRadioValue = (name) => {
@@ -1505,6 +1655,7 @@
     form.addEventListener("submit", async (event) => {
       clearErrors();
       updatePhotoRequirement();
+      trackApplicationStartedOnce();
       let hasErrors = !form.checkValidity();
 
       const ageEl = document.getElementById("age");
@@ -1543,6 +1694,7 @@
       event.preventDefault();
       submitBtn.disabled = true;
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
+      trackEvent("submit_attempt");
 
       try {
         const { payload, uploadWarnings } = await buildSubmissionPayloadWithUploads();
@@ -1555,10 +1707,11 @@
           body: JSON.stringify(payload)
         });
 
+        const result = await response.json().catch(() => ({}));
+
         if (!response.ok) {
           let serverMessage = "";
           try {
-            const result = await response.json();
             const errorText = result && result.error ? result.error : "";
             const detailText = result && result.detail ? result.detail : "";
             const combined = [errorText, detailText].filter(Boolean).join(" - ");
@@ -1569,6 +1722,17 @@
             const fallback = [`HTTP ${response.status}`, rawText].filter(Boolean).join(" - ");
             serverMessage = fallback ? ` (${fallback})` : "";
           }
+
+          trackEvent("submit_error", {
+            error_message: result && result.error ? result.error : `HTTP ${response.status}`,
+            draft_data: {
+              preferred_name: payload.preferred_name,
+              email: payload.email,
+              city: payload.city,
+              country: payload.country,
+              instagram: payload.instagram
+            }
+          });
 
           submitBtn.disabled = false;
           submitStatus.textContent = selectedLanguage === "es"
@@ -1584,8 +1748,13 @@
             : " Note: Photo uploads failed; only filenames were saved.";
           successText.textContent = `${successText.textContent}${warning}`;
         }
+
+        trackEvent("submit_success", { application_id: result && result.id ? result.id : null });
       } catch (error) {
         console.error(error);
+        trackEvent("submit_error", {
+          error_message: error && error.message ? error.message : "Unknown error"
+        });
         submitBtn.disabled = false;
         submitStatus.textContent = selectedLanguage === "es"
           ? `No se pudo enviar. Intenta nuevamente. (${error && error.message ? error.message : "Error desconocido"})`
@@ -1613,7 +1782,10 @@
     });
 
     document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+    form.addEventListener("input", trackApplicationStartedOnce);
+    form.addEventListener("change", trackApplicationStartedOnce);
 
+    trackEvent("page_visit", { language: document.documentElement.lang || "en" });
     restoreDraft();
     updateStep();
     setTravelFields();

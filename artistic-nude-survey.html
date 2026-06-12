@@ -91,6 +91,74 @@
       gap: 16px;
     }
 
+    .about-section {
+      margin-top: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(22, 25, 31, 0.88), rgba(14, 16, 21, 0.72));
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 3.2vw, 30px);
+      display: grid;
+      gap: 12px;
+    }
+
+    .about-section h2 {
+      margin: 0;
+      color: var(--accent);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
+      line-height: 1.06;
+    }
+
+    .about-section p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+      max-width: 920px;
+    }
+
+    .about-grid {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .about-card {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      background: rgba(13, 15, 19, 0.58);
+      padding: 14px 14px 12px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+    }
+
+    .about-card h3 {
+      margin: 0 0 6px;
+      color: #f3e0b0;
+      font-size: 1rem;
+    }
+
+    .about-card p {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .about-notice {
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      background: #3b2d12;
+      color: #fff6e2;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .about-section .about-start {
+      justify-self: start;
+      margin-top: 4px;
+      min-width: 260px;
+    }
+
     fieldset {
       margin: 0;
       border: 0;
@@ -368,6 +436,7 @@
 
     @media (max-width: 860px) {
       .two { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
       .hero {
         min-height: 520px;
         padding: 28px;
@@ -405,6 +474,32 @@
         and release terms are discussed before any shoot is scheduled.
       </p>
     </header>
+
+    <section class="about-section" id="aboutMvpAdultCreative">
+      <h2>About MVP Media Adult Creative Photography</h2>
+      <p>MVP Media Photography also produces adult creative photography projects for consenting adults 18 and older. These projects may include nude photography, erotic nude concepts, boudoir, glamour, nude bodypaint, sensual editorial work, subscription-platform content, and other adult-content collaborations discussed in advance.</p>
+      <p>This application is designed for adult models, creators, and performers who are interested in professional nude, erotic, boudoir, bodypaint, or paid-content opportunities with clear communication, privacy awareness, compensation discussion, and respect for boundaries.</p>
+      <div class="about-grid">
+        <article class="about-card">
+          <h3>Adult Creative Direction</h3>
+          <p>MVP Media develops adult creative concepts with a focus on visual style, confidence, body expression, and professional production. Before any shoot is scheduled, we discuss the concept, nudity level, posing style, wardrobe or bodypaint, image/video usage, privacy preferences, compensation, and boundaries.</p>
+        </article>
+        <article class="about-card">
+          <h3>Professional Adult Content Process</h3>
+          <p>Adult-content projects require clear communication and written agreement. This may include a model release, adult-content usage agreement, platform-use agreement, compensation terms, privacy rules, tagging preferences, face-visible or face-hidden preferences, and content delivery expectations.</p>
+        </article>
+        <article class="about-card">
+          <h3>Content Opportunities</h3>
+          <p>MVP Media may cast models and creators for boudoir, lingerie, implied nude, artistic nude, erotic nude, nude bodypaint, glamour nude, sensual portraiture, adult photo sets, adult video content, subscription-platform content, private paid-gallery content, and editorial adult concepts.</p>
+        </article>
+        <article class="about-card">
+          <h3>Consent, Privacy, and Boundaries</h3>
+          <p>MVP Media respects personal boundaries, privacy preferences, and project consent. Models are encouraged to clearly state what they are open to, what they are unsure about, and what is completely off-limits.</p>
+        </article>
+      </div>
+      <div class="about-notice">All applicants for adult creative projects must be 18 or older. Age verification may be required before any adult-content shoot. Submitting an application does not guarantee selection, and all content details, usage rights, compensation, and boundaries are discussed before scheduling.</div>
+      <button type="button" class="about-start" id="startAdultCreativeApplicationBtn">Start Adult Creative Application</button>
+    </section>
 
     <form id="applicationForm" novalidate>
       <div class="progress-panel" aria-live="polite">
@@ -626,9 +721,22 @@
     const autosaveStatus = document.getElementById("autosaveStatus");
     const restoreDraftBtn = document.getElementById("restoreDraftBtn");
     const clearDraftBtn = document.getElementById("clearDraftBtn");
+    const startAdultCreativeApplicationBtn = document.getElementById("startAdultCreativeApplicationBtn");
     const fieldsets = Array.from(form.querySelectorAll("fieldset"));
     const autosaveKey = "mvp-artistic-nude-application-draft";
     const maxPhotoSize = 8 * 1024 * 1024;
+    const trackingSessionKey = "mvp-artistic-tracking-session-id";
+    const trackingStartedKey = "mvp-artistic-tracking-started";
+    const trackingSessionId = (() => {
+      const existing = localStorage.getItem(trackingSessionKey);
+      if (existing) {
+        return existing;
+      }
+      const created = `artistic-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+      localStorage.setItem(trackingSessionKey, created);
+      return created;
+    })();
+    let hasTrackedApplicationStart = localStorage.getItem(trackingStartedKey) === "1";
     const stepNames = [
       "Basic Information",
       "Profile Snapshot",
@@ -641,6 +749,21 @@
 
     const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
     const CLOUDINARY_UPLOAD_PRESET = "jobstats";
+
+    const trackEvent = (eventType, extras = {}) => {
+      fetch("/api/track-application-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_type: eventType,
+          form_type: "artistic",
+          session_id: trackingSessionId,
+          language: "en",
+          source_page: String(globalThis.location && globalThis.location.pathname ? globalThis.location.pathname : ""),
+          ...extras
+        })
+      }).catch(() => {});
+    };
 
     const setError = (id, msg) => {
       document.getElementById(id).textContent = msg;
@@ -772,6 +895,15 @@
 
     clearDraftBtn.addEventListener("click", clearDraft);
 
+    if (startAdultCreativeApplicationBtn) {
+      startAdultCreativeApplicationBtn.addEventListener("click", () => {
+        const firstFieldset = form.querySelector("fieldset");
+        if (firstFieldset) {
+          firstFieldset.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
+
     prevStepBtn.addEventListener("click", () => {
       currentStep = Math.max(currentStep - 1, 0);
       updateStep();
@@ -798,6 +930,24 @@
     const getValue = (id) => {
       const element = document.getElementById(id);
       return element ? element.value.trim() : "";
+    };
+
+    const trackApplicationStartedOnce = () => {
+      if (hasTrackedApplicationStart) {
+        return;
+      }
+      hasTrackedApplicationStart = true;
+      localStorage.setItem(trackingStartedKey, "1");
+      trackEvent("application_started", {
+        draft_data: {
+          preferred_name: getValue("preferredName"),
+          email: getValue("email"),
+          phone: getValue("phone"),
+          city: getValue("city"),
+          country: getValue("country"),
+          instagram: getValue("instagram")
+        }
+      });
     };
 
     const selectedRadioValue = (name) => {
@@ -990,6 +1140,8 @@
       event.preventDefault();
       clearErrors();
       updatePhotoRequirement();
+      trackApplicationStartedOnce();
+      trackEvent("submit_attempt");
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
@@ -1044,14 +1196,30 @@
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
+          trackEvent("submit_error", {
+            error_message: data.error || "Submission failed",
+            draft_data: {
+              preferred_name: payload.preferred_name,
+              email: payload.email,
+              phone: payload.phone,
+              city: payload.city,
+              country: payload.country,
+              instagram: payload.instagram
+            }
+          });
           throw new Error(data.error || "Submission failed");
         }
+
+        trackEvent("submit_success", { application_id: data.id || null });
 
         form.style.display = "none";
         document.getElementById("successMessage").style.display = "block";
         localStorage.removeItem(autosaveKey);
         globalThis.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
+        trackEvent("submit_error", {
+          error_message: error && error.message ? error.message : "Unknown error"
+        });
         submitStatus.textContent = `Could not submit. Please try again. (${error?.message || "Unknown error"})`;
       } finally {
         submitBtn.disabled = false;
@@ -1067,7 +1235,10 @@
     });
 
     document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+    form.addEventListener("input", trackApplicationStartedOnce);
+    form.addEventListener("change", trackApplicationStartedOnce);
 
+    trackEvent("page_visit", { language: "en" });
     restoreDraft();
     updateStep();
     setTravelFields();

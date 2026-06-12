@@ -98,3 +98,33 @@ alter table public.model_applications
 create index if not exists idx_model_applications_created_at on public.model_applications (created_at);
 create index if not exists idx_model_applications_source on public.model_applications (hear_about);
 create index if not exists idx_model_applications_review_status on public.model_applications (review_status);
+
+create table if not exists public.application_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  session_id text not null,
+  form_type text not null,
+  event_type text not null,
+  language text,
+  source_page text,
+  application_id uuid,
+  error_message text,
+  draft_data jsonb not null default '{}'::jsonb,
+  metadata jsonb not null default '{}'::jsonb
+);
+
+alter table public.application_events
+  add column if not exists created_at timestamptz not null default now(),
+  add column if not exists session_id text not null default '',
+  add column if not exists form_type text not null default '',
+  add column if not exists event_type text not null default '',
+  add column if not exists language text,
+  add column if not exists source_page text,
+  add column if not exists application_id uuid,
+  add column if not exists error_message text,
+  add column if not exists draft_data jsonb not null default '{}'::jsonb,
+  add column if not exists metadata jsonb not null default '{}'::jsonb;
+
+create index if not exists idx_application_events_created_at on public.application_events (created_at);
+create index if not exists idx_application_events_form_event on public.application_events (form_type, event_type);
+create index if not exists idx_application_events_session on public.application_events (session_id);

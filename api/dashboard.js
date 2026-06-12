@@ -52,6 +52,35 @@ const monthlyTrend = (rows) => {
     .map(([month, count]) => ({ month, count }));
 };
 
+const summarizeEvents = (rows) => {
+  const summary = {
+    totalVisits: 0,
+    languageClicks: 0,
+    applicationStarts: 0,
+    submitAttempts: 0,
+    submitSuccess: 0,
+    submitErrors: 0,
+    languageSelections: {}
+  };
+
+  for (const row of rows) {
+    const eventType = String(row.event_type || "");
+    const language = String(row.language || "").trim() || "unknown";
+
+    if (eventType === "page_visit") summary.totalVisits += 1;
+    if (eventType === "language_selected") {
+      summary.languageClicks += 1;
+      summary.languageSelections[language] = (summary.languageSelections[language] || 0) + 1;
+    }
+    if (eventType === "application_started") summary.applicationStarts += 1;
+    if (eventType === "submit_attempt") summary.submitAttempts += 1;
+    if (eventType === "submit_success") summary.submitSuccess += 1;
+    if (eventType === "submit_error") summary.submitErrors += 1;
+  }
+
+  return summary;
+};
+
 const toPhotoUrl = (supabaseUrl, value) => {
   if (!value) return null;
   if (/^https?:\/\//i.test(value)) return value;
@@ -123,6 +152,18 @@ export default async function handler(req, res) {
     }
 
     const rows = await response.json();
+
+    const eventsResponse = await fetch(`${cfg.supabaseUrl}/rest/v1/application_events?select=event_type,language&form_type=eq.main&order=created_at.desc`, {
+      headers: {
+        apikey: cfg.supabaseKey,
+        Authorization: `Bearer ${cfg.supabaseKey}`,
+        "Accept-Profile": "public",
+        "Range-Unit": "items",
+        Range: "0-999999"
+      }
+    });
+
+    const eventRows = eventsResponse.ok ? await eventsResponse.json() : [];
     const analyticsRows = rows.filter((row) => (row.review_status || "pending") !== "denied");
     const candidates = rows.map((row) => ({
       ...row,
@@ -154,13 +195,14 @@ export default async function handler(req, res) {
       byStatus: countBy(analyticsRows, "review_status"),
       byInterest: countArrayField(analyticsRows, "interests"),
       trendByMonth: monthlyTrend(analyticsRows),
+      tracking: summarizeEvents(eventRows),
       candidates,
       recentPhotos
     });
   } catch (error) {
     return respond(res, 500, {
       error: "Unexpected server error",
-      detail: String(error && error.message ? error.message : error)
+      detail: String(error?.message || error)
     });
   }
 }

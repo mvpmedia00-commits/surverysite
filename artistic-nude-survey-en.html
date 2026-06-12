@@ -629,6 +629,18 @@
     const fieldsets = Array.from(form.querySelectorAll("fieldset"));
     const autosaveKey = "mvp-artistic-nude-application-draft-en";
     const maxPhotoSize = 8 * 1024 * 1024;
+    const trackingSessionKey = "mvp-artistic-tracking-session-id";
+    const trackingStartedKey = "mvp-artistic-tracking-started";
+    const trackingSessionId = (() => {
+      const existing = localStorage.getItem(trackingSessionKey);
+      if (existing) {
+        return existing;
+      }
+      const created = `artistic-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+      localStorage.setItem(trackingSessionKey, created);
+      return created;
+    })();
+    let hasTrackedApplicationStart = localStorage.getItem(trackingStartedKey) === "1";
     const stepNames = [
       "Basic Information",
       "Profile Snapshot",
@@ -641,6 +653,21 @@
 
     const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
     const CLOUDINARY_UPLOAD_PRESET = "jobstats";
+
+    const trackEvent = (eventType, extras = {}) => {
+      fetch("/api/track-application-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_type: eventType,
+          form_type: "artistic",
+          session_id: trackingSessionId,
+          language: "en",
+          source_page: String(globalThis.location && globalThis.location.pathname ? globalThis.location.pathname : ""),
+          ...extras
+        })
+      }).catch(() => {});
+    };
 
     const setError = (id, msg) => {
       document.getElementById(id).textContent = msg;
@@ -798,6 +825,24 @@
     const getValue = (id) => {
       const element = document.getElementById(id);
       return element ? element.value.trim() : "";
+    };
+
+    const trackApplicationStartedOnce = () => {
+      if (hasTrackedApplicationStart) {
+        return;
+      }
+      hasTrackedApplicationStart = true;
+      localStorage.setItem(trackingStartedKey, "1");
+      trackEvent("application_started", {
+        draft_data: {
+          preferred_name: getValue("preferredName"),
+          email: getValue("email"),
+          phone: getValue("phone"),
+          city: getValue("city"),
+          country: getValue("country"),
+          instagram: getValue("instagram")
+        }
+      });
     };
 
     const selectedRadioValue = (name) => {
@@ -990,6 +1035,8 @@
       event.preventDefault();
       clearErrors();
       updatePhotoRequirement();
+      trackApplicationStartedOnce();
+      trackEvent("submit_attempt");
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
@@ -1044,14 +1091,30 @@
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
+          trackEvent("submit_error", {
+            error_message: data.error || "Submission failed",
+            draft_data: {
+              preferred_name: payload.preferred_name,
+              email: payload.email,
+              phone: payload.phone,
+              city: payload.city,
+              country: payload.country,
+              instagram: payload.instagram
+            }
+          });
           throw new Error(data.error || "Submission failed");
         }
+
+        trackEvent("submit_success", { application_id: data.id || null });
 
         form.style.display = "none";
         document.getElementById("successMessage").style.display = "block";
         localStorage.removeItem(autosaveKey);
         globalThis.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
+        trackEvent("submit_error", {
+          error_message: error && error.message ? error.message : "Unknown error"
+        });
         submitStatus.textContent = `Could not submit. Please try again. (${error?.message || "Unknown error"})`;
       } finally {
         submitBtn.disabled = false;
@@ -1067,7 +1130,10 @@
     });
 
     document.getElementById("instagram").addEventListener("input", updatePhotoRequirement);
+    form.addEventListener("input", trackApplicationStartedOnce);
+    form.addEventListener("change", trackApplicationStartedOnce);
 
+    trackEvent("page_visit", { language: "en" });
     restoreDraft();
     updateStep();
     setTravelFields();
