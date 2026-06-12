@@ -675,6 +675,13 @@
             <option>Open to discussion</option>
           </select>
         </div>
+        <div class="field">
+          <span class="sub-label">Open to unpaid shoots in exchange for edited pictures?</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No</label>
+          </div>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -1069,7 +1076,7 @@
         travel_distance: travelAnswer === "No" ? "Not applicable" : "Not specified",
         comp_interest: "Provided via expected comp",
         compensation_types: [],
-        unpaid_tfp_willing: false,
+        unpaid_tfp_willing: selectedRadioValue("unpaidTfpWilling") === "Yes",
         expected_comp: getValue("expectedComp"),
         why_work: getValue("whyWork"),
         good_fit: getValue("anythingElse"),
