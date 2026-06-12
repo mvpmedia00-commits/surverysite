@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
-    const required = ["preferred_name", "age", "email", "city", "country", "hear_about", "expected_comp", "why_work"];
+    const required = ["preferred_name", "age", "city", "country", "hear_about", "expected_comp", "why_work"];
 
     for (const field of required) {
       if (body[field] === undefined || body[field] === null || body[field] === "") {
@@ -55,10 +55,18 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "Applicant must be at least 18 years old" });
     }
 
-    const email = String(body.email || "").trim().toLowerCase();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return respond(res, 400, { error: "A valid email address is required" });
+    const emailInput = String(body.email || "").trim().toLowerCase();
+    const phone = String(body.phone || "").trim();
+    const instagram = String(body.instagram || "").trim();
+    if (!emailInput && !phone && !instagram) {
+      return respond(res, 400, { error: "At least one contact method is required: email, phone, or instagram" });
     }
+
+    if (emailInput && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+      return respond(res, 400, { error: "If provided, email must be valid" });
+    }
+
+    const email = emailInput || `no-email+${Date.now()}@placeholder.local`;
 
     const row = {
       full_name: body.full_name || body.preferred_name,
@@ -66,11 +74,11 @@ export default async function handler(req, res) {
       pronouns: body.pronouns || "",
       age,
       email,
-      phone: body.phone || "",
+      phone,
       city: body.city,
       state_province: body.state_province || "",
       country: body.country,
-      instagram: body.instagram || "",
+      instagram,
       tiktok: body.tiktok || "",
       hear_about: body.hear_about,
       previous_modeling_experience: body.previous_modeling_experience || "",

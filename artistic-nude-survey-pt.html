@@ -429,11 +429,11 @@
         <div class="grid two">
           <div class="field"><label for="preferredName">Nome Preferido *</label><input id="preferredName" required></div>
           <div class="field"><label for="age">Idade (18+) *</label><input id="age" type="number" min="18" required></div>
-          <div class="field"><label for="email">Email *</label><input id="email" type="email" required></div>
-          <div class="field"><label for="phone">Telefone / WhatsApp *</label><input id="phone" required></div>
+          <div class="field"><label for="email">Email</label><input id="email" type="email"></div>
+          <div class="field"><label for="phone">Telefone / WhatsApp</label><input id="phone"></div>
           <div class="field"><label for="city">Cidade *</label><input id="city" required></div>
           <div class="field"><label for="country">Pais *</label><input id="country" required></div>
-          <div class="field"><label for="instagram">Instagram / Portfolio / Link De Plataforma *</label><input id="instagram" placeholder="@handle or https://..." required></div>
+          <div class="field"><label for="instagram">Instagram / Portfolio / Link De Plataforma</label><input id="instagram" placeholder="@handle or https://..."></div>
           <div class="field">
             <label for="hearAbout">Como voce conheceu a MVP Media? *</label>
             <select id="hearAbout" required>
@@ -993,8 +993,14 @@
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
+      const hasPrimaryContact = [getValue("instagram"), getValue("email"), getValue("phone")].some((value) => value.length > 0);
 
       if (!Number.isFinite(age) || age < 18) {
+        hasErrors = true;
+      }
+
+      if (!hasPrimaryContact) {
+        submitStatus.textContent = "Informe pelo menos um meio de contato: Instagram, email ou telefone/WhatsApp.";
         hasErrors = true;
       }
 
