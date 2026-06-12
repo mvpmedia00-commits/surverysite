@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
-    const required = ["preferred_name", "age", "email", "city", "country", "hear_about", "avoid_concepts", "expected_comp", "why_work"];
+    const required = ["preferred_name", "age", "email", "city", "country", "hear_about", "expected_comp", "why_work"];
 
     for (const field of required) {
       if (body[field] === undefined || body[field] === null || body[field] === "") {
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
       interests: Array.isArray(body.interests) ? body.interests : [],
       nudity_comfort_levels: Array.isArray(body.nudity_comfort_levels) ? body.nudity_comfort_levels : [],
       comfort_level: body.comfort_level || "Not specified",
-      avoid_concepts: body.avoid_concepts,
+      avoid_concepts: body.avoid_concepts || "",
       hard_limits: body.hard_limits || body.avoid_concepts || "",
       special_conditions: body.special_conditions || "",
       availability: Array.isArray(body.availability) ? body.availability : [],

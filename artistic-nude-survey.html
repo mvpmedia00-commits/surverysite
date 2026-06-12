@@ -526,19 +526,6 @@
           </div>
           <div class="error" id="nudityComfortError"></div>
         </div>
-        <div class="field">
-          <label for="avoidConcepts">What is completely off-limits for you? *</label>
-          <textarea id="avoidConcepts" required placeholder="List anything you do not want to do"></textarea>
-        </div>
-        <div class="field">
-          <span class="sub-label">Do you want your face visible in images/videos?</span>
-          <div class="choices inline">
-            <label class="choice"><input type="radio" name="faceVisible" value="Yes">Yes</label>
-            <label class="choice"><input type="radio" name="faceVisible" value="No">No</label>
-            <label class="choice"><input type="radio" name="faceVisible" value="Maybe">Maybe</label>
-            <label class="choice"><input type="radio" name="faceVisible" value="Depends on usage">Depends on usage</label>
-          </div>
-        </div>
       </fieldset>
 
       <fieldset>
@@ -957,9 +944,9 @@
         experience: checkedValues("input[name='experienceTypes']").join(", ") || "Not specified",
         interests: checkedValues("input[name='interests']"),
         nudity_comfort_levels: checkedValues("input[name='nudityComfortLevels']"),
-        comfort_level: selectedRadioValue("faceVisible") ? `Face: ${selectedRadioValue("faceVisible")}` : "Not specified",
-        avoid_concepts: getValue("avoidConcepts"),
-        hard_limits: getValue("avoidConcepts"),
+        comfort_level: "Not specified",
+        avoid_concepts: "",
+        hard_limits: "",
         special_conditions: selectedRadioValue("paidPlatformOpen") ? `Paid platform: ${selectedRadioValue("paidPlatformOpen")}` : "Not specified",
         availability: checkedValues("input[name='availability']"),
         frequency: "Not specified",
