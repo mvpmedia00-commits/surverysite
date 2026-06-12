@@ -9,17 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #101115;
-      --panel: rgba(24, 25, 30, 0.82);
+      --bg: #0f1116;
+      --panel: rgba(23, 27, 34, 0.86);
       --line: rgba(255, 255, 255, 0.14);
       --text: #f4f1eb;
       --muted: #c8c0b3;
       --accent: #d8b86f;
-      --accent-2: #8ad4a2;
+      --accent-2: #84d2aa;
+      --accent-3: #85a9ff;
       --ok: #8ad4a2;
       --error: #ff9c9c;
       --radius: 20px;
-      --shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
     }
 
     * { box-sizing: border-box; }
@@ -29,17 +30,24 @@
       color: var(--text);
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       background:
-        linear-gradient(90deg, rgba(216, 184, 111, 0.045) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(138, 212, 162, 0.035) 1px, transparent 1px),
-        radial-gradient(circle at 84% 9%, rgba(216, 184, 111, 0.22), transparent 31%),
-        radial-gradient(circle at 12% 22%, rgba(138, 212, 162, 0.09), transparent 27%),
-        linear-gradient(180deg, #17191f 0%, var(--bg) 100%);
-      background-size: 46px 46px, 46px 46px, auto, auto, auto;
+        linear-gradient(90deg, rgba(216, 184, 111, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(132, 210, 170, 0.028) 1px, transparent 1px),
+        radial-gradient(circle at 84% 9%, rgba(216, 184, 111, 0.22), transparent 33%),
+        radial-gradient(circle at 14% 24%, rgba(132, 210, 170, 0.1), transparent 28%),
+        radial-gradient(circle at 45% 110%, rgba(133, 169, 255, 0.12), transparent 36%),
+        linear-gradient(180deg, #161a22 0%, var(--bg) 100%);
+      background-size: 52px 52px, 52px 52px, auto, auto, auto, auto;
     }
 
     .page {
       width: min(1040px, 94vw);
-      margin: 28px auto 48px;
+      margin: 24px auto 52px;
+      animation: pageIn 420ms ease-out;
+    }
+
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hidden { display: none; }
@@ -60,13 +68,13 @@
 
     .lang-card {
       width: min(560px, 94vw);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 24px;
-      background: rgba(255, 253, 249, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 26px;
+      background: linear-gradient(145deg, rgba(255, 253, 249, 0.93), rgba(244, 236, 224, 0.9));
       box-shadow: var(--shadow);
-      padding: 30px 24px;
+      padding: 32px 26px;
       text-align: center;
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
       color: #181714;
     }
 
@@ -81,13 +89,32 @@
       margin: 10px 0 0;
       color: #625a4e;
       line-height: 1.5;
+      font-size: 0.98rem;
     }
 
     .lang-actions {
-      margin-top: 16px;
+      margin-top: 18px;
       display: grid;
       gap: 10px;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lang-actions button {
+      min-width: 0;
+      border-radius: 14px;
+      padding: 12px 10px;
+      border: 1px solid rgba(24, 25, 30, 0.2);
+      color: #14161a;
+      background: linear-gradient(135deg, #f4e6c2, #d7b779);
+      box-shadow: 0 10px 22px rgba(28, 25, 19, 0.18);
+    }
+
+    .lang-actions button:nth-child(2) {
+      background: linear-gradient(135deg, #f0db9d, #d9975b);
+    }
+
+    .lang-actions button:nth-child(3) {
+      background: linear-gradient(135deg, #c7dbff, #92a7e1);
     }
 
     .hero {
@@ -98,11 +125,19 @@
       background:
         linear-gradient(90deg, rgba(9, 10, 12, 0.78), rgba(9, 10, 12, 0.36)),
         url("https://res.cloudinary.com/dale5sd8p/image/upload/v1781224106/1cff99f8-5c1e-47c1-8f18-057c48b4b2c0_rwqfys.jpg") center/cover;
-      min-height: min(680px, calc(100vh - 56px));
+      min-height: min(700px, calc(100vh - 54px));
       display: grid;
       align-content: end;
-      padding: clamp(24px, 5vw, 56px);
+      padding: clamp(26px, 5vw, 58px);
       position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(4, 5, 7, 0.18), rgba(4, 5, 7, 0.58));
+      pointer-events: none;
     }
 
     .hero::before {
@@ -114,6 +149,11 @@
       pointer-events: none;
     }
 
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
     .hero h1 {
       margin: 0;
       font-family: "Cormorant Garamond", serif;
@@ -122,6 +162,7 @@
       max-width: 720px;
       position: relative;
       letter-spacing: 0;
+      text-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     }
 
     .hero p {
@@ -131,22 +172,22 @@
       line-height: 1.65;
       font-size: clamp(1rem, 1.8vw, 1.12rem);
       position: relative;
+      text-shadow: 0 10px 24px rgba(0, 0, 0, 0.46);
     }
 
     form {
-      margin-top: 18px;
+      margin-top: 16px;
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     fieldset {
       margin: 0;
-      border: 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-      padding: clamp(22px, 4vw, 34px) 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(20, 23, 29, 0.78), rgba(15, 17, 22, 0.62));
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+      padding: 18px clamp(16px, 3vw, 24px) clamp(16px, 3vw, 24px);
     }
 
     legend {
@@ -154,6 +195,11 @@
       font-weight: 800;
       padding: 0 10px;
       font-size: 1.02rem;
+      letter-spacing: 0.02em;
+      background: rgba(15, 17, 22, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      margin-left: 4px;
     }
 
     .grid {
@@ -270,7 +316,7 @@
       border: 1px solid rgba(216, 184, 111, 0.22);
       border-left: 5px solid var(--accent);
       border-radius: 18px;
-      background: linear-gradient(135deg, rgba(24, 27, 32, 0.72), rgba(16, 17, 21, 0.52));
+      background: linear-gradient(145deg, rgba(26, 30, 38, 0.8), rgba(15, 17, 22, 0.62));
       box-shadow: none;
       padding: 16px 18px;
       display: grid;
@@ -332,16 +378,10 @@
       min-height: 1.2em;
       color: var(--muted);
       font-size: 0.9rem;
+      font-weight: 600;
     }
 
     .submit-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .wizard-actions {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -368,8 +408,8 @@
       cursor: pointer;
       font: inherit;
       font-weight: 700;
-      color: #14161a;
-      background: linear-gradient(135deg, #ead29a, #c69b4f);
+      color: #111316;
+      background: linear-gradient(135deg, #edd7a3, #c89d53 56%, #b88438);
       box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32);
       transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
     }
@@ -387,7 +427,7 @@
 
     button.secondary {
       border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(13, 15, 19, 0.68);
+      background: rgba(17, 20, 27, 0.84);
       color: var(--text);
       box-shadow: none;
     }
