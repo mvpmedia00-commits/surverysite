@@ -1198,7 +1198,7 @@
       updatePhotoRequirement();
       setupPhotoPreview("headshot", "headshotPreview");
       setupPhotoPreview("fullBody", "fullBodyPreview");
-      globalThis.scrollTo({ top: 0, behavior: "smooth" });
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     const selectSurveyLanguage = (lang) => {
