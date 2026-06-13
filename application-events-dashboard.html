@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Photography - Application Events Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(11, 18, 34, 0.9);
+      --panel-strong: #101b31;
+      --text: #eef4ff;
+      --muted: #95a7c6;
+      --accent: #7dd3fc;
+      --accent-2: #f59e0b;
+      --accent-3: #34d399;
+      --line: rgba(125, 211, 252, 0.14);
+      --radius: 18px;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(125, 211, 252, 0.18), transparent 28%),
+        radial-gradient(circle at 95% 10%, rgba(245, 158, 11, 0.16), transparent 26%),
+        linear-gradient(180deg, #08121f 0%, #0b1324 50%, #050a12 100%);
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      width: min(1280px, 95vw);
+      margin: 24px auto 40px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .head,
+    .card,
+    .metric,
+    .chart-box,
+    .event-card,
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .head {
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .head::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -40% auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125, 211, 252, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .head h1 {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .head p {
+      margin: 12px 0 0;
+      max-width: 70ch;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .head-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn,
+    .toolbar-btn {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(14, 20, 36, 0.92);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .toolbar-btn.primary {
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(245, 158, 11, 0.18));
+      color: var(--text);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(16, 27, 49, 0.95), rgba(11, 18, 34, 0.95));
+    }
+
+    .metric-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .metric-value {
+      margin: 8px 0 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .metric-sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .chart-box,
+    .summary-card,
+    .card {
+      padding: 16px;
+    }
+
+    .chart-box h2,
+    .summary-card h2,
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-box p,
+    .summary-card p,
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .chart-frame {
+      margin-top: 10px;
+      min-height: 300px;
+    }
+
+    canvas {
+      max-height: 280px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .panel-head .status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+      background: rgba(8, 15, 28, 0.95);
+      width: 100%;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-card {
+      background: linear-gradient(180deg, rgba(16, 27, 49, 0.95), rgba(11, 18, 34, 0.95));
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid rgba(125, 211, 252, 0.12);
+      border-radius: 12px;
+      background: rgba(9, 16, 30, 0.95);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .summary-item span:last-child {
+      color: var(--accent);
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .event-card {
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(15, 24, 42, 0.96), rgba(8, 13, 24, 0.96));
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .event-title {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .event-meta {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .badge.page_visit { background: rgba(52, 211, 153, 0.92); color: #08111f; border-color: rgba(52, 211, 153, 1); }
+    .badge.language_selected { background: rgba(125, 211, 252, 0.92); color: #08111f; border-color: rgba(125, 211, 252, 1); }
+    .badge.application_started { background: rgba(245, 158, 11, 0.92); color: #08111f; border-color: rgba(245, 158, 11, 1); }
+    .badge.submit_attempt { background: rgba(167, 139, 250, 0.92); color: #08111f; border-color: rgba(167, 139, 250, 1); }
+    .badge.submit_success { background: rgba(52, 211, 153, 0.98); color: #08111f; border-color: rgba(52, 211, 153, 1); }
+    .badge.submit_error { background: rgba(248, 113, 113, 0.98); color: #08111f; border-color: rgba(248, 113, 113, 1); }
+    .badge.main { background: rgba(245, 158, 11, 0.88); color: #08111f; border-color: rgba(245, 158, 11, 1); }
+    .badge.artistic { background: rgba(125, 211, 252, 0.88); color: #08111f; border-color: rgba(125, 211, 252, 1); }
+
+    .event-details {
+      margin-top: 12px;
+      border-top: 1px solid rgba(125, 211, 252, 0.12);
+      padding-top: 10px;
+    }
+
+    .event-details summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 700;
+      list-style: none;
+    }
+
+    .event-details summary::-webkit-details-marker { display: none; }
+
+    .json-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 10px;
+    }
+
+    .json-box {
+      border: 1px solid rgba(125, 211, 252, 0.12);
+      border-radius: 12px;
+      background: rgba(7, 12, 22, 0.95);
+      padding: 10px;
+    }
+
+    .json-box h3 {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #d9e5ff;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      font-family: "Cascadia Code", "Consolas", monospace;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .feed-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .feed-head .status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 920px) {
+      .charts { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .json-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="head">
+      <p class="eyebrow">Behavior telemetry</p>
+      <h1>Application Events Dashboard</h1>
+      <p>
+        Monitor the full applicant journey across both survey flows. This view tracks visits,
+        language clicks, start rates, submit attempts, saves, and errors so you can see where applicants drop off.
+      </p>
+      <div class="head-actions">
+        <a class="nav-btn" href="/dashboard.html">Main Dashboard</a>
+        <a class="nav-btn" href="/artistic-nude-dashboard.html">Artistic Nude Dashboard</a>
+        <button class="toolbar-btn primary" id="refreshBtn" type="button">Refresh Events</button>
+        <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="status" id="status">Loading application events...</p>
+      <div class="kpis" id="kpis">
+        <div class="metric"><p class="metric-label">Total Events</p><p class="metric-value" id="kpiTotalEvents">0</p><p class="metric-sub">Across all tracked actions</p></div>
+        <div class="metric"><p class="metric-label">Unique Sessions</p><p class="metric-value" id="kpiSessions">0</p><p class="metric-sub">Distinct browser sessions</p></div>
+        <div class="metric"><p class="metric-label">Page Visits</p><p class="metric-value" id="kpiVisits">0</p><p class="metric-sub">Landing and revisit traffic</p></div>
+        <div class="metric"><p class="metric-label">Language Clicks</p><p class="metric-value" id="kpiLanguageClicks">0</p><p class="metric-sub">Language switches</p></div>
+        <div class="metric"><p class="metric-label">Application Starts</p><p class="metric-value" id="kpiStarts">0</p><p class="metric-sub">First interaction signal</p></div>
+        <div class="metric"><p class="metric-label">Submit Attempts</p><p class="metric-value" id="kpiAttempts">0</p><p class="metric-sub">Form submit presses</p></div>
+        <div class="metric"><p class="metric-label">Submit Success</p><p class="metric-value" id="kpiSuccess">0</p><p class="metric-sub">Confirmed saves</p></div>
+        <div class="metric"><p class="metric-label">Submit Errors</p><p class="metric-value" id="kpiErrors">0</p><p class="metric-sub">Validation or server failures</p></div>
+        <div class="metric"><p class="metric-label">Completion Rate</p><p class="metric-value" id="kpiCompletion">0%</p><p class="metric-sub">Success / starts</p></div>
+        <div class="metric"><p class="metric-label">Top Event</p><p class="metric-value" id="kpiTopEvent">-</p><p class="metric-sub">Most common event type</p></div>
+        <div class="metric"><p class="metric-label">Top Form</p><p class="metric-value" id="kpiTopForm">-</p><p class="metric-sub">Main vs artistic</p></div>
+        <div class="metric"><p class="metric-label">Top Language</p><p class="metric-value" id="kpiTopLanguage">-</p><p class="metric-sub">Most selected language</p></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="stack">
+        <section class="charts">
+          <article class="chart-box">
+            <h2>Event Types</h2>
+            <p>What applicants are doing most often.</p>
+            <div class="chart-frame"><canvas id="eventTypeChart"></canvas></div>
+          </article>
+          <article class="chart-box">
+            <h2>Form Types</h2>
+            <p>Main survey vs artistic survey activity.</p>
+            <div class="chart-frame"><canvas id="formTypeChart"></canvas></div>
+          </article>
+          <article class="chart-box">
+            <h2>Languages</h2>
+            <p>Which languages visitors choose most.</p>
+            <div class="chart-frame"><canvas id="languageChart"></canvas></div>
+          </article>
+          <article class="chart-box">
+            <h2>Daily Trend</h2>
+            <p>Event volume over time.</p>
+            <div class="chart-frame"><canvas id="trendChart"></canvas></div>
+          </article>
+        </section>
+
+        <section class="card">
+          <div class="feed-head">
+            <div>
+              <h2>Recent Events</h2>
+              <p>Filter and inspect the latest application actions in the raw event feed.</p>
+            </div>
+            <p class="status" id="feedStatus">0 events loaded</p>
+          </div>
+          <div class="filters">
+            <div class="field">
+              <label for="filterSearch">Search session, source, error, app id</label>
+              <input id="filterSearch" type="text" placeholder="Search events">
+            </div>
+            <div class="field">
+              <label for="filterForm">Form</label>
+              <select id="filterForm">
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterEvent">Event Type</label>
+              <select id="filterEvent">
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterLanguage">Language</label>
+              <select id="filterLanguage">
+                <option value="all">All</option>
+              </select>
+            </div>
+          </div>
+          <div class="event-list" id="eventList"></div>
+        </section>
+      </div>
+
+      <aside class="stack">
+        <section class="summary-grid">
+          <article class="summary-card">
+            <h2>Top Source Pages</h2>
+            <p>Where the event traffic is coming from.</p>
+            <div class="summary-list" id="sourceSummary"></div>
+          </article>
+          <article class="summary-card">
+            <h2>Top Errors</h2>
+            <p>Most repeated submit failures.</p>
+            <div class="summary-list" id="errorSummary"></div>
+          </article>
+        </section>
+        <section class="card">
+          <h2>Notes</h2>
+          <p class="footer-note">
+            Submit errors usually mean the form is telling the applicant what is missing. If this number rises,
+            the fix is often a validation message or a field label, not the save pipeline.
+          </p>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      dashboard: null,
+      events: []
+    };
+
+    const charts = [];
+
+    const chartPalette = ["#7dd3fc", "#f59e0b", "#34d399", "#a78bfa", "#fb7185", "#60a5fa", "#fbbf24"];
+
+    const adminFetch = async (url, options = {}) => fetch(url, options);
+
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+    const topKey = (counts) => {
+      const entries = Object.entries(counts || {});
+      if (entries.length === 0) {
+        return "-";
+      }
+      entries.sort((a, b) => b[1] - a[1]);
+      return entries[0][0];
+    };
+
+    const sortedEntries = (counts) => Object.entries(counts || {}).sort((a, b) => b[1] - a[1]);
+
+    const uniqueValues = (rows, field) => [...new Set(rows.map((row) => String(row[field] || "").trim()).filter(Boolean))];
+
+    const destroyCharts = () => {
+      while (charts.length > 0) {
+        const chart = charts.pop();
+        chart.destroy();
+      }
+    };
+
+    const fmtDate = (value) => {
+      if (!value) {
+        return "";
+      }
+      try {
+        return new Date(value).toLocaleString();
+      } catch {
+        return value;
+      }
+    };
+
+    const fmtJson = (value) => {
+      try {
+        return JSON.stringify(value ?? {}, null, 2);
+      } catch {
+        return String(value ?? "");
+      }
+    };
+
+    const addOptions = (selectId, values) => {
+      const select = document.getElementById(selectId);
+      const current = select.value;
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+
+      uniqueValues(values.map((value) => ({ value })), "value")
+        .sort((a, b) => a.localeCompare(b))
+        .forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+      if ([...select.options].some((option) => option.value === current)) {
+        select.value = current;
+      }
+    };
+
+    const filteredEvents = () => {
+      const search = document.getElementById("filterSearch").value.trim().toLowerCase();
+      const form = document.getElementById("filterForm").value;
+      const eventType = document.getElementById("filterEvent").value;
+      const language = document.getElementById("filterLanguage").value;
+
+      return state.events.filter((event) => {
+        const haystack = [
+          event.session_id,
+          event.form_type,
+          event.event_type,
+          event.language,
+          event.source_page,
+          event.application_id,
+          event.error_message,
+          fmtJson(event.draft_data),
+          fmtJson(event.metadata)
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = !search || haystack.includes(search);
+        const matchesForm = form === "all" || event.form_type === form;
+        const matchesEvent = eventType === "all" || event.event_type === eventType;
+        const matchesLanguage = language === "all" || String(event.language || "").trim() === language;
+        return matchesSearch && matchesForm && matchesEvent && matchesLanguage;
+      });
+    };
+
+    const renderSummaryList = (targetId, counts, formatter = (key) => key) => {
+      const target = document.getElementById(targetId);
+      const entries = sortedEntries(counts).slice(0, 5);
+      if (entries.length === 0) {
+        target.innerHTML = '<p class="empty">No data yet.</p>';
+        return;
+      }
+      target.innerHTML = entries.map(([key, count]) => `
+        <div class="summary-item"><span>${escapeHtml(formatter(key))}</span><span>${count}</span></div>
+      `).join("");
+    };
+
+    const renderEvents = () => {
+      const target = document.getElementById("eventList");
+      const rows = filteredEvents();
+      document.getElementById("feedStatus").textContent = `${rows.length} event${rows.length === 1 ? "" : "s"} shown`;
+
+      if (rows.length === 0) {
+        target.innerHTML = '<p class="empty">No events match these filters.</p>';
+        return;
+      }
+
+      target.innerHTML = rows.map((event) => {
+        const eventType = escapeHtml(event.event_type || "unknown");
+        const formType = escapeHtml(event.form_type || "unknown");
+        const language = escapeHtml(event.language || "unknown");
+        const sourcePage = escapeHtml(event.source_page || "-");
+        const applicationId = escapeHtml(event.application_id || "-");
+        const errorMessage = escapeHtml(event.error_message || "");
+        const draft = escapeHtml(fmtJson(event.draft_data));
+        const metadata = escapeHtml(fmtJson(event.metadata));
+
+        return `
+          <article class="event-card">
+            <div class="event-top">
+              <div>
+                <h3 class="event-title">${eventType}</h3>
+                <p class="event-meta">${fmtDate(event.created_at)} · Session ${escapeHtml(event.session_id || "-")}</p>
+              </div>
+              <div class="badges">
+                <span class="badge ${eventType}">${eventType}</span>
+                <span class="badge ${formType}">${formType}</span>
+                <span class="badge">${language}</span>
+              </div>
+            </div>
+            <p class="event-meta">Source: ${sourcePage}</p>
+            <p class="event-meta">Application ID: ${applicationId}</p>
+            ${errorMessage ? `<p class="event-meta">Error: ${errorMessage}</p>` : ""}
+            <details class="event-details">
+              <summary>Inspect payload</summary>
+              <div class="json-grid">
+                <div class="json-box">
+                  <h3>Draft Data</h3>
+                  <pre>${draft}</pre>
+                </div>
+                <div class="json-box">
+                  <h3>Metadata</h3>
+                  <pre>${metadata}</pre>
+                </div>
+              </div>
+            </details>
+          </article>
+        `;
+      }).join("");
+    };
+
+    const renderDashboard = (data) => {
+      const summary = data.summary || {};
+      const completionRate = Number(summary.applicationStarts || 0) > 0
+        ? Math.round((Number(summary.submitSuccess || 0) / Number(summary.applicationStarts || 1)) * 100)
+        : 0;
+
+      document.getElementById("kpiTotalEvents").textContent = String(summary.totalEvents || 0);
+      document.getElementById("kpiSessions").textContent = String(summary.uniqueSessions || 0);
+      document.getElementById("kpiVisits").textContent = String(summary.pageVisits || 0);
+      document.getElementById("kpiLanguageClicks").textContent = String(summary.languageClicks || 0);
+      document.getElementById("kpiStarts").textContent = String(summary.applicationStarts || 0);
+      document.getElementById("kpiAttempts").textContent = String(summary.submitAttempts || 0);
+      document.getElementById("kpiSuccess").textContent = String(summary.submitSuccess || 0);
+      document.getElementById("kpiErrors").textContent = String(summary.submitErrors || 0);
+      document.getElementById("kpiCompletion").textContent = `${completionRate}%`;
+      document.getElementById("kpiTopEvent").textContent = topKey(data.byEventType);
+      document.getElementById("kpiTopForm").textContent = topKey(data.byFormType);
+      document.getElementById("kpiTopLanguage").textContent = topKey(summary.languageSelections || data.byLanguage);
+
+      destroyCharts();
+
+      const eventTypeEntries = sortedEntries(data.byEventType);
+      charts.push(new Chart(document.getElementById("eventTypeChart"), {
+        type: "bar",
+        data: {
+          labels: eventTypeEntries.map(([key]) => key),
+          datasets: [{
+            label: "Events",
+            data: eventTypeEntries.map(([, count]) => count),
+            backgroundColor: chartPalette[0]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#eef4ff" } } },
+          scales: {
+            x: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } },
+            y: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } }
+          }
+        }
+      }));
+
+      const formEntries = sortedEntries(data.byFormType);
+      charts.push(new Chart(document.getElementById("formTypeChart"), {
+        type: "doughnut",
+        data: {
+          labels: formEntries.map(([key]) => key),
+          datasets: [{
+            data: formEntries.map(([, count]) => count),
+            backgroundColor: [chartPalette[1], chartPalette[2], chartPalette[3], chartPalette[4]]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#eef4ff" } } }
+        }
+      }));
+
+      const languageEntries = sortedEntries(data.byLanguage);
+      charts.push(new Chart(document.getElementById("languageChart"), {
+        type: "bar",
+        data: {
+          labels: languageEntries.map(([key]) => key || "unknown"),
+          datasets: [{
+            label: "Selections",
+            data: languageEntries.map(([, count]) => count),
+            backgroundColor: chartPalette[2]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#eef4ff" } } },
+          scales: {
+            x: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } },
+            y: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } }
+          }
+        }
+      }));
+
+      const trendEntries = data.trendByDay || [];
+      charts.push(new Chart(document.getElementById("trendChart"), {
+        type: "line",
+        data: {
+          labels: trendEntries.map((item) => item.day),
+          datasets: [{
+            label: "Events",
+            data: trendEntries.map((item) => item.count),
+            borderColor: chartPalette[1],
+            backgroundColor: "rgba(245, 158, 11, 0.2)",
+            fill: true,
+            tension: 0.28
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#eef4ff" } } },
+          scales: {
+            x: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } },
+            y: { ticks: { color: "#95a7c6" }, grid: { color: "rgba(125,211,252,0.08)" } }
+          }
+        }
+      }));
+
+      state.events = data.recentEvents || [];
+      document.getElementById("status").textContent = `Loaded ${summary.totalEvents || 0} events from ${summary.uniqueSessions || 0} sessions.`;
+      document.getElementById("feedStatus").textContent = `${state.events.length} recent event${state.events.length === 1 ? "" : "s"} loaded`;
+
+      addOptions("filterForm", state.events.map((event) => event.form_type));
+      addOptions("filterEvent", state.events.map((event) => event.event_type));
+      addOptions("filterLanguage", state.events.map((event) => event.language));
+
+      renderSummaryList("sourceSummary", data.bySourcePage, (key) => key.length > 64 ? `${key.slice(0, 64)}...` : key);
+      renderSummaryList("errorSummary", data.byErrorMessage, (key) => key.length > 64 ? `${key.slice(0, 64)}...` : key);
+      renderEvents();
+    };
+
+    const loadDashboard = async () => {
+      const response = await adminFetch("/api/dashboard-application-events");
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.detail || detail.error || "Could not load application events.");
+      }
+      const data = await response.json();
+      state.dashboard = data;
+      renderDashboard(data);
+    };
+
+    const csvEscape = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      const rows = filteredEvents();
+      if (rows.length === 0) {
+        document.getElementById("status").textContent = "No filtered events to export.";
+        return;
+      }
+
+      const headers = [
+        "id",
+        "created_at",
+        "session_id",
+        "form_type",
+        "event_type",
+        "language",
+        "source_page",
+        "application_id",
+        "error_message",
+        "draft_data",
+        "metadata"
+      ];
+
+      const lines = [headers.join(",")];
+      rows.forEach((event) => {
+        lines.push([
+          event.id,
+          event.created_at,
+          event.session_id,
+          event.form_type,
+          event.event_type,
+          event.language,
+          event.source_page,
+          event.application_id,
+          event.error_message,
+          fmtJson(event.draft_data),
+          fmtJson(event.metadata)
+        ].map(csvEscape).join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `application-events-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", async () => {
+      document.getElementById("status").textContent = "Refreshing events...";
+      try {
+        await loadDashboard();
+      } catch (error) {
+        document.getElementById("status").textContent = error?.message || "Could not refresh application events.";
+      }
+    });
+
+    ["filterSearch", "filterForm", "filterEvent", "filterLanguage"].forEach((id) => {
+      const element = document.getElementById(id);
+      element.addEventListener("input", renderEvents);
+      element.addEventListener("change", renderEvents);
+    });
+
+    (async () => {
+      try {
+        await loadDashboard();
+      } catch (error) {
+        document.getElementById("status").textContent = error && error.message ? error.message : "Could not load application events.";
+      }
+    })();
+  </script>
+</body>
+</html>

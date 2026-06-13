@@ -36,6 +36,7 @@ export default async function handler(req, res) {
     ["submit-artistic-nude", "./submit-artistic-nude.js"],
     ["dashboard", "./dashboard.js"],
     ["dashboard-artistic-nude", "./dashboard-artistic-nude.js"],
+      ["dashboard-application-events", "./dashboard-application-events.js"],
     ["admin-login", "./admin-login.js"]
   ];
 
@@ -50,10 +51,10 @@ export default async function handler(req, res) {
         result.status = invoke.status;
         result.body = invoke.body;
       } catch (invokeError) {
-        result.invokeError = String(invokeError && invokeError.stack ? invokeError.stack : invokeError);
+        result.invokeError = String(invokeError?.stack || invokeError);
       }
     } catch (importError) {
-      result.importError = String(importError && importError.stack ? importError.stack : importError);
+      result.importError = String(importError?.stack || importError);
     }
     checks.push(result);
   }
