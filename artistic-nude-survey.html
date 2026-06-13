@@ -1145,38 +1145,54 @@
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
+      const hasPrimaryContact = [getValue("instagram"), getValue("email"), getValue("phone")].some((value) => value.length > 0);
+      const validationTips = [];
 
       if (!Number.isFinite(age) || age < 18) {
         hasErrors = true;
+        validationTips.push("confirm age is 18+");
+      }
+
+      if (!hasPrimaryContact) {
+        submitStatus.textContent = "Please provide at least one contact method: Instagram, email, or phone/WhatsApp.";
+        hasErrors = true;
+        validationTips.push("add Instagram, email, or phone/WhatsApp");
       }
 
       if (!checkAtLeastOne("input[name='interests']")) {
         setError("interestsError", "Please select at least one project interest.");
         hasErrors = true;
+        validationTips.push("select at least one project interest");
       }
 
       if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
         setError("nudityComfortError", "Please select at least one comfort level.");
         hasErrors = true;
+        validationTips.push("select at least one comfort level");
       }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Please select at least one availability option.");
         hasErrors = true;
+        validationTips.push("select at least one availability option");
       }
 
       if (checkedValues("input[name='consent']").length < 5) {
         setError("consentError", "All consent items are required.");
         hasErrors = true;
+        validationTips.push("check all consent boxes");
       }
 
       if (checkedValues("input[name='confirm18Truth']").length === 0) {
         setError("confirm18Error", "Please confirm you are 18+.");
         hasErrors = true;
+        validationTips.push("check the 18+ confirmation box");
       }
 
       if (hasErrors) {
-        submitStatus.textContent = "Please review required fields and try again.";
+        submitStatus.textContent = validationTips.length > 0
+          ? `Please review required fields. Fix: ${validationTips.join("; ")}.`
+          : "Please review required fields and try again.";
         form.reportValidity();
         return;
       }
@@ -1196,8 +1212,9 @@
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
+          const serverError = [data.error, data.detail].filter(Boolean).join(" - ");
           trackEvent("submit_error", {
-            error_message: data.error || "Submission failed",
+            error_message: serverError || "Submission failed",
             draft_data: {
               preferred_name: payload.preferred_name,
               email: payload.email,
@@ -1207,7 +1224,7 @@
               instagram: payload.instagram
             }
           });
-          throw new Error(data.error || "Submission failed");
+          throw new Error(serverError || "Submission failed");
         }
 
         trackEvent("submit_success", { application_id: data.id || null });
@@ -1217,10 +1234,14 @@
         localStorage.removeItem(autosaveKey);
         globalThis.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
+        const message = error?.message || "Unknown error";
+        const suggestion = /At least one contact method/i.test(message)
+          ? " Add Instagram, email, or phone/WhatsApp."
+          : "";
         trackEvent("submit_error", {
-          error_message: error && error.message ? error.message : "Unknown error"
+          error_message: message
         });
-        submitStatus.textContent = `Could not submit. Please try again. (${error?.message || "Unknown error"})`;
+        submitStatus.textContent = `Could not submit. Please try again. (${message})${suggestion}`;
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit Artistic Nude Application";
