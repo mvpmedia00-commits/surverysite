@@ -1082,7 +1082,13 @@
       clearErrors();
       updatePhotoRequirement();
       trackApplicationStartedOnce();
-      trackEvent("submit_attempt");
+      const attemptDraft = serializeDraft();
+      trackEvent("submit_attempt", {
+        draft_data: attemptDraft,
+        metadata: {
+          stage: "before_client_validation"
+        }
+      });
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
@@ -1131,6 +1137,13 @@
       }
 
       if (hasErrors) {
+        trackEvent("submit_error", {
+          error_message: "client_validation_failed",
+          draft_data: attemptDraft,
+          metadata: {
+            validation_tips: validationTips
+          }
+        });
         setSubmitIssue(
           "Revise os campos obrigatorios e tente novamente.",
           validationTips.length > 0 ? validationTips : ["Complete todos os campos marcados com *."]
@@ -1156,14 +1169,7 @@
         if (!response.ok) {
           trackEvent("submit_error", {
             error_message: data.error || "Falha no envio",
-            draft_data: {
-              preferred_name: payload.preferred_name,
-              email: payload.email,
-              phone: payload.phone,
-              city: payload.city,
-              country: payload.country,
-              instagram: payload.instagram
-            }
+            draft_data: payload
           });
           throw new Error(data.error || "Falha no envio");
         }
@@ -1176,7 +1182,8 @@
         globalThis.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
         trackEvent("submit_error", {
-          error_message: error && error.message ? error.message : "Erro desconhecido"
+          error_message: error && error.message ? error.message : "Erro desconhecido",
+          draft_data: attemptDraft
         });
         setSubmitIssue(
           `Nao foi possivel enviar. Tente novamente. (${error?.message || "Erro desconhecido"})`,

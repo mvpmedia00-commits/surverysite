@@ -1105,7 +1105,13 @@
       clearErrors();
       updatePhotoRequirement();
       trackApplicationStartedOnce();
-      trackEvent("submit_attempt");
+      const attemptDraft = serializeDraft();
+      trackEvent("submit_attempt", {
+        draft_data: attemptDraft,
+        metadata: {
+          stage: "before_client_validation"
+        }
+      });
 
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
@@ -1154,6 +1160,13 @@
       }
 
       if (hasErrors) {
+        trackEvent("submit_error", {
+          error_message: "client_validation_failed",
+          draft_data: attemptDraft,
+          metadata: {
+            validation_tips: validationTips
+          }
+        });
         setSubmitIssue("Revisa los campos obligatorios e intenta de nuevo.", validationTips);
         if (form.checkValidity()) {
           focusFirstMissingField();
@@ -1180,14 +1193,7 @@
         if (!response.ok) {
           trackEvent("submit_error", {
             error_message: data.error || "El envio fallo",
-            draft_data: {
-              preferred_name: payload.preferred_name,
-              email: payload.email,
-              phone: payload.phone,
-              city: payload.city,
-              country: payload.country,
-              instagram: payload.instagram
-            }
+            draft_data: payload
           });
           throw new Error([data.error, data.detail].filter(Boolean).join(" - ") || "El envio fallo");
         }
@@ -1204,7 +1210,8 @@
           ? ["Agrega Instagram, correo electronico o telefono/WhatsApp."]
           : [];
         trackEvent("submit_error", {
-          error_message: message
+          error_message: message,
+          draft_data: attemptDraft
         });
         setSubmitIssue(`No se pudo enviar. Intenta de nuevo. (${message})`, tips);
       } finally {

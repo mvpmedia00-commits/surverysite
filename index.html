@@ -1656,7 +1656,15 @@
       clearErrors();
       updatePhotoRequirement();
       trackApplicationStartedOnce();
+      const attemptDraft = serializeDraft();
+      trackEvent("submit_attempt", {
+        draft_data: attemptDraft,
+        metadata: {
+          stage: "before_client_validation"
+        }
+      });
       let hasErrors = !form.checkValidity();
+      const validationTips = [];
 
       const ageEl = document.getElementById("age");
       const age = Number(ageEl.value);
@@ -1665,6 +1673,7 @@
       if (!Number.isFinite(age) || age < 18) {
         ageEl.setCustomValidity(t.msg18);
         hasErrors = true;
+        validationTips.push(t.msg18);
       } else {
         ageEl.setCustomValidity("");
       }
@@ -1672,20 +1681,30 @@
       if (!checkAtLeastOne("input[name='interests']")) {
         setError("interestsError", t.msgInterest);
         hasErrors = true;
+        validationTips.push(t.msgInterest);
       }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", t.msgAvailability);
         hasErrors = true;
+        validationTips.push(t.msgAvailability);
       }
 
       const consentOk = Array.from(document.querySelectorAll("input[name='consent']")).every((item) => item.checked);
       if (!consentOk) {
         setError("consentError", t.msgConsent);
         hasErrors = true;
+        validationTips.push(t.msgConsent);
       }
 
       if (hasErrors) {
+        trackEvent("submit_error", {
+          error_message: "client_validation_failed",
+          draft_data: attemptDraft,
+          metadata: {
+            validation_tips: validationTips
+          }
+        });
         event.preventDefault();
         form.reportValidity();
         return;
@@ -1694,7 +1713,6 @@
       event.preventDefault();
       submitBtn.disabled = true;
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
-      trackEvent("submit_attempt");
 
       try {
         const { payload, uploadWarnings } = await buildSubmissionPayloadWithUploads();
@@ -1725,13 +1743,7 @@
 
           trackEvent("submit_error", {
             error_message: result && result.error ? result.error : `HTTP ${response.status}`,
-            draft_data: {
-              preferred_name: payload.preferred_name,
-              email: payload.email,
-              city: payload.city,
-              country: payload.country,
-              instagram: payload.instagram
-            }
+            draft_data: payload
           });
 
           submitBtn.disabled = false;
@@ -1753,7 +1765,8 @@
       } catch (error) {
         console.error(error);
         trackEvent("submit_error", {
-          error_message: error && error.message ? error.message : "Unknown error"
+          error_message: error && error.message ? error.message : "Unknown error",
+          draft_data: attemptDraft
         });
         submitBtn.disabled = false;
         submitStatus.textContent = selectedLanguage === "es"
