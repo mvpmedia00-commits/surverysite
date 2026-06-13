@@ -1083,6 +1083,7 @@
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
       const hasPrimaryContact = [getValue("instagram"), getValue("email"), getValue("phone")].some((value) => value.length > 0);
+      const validationTips = [];
 
       if (!Number.isFinite(age) || age < 18) {
         hasErrors = true;

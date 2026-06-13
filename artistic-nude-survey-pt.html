@@ -286,6 +286,27 @@
       font-size: 0.9rem;
     }
 
+    .error-panel {
+      border: 1px solid rgba(176, 53, 53, 0.35);
+      background: #fff4f4;
+      color: #4a0f0f;
+      border-radius: 14px;
+      padding: 12px 14px;
+      line-height: 1.5;
+      font-size: 0.92rem;
+      display: grid;
+      gap: 6px;
+    }
+
+    .error-panel strong {
+      font-size: 0.95rem;
+    }
+
+    .error-panel ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
     .submit-row {
       display: flex;
       justify-content: center;
@@ -606,6 +627,7 @@
       </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Enviar Aplicacao De Modelo Criativo Adulto</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
+      <div class="error-panel" id="submitErrorPanel" hidden aria-live="polite"></div>
     </form>
 
     <section class="success" id="successMessage" aria-live="polite">
@@ -618,6 +640,7 @@
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
+    const submitErrorPanel = document.getElementById("submitErrorPanel");
     const prevStepBtn = document.getElementById("prevStepBtn");
     const nextStepBtn = document.getElementById("nextStepBtn");
     const stepLabel = document.getElementById("stepLabel");
@@ -673,6 +696,25 @@
       document.getElementById(id).textContent = msg;
     };
 
+    const setSubmitIssue = (message, tips = []) => {
+      submitStatus.textContent = message;
+      if (!submitErrorPanel) {
+        return;
+      }
+      const list = tips.length > 0 ? `<ul>${tips.map((tip) => '<li>' + tip + '</li>').join("")}</ul>` : "";
+      submitErrorPanel.innerHTML = `<strong>O que corrigir</strong><div>${message}</div>${list}`;
+      submitErrorPanel.hidden = false;
+      submitErrorPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    const clearSubmitIssue = () => {
+      if (!submitErrorPanel) {
+        return;
+      }
+      submitErrorPanel.hidden = true;
+      submitErrorPanel.innerHTML = "";
+    };
+
     const clearErrors = () => {
       setError("experienceTypesError", "");
       setError("interestsError", "");
@@ -684,6 +726,7 @@
       setError("consentError", "");
       setError("confirm18Error", "");
       submitStatus.textContent = "";
+      clearSubmitIssue();
     };
 
     const updateStep = () => {
@@ -920,7 +963,10 @@
           input.value = "";
           preview.removeAttribute("src");
           preview.style.display = "none";
-          submitStatus.textContent = error && error.message ? error.message : "O arquivo de foto nao e valido.";
+          setSubmitIssue(
+            error && error.message ? error.message : "O arquivo de foto nao e valido.",
+            ["Envie uma imagem de ate 8MB, ou informe Instagram como contato."]
+          );
         }
       });
     };
@@ -1041,43 +1087,54 @@
       let hasErrors = !form.checkValidity();
       const age = Number(getValue("age"));
       const hasPrimaryContact = [getValue("instagram"), getValue("email"), getValue("phone")].some((value) => value.length > 0);
+      const validationTips = [];
 
       if (!Number.isFinite(age) || age < 18) {
         hasErrors = true;
+        validationTips.push("confirme que voce tem 18+");
       }
 
       if (!hasPrimaryContact) {
-        submitStatus.textContent = "Informe pelo menos um meio de contato: Instagram, email ou telefone/WhatsApp.";
+        setSubmitIssue("Informe pelo menos um meio de contato.", ["Adicione Instagram, email ou telefone/WhatsApp para salvar e contatar voce."]);
         hasErrors = true;
+        validationTips.push("adicione Instagram, email ou telefone/WhatsApp");
       }
 
       if (!checkAtLeastOne("input[name='interests']")) {
         setError("interestsError", "Selecione pelo menos um interesse de projeto.");
         hasErrors = true;
+        validationTips.push("selecione pelo menos um interesse de projeto");
       }
 
       if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
         setError("nudityComfortError", "Selecione pelo menos um nivel de conforto.");
         hasErrors = true;
+        validationTips.push("selecione pelo menos um nivel de conforto");
       }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Selecione pelo menos uma opcao de disponibilidade.");
         hasErrors = true;
+        validationTips.push("selecione pelo menos uma opcao de disponibilidade");
       }
 
       if (checkedValues("input[name='consent']").length < 5) {
         setError("consentError", "Todos os itens de consentimento sao obrigatorios.");
         hasErrors = true;
+        validationTips.push("marque todos os consentimentos obrigatorios");
       }
 
       if (checkedValues("input[name='confirm18Truth']").length === 0) {
         setError("confirm18Error", "Confirme que voce tem 18+.");
         hasErrors = true;
+        validationTips.push("marque a confirmacao de 18+");
       }
 
       if (hasErrors) {
-        submitStatus.textContent = "Revise os campos obrigatorios e tente novamente.";
+        setSubmitIssue(
+          "Revise os campos obrigatorios e tente novamente.",
+          validationTips.length > 0 ? validationTips : ["Complete todos os campos marcados com *."]
+        );
         form.reportValidity();
         return;
       }
@@ -1121,7 +1178,10 @@
         trackEvent("submit_error", {
           error_message: error && error.message ? error.message : "Erro desconhecido"
         });
-        submitStatus.textContent = `Nao foi possivel enviar. Tente novamente. (${error?.message || "Erro desconhecido"})`;
+        setSubmitIssue(
+          `Nao foi possivel enviar. Tente novamente. (${error?.message || "Erro desconhecido"})`,
+          ["Revise os dados obrigatorios e tente enviar novamente."]
+        );
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Enviar Aplicacao Artistica Nude";
@@ -1144,6 +1204,7 @@
     updateStep();
     setTravelFields();
     updatePhotoRequirement();
+    clearSubmitIssue();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>

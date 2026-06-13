@@ -286,6 +286,27 @@
       font-size: 0.9rem;
     }
 
+    .error-panel {
+      border: 1px solid rgba(176, 53, 53, 0.35);
+      background: #fff4f4;
+      color: #4a0f0f;
+      border-radius: 14px;
+      padding: 12px 14px;
+      line-height: 1.5;
+      font-size: 0.92rem;
+      display: grid;
+      gap: 6px;
+    }
+
+    .error-panel strong {
+      font-size: 0.95rem;
+    }
+
+    .error-panel ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
     .submit-row {
       display: flex;
       justify-content: center;
@@ -606,6 +627,7 @@
       </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Submit Adult Creative Model Application</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
+      <div class="error-panel" id="submitErrorPanel" hidden aria-live="polite"></div>
     </form>
 
     <section class="success" id="successMessage" aria-live="polite">
@@ -618,6 +640,7 @@
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
+    const submitErrorPanel = document.getElementById("submitErrorPanel");
     const prevStepBtn = document.getElementById("prevStepBtn");
     const nextStepBtn = document.getElementById("nextStepBtn");
     const stepLabel = document.getElementById("stepLabel");
@@ -673,6 +696,25 @@
       document.getElementById(id).textContent = msg;
     };
 
+    const setSubmitIssue = (message, tips = []) => {
+      submitStatus.textContent = message;
+      if (!submitErrorPanel) {
+        return;
+      }
+      const list = tips.length > 0 ? `<ul>${tips.map((tip) => '<li>' + tip + '</li>').join("")}</ul>` : "";
+      submitErrorPanel.innerHTML = `<strong>What To Fix</strong><div>${message}</div>${list}`;
+      submitErrorPanel.hidden = false;
+      submitErrorPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    const clearSubmitIssue = () => {
+      if (!submitErrorPanel) {
+        return;
+      }
+      submitErrorPanel.hidden = true;
+      submitErrorPanel.innerHTML = "";
+    };
+
     const clearErrors = () => {
       setError("experienceTypesError", "");
       setError("interestsError", "");
@@ -684,6 +726,7 @@
       setError("consentError", "");
       setError("confirm18Error", "");
       submitStatus.textContent = "";
+      clearSubmitIssue();
     };
 
     const updateStep = () => {
@@ -920,7 +963,10 @@
           input.value = "";
           preview.removeAttribute("src");
           preview.style.display = "none";
-          submitStatus.textContent = error && error.message ? error.message : "Photo file is not valid.";
+          setSubmitIssue(
+            error && error.message ? error.message : "Photo file is not valid.",
+            ["Upload an image file up to 8MB, or provide Instagram as contact."]
+          );
         }
       });
     };
@@ -1049,7 +1095,7 @@
       }
 
       if (!hasPrimaryContact) {
-        submitStatus.textContent = "Please provide at least one contact method: Instagram, email, or phone/WhatsApp.";
+        setSubmitIssue("Please provide at least one contact method.", ["Add Instagram, email, or phone/WhatsApp so we can save and contact you."]);
         hasErrors = true;
         validationTips.push("add Instagram, email, or phone/WhatsApp");
       }
@@ -1085,9 +1131,10 @@
       }
 
       if (hasErrors) {
-        submitStatus.textContent = validationTips.length > 0
-          ? `Please review required fields. Fix: ${validationTips.join("; ")}.`
-          : "Please review required fields and try again.";
+        setSubmitIssue(
+          "Please review required fields and try again.",
+          validationTips.length > 0 ? validationTips : ["Complete all required fields marked with *."]
+        );
         form.reportValidity();
         return;
       }
@@ -1136,7 +1183,7 @@
         trackEvent("submit_error", {
           error_message: message
         });
-        submitStatus.textContent = `Could not submit. Please try again. (${message})${suggestion}`;
+        setSubmitIssue(`Could not submit. Please try again. (${message})${suggestion}`, ["Check required fields and contact details, then submit again."]);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit Artistic Nude Application";
@@ -1159,6 +1206,7 @@
     updateStep();
     setTravelFields();
     updatePhotoRequirement();
+    clearSubmitIssue();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>
