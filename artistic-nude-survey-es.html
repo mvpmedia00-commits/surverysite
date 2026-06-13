@@ -1076,6 +1076,30 @@
       return payload;
     };
 
+    const focusFirstMissingField = () => {
+      const focusableGroups = [
+        { test: () => !getValue("instagram") && !getValue("email") && !getValue("phone"), selector: "#instagram" },
+        { test: () => !checkAtLeastOne("input[name='interests']"), selector: "input[name='interests']" },
+        { test: () => !checkAtLeastOne("input[name='nudityComfortLevels']"), selector: "input[name='nudityComfortLevels']" },
+        { test: () => !checkAtLeastOne("input[name='availability']"), selector: "input[name='availability']" },
+        { test: () => checkedValues("input[name='consent']").length < 5, selector: "input[name='consent']" },
+        { test: () => checkedValues("input[name='confirm18Truth']").length === 0, selector: "input[name='confirm18Truth']" }
+      ];
+
+      for (const group of focusableGroups) {
+        if (!group.test()) {
+          continue;
+        }
+
+        const target = document.querySelector(group.selector);
+        if (target && typeof target.focus === "function") {
+          target.focus();
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        break;
+      }
+    };
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearErrors();
@@ -1131,7 +1155,11 @@
 
       if (hasErrors) {
         setSubmitIssue("Revisa los campos obligatorios e intenta de nuevo.", validationTips);
-        form.reportValidity();
+        if (form.checkValidity()) {
+          focusFirstMissingField();
+        } else {
+          form.reportValidity();
+        }
         return;
       }
 
