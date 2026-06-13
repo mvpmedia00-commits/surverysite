@@ -286,6 +286,27 @@
       font-size: 0.9rem;
     }
 
+    .error-panel {
+      border: 1px solid rgba(176, 53, 53, 0.35);
+      background: #fff4f4;
+      color: #4a0f0f;
+      border-radius: 14px;
+      padding: 12px 14px;
+      line-height: 1.5;
+      font-size: 0.92rem;
+      display: grid;
+      gap: 6px;
+    }
+
+    .error-panel strong {
+      font-size: 0.95rem;
+    }
+
+    .error-panel ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
     .submit-row {
       display: flex;
       justify-content: center;
@@ -606,6 +627,7 @@
       </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Enviar Solicitud De Modelo Creativa Adulta</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
+      <div class="error-panel" id="submitErrorPanel" hidden aria-live="polite"></div>
     </form>
 
     <section class="success" id="successMessage" aria-live="polite">
@@ -618,6 +640,7 @@
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
+    const submitErrorPanel = document.getElementById("submitErrorPanel");
     const prevStepBtn = document.getElementById("prevStepBtn");
     const nextStepBtn = document.getElementById("nextStepBtn");
     const stepLabel = document.getElementById("stepLabel");
@@ -673,6 +696,24 @@
       document.getElementById(id).textContent = msg;
     };
 
+    const setSubmitIssue = (message, tips = []) => {
+      submitStatus.textContent = message;
+      if (!submitErrorPanel) {
+        return;
+      }
+      const list = tips.length > 0 ? `<ul>${tips.map((tip) => '<li>' + tip + '</li>').join("")}</ul>` : "";
+      submitErrorPanel.innerHTML = `<strong>Que corregir</strong><div>${message}</div>${list}`;
+      submitErrorPanel.hidden = false;
+    };
+
+    const clearSubmitIssue = () => {
+      if (!submitErrorPanel) {
+        return;
+      }
+      submitErrorPanel.hidden = true;
+      submitErrorPanel.innerHTML = "";
+    };
+
     const clearErrors = () => {
       setError("experienceTypesError", "");
       setError("interestsError", "");
@@ -684,6 +725,7 @@
       setError("consentError", "");
       setError("confirm18Error", "");
       submitStatus.textContent = "";
+      clearSubmitIssue();
     };
 
     const updateStep = () => {
@@ -1044,40 +1086,47 @@
 
       if (!Number.isFinite(age) || age < 18) {
         hasErrors = true;
+        validationTips.push("Confirma que tienes 18+.");
       }
 
       if (!hasPrimaryContact) {
-        submitStatus.textContent = "Proporciona al menos un medio de contacto: Instagram, correo electronico o telefono/WhatsApp.";
+        setSubmitIssue("Proporciona al menos un medio de contacto.", ["Agrega Instagram, correo electronico o telefono/WhatsApp para poder guardar tu solicitud."]);
         hasErrors = true;
+        validationTips.push("Agrega Instagram, correo electronico o telefono/WhatsApp.");
       }
 
       if (!checkAtLeastOne("input[name='interests']")) {
         setError("interestsError", "Selecciona al menos un interes de proyecto.");
         hasErrors = true;
+        validationTips.push("Selecciona al menos un interes de proyecto.");
       }
 
       if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
         setError("nudityComfortError", "Selecciona al menos un nivel de comodidad.");
         hasErrors = true;
+        validationTips.push("Selecciona al menos un nivel de comodidad.");
       }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Selecciona al menos una opcion de disponibilidad.");
         hasErrors = true;
+        validationTips.push("Selecciona al menos una opcion de disponibilidad.");
       }
 
       if (checkedValues("input[name='consent']").length < 5) {
         setError("consentError", "Todos los consentimientos son obligatorios.");
         hasErrors = true;
+        validationTips.push("Marca todos los consentimientos obligatorios.");
       }
 
       if (checkedValues("input[name='confirm18Truth']").length === 0) {
         setError("confirm18Error", "Confirma que tienes 18+.");
         hasErrors = true;
+        validationTips.push("Marca la confirmacion de 18+.");
       }
 
       if (hasErrors) {
-        submitStatus.textContent = "Revisa los campos obligatorios e intenta de nuevo.";
+        setSubmitIssue("Revisa los campos obligatorios e intenta de nuevo.", validationTips);
         form.reportValidity();
         return;
       }
@@ -1108,7 +1157,7 @@
               instagram: payload.instagram
             }
           });
-          throw new Error(data.error || "El envio fallo");
+          throw new Error([data.error, data.detail].filter(Boolean).join(" - ") || "El envio fallo");
         }
 
         trackEvent("submit_success", { application_id: data.id || null });
@@ -1118,10 +1167,14 @@
         localStorage.removeItem(autosaveKey);
         globalThis.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
+        const message = error?.message || "Error desconocido";
+        const tips = /At least one contact method/i.test(message)
+          ? ["Agrega Instagram, correo electronico o telefono/WhatsApp."]
+          : [];
         trackEvent("submit_error", {
-          error_message: error && error.message ? error.message : "Error desconocido"
+          error_message: message
         });
-        submitStatus.textContent = `No se pudo enviar. Intenta de nuevo. (${error?.message || "Error desconocido"})`;
+        setSubmitIssue(`No se pudo enviar. Intenta de nuevo. (${message})`, tips);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Enviar Solicitud Artistica Nude";
@@ -1144,6 +1197,7 @@
     updateStep();
     setTravelFields();
     updatePhotoRequirement();
+    clearSubmitIssue();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>
