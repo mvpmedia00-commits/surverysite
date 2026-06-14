@@ -108,6 +108,16 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .lang-job-link {
+      margin-top: 12px;
+      display: inline-block;
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(12, 117, 104, 0.35);
+      padding-bottom: 2px;
+    }
+
     .hero {
       position: relative;
       border: 1px solid rgba(61, 53, 43, 0.12);
@@ -129,6 +139,25 @@
       display: grid;
       align-content: start;
       gap: 12px;
+    }
+
+    .hero-quick-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .hero-quick-links a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
 
     .hero-about-link {
@@ -561,6 +590,7 @@
         <button type="button" data-lang="en">English</button>
         <button type="button" data-lang="es">Espanol</button>
       </div>
+      <a class="lang-job-link" href="/job-board.html">View Open Roles (Job Board)</a>
     </div>
   </section>
 
@@ -577,6 +607,10 @@
           screen interest, comfort levels, and availability.
         </p>
         <div class="tag" id="pageTag">Fast Application: 3-5 minutes</div>
+        <div class="hero-quick-links">
+          <a href="/job-board.html">View Job Board</a>
+          <a href="/artistic-nude-survey.html">Adult Creative Application</a>
+        </div>
       </div>
       <div class="hero-photo">
         <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" id="heroPhoto" alt="MVP Media hero">

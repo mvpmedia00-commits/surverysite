@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Photography Job Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f1e9;
+      --panel: rgba(255, 253, 248, 0.95);
+      --text: #181714;
+      --muted: #625a4e;
+      --accent: #0c7568;
+      --accent-2: #c56f48;
+      --line: rgba(61, 53, 43, 0.14);
+      --shadow: 0 24px 70px rgba(30, 25, 15, 0.14);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 86% 10%, rgba(12, 117, 104, 0.18), transparent 30%),
+        radial-gradient(circle at 10% 20%, rgba(197, 111, 72, 0.14), transparent 28%),
+        linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
+    }
+
+    .page {
+      width: min(1120px, 94vw);
+      margin: 28px auto 48px;
+      display: grid;
+      gap: 14px;
+      animation: riseIn 420ms ease-out;
+    }
+
+    .hero,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 249, 0.98), rgba(255, 250, 240, 0.9)),
+        linear-gradient(130deg, rgba(12, 117, 104, 0.16), rgba(197, 111, 72, 0.1));
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      right: -120px;
+      bottom: -170px;
+      background: radial-gradient(circle, rgba(12, 117, 104, 0.2), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--accent-2);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 6px 0 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 80ch;
+    }
+
+    .quick-links {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #139180);
+      box-shadow: 0 12px 26px rgba(12, 117, 104, 0.28);
+    }
+
+    .btn-secondary {
+      color: var(--accent);
+      border-color: rgba(12, 117, 104, 0.24);
+      background: #fff;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .job-title {
+      margin: 0;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      color: #1e1b16;
+    }
+
+    .meta {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: #363027;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 9px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 16px 0 8px;
+      color: var(--accent);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 10px 0 0;
+      line-height: 1.65;
+      color: #2b261f;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      line-height: 1.65;
+      color: #2b261f;
+    }
+
+    .job-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .requirements h2,
+    .apply h2 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+      line-height: 1.05;
+    }
+
+    .requirements p,
+    .apply p {
+      margin-top: 10px;
+      color: var(--muted);
+    }
+
+    .apply-list {
+      margin-top: 8px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .apply-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .apply-item h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .apply-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 920px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">MVP Media Photography</p>
+      <h1>Job Board</h1>
+      <p>
+        MVP Media Photography is now accepting applications for creative modeling, photography,
+        and content collaboration opportunities. We work with new and experienced models, creators,
+        and performers for professional photo and video projects.
+      </p>
+      <p>
+        All applicants must be 18 or older for adult creative projects. Every opportunity includes clear
+        communication about the concept, compensation, image usage, boundaries, and scheduling before any shoot is confirmed.
+      </p>
+      <div class="quick-links">
+        <a class="btn btn-secondary" href="/index.html">General Model Application</a>
+        <a class="btn btn-primary" href="/artistic-nude-survey.html">Adult Creative Application</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2 class="job-title">1) General Model - Portrait, Fashion and Lifestyle</h2>
+        <div class="meta">
+          <span class="chip">Type: Modeling / Portfolio Building</span>
+          <span class="chip">Experience: Beginner-friendly</span>
+          <span class="chip">Compensation: Paid / TFP / Collaboration</span>
+        </div>
+        <p>
+          MVP Media is looking for models interested in portrait, fashion, lifestyle, editorial, branding,
+          and social media photo projects. This opportunity is ideal for models who want to build a portfolio,
+          create professional images, or collaborate on creative visual concepts.
+        </p>
+        <h3 class="section-title">Good fit for</h3>
+        <p>New models, fashion models, lifestyle creators, social media creators, and portfolio-building talent.</p>
+        <h3 class="section-title">May include</h3>
+        <ul>
+          <li>Portraits</li>
+          <li>Fashion looks</li>
+          <li>Lifestyle scenes</li>
+          <li>Editorial concepts</li>
+          <li>Branding images</li>
+          <li>Creative social media content</li>
+        </ul>
+        <div class="job-actions">
+          <a class="btn btn-secondary" href="/index.html">Apply To General Model</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 class="job-title">2) Boudoir / Glamour Model</h2>
+        <div class="meta">
+          <span class="chip">Type: Adult creative / Glamour photography</span>
+          <span class="chip">Age Requirement: 18+</span>
+          <span class="chip">Compensation: Paid or portfolio collaboration</span>
+        </div>
+        <p>
+          MVP Media is casting models for tasteful boudoir, glamour, lingerie, implied nude, and sensual
+          editorial photography projects. Shoots are planned in advance with clear boundaries, wardrobe
+          discussion, and image usage terms.
+        </p>
+        <h3 class="section-title">Good fit for</h3>
+        <p>
+          Models comfortable with glamour, lingerie, sensual posing, confidence-based photography,
+          or intimate editorial styling.
+        </p>
+        <h3 class="section-title">May include</h3>
+        <ul>
+          <li>Boudoir</li>
+          <li>Lingerie</li>
+          <li>Implied nude</li>
+          <li>Glamour portraits</li>
+          <li>Robe and sheet concepts</li>
+          <li>Studio lighting and elegant sensual imagery</li>
+        </ul>
+        <div class="job-actions">
+          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 class="job-title">3) Adult Creative / Erotic Nude Model</h2>
+        <div class="meta">
+          <span class="chip">Type: Adult creative content</span>
+          <span class="chip">Age Requirement: 18+ only</span>
+          <span class="chip">Compensation: Paid / Collaboration / Platform agreement</span>
+        </div>
+        <p>
+          MVP Media is accepting applications from adult models and creators interested in nude, erotic nude,
+          glamour nude, body-focused, and subscription-style content projects. All concepts, comfort levels,
+          compensation, privacy preferences, and usage rights are discussed before scheduling.
+        </p>
+        <h3 class="section-title">Good fit for</h3>
+        <p>
+          Adult models, creators, OnlyFans-style creators, glamour models, and performers comfortable discussing
+          adult-content opportunities.
+        </p>
+        <h3 class="section-title">May include</h3>
+        <ul>
+          <li>Nude photography</li>
+          <li>Erotic nude concepts</li>
+          <li>Adult photo sets</li>
+          <li>Subscription-platform content</li>
+          <li>Private gallery content</li>
+          <li>Promotional adult imagery</li>
+        </ul>
+        <h3 class="section-title">Note</h3>
+        <p>Participation is voluntary. Models may decline any concept before scheduling.</p>
+        <div class="job-actions">
+          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 class="job-title">4) Nude Bodypaint Model</h2>
+        <div class="meta">
+          <span class="chip">Type: Artistic / Adult creative modeling</span>
+          <span class="chip">Age Requirement: 18+</span>
+          <span class="chip">Compensation: Paid / TFP / Collaboration</span>
+        </div>
+        <p>
+          MVP Media is looking for models interested in nude or partial nude bodypaint concepts. These projects
+          focus on visual art, body expression, color, texture, and creative styling. Bodypaint designs, comfort
+          levels, nudity level, and image usage are discussed before the shoot.
+        </p>
+        <h3 class="section-title">Good fit for</h3>
+        <p>
+          Models interested in art, bodypaint, creative posing, fine-art photography, glamour,
+          or experimental visual concepts.
+        </p>
+        <h3 class="section-title">May include</h3>
+        <ul>
+          <li>Full or partial bodypaint</li>
+          <li>Studio lighting</li>
+          <li>Fine-art posing</li>
+          <li>Creative makeup</li>
+          <li>Color themes</li>
+          <li>Editorial nude concepts and artistic portfolio images</li>
+        </ul>
+        <div class="job-actions">
+          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
+        </div>
+      </article>
+
+      <article class="card" style="grid-column: 1 / -1;">
+        <h2 class="job-title">5) Content Creator / Social Media Model</h2>
+        <div class="meta">
+          <span class="chip">Type: Photo and video content creation</span>
+          <span class="chip">Experience: Beginner to experienced</span>
+          <span class="chip">Compensation: Paid / Collaboration / Content trade / Revenue-share</span>
+        </div>
+        <p>
+          MVP Media is seeking creators who want to produce high-quality content for social media,
+          promotional campaigns, personal branding, paid platforms, or creative portfolio use. This role
+          may include short-form video, BTS content, reels, teaser clips, photo sets, and creator-style campaigns.
+        </p>
+        <h3 class="section-title">Good fit for</h3>
+        <p>
+          Influencers, models, adult creators, lifestyle creators, dancers, performers, and social media personalities.
+        </p>
+        <h3 class="section-title">May include</h3>
+        <ul>
+          <li>Reels</li>
+          <li>Teaser videos</li>
+          <li>Behind-the-scenes clips</li>
+          <li>Photo sets</li>
+          <li>Lifestyle and glamour content</li>
+          <li>Promotional visuals and creator branding campaigns</li>
+        </ul>
+        <div class="job-actions">
+          <a class="btn btn-secondary" href="/index.html">Apply To General Model</a>
+          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="card requirements">
+      <h2>General Requirements</h2>
+      <p>
+        Applicants should be professional, reliable, and clear about their comfort levels. No experience is required
+        for every role, but applicants should be comfortable communicating about concepts, boundaries, availability,
+        and compensation expectations.
+      </p>
+      <p>
+        For adult creative opportunities, applicants must be 18 or older. Age verification and signed agreements
+        may be required before production.
+      </p>
+    </section>
+
+    <section class="card apply">
+      <h2>How To Apply</h2>
+      <div class="apply-list">
+        <article class="apply-item">
+          <h3>General Model Application</h3>
+          <p>For portrait, fashion, lifestyle, editorial, and branding work.</p>
+          <a class="btn btn-secondary" href="/index.html">Open General Model Application</a>
+        </article>
+        <article class="apply-item">
+          <h3>Adult Creative Application</h3>
+          <p>For boudoir, nude, erotic, bodypaint, glamour, and subscription-style content.</p>
+          <a class="btn btn-primary" href="/artistic-nude-survey.html">Open Adult Creative Application</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
