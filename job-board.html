@@ -1,462 +1,1348 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media Photography Job Board</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f5f1e9;
-      --panel: rgba(255, 253, 248, 0.95);
-      --text: #181714;
-      --muted: #625a4e;
-      --accent: #0c7568;
-      --accent-2: #c56f48;
-      --line: rgba(61, 53, 43, 0.14);
-      --shadow: 0 24px 70px rgba(30, 25, 15, 0.14);
-      --radius: 18px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Media Casting Board • Creative Opportunities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
 
-    * { box-sizing: border-box; }
+        :root {
+            --accent: #c8102e;
+        }
 
-    body {
-      margin: 0;
-      font-family: "Space Grotesk", "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
-        radial-gradient(circle at 86% 10%, rgba(12, 117, 104, 0.18), transparent 30%),
-        radial-gradient(circle at 10% 20%, rgba(197, 111, 72, 0.14), transparent 28%),
-        linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%);
-      background-size: 44px 44px, 44px 44px, auto, auto, auto;
-    }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
 
-    .page {
-      width: min(1120px, 94vw);
-      margin: 28px auto 48px;
-      display: grid;
-      gap: 14px;
-      animation: riseIn 420ms ease-out;
-    }
+        .heading-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
 
-    .hero,
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 3vw, 28px);
-    }
+        .mvp-dark {
+            background-color: #0f0f0f;
+            color: #f1f1f1;
+        }
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(255, 253, 249, 0.98), rgba(255, 250, 240, 0.9)),
-        linear-gradient(130deg, rgba(12, 117, 104, 0.16), rgba(197, 111, 72, 0.1));
-    }
+        .card {
+            background-color: #1a1a1e;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      right: -120px;
-      bottom: -170px;
-      background: radial-gradient(circle, rgba(12, 117, 104, 0.2), transparent 70%);
-      pointer-events: none;
-    }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
 
-    .eyebrow {
-      margin: 0;
-      color: var(--accent-2);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
-    }
+        .accent-red {
+            color: #c8102e;
+        }
 
-    h1 {
-      margin: 6px 0 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-    }
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
 
-    .hero p {
-      margin: 12px 0 0;
-      color: var(--muted);
-      line-height: 1.65;
-      max-width: 80ch;
-    }
+        .job-card {
+            overflow: hidden;
+            border: 1px solid #27272a;
+        }
 
-    .quick-links {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+        .job-header {
+            height: 160px;
+            background: linear-gradient(135deg, #1f1f23 0%, #27272a 100%);
+            position: relative;
+        }
 
-    .btn {
-      appearance: none;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      padding: 10px 16px;
-      font: inherit;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
+        .mood-tag {
+            font-size: 0.65rem;
+            padding: 1px 8px;
+            border-radius: 9999px;
+            background-color: #27272a;
+            color: #a1a1aa;
+        }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
+        .filter-active {
+            background-color: #c8102e;
+            color: white;
+            border-color: #c8102e;
+        }
 
-    .btn-primary {
-      color: #fff;
-      background: linear-gradient(135deg, var(--accent), #139180);
-      box-shadow: 0 12px 26px rgba(12, 117, 104, 0.28);
-    }
+        .modal {
+            animation: modalPop 0.2s ease-out forwards;
+        }
 
-    .btn-secondary {
-      color: var(--accent);
-      border-color: rgba(12, 117, 104, 0.24);
-      background: #fff;
-    }
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
 
-    .grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+        .swipe-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .job-title {
-      margin: 0;
-      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-      color: #1e1b16;
-    }
+        .nav-active {
+            color: #c8102e;
+            border-bottom: 2px solid #c8102e;
+        }
 
-    .meta {
-      margin-top: 8px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+        .comfort-pill {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 9999px;
+        }
 
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #fff;
-      color: #363027;
-      font-size: 0.76rem;
-      font-weight: 700;
-      padding: 5px 9px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    .section-title {
-      margin: 16px 0 8px;
-      color: var(--accent);
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-    }
-
-    p {
-      margin: 10px 0 0;
-      line-height: 1.65;
-      color: #2b261f;
-    }
-
-    ul {
-      margin: 8px 0 0;
-      padding-left: 18px;
-      line-height: 1.65;
-      color: #2b261f;
-    }
-
-    .job-actions {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .requirements h2,
-    .apply h2 {
-      margin: 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.5rem, 3.4vw, 2.2rem);
-      line-height: 1.05;
-    }
-
-    .requirements p,
-    .apply p {
-      margin-top: 10px;
-      color: var(--muted);
-    }
-
-    .apply-list {
-      margin-top: 8px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .apply-item {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
-      padding: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .apply-item h3 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .apply-item p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    @media (max-width: 920px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @keyframes riseIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+        .level-badge {
+            font-size: 0.65rem;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
 </head>
-<body>
-  <main class="page">
-    <section class="hero">
-      <p class="eyebrow">MVP Media Photography</p>
-      <h1>Job Board</h1>
-      <p>
-        MVP Media Photography is now accepting applications for creative modeling, photography,
-        and content collaboration opportunities. We work with new and experienced models, creators,
-        and performers for professional photo and video projects.
-      </p>
-      <p>
-        All applicants must be 18 or older for adult creative projects. Every opportunity includes clear
-        communication about the concept, compensation, image usage, boundaries, and scheduling before any shoot is confirmed.
-      </p>
-      <div class="quick-links">
-        <a class="btn btn-secondary" href="/index.html">General Model Application</a>
-        <a class="btn btn-primary" href="/artistic-nude-survey.html">Adult Creative Application</a>
-      </div>
-    </section>
+<body class="mvp-dark text-zinc-200">
+    <nav class="border-b border-zinc-800 bg-[#0f0f0f]/95 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-[#c8102e] rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold text-2xl tracking-tighter">M</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-tighter">MVP Media</span>
+                        <span class="text-xs text-zinc-500 font-mono block -mt-1">CASTING BOARD</span>
+                    </div>
+                </div>
 
-    <section class="grid">
-      <article class="card">
-        <h2 class="job-title">1) General Model - Portrait, Fashion and Lifestyle</h2>
-        <div class="meta">
-          <span class="chip">Type: Modeling / Portfolio Building</span>
-          <span class="chip">Experience: Beginner-friendly</span>
-          <span class="chip">Compensation: Paid / TFP / Collaboration</span>
-        </div>
-        <p>
-          MVP Media is looking for models interested in portrait, fashion, lifestyle, editorial, branding,
-          and social media photo projects. This opportunity is ideal for models who want to build a portfolio,
-          create professional images, or collaborate on creative visual concepts.
-        </p>
-        <h3 class="section-title">Good fit for</h3>
-        <p>New models, fashion models, lifestyle creators, social media creators, and portfolio-building talent.</p>
-        <h3 class="section-title">May include</h3>
-        <ul>
-          <li>Portraits</li>
-          <li>Fashion looks</li>
-          <li>Lifestyle scenes</li>
-          <li>Editorial concepts</li>
-          <li>Branding images</li>
-          <li>Creative social media content</li>
-        </ul>
-        <div class="job-actions">
-          <a class="btn btn-secondary" href="/index.html">Apply To General Model</a>
-        </div>
-      </article>
+                <div class="hidden md:flex items-center gap-x-8 text-sm">
+                    <a href="#jobs" class="hover:text-white transition-colors">Opportunities</a>
+                    <a href="#quiz" class="hover:text-white transition-colors">Find Your Fit</a>
+                    <a href="#swipe" class="hover:text-white transition-colors">Swipe Mode</a>
+                    <button onclick="showCreatorDashboard()"
+                            class="px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-full flex items-center gap-x-2">
+                        <i class="fa-solid fa-user-shield text-xs"></i>
+                        <span>Creator Dashboard</span>
+                    </button>
+                </div>
 
-      <article class="card">
-        <h2 class="job-title">2) Boudoir / Glamour Model</h2>
-        <div class="meta">
-          <span class="chip">Type: Adult creative / Glamour photography</span>
-          <span class="chip">Age Requirement: 18+</span>
-          <span class="chip">Compensation: Paid or portfolio collaboration</span>
-        </div>
-        <p>
-          MVP Media is casting models for tasteful boudoir, glamour, lingerie, implied nude, and sensual
-          editorial photography projects. Shoots are planned in advance with clear boundaries, wardrobe
-          discussion, and image usage terms.
-        </p>
-        <h3 class="section-title">Good fit for</h3>
-        <p>
-          Models comfortable with glamour, lingerie, sensual posing, confidence-based photography,
-          or intimate editorial styling.
-        </p>
-        <h3 class="section-title">May include</h3>
-        <ul>
-          <li>Boudoir</li>
-          <li>Lingerie</li>
-          <li>Implied nude</li>
-          <li>Glamour portraits</li>
-          <li>Robe and sheet concepts</li>
-          <li>Studio lighting and elegant sensual imagery</li>
-        </ul>
-        <div class="job-actions">
-          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
-        </div>
-      </article>
+                <div class="flex items-center gap-x-3">
+                    <button onclick="showQuickApply()"
+                            class="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-2xl hover:bg-zinc-100 transition-all flex items-center gap-x-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span class="hidden sm:inline">Quick Apply</span>
+                    </button>
 
-      <article class="card">
-        <h2 class="job-title">3) Adult Creative / Erotic Nude Model</h2>
-        <div class="meta">
-          <span class="chip">Type: Adult creative content</span>
-          <span class="chip">Age Requirement: 18+ only</span>
-          <span class="chip">Compensation: Paid / Collaboration / Platform agreement</span>
+                    <button onclick="document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })"
+                            class="md:hidden px-4 py-2 text-sm border border-zinc-700 rounded-2xl">
+                        Browse
+                    </button>
+                </div>
+            </div>
         </div>
-        <p>
-          MVP Media is accepting applications from adult models and creators interested in nude, erotic nude,
-          glamour nude, body-focused, and subscription-style content projects. All concepts, comfort levels,
-          compensation, privacy preferences, and usage rights are discussed before scheduling.
-        </p>
-        <h3 class="section-title">Good fit for</h3>
-        <p>
-          Adult models, creators, OnlyFans-style creators, glamour models, and performers comfortable discussing
-          adult-content opportunities.
-        </p>
-        <h3 class="section-title">May include</h3>
-        <ul>
-          <li>Nude photography</li>
-          <li>Erotic nude concepts</li>
-          <li>Adult photo sets</li>
-          <li>Subscription-platform content</li>
-          <li>Private gallery content</li>
-          <li>Promotional adult imagery</li>
-        </ul>
-        <h3 class="section-title">Note</h3>
-        <p>Participation is voluntary. Models may decline any concept before scheduling.</p>
-        <div class="job-actions">
-          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
-        </div>
-      </article>
+    </nav>
 
-      <article class="card">
-        <h2 class="job-title">4) Nude Bodypaint Model</h2>
-        <div class="meta">
-          <span class="chip">Type: Artistic / Adult creative modeling</span>
-          <span class="chip">Age Requirement: 18+</span>
-          <span class="chip">Compensation: Paid / TFP / Collaboration</span>
-        </div>
-        <p>
-          MVP Media is looking for models interested in nude or partial nude bodypaint concepts. These projects
-          focus on visual art, body expression, color, texture, and creative styling. Bodypaint designs, comfort
-          levels, nudity level, and image usage are discussed before the shoot.
-        </p>
-        <h3 class="section-title">Good fit for</h3>
-        <p>
-          Models interested in art, bodypaint, creative posing, fine-art photography, glamour,
-          or experimental visual concepts.
-        </p>
-        <h3 class="section-title">May include</h3>
-        <ul>
-          <li>Full or partial bodypaint</li>
-          <li>Studio lighting</li>
-          <li>Fine-art posing</li>
-          <li>Creative makeup</li>
-          <li>Color themes</li>
-          <li>Editorial nude concepts and artistic portfolio images</li>
-        </ul>
-        <div class="job-actions">
-          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
-        </div>
-      </article>
+    <div class="max-w-screen-2xl mx-auto px-8 pt-16 pb-12">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 mb-6">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="text-xs font-medium tracking-[1px] text-emerald-400">NOW CASTING • FEBRUARY 2026</span>
+            </div>
 
-      <article class="card" style="grid-column: 1 / -1;">
-        <h2 class="job-title">5) Content Creator / Social Media Model</h2>
-        <div class="meta">
-          <span class="chip">Type: Photo and video content creation</span>
-          <span class="chip">Experience: Beginner to experienced</span>
-          <span class="chip">Compensation: Paid / Collaboration / Content trade / Revenue-share</span>
-        </div>
-        <p>
-          MVP Media is seeking creators who want to produce high-quality content for social media,
-          promotional campaigns, personal branding, paid platforms, or creative portfolio use. This role
-          may include short-form video, BTS content, reels, teaser clips, photo sets, and creator-style campaigns.
-        </p>
-        <h3 class="section-title">Good fit for</h3>
-        <p>
-          Influencers, models, adult creators, lifestyle creators, dancers, performers, and social media personalities.
-        </p>
-        <h3 class="section-title">May include</h3>
-        <ul>
-          <li>Reels</li>
-          <li>Teaser videos</li>
-          <li>Behind-the-scenes clips</li>
-          <li>Photo sets</li>
-          <li>Lifestyle and glamour content</li>
-          <li>Promotional visuals and creator branding campaigns</li>
-        </ul>
-        <div class="job-actions">
-          <a class="btn btn-secondary" href="/index.html">Apply To General Model</a>
-          <a class="btn btn-primary" href="/artistic-nude-survey.html">Apply To Adult Creative</a>
-        </div>
-      </article>
-    </section>
+            <h1 class="text-7xl md:text-7xl font-bold tracking-tighter heading-serif leading-none">
+                Creative.<br>
+                <span class="text-[#c8102e]">Sensual.</span><br>
+                Professional.
+            </h1>
 
-    <section class="card requirements">
-      <h2>General Requirements</h2>
-      <p>
-        Applicants should be professional, reliable, and clear about their comfort levels. No experience is required
-        for every role, but applicants should be comfortable communicating about concepts, boundaries, availability,
-        and compensation expectations.
-      </p>
-      <p>
-        For adult creative opportunities, applicants must be 18 or older. Age verification and signed agreements
-        may be required before production.
-      </p>
-    </section>
+            <p class="mt-6 text-xl text-zinc-400 max-w-md">
+                A premium casting experience for models, creators, and artists.
+                Find shoots that match your energy, comfort, and vision.
+            </p>
 
-    <section class="card apply">
-      <h2>How To Apply</h2>
-      <div class="apply-list">
-        <article class="apply-item">
-          <h3>General Model Application</h3>
-          <p>For portrait, fashion, lifestyle, editorial, and branding work.</p>
-          <a class="btn btn-secondary" href="/index.html">Open General Model Application</a>
-        </article>
-        <article class="apply-item">
-          <h3>Adult Creative Application</h3>
-          <p>For boudoir, nude, erotic, bodypaint, glamour, and subscription-style content.</p>
-          <a class="btn btn-primary" href="/artistic-nude-survey.html">Open Adult Creative Application</a>
-        </article>
-      </div>
-    </section>
-  </main>
+            <div class="flex items-center gap-x-4 mt-9">
+                <button onclick="document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })"
+                        class="px-8 py-4 bg-[#c8102e] hover:bg-red-700 transition-all text-white font-semibold rounded-3xl text-base flex items-center gap-x-3 group">
+                    <span>Browse Open Roles</span>
+                    <i class="fa-solid fa-arrow-right group-active:translate-x-1 transition"></i>
+                </button>
+
+                <button onclick="document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' })"
+                        class="px-7 py-4 border border-zinc-700 hover:bg-zinc-900 transition-all font-medium rounded-3xl text-base flex items-center gap-x-2">
+                    <i class="fa-solid fa-magic"></i>
+                    <span>Take the Fit Quiz</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-x-6 mt-8 text-xs text-zinc-500">
+                <div class="flex items-center gap-x-1.5">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>18+ verified opportunities</span>
+                </div>
+                <div>•</div>
+                <div>Clear boundaries &amp; consent-first process</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-screen-2xl mx-auto px-8 pb-12">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 md:p-9 flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1">
+                <div class="flex items-center gap-x-3 mb-3">
+                    <span class="px-3 py-1 text-xs font-bold tracking-widest bg-[#c8102e] text-white rounded-full">CASTING CALL OF THE WEEK</span>
+                    <span class="text-xs text-amber-400 flex items-center gap-x-1">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="countdown">Closes in 4 days</span>
+                    </span>
+                </div>
+                <h3 class="text-3xl font-semibold tracking-tight">Nude Bodypaint Series — "Liquid Gold"</h3>
+                <p class="mt-2 text-zinc-400">Artistic nude bodypaint shoot exploring light, texture, and color. Multiple looks, professional body artist on set.</p>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <span class="mood-tag">Bodypaint</span>
+                    <span class="mood-tag">Studio</span>
+                    <span class="mood-tag">Sensual</span>
+                    <span class="mood-tag">Fine Art</span>
+                </div>
+            </div>
+
+            <div class="md:text-right">
+                <div class="text-sm text-zinc-400 mb-1">Compensation</div>
+                <div class="text-2xl font-semibold">$450–$650 <span class="text-xs font-normal text-zinc-500">/ day</span></div>
+                <div class="text-xs text-emerald-400 mt-0.5">Paid • 18+ • 3 spots left</div>
+
+                <button onclick="applyToJob(4)"
+                        class="mt-5 w-full md:w-auto px-8 py-3.5 bg-white text-black text-sm font-semibold rounded-2xl hover:bg-zinc-200 transition flex items-center justify-center gap-x-2">
+                    <span>Apply to this casting</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz" class="max-w-screen-2xl mx-auto px-8 py-12 border-t border-zinc-800">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <span class="text-[#c8102e] text-sm font-semibold tracking-[1.5px]">PERSONALIZED MATCHING</span>
+                <h2 class="section-header tracking-tighter">Find Your Fit</h2>
+            </div>
+            <button onclick="resetQuiz()" class="text-xs px-4 py-2 border border-zinc-700 rounded-2xl hover:bg-zinc-900">Reset Quiz</button>
+        </div>
+
+        <div class="grid md:grid-cols-5 gap-4">
+            <div class="md:col-span-3 bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+                <div class="space-y-8">
+                    <div>
+                        <div class="font-medium mb-3 flex items-center gap-x-2">
+                            <span class="text-[#c8102e]">01</span>
+                            <span>What are you most excited to create?</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="quiz-q1">
+                            <button onclick="selectQuizOption(this, 'q1', 'portrait')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Portrait / Fashion</button>
+                            <button onclick="selectQuizOption(this, 'q1', 'boudoir')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Boudoir / Glamour</button>
+                            <button onclick="selectQuizOption(this, 'q1', 'bodypaint')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Bodypaint / Artistic Nude</button>
+                            <button onclick="selectQuizOption(this, 'q1', 'erotic')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Erotic / Adult Creative</button>
+                            <button onclick="selectQuizOption(this, 'q1', 'content')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Social Media / Video Content</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="font-medium mb-3 flex items-center gap-x-2">
+                            <span class="text-[#c8102e]">02</span>
+                            <span>What's your comfort level with nudity?</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2" id="quiz-q2">
+                            <button onclick="selectQuizOption(this, 'q2', 'no-nudity')" class="quiz-btn px-4 py-2 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">No nudity</button>
+                            <button onclick="selectQuizOption(this, 'q2', 'lingerie')" class="quiz-btn px-4 py-2 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Lingerie / Implied</button>
+                            <button onclick="selectQuizOption(this, 'q2', 'artistic-nude')" class="quiz-btn px-4 py-2 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Artistic Nude</button>
+                            <button onclick="selectQuizOption(this, 'q2', 'erotic-nude')" class="quiz-btn px-4 py-2 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Erotic / Full Nude</button>
+                            <button onclick="selectQuizOption(this, 'q2', 'bodypaint')" class="quiz-btn px-4 py-2 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Bodypaint (nude OK)</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <div class="font-medium mb-3 flex items-center gap-x-2">
+                                <span class="text-[#c8102e]">03</span> <span>Experience level?</span>
+                            </div>
+                            <div class="flex gap-2" id="quiz-q3">
+                                <button onclick="selectQuizOption(this, 'q3', 'beginner')" class="flex-1 quiz-btn px-4 py-2.5 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Beginner</button>
+                                <button onclick="selectQuizOption(this, 'q3', 'experienced')" class="flex-1 quiz-btn px-4 py-2.5 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Experienced</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="font-medium mb-3 flex items-center gap-x-2">
+                                <span class="text-[#c8102e]">04</span> <span>Preferred format?</span>
+                            </div>
+                            <div class="flex gap-2" id="quiz-q4">
+                                <button onclick="selectQuizOption(this, 'q4', 'photo')" class="flex-1 quiz-btn px-4 py-2.5 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Photos</button>
+                                <button onclick="selectQuizOption(this, 'q4', 'video')" class="flex-1 quiz-btn px-4 py-2.5 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Video / Reels</button>
+                                <button onclick="selectQuizOption(this, 'q4', 'both')" class="flex-1 quiz-btn px-4 py-2.5 text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Both</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col">
+                <div class="text-sm font-medium text-zinc-400 mb-3">YOUR RECOMMENDATIONS</div>
+
+                <div id="quiz-results" class="flex-1 flex flex-col justify-center text-center py-6">
+                    <div class="text-zinc-500">
+                        <i class="fa-solid fa-magic text-4xl mb-4 opacity-40"></i>
+                        <p class="text-sm">Answer the questions above<br>to see your best matches</p>
+                    </div>
+                </div>
+
+                <button onclick="applyRecommendations()"
+                        class="mt-auto w-full py-3.5 text-sm font-semibold bg-white text-black rounded-2xl disabled:opacity-40"
+                        id="apply-recs-btn" disabled>
+                    Apply to Top Matches
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="jobs" class="max-w-screen-2xl mx-auto px-8 pt-8 pb-16 border-t border-zinc-800">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-4xl font-semibold tracking-tighter">Open Opportunities</h2>
+                <p class="text-zinc-400 text-sm mt-1">7 active castings • Updated today</p>
+            </div>
+
+            <div class="hidden md:flex items-center gap-x-2 text-xs">
+                <button onclick="showSwipeMode()"
+                        class="flex items-center gap-x-2 px-4 h-9 border border-zinc-700 hover:bg-zinc-900 rounded-2xl text-xs font-medium">
+                    <i class="fa-solid fa-hand-pointer"></i>
+                    <span>Try Swipe Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="sticky top-[73px] z-40 bg-[#0f0f0f] py-4 -mx-1 px-1 border-b border-zinc-800 mb-6">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-3">
+                <div class="relative flex-1 min-w-[220px]">
+                    <input type="text" id="search-input" placeholder="Search roles, locations, vibes..."
+                           onkeyup="filterJobs()"
+                           class="w-full bg-zinc-900 border border-zinc-700 focus:border-zinc-500 transition pl-10 py-2.5 text-sm rounded-2xl placeholder:text-zinc-500">
+                    <i class="fa-solid fa-search absolute left-4 top-3.5 text-zinc-500"></i>
+                </div>
+
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <button onclick="toggleFilter(this, 'all')" class="filter-btn active px-5 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="all">All</button>
+                    <button onclick="toggleFilter(this, 'beginner')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="beginner">Beginner Friendly</button>
+                    <button onclick="toggleFilter(this, 'paid')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="paid">Paid</button>
+                    <button onclick="toggleFilter(this, '18+')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="18+">18+</button>
+
+                    <div class="w-px h-6 bg-zinc-800 mx-1"></div>
+
+                    <button onclick="toggleFilter(this, 'portrait')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="portrait">Portrait</button>
+                    <button onclick="toggleFilter(this, 'boudoir')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="boudoir">Boudoir</button>
+                    <button onclick="toggleFilter(this, 'bodypaint')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="bodypaint">Bodypaint</button>
+                    <button onclick="toggleFilter(this, 'erotic')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="erotic">Erotic Creative</button>
+                </div>
+            </div>
+
+            <div class="mt-3 flex items-center gap-x-2 text-xs">
+                <span class="text-zinc-500 font-medium px-1">Comfort:</span>
+                <div class="flex flex-wrap gap-1.5">
+                    <button onclick="filterByComfort(this, 'all')" class="comfort-filter px-3 py-1 rounded-full text-xs border border-transparent hover:bg-zinc-900 active">Any</button>
+                    <button onclick="filterByComfort(this, 'no-nudity')" class="comfort-filter px-3 py-1 rounded-full text-xs border border-transparent hover:bg-zinc-900">No Nudity</button>
+                    <button onclick="filterByComfort(this, 'lingerie')" class="comfort-filter px-3 py-1 rounded-full text-xs border border-transparent hover:bg-zinc-900">Lingerie</button>
+                    <button onclick="filterByComfort(this, 'artistic-nude')" class="comfort-filter px-3 py-1 rounded-full text-xs border border-transparent hover:bg-zinc-900">Artistic Nude</button>
+                    <button onclick="filterByComfort(this, 'erotic-nude')" class="comfort-filter px-3 py-1 rounded-full text-xs border border-transparent hover:bg-zinc-900">Erotic Nude</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="jobs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+        <div class="text-center mt-10">
+            <p class="text-xs text-zinc-500">Showing all current opportunities. New castings added weekly.</p>
+        </div>
+    </div>
+
+    <div id="swipe" class="max-w-screen-2xl mx-auto px-8 py-14 border-t border-zinc-800 bg-zinc-950">
+        <div class="max-w-md mx-auto text-center mb-8">
+            <h2 class="text-3xl font-semibold tracking-tight">Swipe Mode</h2>
+            <p class="text-zinc-400 mt-2 text-sm">Fast-track your applications. Swipe right on what excites you.</p>
+        </div>
+
+        <div class="max-w-sm mx-auto">
+            <div id="swipe-container" class="relative h-[420px] flex items-center justify-center"></div>
+
+            <div class="flex justify-center gap-x-4 mt-6">
+                <button onclick="swipeAction('no')"
+                        class="w-14 h-14 flex items-center justify-center border border-red-900/70 hover:bg-red-950 text-red-400 rounded-2xl transition">
+                    <i class="fa-solid fa-times text-3xl"></i>
+                </button>
+                <button onclick="swipeAction('maybe')"
+                        class="w-14 h-14 flex items-center justify-center border border-amber-800/70 hover:bg-amber-950 text-amber-400 rounded-2xl transition">
+                    <i class="fa-solid fa-question text-3xl"></i>
+                </button>
+                <button onclick="swipeAction('yes')"
+                        class="w-14 h-14 flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl transition">
+                    <i class="fa-solid fa-heart text-3xl"></i>
+                </button>
+            </div>
+            <p class="text-[10px] text-center text-zinc-500 mt-3">Interested → Opens application • Maybe → Saves for later</p>
+        </div>
+    </div>
+
+    <div class="max-w-screen-2xl mx-auto px-8 py-16 border-t border-zinc-800">
+        <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+            <div>
+                <h3 class="font-semibold text-xl tracking-tight mb-5">Safety, Consent &amp; Boundaries</h3>
+                <div class="space-y-4 text-sm text-zinc-400">
+                    <p>All opportunities are 18+ only. Every adult creative project begins with an open conversation about boundaries, image usage, compensation, and release terms before any shoot is scheduled.</p>
+                    <p>You may decline any concept at any stage. Your comfort and agency come first.</p>
+                    <div class="pt-3 text-xs border-t border-zinc-800">
+                        MVP Media follows strict consent-first practices. All models receive a detailed project brief and have final approval on concepts.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-semibold text-xl tracking-tight mb-5">How the Process Works</h3>
+                <div class="space-y-5 text-sm">
+                    <div class="flex gap-4">
+                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">1</div>
+                        <div><span class="font-medium">Apply</span> — Quick form or full application</div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">2</div>
+                        <div><span class="font-medium">Review</span> — We review your profile &amp; comfort level</div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">3</div>
+                        <div><span class="font-medium">Concept Chat</span> — 15-min call to align on vision &amp; boundaries</div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">4</div>
+                        <div><span class="font-medium">Shoot Day</span> — Professional, respectful, and creative environment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-zinc-800 py-9 text-xs text-zinc-500">
+        <div class="max-w-screen-2xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-y-3 text-center md:text-left">
+            <div>© MVP Media 2026. All creative opportunities are handled with respect and professionalism.</div>
+            <div class="flex gap-x-5">
+                <a href="#" class="hover:text-zinc-400">Creator Guidelines</a>
+                <a href="#" class="hover:text-zinc-400">Model Safety</a>
+                <a href="#" class="hover:text-zinc-400">Contact Casting Director</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="job-modal" onclick="if (event.target.id === 'job-modal') closeJobModal()" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-zinc-900 border border-zinc-700 max-w-2xl w-full rounded-3xl overflow-hidden modal">
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <div id="apply-modal" onclick="if (event.target.id === 'apply-modal') closeApplyModal()" class="hidden fixed inset-0 bg-black/90 z-[110] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-zinc-900 border border-zinc-700 max-w-lg w-full rounded-3xl p-8 modal">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div id="apply-job-title" class="font-semibold text-2xl tracking-tight"></div>
+                    <div id="apply-job-meta" class="text-xs text-zinc-400"></div>
+                </div>
+                <button onclick="closeApplyModal()" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+
+            <form id="apply-form" onsubmit="submitApplication(event)">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-medium text-zinc-400 block mb-1.5">Full Name</label>
+                            <input type="text" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-zinc-400 block mb-1.5">Age (must be 18+)</label>
+                            <input type="number" min="18" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-zinc-400 block mb-1.5">Instagram or Portfolio Link</label>
+                        <input type="url" placeholder="https://instagram.com/yourhandle" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-zinc-400 block mb-1.5">City / Location</label>
+                        <input type="text" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-zinc-400 block mb-2">Your Comfort Level for this project</label>
+                        <select id="comfort-select" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                            <option value="lingerie">Lingerie / Implied Nude</option>
+                            <option value="artistic-nude">Artistic Nude</option>
+                            <option value="erotic-nude">Erotic / Full Nude</option>
+                            <option value="bodypaint">Bodypaint (nude OK)</option>
+                            <option value="no-nudity">No Nudity</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-zinc-400 block mb-1.5">Why are you interested in this opportunity? (optional)</label>
+                        <textarea rows="3" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]" placeholder="I love the artistic direction and want to expand my portfolio with creative bodypaint work..."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center gap-x-3">
+                    <button type="submit"
+                            class="flex-1 py-4 bg-[#c8102e] hover:bg-red-700 transition font-semibold rounded-2xl text-sm">
+                        Submit Application
+                    </button>
+                    <button type="button" onclick="closeApplyModal()"
+                            class="px-6 py-4 border border-zinc-700 hover:bg-zinc-800 transition font-medium rounded-2xl text-sm">
+                        Cancel
+                    </button>
+                </div>
+
+                <p class="text-[10px] text-center text-zinc-500 mt-4">Your application will be reviewed within 48 hours. We respect your time and privacy.</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#c8102e');
+        }
+
+        let jobs = [
+            {
+                id: 1,
+                title: "General Model — Portrait & Fashion",
+                category: "portrait",
+                level: 1,
+                compensation: "Paid / TFP / Collaboration",
+                location: "Studio + Location",
+                type: "Modeling / Portfolio Building",
+                age: "18+",
+                experience: "Beginner Friendly",
+                comfort: ["no-nudity", "lingerie"],
+                mood: ["Urban", "Soft Glam", "Minimal"],
+                description: "Seeking models for portrait, fashion, lifestyle, editorial, and branding projects. Perfect for building a strong portfolio.",
+                goodFor: "New models, fashion enthusiasts, those wanting clean professional work",
+                includes: "Portraits, fashion looks, lifestyle imagery, social media content",
+                paid: true,
+                beginner: true,
+                featured: true
+            },
+            {
+                id: 2,
+                title: "Boudoir / Glamour Model",
+                category: "boudoir",
+                level: 2,
+                compensation: "Paid or Portfolio Collaboration",
+                location: "Private Studio",
+                type: "Adult Creative / Glamour",
+                age: "18+",
+                experience: "Beginner to Intermediate",
+                comfort: ["lingerie", "artistic-nude"],
+                mood: ["Sensual", "Luxury", "Soft Glam"],
+                description: "Casting for beautiful boudoir, glamour, lingerie, and implied nude photography. Pre-planned concepts with clear communication.",
+                goodFor: "Models comfortable with sensual and elegant imagery",
+                includes: "Lingerie sets, implied nude, sensual editorial, portfolio building",
+                paid: true,
+                beginner: true,
+                featured: true
+            },
+            {
+                id: 3,
+                title: "Artistic Nude / Erotic Creative Model",
+                category: "erotic",
+                level: 4,
+                compensation: "Paid / Collaboration / Platform Agreement",
+                location: "Studio",
+                type: "Adult Creative Content",
+                age: "18+ only",
+                experience: "Intermediate+",
+                comfort: ["artistic-nude", "erotic-nude"],
+                mood: ["Dark Editorial", "Sensual", "Bold"],
+                description: "Open calls for nude, erotic, and artistic nude projects. Focus on body-positive, empowered imagery and subscription-style content.",
+                goodFor: "Experienced models who enjoy creative freedom and sensual expression",
+                includes: "Fine art nude, erotic concepts, body-focused work, video elements",
+                paid: true,
+                beginner: false,
+                featured: false
+            },
+            {
+                id: 4,
+                title: "Nude Bodypaint Model — Liquid Gold",
+                category: "bodypaint",
+                level: 3,
+                compensation: "$450–$650 / day",
+                location: "Private Studio",
+                type: "Artistic / Adult Creative",
+                age: "18+",
+                experience: "All Levels Welcome",
+                comfort: ["bodypaint", "artistic-nude"],
+                mood: ["Bodypaint", "Fine Art", "Neon"],
+                description: "Artistic nude bodypaint series exploring color, texture, light, and movement. Professional body artist on set. Multiple creative looks.",
+                goodFor: "Models who enjoy transformation, color, and high-concept artistic work",
+                includes: "Full body paint, artistic nude poses, creative direction, high-end lighting",
+                paid: true,
+                beginner: true,
+                featured: true
+            },
+            {
+                id: 5,
+                title: "Social Media Content Creator / Reels Model",
+                category: "content",
+                level: 2,
+                compensation: "Paid / Revenue Share / Collab",
+                location: "Studio + On Location",
+                type: "Photo & Video Content",
+                age: "18+",
+                experience: "Beginner to Experienced",
+                comfort: ["lingerie", "artistic-nude"],
+                mood: ["Urban", "Bold", "Minimal"],
+                description: "Creators wanted for Instagram Reels, TikTok, and promotional content. High-energy, flirty, and fashion-forward concepts.",
+                goodFor: "Outgoing creators who enjoy being on camera and building personal brands",
+                includes: "Short-form video, modeling, behind-the-scenes, branded content",
+                paid: true,
+                beginner: true,
+                featured: false
+            },
+            {
+                id: 6,
+                title: "High-Fashion Editorial Model",
+                category: "portrait",
+                level: 3,
+                compensation: "Paid",
+                location: "Studio + Rooftop",
+                type: "Fashion / Editorial",
+                age: "18+",
+                experience: "Intermediate",
+                comfort: ["lingerie", "artistic-nude"],
+                mood: ["Luxury", "Dark Editorial", "Magazine Style"],
+                description: "Editorial fashion shoot with dramatic lighting and high-fashion styling. Strong focus on posing, movement, and expression.",
+                goodFor: "Models with runway or strong posing experience looking for editorial tear sheets",
+                includes: "High-fashion looks, dramatic lighting, magazine-style imagery",
+                paid: true,
+                beginner: false,
+                featured: true
+            },
+            {
+                id: 7,
+                title: "Outdoor Location Shoot — Golden Hour",
+                category: "portrait",
+                level: 2,
+                compensation: "TFP + Travel Stipend",
+                location: "Various Scenic Locations",
+                type: "Lifestyle / Fashion",
+                age: "18+",
+                experience: "All Levels",
+                comfort: ["no-nudity", "lingerie"],
+                mood: ["Soft Glam", "Urban", "Minimal"],
+                description: "Beautiful outdoor golden hour shoots in scenic locations. Wardrobe provided. Great for natural light portfolio work.",
+                goodFor: "Models who love natural environments and relaxed, authentic energy",
+                includes: "Fashion, lifestyle, natural light portraits, movement shots",
+                paid: false,
+                beginner: true,
+                featured: false
+            }
+        ];
+
+        let activeFilters = new Set(['all']);
+        let activeComfortFilter = 'all';
+        let savedJobs = new Set();
+        let swipeJobs = [...jobs];
+        let currentSwipeIndex = 0;
+
+        function renderJobs(filteredJobs = jobs) {
+            const grid = document.getElementById('jobs-grid');
+            grid.innerHTML = '';
+
+            if (filteredJobs.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center">
+                        <i class="fa-solid fa-search text-4xl text-zinc-700 mb-4"></i>
+                        <p class="text-zinc-400">No opportunities match your current filters.</p>
+                        <button onclick="resetFilters()" class="mt-4 text-xs underline">Clear all filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredJobs.forEach(job => {
+                const card = document.createElement('div');
+                card.className = `job-card bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden group cursor-pointer`;
+
+                const levelColor = job.level <= 2 ? 'bg-emerald-900 text-emerald-300' :
+                                  job.level === 3 ? 'bg-amber-900 text-amber-300' : 'bg-rose-900 text-rose-300';
+
+                const comfortBadges = job.comfort.map(c => {
+                    const label = c === 'no-nudity' ? 'No Nudity' :
+                                 c === 'lingerie' ? 'Lingerie' :
+                                 c === 'artistic-nude' ? 'Artistic Nude' :
+                                 c === 'erotic-nude' ? 'Erotic Nude' : 'Bodypaint';
+                    return `<span class="px-2 py-px text-[9px] bg-zinc-800 rounded">${label}</span>`;
+                }).join('');
+
+                const moodBadges = job.mood.slice(0, 3).map(m =>
+                    `<span class="mood-tag">${m}</span>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="job-header p-5 flex flex-col justify-between" style="background: linear-gradient(135deg, #1f1f23 0%, #27272a 100%)">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="level-badge ${levelColor}">LEVEL ${job.level}</span>
+                                ${job.beginner ? `<span class="ml-1.5 px-2 py-px text-[9px] bg-emerald-900/70 text-emerald-300 rounded">Beginner OK</span>` : ''}
+                            </div>
+                            ${job.paid ? `<span class="text-[10px] px-2.5 py-px bg-emerald-900/70 text-emerald-300 rounded-full font-medium">PAID</span>` :
+                                         `<span class="text-[10px] px-2.5 py-px bg-zinc-700 text-zinc-300 rounded-full">TFP / COLLAB</span>`}
+                        </div>
+
+                        <div>
+                            <div class="text-xl font-semibold tracking-tighter leading-none pr-8">${job.title}</div>
+                            <div class="text-xs text-zinc-400 mt-1">${job.type}</div>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <div class="flex flex-wrap gap-1.5 mb-3">
+                            ${comfortBadges}
+                        </div>
+
+                        <p class="text-sm text-zinc-300 line-clamp-2 mb-4">${job.description}</p>
+
+                        <div class="flex flex-wrap gap-1 mb-4">
+                            ${moodBadges}
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="text-zinc-400">
+                                <i class="fa-solid fa-map-marker-alt mr-1"></i> ${job.location}
+                            </div>
+                            <div class="font-mono text-emerald-400 text-[10px]">${job.compensation}</div>
+                        </div>
+
+                        <div class="flex items-center gap-x-2 mt-5">
+                            <button onclick="event.stopImmediatePropagation(); showJobDetail(${job.id})"
+                                    class="flex-1 text-xs py-2.5 border border-zinc-700 hover:bg-zinc-800 rounded-2xl font-medium transition">
+                                View Details
+                            </button>
+
+                            <button onclick="event.stopImmediatePropagation(); applyToJob(${job.id})"
+                                    class="flex-1 text-xs py-2.5 bg-white text-black hover:bg-zinc-200 font-semibold rounded-2xl transition">
+                                Quick Apply
+                            </button>
+
+                            <button onclick="event.stopImmediatePropagation(); toggleSaveJob(${job.id}, this)"
+                                    class="w-9 h-9 flex items-center justify-center border border-zinc-700 hover:bg-zinc-800 rounded-2xl text-zinc-400 hover:text-white transition">
+                                <i class="fa-${savedJobs.has(job.id) ? 'solid' : 'regular'} fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => showJobDetail(job.id);
+                grid.appendChild(card);
+            });
+        }
+
+        function filterJobs() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            let filtered = jobs;
+
+            if (!activeFilters.has('all')) {
+                filtered = filtered.filter(job => {
+                    if (activeFilters.has('beginner') && !job.beginner) return false;
+                    if (activeFilters.has('paid') && !job.paid) return false;
+                    if (activeFilters.has('18+') && !String(job.age).includes('18+')) return false;
+                    if (activeFilters.has(job.category)) return true;
+                    return false;
+                });
+            }
+
+            if (activeComfortFilter !== 'all') {
+                filtered = filtered.filter(job => job.comfort.includes(activeComfortFilter));
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(job =>
+                    job.title.toLowerCase().includes(searchTerm) ||
+                    job.description.toLowerCase().includes(searchTerm) ||
+                    job.mood.join(' ').toLowerCase().includes(searchTerm)
+                );
+            }
+
+            renderJobs(filtered);
+        }
+
+        function toggleFilter(btn, filterType) {
+            const allBtns = document.querySelectorAll('#filter-buttons .filter-btn');
+
+            if (filterType === 'all') {
+                activeFilters = new Set(['all']);
+                allBtns.forEach(b => b.classList.remove('filter-active', 'border-[#c8102e]'));
+                btn.classList.add('filter-active', 'border-[#c8102e]');
+            } else {
+                activeFilters.delete('all');
+                const allBtn = document.querySelector('#filter-buttons .filter-btn[data-filter="all"]');
+                if (allBtn) allBtn.classList.remove('filter-active', 'border-[#c8102e]');
+
+                if (activeFilters.has(filterType)) {
+                    activeFilters.delete(filterType);
+                    btn.classList.remove('filter-active', 'border-[#c8102e]');
+                } else {
+                    activeFilters.add(filterType);
+                    btn.classList.add('filter-active', 'border-[#c8102e]');
+                }
+
+                if (activeFilters.size === 0) {
+                    activeFilters.add('all');
+                    if (allBtn) allBtn.classList.add('filter-active', 'border-[#c8102e]');
+                }
+            }
+
+            filterJobs();
+        }
+
+        function filterByComfort(btn, comfort) {
+            document.querySelectorAll('.comfort-filter').forEach(b => b.classList.remove('border-[#c8102e]', 'bg-zinc-800'));
+
+            if (activeComfortFilter === comfort) {
+                activeComfortFilter = 'all';
+                btn.classList.add('border-transparent');
+            } else {
+                activeComfortFilter = comfort;
+                btn.classList.add('border-[#c8102e]', 'bg-zinc-800');
+            }
+
+            filterJobs();
+        }
+
+        function resetFilters() {
+            activeFilters = new Set(['all']);
+            activeComfortFilter = 'all';
+            document.getElementById('search-input').value = '';
+
+            document.querySelectorAll('#filter-buttons .filter-btn').forEach(b => b.classList.remove('filter-active', 'border-[#c8102e]'));
+            const allBtn = document.querySelector('#filter-buttons .filter-btn[data-filter="all"]');
+            if (allBtn) allBtn.classList.add('filter-active', 'border-[#c8102e]');
+
+            document.querySelectorAll('.comfort-filter').forEach(b => b.classList.remove('border-[#c8102e]', 'bg-zinc-800'));
+
+            renderJobs(jobs);
+        }
+
+        let quizAnswers = {};
+
+        function selectQuizOption(element, question, value) {
+            const container = document.getElementById(`quiz-${question}`);
+            if (container) {
+                container.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('!border-[#c8102e]', '!bg-zinc-800');
+                    btn.classList.add('border-zinc-700');
+                });
+            } else {
+                element.parentElement.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('!border-[#c8102e]', '!bg-zinc-800');
+                });
+            }
+
+            element.classList.add('!border-[#c8102e]', '!bg-zinc-800');
+            element.classList.remove('border-zinc-700');
+
+            quizAnswers[question] = value;
+            updateQuizResults();
+        }
+
+        function updateQuizResults() {
+            const resultsDiv = document.getElementById('quiz-results');
+            const applyBtn = document.getElementById('apply-recs-btn');
+
+            if (Object.keys(quizAnswers).length < 2) {
+                resultsDiv.innerHTML = `
+                    <div class="text-zinc-500">
+                        <i class="fa-solid fa-magic text-4xl mb-4 opacity-40"></i>
+                        <p class="text-sm">Answer a few more questions<br>to see personalized matches</p>
+                    </div>
+                `;
+                applyBtn.disabled = true;
+                return;
+            }
+
+            let recommendations = [...jobs];
+
+            if (quizAnswers.q1) {
+                const catMap = { portrait: 'portrait', boudoir: 'boudoir', bodypaint: 'bodypaint', erotic: 'erotic', content: 'content' };
+                recommendations = recommendations.filter(j => j.category === catMap[quizAnswers.q1] || (quizAnswers.q1 === 'content' && j.category === 'content'));
+            }
+
+            if (quizAnswers.q2) {
+                const comfortMap = {
+                    'no-nudity': 'no-nudity',
+                    'lingerie': 'lingerie',
+                    'artistic-nude': 'artistic-nude',
+                    'erotic-nude': 'erotic-nude',
+                    'bodypaint': 'bodypaint'
+                };
+                recommendations = recommendations.filter(j => j.comfort.includes(comfortMap[quizAnswers.q2]));
+            }
+
+            if (quizAnswers.q3 === 'beginner') {
+                recommendations = recommendations.filter(j => j.beginner);
+            }
+
+            recommendations = recommendations.slice(0, 3);
+
+            let html = '<div class="space-y-3">';
+            recommendations.forEach(job => {
+                html += `
+                    <div onclick="showJobDetail(${job.id}); document.getElementById('quiz').scrollIntoView({block:'center'})"
+                         class="cursor-pointer flex items-center gap-x-3 p-3 rounded-2xl hover:bg-zinc-800 border border-transparent hover:border-zinc-700 transition">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-sm truncate">${job.title}</div>
+                            <div class="text-[10px] text-zinc-400">${job.compensation}</div>
+                        </div>
+                        <div class="text-xs px-3 py-1 bg-zinc-800 rounded-xl whitespace-nowrap">View</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            resultsDiv.innerHTML = html;
+            applyBtn.disabled = false;
+        }
+
+        function applyRecommendations() {
+            const resultsDiv = document.getElementById('quiz-results');
+            const topJob = resultsDiv.querySelector('div[onclick]');
+            if (topJob) {
+                const id = parseInt(topJob.getAttribute('onclick').match(/\d+/)[0]);
+                applyToJob(id);
+            }
+        }
+
+        function resetQuiz() {
+            quizAnswers = {};
+            document.querySelectorAll('.quiz-btn').forEach(btn => {
+                btn.classList.remove('!border-[#c8102e]', '!bg-zinc-800');
+                btn.classList.add('border-zinc-700');
+            });
+            document.getElementById('quiz-results').innerHTML = `
+                <div class="text-zinc-500">
+                    <i class="fa-solid fa-magic text-4xl mb-4 opacity-40"></i>
+                    <p class="text-sm">Answer the questions above<br>to see your best matches</p>
+                </div>
+            `;
+            document.getElementById('apply-recs-btn').disabled = true;
+        }
+
+        function showJobDetail(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            const modal = document.getElementById('job-modal');
+            const content = document.getElementById('modal-content');
+
+            const levelText = job.level <= 2 ? 'Beginner Friendly' : job.level === 3 ? 'Intermediate' : 'Advanced Creative';
+
+            content.innerHTML = `
+                <div class="p-8">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center gap-x-3">
+                                <span class="px-3 py-1 text-xs rounded-full ${job.paid ? 'bg-emerald-900 text-emerald-300' : 'bg-zinc-700'}">${job.paid ? 'PAID OPPORTUNITY' : 'TFP / COLLAB'}</span>
+                                <span class="text-xs text-zinc-400">${job.age}</span>
+                            </div>
+                            <h2 class="text-4xl font-semibold tracking-tighter mt-3 pr-8">${job.title}</h2>
+                            <p class="text-zinc-400 mt-1">${job.type} • ${job.location}</p>
+                        </div>
+
+                        <button onclick="closeJobModal()" class="text-zinc-400 hover:text-white text-2xl leading-none">×</button>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                        <div class="md:col-span-2">
+                            <div class="prose prose-invert text-sm">
+                                <p class="text-zinc-300">${job.description}</p>
+
+                                <div class="mt-6">
+                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">GOOD FIT FOR</div>
+                                    <p>${job.goodFor}</p>
+                                </div>
+
+                                <div class="mt-5">
+                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">WHAT THIS PROJECT INCLUDES</div>
+                                    <p>${job.includes}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 text-xs">
+                            <div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">COMPENSATION</div>
+                                <div class="text-lg font-semibold">${job.compensation}</div>
+                            </div>
+
+                            <div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">EXPERIENCE LEVEL</div>
+                                <div>Level ${job.level} — ${levelText}</div>
+                            </div>
+
+                            <div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">COMFORT LEVELS</div>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${job.comfort.map(c => {
+                                        const label = c.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                        return `<span class="px-3 py-px bg-zinc-800 text-xs rounded-full">${label}</span>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">MOOD / VIBE</div>
+                                <div class="flex flex-wrap gap-1">${job.mood.map(m => `<span class="mood-tag">${m}</span>`).join('')}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-zinc-700 px-8 py-5 bg-zinc-950 flex items-center justify-between">
+                    <button onclick="closeJobModal()" class="px-6 py-3 text-sm font-medium">Close</button>
+
+                    <div class="flex gap-x-3">
+                        <button onclick="toggleSaveJob(${job.id}, this); event.target.closest('.modal').querySelector('button[onclick*=\'closeJobModal\']').click()"
+                                class="px-5 py-3 text-sm border border-zinc-700 hover:bg-zinc-900 rounded-2xl flex items-center gap-x-2">
+                            <i class="fa-regular fa-heart mr-1"></i> Save for Later
+                        </button>
+
+                        <button onclick="closeJobModal(); applyToJob(${job.id})"
+                                class="px-8 py-3 text-sm font-semibold bg-[#c8102e] hover:bg-red-700 transition rounded-2xl">
+                            Apply to this Role
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeJobModal() {
+            const modal = document.getElementById('job-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        let currentApplyingJobId = null;
+
+        function applicationPathForJob(job) {
+            if (!job) return '/index.html';
+            const adultCategories = new Set(['boudoir', 'erotic', 'bodypaint']);
+            return adultCategories.has(job.category) ? '/artistic-nude-survey.html' : '/index.html';
+        }
+
+        function applyToJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            currentApplyingJobId = jobId;
+
+            document.getElementById('apply-job-title').innerText = job.title;
+            document.getElementById('apply-job-meta').innerHTML = `${job.type} • ${job.compensation}`;
+
+            const select = document.getElementById('comfort-select');
+            if (job.comfort.length > 0) {
+                select.value = job.comfort[0];
+            }
+
+            const modal = document.getElementById('apply-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeApplyModal() {
+            const modal = document.getElementById('apply-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function submitApplication(e) {
+            e.preventDefault();
+
+            const job = jobs.find(j => j.id === currentApplyingJobId);
+            if (!job) {
+                closeApplyModal();
+                return;
+            }
+
+            const targetPath = applicationPathForJob(job);
+            const role = encodeURIComponent(job.title);
+            const query = `?source=job-board&role=${role}`;
+
+            closeApplyModal();
+            window.location.href = `${targetPath}${query}`;
+        }
+
+        function showSwipeMode() {
+            document.getElementById('swipe').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            initializeSwipe();
+        }
+
+        function initializeSwipe() {
+            const container = document.getElementById('swipe-container');
+            container.innerHTML = '';
+            swipeJobs = [...jobs].sort(() => 0.5 - Math.random()).slice(0, 6);
+            currentSwipeIndex = 0;
+
+            if (swipeJobs.length === 0) return;
+
+            renderSwipeCard();
+        }
+
+        function renderSwipeCard() {
+            const container = document.getElementById('swipe-container');
+            container.innerHTML = '';
+
+            if (currentSwipeIndex >= swipeJobs.length) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-solid fa-heart text-5xl text-emerald-500 mb-4"></i>
+                        <div class="font-medium">You've gone through today's matches!</div>
+                        <button onclick="initializeSwipe()" class="mt-5 text-xs px-6 py-2 border border-zinc-700 rounded-2xl">Start Over</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const job = swipeJobs[currentSwipeIndex];
+
+            const card = document.createElement('div');
+            card.className = `swipe-card absolute w-full max-w-[300px] bg-zinc-900 border border-zinc-700 rounded-3xl overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing`;
+
+            card.innerHTML = `
+                <div class="p-5">
+                    <div class="flex justify-between mb-4">
+                        <span class="level-badge ${job.level <= 2 ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'}">LEVEL ${job.level}</span>
+                        ${job.paid ? `<span class="text-emerald-400 text-xs">PAID</span>` : ''}
+                    </div>
+
+                    <div class="font-semibold text-2xl tracking-tight leading-none pr-4">${job.title}</div>
+                    <div class="text-xs mt-1 text-zinc-400">${job.type}</div>
+
+                    <div class="mt-6 text-sm text-zinc-300 line-clamp-3">${job.description}</div>
+
+                    <div class="mt-6 flex flex-wrap gap-1">
+                        ${job.mood.map(m => `<span class="mood-tag">${m}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="px-5 py-4 bg-zinc-950 flex justify-between text-xs border-t border-zinc-800">
+                    <div>${job.location}</div>
+                    <div class="font-mono text-emerald-400">${job.compensation}</div>
+                </div>
+            `;
+
+            let startX = 0;
+            card.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                card.style.transition = 'none';
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                if (!card.parentNode) return;
+                const diff = e.clientX - startX;
+                card.style.transition = 'transform 0.3s ease';
+
+                if (diff > 80) {
+                    swipeAction('yes', card);
+                } else if (diff < -80) {
+                    swipeAction('no', card);
+                } else {
+                    card.style.transform = '';
+                }
+            }, { once: true });
+
+            container.appendChild(card);
+        }
+
+        function swipeAction(action, cardElement = null) {
+            const container = document.getElementById('swipe-container');
+            const currentCard = cardElement || container.querySelector('.swipe-card');
+
+            if (!currentCard || currentSwipeIndex >= swipeJobs.length) return;
+
+            const job = swipeJobs[currentSwipeIndex];
+
+            if (action === 'yes') {
+                currentCard.style.transition = 'transform 0.25s ease, opacity 0.2s';
+                currentCard.style.transform = 'translateX(400px) rotate(15deg)';
+                currentCard.style.opacity = '0';
+
+                setTimeout(() => {
+                    currentSwipeIndex++;
+                    applyToJob(job.id);
+                    renderSwipeCard();
+                }, 220);
+            }
+            else if (action === 'no') {
+                currentCard.style.transition = 'transform 0.25s ease, opacity 0.2s';
+                currentCard.style.transform = 'translateX(-400px) rotate(-15deg)';
+                currentCard.style.opacity = '0';
+
+                setTimeout(() => {
+                    currentSwipeIndex++;
+                    renderSwipeCard();
+                }, 220);
+            }
+            else if (action === 'maybe') {
+                savedJobs.add(job.id);
+                currentCard.style.transition = 'transform 0.3s ease, opacity 0.2s';
+                currentCard.style.transform = 'translateY(80px)';
+                currentCard.style.opacity = '0';
+
+                setTimeout(() => {
+                    currentSwipeIndex++;
+                    renderSwipeCard();
+                }, 200);
+            }
+        }
+
+        function toggleSaveJob(jobId, element) {
+            if (savedJobs.has(jobId)) {
+                savedJobs.delete(jobId);
+                element.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+            } else {
+                savedJobs.add(jobId);
+                element.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i>`;
+            }
+        }
+
+        function showCreatorDashboard() {
+            const modalHTML = `
+                <div onclick="this.remove()" class="fixed inset-0 bg-black/90 z-[130] flex items-center justify-center p-6">
+                    <div onclick="event.stopImmediatePropagation()" class="max-w-5xl w-full bg-zinc-900 border border-zinc-700 rounded-3xl overflow-hidden modal">
+                        <div class="px-8 py-5 border-b border-zinc-700 flex items-center justify-between">
+                            <div>
+                                <span class="font-semibold">MVP Media • Creator Dashboard</span>
+                                <span class="ml-3 text-xs px-2 py-px bg-zinc-800 rounded">7 applicants this week</span>
+                            </div>
+                            <button onclick="event.target.closest('.fixed').remove()" class="text-xl text-zinc-400 hover:text-white">×</button>
+                        </div>
+
+                        <div class="p-8">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-xs text-zinc-400 border-b border-zinc-700">
+                                        <th class="text-left pb-3 font-normal">Applicant</th>
+                                        <th class="text-left pb-3 font-normal">Applied For</th>
+                                        <th class="text-left pb-3 font-normal">Comfort</th>
+                                        <th class="text-left pb-3 font-normal">Fit Score</th>
+                                        <th class="text-left pb-3 font-normal">Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-800 text-xs">
+                                    <tr>
+                                        <td class="py-4">Aaliyah R. <span class="text-[10px] text-zinc-500">@aaliyahcreates</span></td>
+                                        <td class="py-4">Nude Bodypaint — Liquid Gold</td>
+                                        <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Bodypaint</span></td>
+                                        <td class="py-4"><span class="font-mono text-emerald-400">94</span></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Good Fit</span></td>
+                                        <td class="py-4"><button class="text-xs underline">Contact</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4">Jordan K. <span class="text-[10px] text-zinc-500">@jordankmodel</span></td>
+                                        <td class="py-4">Boudoir / Glamour Model</td>
+                                        <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Lingerie</span></td>
+                                        <td class="py-4"><span class="font-mono text-emerald-400">81</span></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-amber-900 text-amber-300 text-[10px] rounded">Needs Info</span></td>
+                                        <td class="py-4"><button class="text-xs underline">Contact</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4">Maya S. <span class="text-[10px] text-zinc-500">@mayasensual</span></td>
+                                        <td class="py-4">Artistic Nude / Erotic Creative</td>
+                                        <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Erotic Nude</span></td>
+                                        <td class="py-4"><span class="font-mono text-emerald-400">88</span></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Scheduled</span></td>
+                                        <td class="py-4"><button class="text-xs underline">View Notes</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="px-8 py-4 bg-zinc-950 text-xs flex justify-between items-center text-zinc-400">
+                            <div>Showing recent applicants. Full CRM available in Collab Expert.</div>
+                            <button class="underline">Export CSV</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function showQuickApply() {
+            window.location.href = '/index.html?source=job-board&role=Quick%20General%20Application';
+        }
+
+        function startCountdown() {
+            const el = document.getElementById('countdown');
+            let days = 4;
+            setInterval(() => {
+                days--;
+                if (days < 0) days = 0;
+                el.innerHTML = `Closes in ${days} day${days === 1 ? '' : 's'}`;
+            }, 1000 * 60 * 60 * 24);
+        }
+
+        function setupKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    document.getElementById('search-input').focus();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const applyModal = document.getElementById('apply-modal');
+                    const jobModal = document.getElementById('job-modal');
+                    if (applyModal && !applyModal.classList.contains('hidden')) {
+                        closeApplyModal();
+                    } else if (jobModal && !jobModal.classList.contains('hidden')) {
+                        closeJobModal();
+                    }
+                }
+            });
+        }
+
+        function initializeApp() {
+            initializeTailwind();
+            renderJobs();
+
+            const allFilter = document.querySelector('#filter-buttons .filter-btn[data-filter="all"]');
+            if (allFilter) allFilter.classList.add('filter-active', 'border-[#c8102e]');
+
+            const search = document.getElementById('search-input');
+            search.addEventListener('input', filterJobs);
+
+            startCountdown();
+            setupKeyboard();
+        }
+
+        window.onload = initializeApp;
+    </script>
 </body>
 </html>
