@@ -1343,6 +1343,11 @@
       form.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
+    const appendCurrentQuery = (path) => {
+      const query = globalThis.location.search || "";
+      return query ? `${path}${query}` : path;
+    };
+
     const selectSurveyLanguage = (lang) => {
       trackEvent("language_selected", { language: lang });
       if (lang === "en") {
@@ -1351,12 +1356,12 @@
       }
 
       if (lang === "es") {
-        globalThis.location.href = "/artistic-nude-survey-es";
+        globalThis.location.href = appendCurrentQuery("/artistic-nude-survey-es");
         return;
       }
 
       if (lang === "pt") {
-        globalThis.location.href = "/artistic-nude-survey-pt";
+        globalThis.location.href = appendCurrentQuery("/artistic-nude-survey-pt");
       }
     };
 

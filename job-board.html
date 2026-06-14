@@ -108,6 +108,19 @@
             border-radius: 4px;
             font-weight: 600;
         }
+
+        .job-context-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid #2f2f35;
+            background: rgba(23, 23, 27, 0.92);
+            color: #e7e7e7;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body class="mvp-dark text-zinc-200">
@@ -1051,7 +1064,19 @@
         function applicationPathForJob(job) {
             if (!job) return '/index.html';
             const adultCategories = new Set(['boudoir', 'erotic', 'bodypaint']);
-            return adultCategories.has(job.category) ? '/artistic-nude-survey.html' : '/index.html';
+            return adultCategories.has(job.category) ? '/artistic-survey.html' : '/';
+        }
+
+        function buildApplicationUrl(job) {
+            const targetPath = applicationPathForJob(job);
+            const params = new URLSearchParams({
+                source: 'job-board',
+                role: job.title,
+                jobId: String(job.id),
+                category: job.category,
+                comfort: job.comfort[0] || ''
+            });
+            return `${targetPath}?${params.toString()}`;
         }
 
         function applyToJob(jobId) {
@@ -1088,12 +1113,8 @@
                 return;
             }
 
-            const targetPath = applicationPathForJob(job);
-            const role = encodeURIComponent(job.title);
-            const query = `?source=job-board&role=${role}`;
-
             closeApplyModal();
-            window.location.href = `${targetPath}${query}`;
+            globalThis.location.assign(buildApplicationUrl(job));
         }
 
         function showSwipeMode() {
@@ -1294,7 +1315,7 @@
         }
 
         function showQuickApply() {
-            window.location.href = '/index.html?source=job-board&role=Quick%20General%20Application';
+            globalThis.location.assign('/index.html?source=job-board&role=Quick%20General%20Application&category=general');
         }
 
         function startCountdown() {
@@ -1346,3 +1367,7 @@
     </script>
 </body>
 </html>
+
+
+
+

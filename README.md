@@ -17,7 +17,8 @@ If you already ran an older version of the schema, run it again so the old requi
 Add these in your Vercel project settings:
 
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (preferred)
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (fallback if the service-role key is not set)
 - `ADMIN_DASHBOARD_PASSWORD`
 
 `ADMIN_DASHBOARD_PASSWORD` protects `/dashboard.html`, `/artistic-nude-dashboard.html`, and their backing API endpoints. Choose a long private password and set it only in Vercel environment variables.
