@@ -171,28 +171,29 @@
                 <span class="text-xs font-medium tracking-[1px] text-emerald-400">NOW CASTING • FEBRUARY 2026</span>
             </div>
 
-            <h1 class="text-7xl md:text-7xl font-bold tracking-tighter heading-serif leading-none">
-                Creative.<br>
-                <span class="text-[#c8102e]">Sensual.</span><br>
-                Professional.
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tighter heading-serif leading-tight max-w-4xl">
+                MVP Media Casting Board
             </h1>
 
-            <p class="mt-6 text-xl text-zinc-400 max-w-md">
-                A premium casting experience for models, creators, and artists.
-                Find shoots that match your energy, comfort, and vision.
+            <p class="mt-5 text-lg text-zinc-300 max-w-4xl">
+                Paid creative opportunities for models, creators, and artists. Explore portrait, fashion, glamour, bodypaint, social media, and 18+ artistic projects with clear compensation, written agreements, and a consent-first process.
+            </p>
+
+            <p class="mt-4 text-sm text-zinc-400 max-w-4xl border border-zinc-800 rounded-2xl bg-zinc-900/70 px-4 py-3">
+                All projects are 18+ only. Every opportunity includes clear compensation, usage terms, consent forms, model release details, and a pre-shoot boundaries conversation before booking.
             </p>
 
             <div class="flex items-center gap-x-4 mt-9">
                 <button onclick="document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })"
                         class="px-8 py-4 bg-[#c8102e] hover:bg-red-700 transition-all text-white font-semibold rounded-3xl text-base flex items-center gap-x-3 group">
-                    <span>Browse Open Roles</span>
+                    <span>Apply for This Paid Role</span>
                     <i class="fa-solid fa-arrow-right group-active:translate-x-1 transition"></i>
                 </button>
 
                 <button onclick="document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' })"
                         class="px-7 py-4 border border-zinc-700 hover:bg-zinc-900 transition-all font-medium rounded-3xl text-base flex items-center gap-x-2">
                     <i class="fa-solid fa-magic"></i>
-                    <span>Take the Fit Quiz</span>
+                    <span>Check My Fit</span>
                 </button>
             </div>
 
@@ -235,7 +236,7 @@
 
                 <button onclick="applyToJob(4)"
                         class="mt-5 w-full md:w-auto px-8 py-3.5 bg-white text-black text-sm font-semibold rounded-2xl hover:bg-zinc-200 transition flex items-center justify-center gap-x-2">
-                    <span>Apply to this casting</span>
+                    <span>Apply for This Paid Role</span>
                 </button>
             </div>
         </div>
@@ -262,7 +263,7 @@
                             <button onclick="selectQuizOption(this, 'q1', 'portrait')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Portrait / Fashion</button>
                             <button onclick="selectQuizOption(this, 'q1', 'boudoir')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Boudoir / Glamour</button>
                             <button onclick="selectQuizOption(this, 'q1', 'bodypaint')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Bodypaint / Artistic Nude</button>
-                            <button onclick="selectQuizOption(this, 'q1', 'erotic')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Erotic / Adult Creative</button>
+                            <button onclick="selectQuizOption(this, 'q1', 'erotic')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">18+ Artistic Projects</button>
                             <button onclick="selectQuizOption(this, 'q1', 'content')" class="quiz-btn px-4 py-3 text-left text-sm border border-zinc-700 hover:border-zinc-600 rounded-2xl">Social Media / Video Content</button>
                         </div>
                     </div>
@@ -342,6 +343,11 @@
         </div>
 
         <div class="sticky top-[73px] z-40 bg-[#0f0f0f] py-4 -mx-1 px-1 border-b border-zinc-800 mb-6">
+            <div class="mb-3 flex flex-wrap items-center gap-2">
+                <button onclick="setBoardSegment(this, 'general')" class="segment-tab px-4 py-2 text-xs font-semibold rounded-2xl border border-[#c8102e] bg-[#c8102e] text-white">General Creative Jobs</button>
+                <button onclick="setBoardSegment(this, 'adult')" class="segment-tab px-4 py-2 text-xs font-semibold rounded-2xl border border-zinc-700 hover:bg-zinc-900">18+ Artistic Projects</button>
+                <button onclick="setBoardSegment(this, 'all')" class="segment-tab px-4 py-2 text-xs font-semibold rounded-2xl border border-zinc-700 hover:bg-zinc-900">All Opportunities</button>
+            </div>
             <div class="flex flex-wrap items-center gap-x-2 gap-y-3">
                 <div class="relative flex-1 min-w-[220px]">
                     <input type="text" id="search-input" placeholder="Search roles, locations, vibes..."
@@ -359,9 +365,9 @@
                     <div class="w-px h-6 bg-zinc-800 mx-1"></div>
 
                     <button onclick="toggleFilter(this, 'portrait')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="portrait">Portrait</button>
-                    <button onclick="toggleFilter(this, 'boudoir')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="boudoir">Boudoir</button>
+                    <button onclick="toggleFilter(this, 'boudoir')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="boudoir">Glamour</button>
                     <button onclick="toggleFilter(this, 'bodypaint')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="bodypaint">Bodypaint</button>
-                    <button onclick="toggleFilter(this, 'erotic')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="erotic">Erotic Creative</button>
+                    <button onclick="toggleFilter(this, 'erotic')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="erotic">Fine Art / Sensual</button>
                 </div>
             </div>
 
@@ -412,42 +418,34 @@
     </div>
 
     <div class="max-w-screen-2xl mx-auto px-8 py-16 border-t border-zinc-800">
-        <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
-            <div>
-                <h3 class="font-semibold text-xl tracking-tight mb-5">Safety, Consent &amp; Boundaries</h3>
-                <div class="space-y-4 text-sm text-zinc-400">
-                    <p>All opportunities are 18+ only. Every adult creative project begins with an open conversation about boundaries, image usage, compensation, and release terms before any shoot is scheduled.</p>
-                    <p>You may decline any concept at any stage. Your comfort and agency come first.</p>
-                    <div class="pt-3 text-xs border-t border-zinc-800">
-                        MVP Media follows strict consent-first practices. All models receive a detailed project brief and have final approval on concepts.
-                    </div>
+        <div class="grid lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-7">
+                <h3 class="font-semibold text-2xl tracking-tight mb-4">Why Work With MVP Media?</h3>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Paid creative opportunities</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Clear written agreements</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Beginner-friendly direction</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Professional image usage terms</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Portfolio-building opportunities</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Respectful production environment</div>
                 </div>
             </div>
-
-            <div>
-                <h3 class="font-semibold text-xl tracking-tight mb-5">How the Process Works</h3>
-                <div class="space-y-5 text-sm">
-                    <div class="flex gap-4">
-                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">1</div>
-                        <div><span class="font-medium">Apply</span> — Quick form or full application</div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">2</div>
-                        <div><span class="font-medium">Review</span> — We review your profile &amp; comfort level</div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">3</div>
-                        <div><span class="font-medium">Concept Chat</span> — 15-min call to align on vision &amp; boundaries</div>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="w-6 h-6 rounded bg-zinc-800 flex-shrink-0 flex items-center justify-center text-xs font-mono">4</div>
-                        <div><span class="font-medium">Shoot Day</span> — Professional, respectful, and creative environment</div>
-                    </div>
-                </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-7">
+                <h3 class="font-semibold text-2xl tracking-tight mb-4">MVP Media Model Safety Promise</h3>
+                <p class="text-sm text-zinc-300 leading-relaxed">Every project begins with a clear conversation about concept, wardrobe, comfort level, compensation, image usage, and boundaries. No model is pressured to do anything outside of what was agreed to in advance. Participation is voluntary, professional, and consent-based at every stage.</p>
+            </div>
+        </div>
+        <div class="mt-8 bg-zinc-900 border border-zinc-800 rounded-3xl p-7">
+            <h3 class="font-semibold text-2xl tracking-tight mb-4">Is This Safe? FAQ</h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800"><span class="font-semibold">Do I have to do nude work?</span><br><span class="text-zinc-400">No. You choose your comfort level before applying.</span></div>
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800"><span class="font-semibold">Can I bring someone?</span><br><span class="text-zinc-400">Yes, for safety and comfort, subject to production rules.</span></div>
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800"><span class="font-semibold">Will my images be posted online?</span><br><span class="text-zinc-400">Only according to the written release and usage agreement.</span></div>
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800"><span class="font-semibold">Can I change my mind?</span><br><span class="text-zinc-400">Yes. You can decline any concept before final booking.</span></div>
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800"><span class="font-semibold">Do you verify age?</span><br><span class="text-zinc-400">Yes. All adult creative projects require 18+ age verification.</span></div>
             </div>
         </div>
     </div>
-
     <footer class="border-t border-zinc-800 py-9 text-xs text-zinc-500">
         <div class="max-w-screen-2xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-y-3 text-center md:text-left">
             <div>© MVP Media 2026. All creative opportunities are handled with respect and professionalism.</div>
@@ -518,7 +516,11 @@
                 <div class="mt-8 flex items-center gap-x-3">
                     <button type="submit"
                             class="flex-1 py-4 bg-[#c8102e] hover:bg-red-700 transition font-semibold rounded-2xl text-sm">
-                        Submit Application
+                        Apply for This Paid Role
+                    </button>
+                    <button type="button" onclick="askQuestion(currentApplyingJobId)"
+                            class="px-6 py-4 border border-zinc-700 hover:bg-zinc-800 transition font-medium rounded-2xl text-sm">
+                        Ask a Question First
                     </button>
                     <button type="button" onclick="closeApplyModal()"
                             class="px-6 py-4 border border-zinc-700 hover:bg-zinc-800 transition font-medium rounded-2xl text-sm">
@@ -678,6 +680,23 @@
         let swipeJobs = [...jobs];
         let currentSwipeIndex = 0;
 
+        let activeBoardSegment = 'general';
+
+        function isMatureCategory(category) {
+            return category === 'boudoir' || category === 'bodypaint' || category === 'erotic';
+        }
+
+        function setBoardSegment(button, segment) {
+            activeBoardSegment = segment;
+            document.querySelectorAll('.segment-tab').forEach(tab => {
+                tab.classList.remove('bg-[#c8102e]', 'text-white', 'border-[#c8102e]');
+                tab.classList.add('border-zinc-700');
+            });
+            button.classList.remove('border-zinc-700');
+            button.classList.add('bg-[#c8102e]', 'text-white', 'border-[#c8102e]');
+            filterJobs();
+        }
+
         function renderJobs(filteredJobs = jobs) {
             const grid = document.getElementById('jobs-grid');
             grid.innerHTML = '';
@@ -755,7 +774,7 @@
 
                             <button onclick="event.stopImmediatePropagation(); applyToJob(${job.id})"
                                     class="flex-1 text-xs py-2.5 bg-white text-black hover:bg-zinc-200 font-semibold rounded-2xl transition">
-                                Quick Apply
+                                Apply for This Paid Role
                             </button>
 
                             <button onclick="event.stopImmediatePropagation(); toggleSaveJob(${job.id}, this)"
@@ -774,7 +793,11 @@
         function filterJobs() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
 
-            let filtered = jobs;
+            let filtered = jobs.filter(job => {
+                if (activeBoardSegment === 'all') return true;
+                if (activeBoardSegment === 'adult') return isMatureCategory(job.category);
+                return !isMatureCategory(job.category);
+            });
 
             if (!activeFilters.has('all')) {
                 filtered = filtered.filter(job => {
@@ -855,7 +878,7 @@
 
             document.querySelectorAll('.comfort-filter').forEach(b => b.classList.remove('border-[#c8102e]', 'bg-zinc-800'));
 
-            renderJobs(jobs);
+            filterJobs();
         }
 
         let quizAnswers = {};
@@ -1043,7 +1066,7 @@
 
                         <button onclick="closeJobModal(); applyToJob(${job.id})"
                                 class="px-8 py-3 text-sm font-semibold bg-[#c8102e] hover:bg-red-700 transition rounded-2xl">
-                            Apply to this Role
+                            Apply for This Paid Role
                         </button>
                     </div>
                 </div>
@@ -1115,6 +1138,21 @@
 
             closeApplyModal();
             globalThis.location.assign(buildApplicationUrl(job));
+        }
+
+        function askQuestion(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) {
+                globalThis.location.assign('/index.html?source=job-board&intent=question');
+                return;
+            }
+            const params = new URLSearchParams({
+                source: 'job-board',
+                role: job.title,
+                category: job.category,
+                intent: 'question'
+            });
+            globalThis.location.assign(`/index.html?${params.toString()}`);
         }
 
         function showSwipeMode() {
@@ -1367,6 +1405,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
