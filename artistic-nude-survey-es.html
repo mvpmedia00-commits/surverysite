@@ -207,6 +207,31 @@
       line-height: 1.35;
     }
 
+    .quick-guide {
+      margin-top: 14px;
+      border: 1px solid rgba(216, 184, 111, 0.28);
+      border-radius: 16px;
+      background: rgba(16, 18, 22, 0.72);
+      padding: 12px 14px;
+    }
+
+    .quick-guide h2 {
+      margin: 0;
+      color: #f5e5be;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+    }
+
+    .quick-guide ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      display: grid;
+      gap: 4px;
+    }
+
     .photo-preview {
       display: none;
       width: 92px;
@@ -425,6 +450,14 @@
         Enviar este formulario no garantiza seleccion. Todos los conceptos, limites, uso de imagen y compensacion,
         y terminos de cesion se revisan antes de programar cualquier sesion.
       </p>
+      <section class="quick-guide" aria-label="Instrucciones de solicitud">
+        <h2>GUIA RAPIDA</h2>
+        <ul>
+          <li>Completa todos los campos obligatorios marcados con asterisco.</li>
+          <li>Describe con claridad tus limites y niveles de comodidad para recibir propuestas adecuadas.</li>
+          <li>Despues de enviar, los perfiles seleccionados reciben contacto por correo o WhatsApp.</li>
+        </ul>
+      </section>
     </header>
 
     <form id="applicationForm" novalidate>
@@ -436,6 +469,11 @@
         <p class="step-title" id="stepTitle">Toma tu tiempo. Los limites y niveles de comodidad se pueden revisar antes de enviar.</p>
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note">Tus respuestas, fotos, limites y datos de contacto se revisan de forma privada por MVP Media para casting y programacion. Los limites se conversan antes de confirmar cualquier sesion.</p>
+        <ul class="quick-guide" aria-label="Antes de enviar">
+          <li>Usa Restaurar borrador si ya habias comenzado este formulario.</li>
+          <li>Verifica tus datos de contacto para poder comunicarnos contigo rapido.</li>
+          <li>No envies esta solicitud si eres menor de 18 anos.</li>
+        </ul>
         <div class="draft-actions">
           <button type="button" class="secondary" id="restoreDraftBtn">Restaurar borrador</button>
           <button type="button" class="secondary" id="clearDraftBtn">Eliminar borrador</button>

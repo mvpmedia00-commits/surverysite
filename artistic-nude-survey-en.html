@@ -207,6 +207,31 @@
       line-height: 1.35;
     }
 
+    .quick-guide {
+      margin-top: 14px;
+      border: 1px solid rgba(216, 184, 111, 0.28);
+      border-radius: 16px;
+      background: rgba(16, 18, 22, 0.72);
+      padding: 12px 14px;
+    }
+
+    .quick-guide h2 {
+      margin: 0;
+      color: #f5e5be;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+    }
+
+    .quick-guide ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      display: grid;
+      gap: 4px;
+    }
+
     .photo-preview {
       display: none;
       width: 92px;
@@ -425,6 +450,14 @@
         Submitting this form does not guarantee selection. All concepts, boundaries, image usage, compensation,
         and release terms are discussed before any shoot is scheduled.
       </p>
+      <section class="quick-guide" aria-label="Application instructions">
+        <h2>QUICK START</h2>
+        <ul>
+          <li>Complete every required field marked with an asterisk.</li>
+          <li>Be specific about boundaries and comfort levels so we only discuss matching projects.</li>
+          <li>After submission, selected applicants are contacted by email or WhatsApp to confirm details.</li>
+        </ul>
+      </section>
     </header>
 
     <form id="applicationForm" novalidate>
@@ -436,6 +469,11 @@
         <p class="step-title" id="stepTitle">Take your time. Boundaries and comfort levels can be reviewed before submitting.</p>
         <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note">Your answers, photos, boundaries, and contact details are reviewed privately by MVP Media for casting and scheduling. Boundaries are discussed before any shoot is booked.</p>
+        <ul class="quick-guide" aria-label="Before submitting">
+          <li>Use Restore Draft if you started this form earlier.</li>
+          <li>Double-check contact information so we can reach you quickly.</li>
+          <li>Do not submit if you are under 18.</li>
+        </ul>
         <div class="draft-actions">
           <button type="button" class="secondary" id="restoreDraftBtn">Restore Draft</button>
           <button type="button" class="secondary" id="clearDraftBtn">Delete Draft</button>
