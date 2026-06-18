@@ -16,17 +16,17 @@
     },
     {
       "source": "/artistic-nude-landing",
-      "destination": "/artistic-survey",
+      "destination": "/artistic-nude-survey-en",
       "permanent": true
     },
     {
       "source": "/artistic-nude-survey",
-      "destination": "/artistic-survey",
+      "destination": "/artistic-nude-survey-en",
       "permanent": true
     },
     {
       "source": "/artistic-nude-survey.html",
-      "destination": "/artistic-survey",
+      "destination": "/artistic-nude-survey-en",
       "permanent": true
     }
   ],
