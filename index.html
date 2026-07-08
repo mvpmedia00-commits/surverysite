@@ -141,25 +141,6 @@
       gap: 12px;
     }
 
-    .hero-quick-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
-    .hero-quick-links a {
-      text-decoration: none;
-      color: var(--accent);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.88);
-      padding: 7px 12px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
     .hero-about-link {
       position: absolute;
       top: 14px;
@@ -806,13 +787,13 @@
           </div>
 
           <div class="field">
-            <label for="expectedComp">Expected compensation per session *</label>
+            <label for="expectedComp">Expected compensation per session (USD) *</label>
             <select id="expectedComp" required>
               <option value="">Select one</option>
-              <option>Under 50,000 COP</option>
-              <option>50,000-100,000 COP</option>
-              <option>100,000-200,000 COP</option>
-              <option>200,000+ COP</option>
+              <option>Under $50</option>
+              <option>$50-$100</option>
+              <option>$100-$200</option>
+              <option>$200+</option>
             </select>
           </div>
 
@@ -999,9 +980,9 @@
         travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "100 km+"],
         labelCompInterest: "Interested in *",
         compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
-        labelExpectedComp: "Expected compensation per session *",
+        labelExpectedComp: "Expected compensation per session (USD) *",
         labelUnpaidTfpWilling: "Open to unpaid shoots in exchange for edited pictures?",
-        expectedCompOptions: ["Under 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
+        expectedCompOptions: ["Under $50", "$50-$100", "$100-$200", "$200+"],
         labelHeadshotRequired: "Headshot *",
         labelHeadshotSuggested: "Headshot (Suggested)",
         labelFullBodyRequired: "Full Body Photo *",
@@ -1093,9 +1074,9 @@
         travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "100 km+"],
         labelCompInterest: "Interes en *",
         compInterestOptions: ["Sesiones Pagadas", "Construir Portafolio", "Ambas"],
-        labelExpectedComp: "Compensacion esperada por sesion *",
+        labelExpectedComp: "Compensacion esperada por sesion (USD) *",
         labelUnpaidTfpWilling: "Estas abierta/o a sesiones no pagadas a cambio de fotos editadas?",
-        expectedCompOptions: ["Menos de 50,000 COP", "50,000-100,000 COP", "100,000-200,000 COP", "200,000+ COP"],
+        expectedCompOptions: ["Menos de $50", "$50-$100", "$100-$200", "$200+"],
         labelHeadshotRequired: "Headshot *",
         labelHeadshotSuggested: "Headshot (Sugerido)",
         labelFullBodyRequired: "Foto de Cuerpo Completo *",
