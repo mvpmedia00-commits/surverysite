@@ -3,86 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media | Model Introduction</title>
+  <title>MVP Media | Fine Art Figure & Body Paint Model</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4efe7;
-      --panel: #fffdf9;
-      --text: #1d1a15;
-      --muted: #655d50;
-      --accent: #0e6b62;
-      --accent-2: #c97845;
-      --line: #dfd4c2;
-      --shadow: 0 18px 42px rgba(18, 17, 15, 0.12);
-      --radius: 22px;
+      --bg: #0f0d0b;
+      --panel: #171311;
+      --panel-2: #201a16;
+      --text: #f8f2eb;
+      --muted: #b8a79a;
+      --accent: #b33f2a;
+      --accent-2: #efe0cb;
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 20px 44px rgba(0,0,0,0.28);
+      --radius: 24px;
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--text);
-      background: linear-gradient(135deg, rgba(14, 107, 98, 0.08), rgba(201, 120, 69, 0.08)), var(--bg);
+      background: radial-gradient(circle at top left, rgba(179,63,42,0.24), transparent 24%), linear-gradient(180deg, #13110d 0%, var(--bg) 100%);
+      line-height: 1.65;
     }
 
-    .wrap {
-      width: min(1120px, 94vw);
-      margin: 24px auto 40px;
-      display: grid;
-      gap: 16px;
+    a { color: inherit; }
+
+    .page-shell {
+      width: min(1140px, 94vw);
+      margin: 0 auto 48px;
+      padding-bottom: 24px;
     }
 
-    .hero, .card {
+    .top-nav {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      margin: 16px 0 18px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
+      border-radius: 999px;
+      background: rgba(17, 14, 12, 0.86);
+      backdrop-filter: blur(12px);
       box-shadow: var(--shadow);
     }
 
-    .hero {
-      padding: clamp(24px, 4vw, 40px);
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1.1fr 0.9fr;
-      align-items: center;
+    .top-nav .brand {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      color: var(--accent-2);
+    }
+
+    .top-nav .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .top-nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.88rem;
+      padding: 7px 10px;
+      border-radius: 999px;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .top-nav a.active, .top-nav a:hover {
+      background: rgba(179,63,42,0.14);
+      color: var(--text);
+    }
+
+    .progress-track {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
       overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #d87a58);
+      transition: width 180ms ease;
+    }
+
+    .hero, .card, .quote-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1.1fr 0.9fr;
+      padding: clamp(24px, 4vw, 42px);
+      align-items: center;
+      margin-bottom: 16px;
     }
 
     .eyebrow {
       display: inline-flex;
-      width: fit-content;
+      align-items: center;
+      gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(14, 107, 98, 0.1);
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.84rem;
-      letter-spacing: 0.03em;
+      background: rgba(179,63,42,0.16);
+      color: #ffe0cf;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      font-weight: 700;
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.08;
+      font-family: "Cormorant Garamond", serif;
     }
 
     h1 {
-      margin: 8px 0 10px;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2.1rem, 4.6vw, 3rem);
-      line-height: 1.05;
+      font-size: clamp(2.25rem, 4.3vw, 3.2rem);
+      max-width: 760px;
+      margin-bottom: 10px;
     }
 
-    p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.65;
+    h2 {
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      margin-bottom: 10px;
+      color: #ffd7c1;
     }
+
+    h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+      color: var(--accent-2);
+    }
+
+    p, li {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .hero p { font-size: 1.01rem; }
 
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 12px;
+      margin-top: 18px;
     }
 
     .btn {
@@ -90,178 +177,541 @@
       align-items: center;
       justify-content: center;
       padding: 12px 18px;
-      border-radius: 999px;
       text-decoration: none;
+      border-radius: 999px;
       font-weight: 700;
       transition: transform 180ms ease, box-shadow 180ms ease;
+      border: 1px solid transparent;
     }
 
     .btn:hover { transform: translateY(-2px); }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #0a4d44);
-      color: #fff;
-      box-shadow: 0 14px 24px rgba(14, 107, 98, 0.2);
+      background: linear-gradient(135deg, var(--accent), #8d2d1d);
+      color: white;
+      box-shadow: 0 14px 26px rgba(179,63,42,0.22);
     }
 
     .btn-secondary {
-      border: 1px solid var(--line);
-      color: var(--text);
-      background: #fff;
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(0, 0, 0, 0.36);
+      color: #ffffff;
     }
 
-    .photo-card {
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .badge {
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #ffffff;
+      font-size: 0.86rem;
+      background: rgba(0, 0, 0, 0.42);
+    }
+
+    .hero-photo {
+      min-height: 360px;
       border-radius: 20px;
       overflow: hidden;
-      border: 1px solid var(--line);
-      min-height: 320px;
+      border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .photo-card img {
+    .hero-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .grid {
+    .section-grid {
       display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
 
     .card {
-      padding: 20px;
+      padding: clamp(20px, 3vw, 26px);
     }
 
-    .card h2 {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 1.05rem;
+    .card p + p { margin-top: 10px; }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 14px;
     }
 
-    .gallery {
+    .stat {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--accent-2);
+      font-size: 0.96rem;
+      margin-bottom: 4px;
+    }
+
+    .feature-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+
+    .feature-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .feature-card p { margin-top: 6px; }
+
+    .diagram {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 14px 0;
+      align-items: center;
+    }
+
+    .step-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(179,63,42,0.14);
+      color: #ffe0cf;
+      font-weight: 700;
+      border: 1px solid rgba(179,63,42,0.26);
+    }
+
+    .step-arrow {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .note {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--accent);
+      background: rgba(179,63,42,0.12);
+      border-radius: 0 14px 14px 0;
+      color: #ffe3d2;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      gap: 6px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .timeline-item strong {
+      color: var(--accent-2);
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .pill-grid {
       display: grid;
       gap: 14px;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 14px;
     }
 
-    .gallery-item {
-      border: 1px solid var(--line);
+    .pill-card {
+      padding: 16px;
       border-radius: 16px;
-      overflow: hidden;
-      background: #fff;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .gallery-item img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
+    .pill-card strong { color: var(--accent-2); display: block; margin-bottom: 6px; }
+
+    .quote-card {
+      padding: 22px;
+      margin-top: 16px;
+      border-color: rgba(179,63,42,0.24);
+      background: linear-gradient(135deg, rgba(179,63,42,0.15), rgba(255,255,255,0.03));
     }
 
-    .gallery-item .caption {
-      padding: 10px 12px;
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .list {
-      margin: 10px 0 0;
-      padding-left: 18px;
-      color: var(--muted);
+    .check-list {
       display: grid;
-      gap: 6px;
+      gap: 10px;
+      margin-top: 12px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .check-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .faq {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    details {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    summary {
+      cursor: pointer;
+      color: #ffe2d0;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    details[open] summary { margin-bottom: 8px; }
+
+    .cta-card {
+      padding: clamp(24px, 3.4vw, 32px);
+      margin-top: 16px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(179,63,42,0.18), rgba(255,255,255,0.03));
+      border: 1px solid rgba(179,63,42,0.24);
     }
 
     .footer-note {
+      padding: 14px 2px 0;
       text-align: center;
-      font-size: 0.95rem;
-      padding: 8px 0 0;
       color: var(--muted);
+      font-size: 0.9rem;
     }
 
     @media (max-width: 860px) {
-      .hero, .grid, .gallery { grid-template-columns: 1fr; }
-      .photo-card { min-height: 260px; }
+      .hero { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid { grid-template-columns: 1fr; }
+      .top-nav { border-radius: 18px; align-items: flex-start; }
+      .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+    }
+
+    @media (max-width: 560px) {
+      .page-shell { width: min(100%, 94vw); }
+      .top-nav { flex-direction: column; align-items: flex-start; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
+  <main class="page-shell">
+    <nav class="top-nav" aria-label="Page navigation">
+      <div class="brand">MVP Media</div>
+      <div class="links">
+        <a href="#about" class="active">About</a>
+        <a href="#role">Role</a>
+        <a href="#process">Process</a>
+        <a href="#faq">FAQ</a>
+        <a href="#interview">Interview</a>
+      </div>
+    </nav>
+
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <section class="hero" id="top">
       <div>
-        <div class="eyebrow">For models & creative talent</div>
-        <h1>Learn about my direction, view my work, and book a phone interview.</h1>
+        <div class="eyebrow">Fine Art Figure &amp; Body Paint Model</div>
+        <h1>You Applied. Here’s What Happens Next.</h1>
         <p>
-          This page is designed for models and collaborators who want a clearer sense of my artistic direction,
-          the kind of work I create, and how we can connect for a respectful, professional conversation.
+          Thank you for applying through Indeed. Before we schedule a phone interview, I want you to have a clear understanding of who I am, the work I create, what the modeling position involves, and what you can expect if we work together.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="mailto:hello@mvpmedia.com?subject=Phone%20Interview%20Request">Request a phone interview</a>
-          <a class="btn btn-secondary" href="/index.html">Fill out the application</a>
+          <a class="btn btn-primary" href="#role">Start here — learn about the position</a>
+          <a class="btn btn-secondary" href="https://kavyar.me/mvpmedia" target="_blank" rel="noopener noreferrer">View my work</a>
+        </div>
+        <div class="badge-row">
+          <span class="badge">Chicago</span>
+          <span class="badge">Paid Modeling Projects</span>
+          <span class="badge">18+ Only</span>
         </div>
       </div>
-      <div class="photo-card">
-        <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="MVP Media portrait concept">
+      <div class="hero-photo">
+        <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="Matthew and the MVP Media creative direction">
       </div>
     </section>
 
-    <section class="grid">
+    <section class="section-grid" id="about">
       <article class="card">
-        <h2>My artistic direction</h2>
+        <h2>Meet Matthew</h2>
         <p>
-          I focus on confident, expressive, editorial-style imagery with a strong sense of mood, story, and polish.
-          I work best with people who value artistry, communication, and professional collaboration.
+          I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My creative work focuses on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and transforming ideas into finished photographs.
         </p>
+        <p>
+          For body paint projects, I approach the human body as a living canvas and collaborate with models to create artwork designed specifically for photography.
+        </p>
+        <div class="stats">
+          <div class="stat"><strong>Photography Since</strong>2015</div>
+          <div class="stat"><strong>Based In</strong>Chicago</div>
+          <div class="stat"><strong>Style</strong>Fashion • Editorial • Portrait</div>
+          <div class="stat"><strong>Role</strong>Creative Director &amp; Photographer</div>
+        </div>
       </article>
+
       <article class="card">
-        <h2>What I look for</h2>
+        <h2>About MVP Media Photography</h2>
         <p>
-          I am interested in models who are open, thoughtful, and comfortable discussing boundaries, look concepts,
-          and creative goals before any shoot is scheduled.
+          MVP Media Photography is a Chicago-based independent photography and creative media brand focused on fashion, portraiture, editorial concepts, creative photography, and artistic body paint projects.
         </p>
+        <p>
+          Projects range from traditional photography sessions to more experimental concepts involving styling, body art, creative direction, and visual storytelling.
+        </p>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Artistic</h3>
+            <p>Original concepts designed around color, styling, body art, and visual storytelling.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Collaborative</h3>
+            <p>Models and the creative team communicate about the concept before the session begins.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Professional</h3>
+            <p>Project expectations, compensation, boundaries, and image usage are discussed before booking.</p>
+          </div>
+        </div>
       </article>
+    </section>
+
+    <section class="card" id="role">
+      <h2>What Is a Body Paint Canvas Model?</h2>
+      <p>
+        A body paint canvas model serves as the human canvas for an artistic body painting project. Professional cosmetic body paint is applied directly to the model’s skin to create a finished piece of wearable artwork. Once the artwork is complete, the model may participate in a professional photography session showcasing the finished design.
+      </p>
+      <div class="diagram" aria-label="Model to body paint to photography">
+        <span class="step-pill">Model</span>
+        <span class="step-arrow">→</span>
+        <span class="step-pill">Body Paint</span>
+        <span class="step-arrow">→</span>
+        <span class="step-pill">Photography</span>
+      </div>
+      <div class="note">
+        You do not need previous body paint experience. Previous modeling experience is helpful, but it is not required.
+      </div>
     </section>
 
     <section class="card">
-      <h2>Recent visual style</h2>
-      <div class="gallery">
-        <div class="gallery-item">
-          <img src="assets/photos/f34f445e-219f-4dab-8e49-cd2ab4e3d506.jpg" alt="Editorial portrait sample">
-          <div class="caption">Editorial portrait work</div>
+      <h2>Understanding the Figure Modeling Requirement</h2>
+      <p>
+        Some MVP Media body paint concepts involve artistic figure modeling and may require the model to pose unclothed while body paint is being applied. The exact level of coverage, body paint design, photography concept, posing expectations, and boundaries are discussed before a project is booked.
+      </p>
+      <p>
+        Applicants should only continue with the process if they are comfortable discussing these requirements openly and professionally.
+      </p>
+      <div class="note">Nothing should be a surprise on shoot day. Your comfort level, boundaries, paint coverage, posing limits, compensation, and image usage should be established before the session.</div>
+    </section>
+
+    <section class="card" id="process">
+      <h2>What Happens During a Body Paint Session?</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>01 — Pre-Shoot Discussion</strong>
+          <p>Review the concept, compensation, expected session length, wardrobe or figure-modeling requirements, body paint coverage, photography plans, boundaries, and image usage.</p>
         </div>
-        <div class="gallery-item">
-          <img src="assets/photos/editorial.svg" alt="Editorial concept illustration">
-          <div class="caption">Creative mood and styling</div>
+        <div class="timeline-item">
+          <strong>02 — Preparation</strong>
+          <p>Prepare the studio, paints, brushes, lighting, and model for the body painting process.</p>
         </div>
-        <div class="gallery-item">
-          <img src="assets/photos/fashion.svg" alt="Fashion concept illustration">
-          <div class="caption">Fashion-forward direction</div>
+        <div class="timeline-item">
+          <strong>03 — Body Paint Application</strong>
+          <p>The model serves as the live canvas while professional cosmetic-grade body paint is applied. Painting may require standing, sitting, changing positions, and remaining relatively still for periods of time. Breaks are provided as needed.</p>
+        </div>
+        <div class="timeline-item">
+          <strong>04 — Final Artwork</strong>
+          <p>The completed design is reviewed and final details or touch-ups are added.</p>
+        </div>
+        <div class="timeline-item">
+          <strong>05 — Photography</strong>
+          <p>The completed artwork may be photographed using editorial, fine-art, portrait, or creative posing.</p>
+        </div>
+        <div class="timeline-item">
+          <strong>06 — Cleanup</strong>
+          <p>The session concludes and the model can remove the body paint.</p>
         </div>
       </div>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>How the conversation works</h2>
-        <ul class="list">
-          <li>We start with a short phone introduction.</li>
-          <li>I share the kind of projects I create and the tone of the work.</li>
-          <li>You can ask about style, availability, comfort level, and next steps.</li>
-        </ul>
-      </article>
-      <article class="card">
-        <h2>Next steps</h2>
-        <ul class="list">
-          <li>Review the application and submit your details.</li>
-          <li>Send a request for a phone interview by email.</li>
-          <li>We can then discuss whether a shoot or collaboration fits your goals.</li>
-        </ul>
-      </article>
+    <section class="card">
+      <h2>What I Look For</h2>
+      <div class="pill-grid">
+        <div class="pill-card"><strong>Reliability</strong>Arrive on time and communicate if circumstances change.</div>
+        <div class="pill-card"><strong>Confidence</strong>Be comfortable being photographed and taking creative direction.</div>
+        <div class="pill-card"><strong>Communication</strong>Be willing to discuss boundaries and expectations clearly.</div>
+        <div class="pill-card"><strong>Patience</strong>Detailed body painting can take time.</div>
+        <div class="pill-card"><strong>Professionalism</strong>Treat the project as a professional creative collaboration.</div>
+        <div class="pill-card"><strong>Open-Minded Creativity</strong>Be willing to experiment with artistic concepts while maintaining your established boundaries.</div>
+      </div>
     </section>
 
-    <p class="footer-note">Respect, clear communication, and professional boundaries are always part of the process.</p>
+    <section class="card">
+      <h2>What You Can Expect From Me</h2>
+      <div class="pill-grid">
+        <div class="pill-card"><strong>Clear Project Details</strong>The concept should be explained before booking.</div>
+        <div class="pill-card"><strong>Discussed Compensation</strong>Compensation is agreed upon before the project.</div>
+        <div class="pill-card"><strong>Boundary Discussion</strong>Comfort levels and posing limits are discussed beforehand.</div>
+        <div class="pill-card"><strong>Image Usage Discussion</strong>How photographs may be used should be discussed before the shoot.</div>
+        <div class="pill-card"><strong>Professional Communication</strong>Applicants should have the opportunity to ask questions before deciding whether to participate.</div>
+        <div class="pill-card"><strong>Breaks During Sessions</strong>Models can communicate when they need a break.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Compensation</h2>
+      <p><strong style="color: #ffe0cf;">Typical project range: $50–$200 per day</strong></p>
+      <p>
+        Rates vary depending on the project, session length, concept, model experience, location, and intended image usage. Your specific compensation will be discussed and agreed upon before accepting a project.
+      </p>
+    </section>
+
+    <section class="card" id="faq">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>Do I need modeling experience?</summary>
+          <p>No. Previous experience is helpful but not required.</p>
+        </details>
+        <details>
+          <summary>Do I need body paint experience?</summary>
+          <p>No.</p>
+        </details>
+        <details>
+          <summary>Is this figure modeling?</summary>
+          <p>Some projects involve artistic figure modeling. The specific requirements will be discussed before booking.</p>
+        </details>
+        <details>
+          <summary>Will body paint be applied directly to my skin?</summary>
+          <p>Yes. Body paint projects involve cosmetic body paint being applied directly to the model’s skin.</p>
+        </details>
+        <details>
+          <summary>How long does body painting take?</summary>
+          <p>It depends on the complexity of the design. Applicants should expect that detailed body painting can require extended periods of standing or posing.</p>
+        </details>
+        <details>
+          <summary>Can I take breaks?</summary>
+          <p>Yes. Breaks can be incorporated during longer sessions.</p>
+        </details>
+        <details>
+          <summary>Can I discuss my boundaries beforehand?</summary>
+          <p>Yes. Applicants should discuss boundaries, body paint coverage, posing limits, and comfort levels before accepting a project.</p>
+        </details>
+        <details>
+          <summary>Will I be photographed?</summary>
+          <p>Most body paint projects are created for photography. The photography portion and intended image usage should be discussed before booking.</p>
+        </details>
+        <details>
+          <summary>Do I need to send nude photographs to apply?</summary>
+          <p>No. Do not require applicants to submit nude photographs as part of the initial application process. A normal modeling portfolio, social media portfolio, headshot, or recent clothed photographs can be used for initial review.</p>
+        </details>
+        <details>
+          <summary>Is this an automatic job offer?</summary>
+          <p>No. Applying or completing the pre-interview process does not guarantee selection or booking. The phone interview is used to determine whether the project is a good fit for both parties.</p>
+        </details>
+        <details>
+          <summary>Is there an age requirement?</summary>
+          <p>Yes. Applicants must be at least 18 years old. Valid identification should be verified before booking.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Before We Talk</h2>
+      <p>Before requesting your interview, please make sure you’ve reviewed the following:</p>
+      <ul class="check-list">
+        <li>☑ I understand what body paint canvas modeling involves.</li>
+        <li>☑ I understand that some projects involve artistic figure modeling.</li>
+        <li>☑ I understand that body painting may require extended periods of posing.</li>
+        <li>☑ I understand that project requirements vary by concept.</li>
+        <li>☑ I know I can discuss boundaries and posing limits before booking.</li>
+        <li>☑ I understand compensation is discussed before accepting a project.</li>
+        <li>☑ I understand applying does not guarantee a booking.</li>
+        <li>☑ I am at least 18 years old.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="interview">
+      <h2>What Happens During the Phone Interview?</h2>
+      <p>The phone interview is a short introductory conversation. It is not a commitment to participate in a shoot.</p>
+      <div class="pill-grid">
+        <div class="pill-card"><strong>01 — Introduction</strong>Learn more about MVP Media and the current projects.</div>
+        <div class="pill-card"><strong>02 — Your Experience</strong>Discuss any modeling, photography, performance, or creative experience you have. Beginners are welcome.</div>
+        <div class="pill-card"><strong>03 — The Position</strong>Discuss body painting, figure modeling, photography, posing, and typical project expectations.</div>
+        <div class="pill-card"><strong>04 — Your Comfort Level</strong>You can ask questions and discuss boundaries or concerns.</div>
+        <div class="pill-card"><strong>05 — Next Steps</strong>If the project appears to be a good fit for both sides, we can discuss availability and potential booking opportunities.</div>
+      </div>
+    </section>
+
+    <section class="cta-card">
+      <h2>Still Interested?</h2>
+      <p>If you’ve reviewed the information above and the position sounds like something you’d genuinely be interested in, the next step is a short phone interview.</p>
+      <div class="hero-actions" style="justify-content:center; margin-top:16px;">
+        <a class="btn btn-primary" href="mailto:hello@mvpmedia.com?subject=Phone%20Interview%20Request">Request my phone interview</a>
+        <a class="btn btn-secondary" href="/index.html">Complete / review my model application</a>
+      </div>
+    </section>
+
+    <p class="footer-note">MVP Media Photography — Chicago, Illinois<br>All modeling projects are intended for adults 18+. Project participation is voluntary. Specific concepts, compensation, boundaries, body paint coverage, posing requirements, photography, and image usage should be discussed and agreed upon before booking.</p>
   </main>
+
+  <script>
+    const sections = Array.from(document.querySelectorAll("section[id], section[id]"));
+    const navLinks = Array.from(document.querySelectorAll(".top-nav a"));
+    const progressFill = document.getElementById("progressFill");
+
+    const setActiveLink = (id) => {
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute("href") === `#${id}`;
+        link.classList.toggle("active", isActive);
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          setActiveLink(id);
+          const index = sections.findIndex((section) => section.id === id);
+          const progress = index >= 0 ? ((index + 1) / sections.length) * 100 : 0;
+          progressFill.style.width = `${Math.min(progress, 100)}%`;
+        }
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
 </body>
 </html>
