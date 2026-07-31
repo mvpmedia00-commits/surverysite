@@ -710,6 +710,37 @@
       <fieldset>
         <legend id="legend3">3) Interests And Comfort</legend>
         <div class="field">
+          <span class="sub-label">Which modeling opportunity interests you most? *</span>
+          <div class="choices inline" id="opportunityGroup">
+            <label class="choice"><input type="radio" name="modelOpportunity" value="Regular Body Paint Canvas Model" required>Regular Body Paint Canvas Model</label>
+            <label class="choice"><input type="radio" name="modelOpportunity" value="Professional Body Paint Model">Professional Body Paint Model</label>
+            <label class="choice"><input type="radio" name="modelOpportunity" value="Both">Both</label>
+            <label class="choice"><input type="radio" name="modelOpportunity" value="I'm not sure yet - I'd like to discuss it">I'm not sure yet - I'd like to discuss it</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="opportunityInterest">What interests you about this opportunity? *</label>
+          <textarea id="opportunityInterest" required></textarea>
+        </div>
+
+        <div class="field" id="portfolioField" hidden>
+          <label for="portfolioLink">Portfolio / Modeling Instagram / Website (Optional)</label>
+          <input id="portfolioLink" placeholder="@handle or https://...">
+        </div>
+
+        <div class="field" id="regularAvailabilityField" hidden>
+          <span class="sub-label">How often are you generally available? *</span>
+          <div class="choices inline">
+            <label class="choice"><input type="radio" name="regularAvailability" value="Occasionally">Occasionally</label>
+            <label class="choice"><input type="radio" name="regularAvailability" value="1-2 days per week">1-2 days per week</label>
+            <label class="choice"><input type="radio" name="regularAvailability" value="3-4 days per week">3-4 days per week</label>
+            <label class="choice"><input type="radio" name="regularAvailability" value="5+ days per week">5+ days per week</label>
+            <label class="choice"><input type="radio" name="regularAvailability" value="Availability varies">Availability varies</label>
+          </div>
+        </div>
+
+        <div class="field">
           <span class="sub-label">Project interests (select at least one) *</span>
           <div class="choices inline" id="interestsGroup">
             <label class="choice"><input type="checkbox" name="interests" value="Portrait">Portrait</label>
@@ -1485,6 +1516,48 @@
       return selected ? selected.value : "";
     };
 
+    const updateOpportunityFields = () => {
+      const opportunity = selectedRadioValue("modelOpportunity");
+      const portfolioField = document.getElementById("portfolioField");
+      const regularAvailabilityField = document.getElementById("regularAvailabilityField");
+      const regularAvailabilityInputs = Array.from(document.querySelectorAll("input[name='regularAvailability']"));
+      const showProfessional = opportunity === "Professional Body Paint Model" || opportunity === "Both";
+      const showRegular = opportunity === "Regular Body Paint Canvas Model" || opportunity === "Both";
+
+      if (portfolioField) {
+        portfolioField.hidden = !showProfessional;
+      }
+
+      if (regularAvailabilityField) {
+        regularAvailabilityField.hidden = !showRegular;
+      }
+
+      regularAvailabilityInputs.forEach((input) => {
+        input.required = showRegular;
+        if (!showRegular) {
+          input.checked = false;
+        }
+      });
+    };
+
+    const preselectOpportunityFromQuery = () => {
+      const track = new URLSearchParams(globalThis.location.search).get("track");
+      const trackMap = {
+        regular: "Regular Body Paint Canvas Model",
+        professional: "Professional Body Paint Model",
+        both: "Both"
+      };
+      const value = trackMap[String(track || "").toLowerCase()];
+      if (!value) {
+        return;
+      }
+
+      const input = document.querySelector(`input[name='modelOpportunity'][value="${CSS.escape(value)}"]`);
+      if (input) {
+        input.checked = true;
+      }
+    };
+
     const updatePhotoRequirement = () => {
       const t = i18n[selectedLanguage] || i18n.en;
       const instagramProvided = getValue("instagram").length > 0;
@@ -1624,6 +1697,10 @@
         worked_with_photographers: selectedRadioValue("worked"),
         comfortable_snapshots: selectedRadioValue("snapshots"),
         interests: checkedValues("input[name='interests']"),
+        model_opportunity: selectedRadioValue("modelOpportunity"),
+        opportunity_interest: getValue("opportunityInterest"),
+        portfolio_link: getValue("portfolioLink"),
+        regular_availability: selectedRadioValue("regularAvailability"),
         comfort_level: getValue("comfortLevel"),
         avoid_concepts: getValue("avoidConcepts"),
         availability: checkedValues("input[name='availability']"),
@@ -1675,6 +1752,7 @@
     };
 
     form.addEventListener("submit", async (event) => {
+      event.preventDefault();
       clearErrors();
       updatePhotoRequirement();
       trackApplicationStartedOnce();
@@ -1712,6 +1790,13 @@
         validationTips.push(t.msgAvailability);
       }
 
+      const selectedOpportunity = selectedRadioValue("modelOpportunity");
+      const requiresRegularAvailability = selectedOpportunity === "Regular Body Paint Canvas Model" || selectedOpportunity === "Both";
+      if (requiresRegularAvailability && !selectedRadioValue("regularAvailability")) {
+        hasErrors = true;
+        validationTips.push("Select how often you are generally available for regular canvas sessions.");
+      }
+
       const consentOk = Array.from(document.querySelectorAll("input[name='consent']")).every((item) => item.checked);
       if (!consentOk) {
         setError("consentError", t.msgConsent);
@@ -1727,12 +1812,10 @@
             validation_tips: validationTips
           }
         });
-        event.preventDefault();
         form.reportValidity();
         return;
       }
 
-      event.preventDefault();
       submitBtn.disabled = true;
       submitStatus.textContent = selectedLanguage === "es" ? "Enviando solicitud..." : "Submitting application...";
 
@@ -1803,9 +1886,14 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    ["interests", "availability", "consent"].forEach((name) => {
+    ["interests", "availability", "consent", "modelOpportunity", "regularAvailability"].forEach((name) => {
       document.querySelectorAll(`input[name='${name}']`).forEach((el) => {
-        el.addEventListener("change", clearErrors);
+        el.addEventListener("change", () => {
+          if (name === "modelOpportunity") {
+            updateOpportunityFields();
+          }
+          clearErrors();
+        });
       });
     });
 
@@ -1821,15 +1909,15 @@
     form.addEventListener("change", trackApplicationStartedOnce);
 
     trackEvent("page_visit", { language: document.documentElement.lang || "en" });
+    preselectOpportunityFromQuery();
+    updateOpportunityFields();
     restoreDraft();
     updateStep();
     setTravelFields();
+    updateOpportunityFields();
     updatePhotoRequirement();
     setupPhotoPreview("headshot", "headshotPreview");
     setupPhotoPreview("fullBody", "fullBodyPreview");
   </script>
 </body>
 </html>
-
-
-

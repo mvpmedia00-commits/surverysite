@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media | Fine Art Figure & Body Paint Model</title>
+  <title>MVP Media | Fine Art Figure & Body Paint Modeling Opportunities</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
@@ -278,6 +278,99 @@
 
     .feature-card p { margin-top: 6px; }
 
+    .opportunity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .opportunity-card {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      padding: clamp(18px, 2.4vw, 24px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .opportunity-card h3 {
+      font-size: clamp(1.35rem, 2vw, 1.65rem);
+    }
+
+    .track-badge {
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(179,63,42,0.18);
+      color: #ffe0cf;
+      border: 1px solid rgba(179,63,42,0.3);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .mini-list li {
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .mini-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent-2);
+      font-weight: 800;
+    }
+
+    .priority {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(239,224,203,0.2);
+      background: rgba(239,224,203,0.08);
+      color: #fff1df;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .both-card {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .comparison {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .comparison-cell {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .comparison-cell strong {
+      color: var(--accent-2);
+    }
+
     .diagram {
       display: flex;
       flex-wrap: wrap;
@@ -414,7 +507,7 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row { grid-template-columns: 1fr; }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
     }
@@ -446,13 +539,13 @@
 
     <section class="hero" id="top">
       <div>
-        <div class="eyebrow">Fine Art Figure &amp; Body Paint Model</div>
+        <div class="eyebrow">Fine Art Figure &amp; Body Paint Modeling Opportunities</div>
         <h1>You Applied. Here’s What Happens Next.</h1>
         <p>
-          Thank you for applying through Indeed. Before we schedule a phone interview, I want you to have a clear understanding of who I am, the work I create, what the modeling position involves, and what you can expect if we work together.
+          Thank you for applying through Indeed. Before we schedule a phone interview, I want you to understand who I am, the work I create, what body paint modeling involves, and the two different modeling opportunities available through MVP Media Photography.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#role">Start here — learn about the position</a>
+          <a class="btn btn-primary" href="#role">Start here — learn about the opportunities</a>
           <a class="btn btn-secondary" href="https://kavyar.me/mvpmedia" target="_blank" rel="noopener noreferrer">View my work</a>
         </div>
         <div class="badge-row">
@@ -526,12 +619,182 @@
     </section>
 
     <section class="card">
-      <h2>Understanding the Figure Modeling Requirement</h2>
+      <h2>Two Ways to Work With MVP Media</h2>
+      <p>Not every body paint model serves the same purpose.</p>
       <p>
-        Some MVP Media body paint concepts involve artistic figure modeling and may require the model to pose unclothed while body paint is being applied. The exact level of coverage, body paint design, photography concept, posing expectations, and boundaries are discussed before a project is booked.
+        MVP Media works with models in two different capacities: recurring models who serve as regular canvases while I develop and practice body-paint techniques, and professional models selected for completed creative productions.
+      </p>
+      <p>You may be interested in either opportunity, or both.</p>
+
+      <div class="opportunity-grid">
+        <article class="opportunity-card">
+          <span class="track-badge">Recurring • Beginner Friendly</span>
+          <h3>Regular Body Paint Canvas Model</h3>
+          <div>
+            <h3>Become a Regular Living Canvas</h3>
+            <p>
+              This is a recurring modeling opportunity for someone interested in working with me regularly while I practice, refine, and develop body-paint techniques.
+            </p>
+            <p>
+              These sessions allow me to experiment with new designs, colors, brush techniques, placement, photography ideas, and creative concepts using a consistent live canvas.
+            </p>
+            <p>
+              This position places greater importance on <strong style="color:#ffe0cf;">reliability, availability, patience, communication, and comfort with body painting</strong> than previous professional modeling experience.
+            </p>
+          </div>
+          <div>
+            <h3>Ideal For</h3>
+            <ul class="mini-list">
+              <li>Beginners interested in modeling</li>
+              <li>Someone seeking recurring creative work</li>
+              <li>Someone with flexible availability</li>
+              <li>Models interested in body art</li>
+              <li>Someone patient enough for longer painting sessions</li>
+              <li>Someone comfortable taking basic posing direction</li>
+              <li>Someone interested in developing modeling experience over time</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Experience</h3>
+            <p><strong style="color:#ffe0cf;">No previous modeling experience required.</strong></p>
+            <p>A professional portfolio is not required for this opportunity.</p>
+          </div>
+          <div>
+            <h3>Sessions May Include</h3>
+            <ul class="mini-list">
+              <li>Body-paint practice</li>
+              <li>Brush-technique development</li>
+              <li>Color testing</li>
+              <li>New design experiments</li>
+              <li>Body-art concept development</li>
+              <li>Posing practice</li>
+              <li>Lighting tests</li>
+              <li>Photography tests</li>
+              <li>Portfolio development</li>
+              <li>Preparation for larger productions</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Schedule</h3>
+            <p><strong style="color:#ffe0cf;">Recurring / based on mutual availability</strong></p>
+            <p>Some models may work with MVP Media multiple times rather than being booked for only one project.</p>
+            <p>This does not promise daily work, guaranteed hours, or guaranteed recurring bookings.</p>
+          </div>
+          <div class="priority">Reliability + Availability + Patience + Communication</div>
+          <a class="btn btn-primary" href="/index.html?track=regular#applicationForm">I'm interested in regular modeling</a>
+        </article>
+
+        <article class="opportunity-card">
+          <span class="track-badge">Project-Based • Professional Productions</span>
+          <h3>Professional Body Paint Model</h3>
+          <div>
+            <h3>Model for Finished Creative Productions</h3>
+            <p>
+              Professional Body Paint Models are selected for planned body-art concepts where the goal is creating polished, finished photography and visual content.
+            </p>
+            <p>
+              These projects place greater emphasis on modeling ability, posing, facial expression, camera presence, body awareness, professionalism, and the ability to interpret creative direction.
+            </p>
+          </div>
+          <div>
+            <h3>Ideal For</h3>
+            <ul class="mini-list">
+              <li>Experienced models</li>
+              <li>Fashion models</li>
+              <li>Editorial models</li>
+              <li>Fine-art models</li>
+              <li>Figure models</li>
+              <li>Glamour models</li>
+              <li>Dancers or performers with strong body awareness</li>
+              <li>Models with strong camera confidence</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Experience</h3>
+            <p><strong style="color:#ffe0cf;">Previous modeling experience preferred.</strong></p>
+            <p>A portfolio, modeling Instagram, website, or examples of previous work are strongly encouraged.</p>
+          </div>
+          <div>
+            <h3>Professional Projects May Include</h3>
+            <ul class="mini-list">
+              <li>Completed body-paint concepts</li>
+              <li>Fine-art photography</li>
+              <li>Editorial photography</li>
+              <li>Fashion-inspired imagery</li>
+              <li>Portfolio productions</li>
+              <li>Promotional imagery</li>
+              <li>Creative campaigns</li>
+              <li>Special artistic productions</li>
+              <li>Behind-the-scenes content when agreed upon</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Schedule</h3>
+            <p><strong style="color:#ffe0cf;">Project-by-project booking</strong></p>
+            <p>Models are contacted when their appearance, experience, availability, and modeling style fit a particular concept.</p>
+          </div>
+          <div class="priority">Experience + Posing + Camera Presence + Professionalism</div>
+          <a class="btn btn-primary" href="/index.html?track=professional#applicationForm">I'm interested in professional modeling</a>
+        </article>
+      </div>
+
+      <div class="quote-card both-card">
+        <h2>Interested in Both?</h2>
+        <p>Some models may participate in recurring canvas sessions while also being considered for finished professional productions.</p>
+        <div class="hero-actions" style="justify-content:center;">
+          <a class="btn btn-primary" href="/index.html?track=both#applicationForm">I'm interested in both</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Which Opportunity Fits You?</h2>
+      <div class="comparison">
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Regular Body Paint Canvas Model</strong></div>
+          <div class="comparison-cell"><strong>Professional Body Paint Model</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Purpose:</strong> Practice &amp; creative development</div>
+          <div class="comparison-cell"><strong>Purpose:</strong> Finished creative productions</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Experience:</strong> None required</div>
+          <div class="comparison-cell"><strong>Experience:</strong> Preferred</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Schedule:</strong> Recurring</div>
+          <div class="comparison-cell"><strong>Schedule:</strong> Project-based</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Portfolio:</strong> Not required</div>
+          <div class="comparison-cell"><strong>Portfolio:</strong> Strongly encouraged</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Primary qualities:</strong> Reliability, availability, patience</div>
+          <div class="comparison-cell"><strong>Primary qualities:</strong> Posing, camera presence, professionalism</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Photography:</strong> Tests, practice and selected creative work</div>
+          <div class="comparison-cell"><strong>Photography:</strong> Finished professional imagery</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Best suited for:</strong> Beginners or models interested in recurring work</div>
+          <div class="comparison-cell"><strong>Best suited for:</strong> Experienced or highly camera-confident models</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Figure Modeling &amp; Body Paint</h2>
+      <p>
+        Both regular canvas sessions and professional productions may involve artistic figure modeling.
       </p>
       <p>
-        Applicants should only continue with the process if they are comfortable discussing these requirements openly and professionally.
+        Some concepts require the model to pose unclothed while cosmetic body paint is applied directly to the skin.
+      </p>
+      <p>
+        The exact level of coverage, areas being painted, posing expectations, photography, compensation, and boundaries are discussed before accepting a session.
       </p>
       <div class="note">Nothing should be a surprise on shoot day. Your comfort level, boundaries, paint coverage, posing limits, compensation, and image usage should be established before the session.</div>
     </section>
@@ -567,14 +830,15 @@
     </section>
 
     <section class="card">
-      <h2>What I Look For</h2>
+      <h2>What I Expect From Every Model</h2>
+      <p>Regardless of which opportunity interests you, I look for:</p>
       <div class="pill-grid">
-        <div class="pill-card"><strong>Reliability</strong>Arrive on time and communicate if circumstances change.</div>
-        <div class="pill-card"><strong>Confidence</strong>Be comfortable being photographed and taking creative direction.</div>
-        <div class="pill-card"><strong>Communication</strong>Be willing to discuss boundaries and expectations clearly.</div>
-        <div class="pill-card"><strong>Patience</strong>Detailed body painting can take time.</div>
+        <div class="pill-card"><strong>Reliability</strong>Arrive when agreed and communicate promptly if circumstances change.</div>
+        <div class="pill-card"><strong>Communication</strong>Ask questions and communicate boundaries clearly.</div>
+        <div class="pill-card"><strong>Patience</strong>Body painting can require extended periods of standing, sitting, or holding positions.</div>
         <div class="pill-card"><strong>Professionalism</strong>Treat the project as a professional creative collaboration.</div>
-        <div class="pill-card"><strong>Open-Minded Creativity</strong>Be willing to experiment with artistic concepts while maintaining your established boundaries.</div>
+        <div class="pill-card"><strong>Creative Direction</strong>Be willing to receive reasonable artistic and posing direction within the boundaries established before the session.</div>
+        <div class="pill-card"><strong>Respect</strong>Maintain a respectful working environment throughout the project.</div>
       </div>
     </section>
 
@@ -592,9 +856,14 @@
 
     <section class="card">
       <h2>Compensation</h2>
-      <p><strong style="color: #ffe0cf;">Typical project range: $50–$200 per day</strong></p>
+      <p><strong style="color: #ffe0cf;">Compensation varies by project and model role.</strong></p>
       <p>
-        Rates vary depending on the project, session length, concept, model experience, location, and intended image usage. Your specific compensation will be discussed and agreed upon before accepting a project.
+        Regular canvas sessions and professional productions may have different rates based on the session's purpose, length, complexity, photography requirements, model experience, location, and intended image usage.
+      </p>
+      <p><strong style="color: #ffe0cf;">Your specific rate will be disclosed and agreed upon before you accept a session.</strong></p>
+      <p><strong style="color: #ffe0cf;">Current advertised range: $50–$200 per day</strong></p>
+      <p>
+        Placement within this range depends on the specific assignment and does not represent guaranteed daily work or guaranteed earnings.
       </p>
     </section>
 
@@ -603,7 +872,7 @@
       <div class="faq">
         <details>
           <summary>Do I need modeling experience?</summary>
-          <p>No. Previous experience is helpful but not required.</p>
+          <p>No previous modeling experience is required for the regular canvas model opportunity. Previous modeling experience is preferred for professional body paint productions.</p>
         </details>
         <details>
           <summary>Do I need body paint experience?</summary>
@@ -635,7 +904,7 @@
         </details>
         <details>
           <summary>Do I need to send nude photographs to apply?</summary>
-          <p>No. Do not require applicants to submit nude photographs as part of the initial application process. A normal modeling portfolio, social media portfolio, headshot, or recent clothed photographs can be used for initial review.</p>
+          <p>No. Applicants are not required to submit nude photographs as part of the initial application process. A normal modeling portfolio, social media portfolio, headshot, or recent clothed photographs can be used for initial review.</p>
         </details>
         <details>
           <summary>Is this an automatic job offer?</summary>
@@ -653,34 +922,41 @@
       <p>Before requesting your interview, please make sure you’ve reviewed the following:</p>
       <ul class="check-list">
         <li>☑ I understand what body paint canvas modeling involves.</li>
+        <li>☑ I understand the difference between regular canvas modeling and professional project modeling.</li>
         <li>☑ I understand that some projects involve artistic figure modeling.</li>
-        <li>☑ I understand that body painting may require extended periods of posing.</li>
-        <li>☑ I understand that project requirements vary by concept.</li>
-        <li>☑ I know I can discuss boundaries and posing limits before booking.</li>
-        <li>☑ I understand compensation is discussed before accepting a project.</li>
-        <li>☑ I understand applying does not guarantee a booking.</li>
-        <li>☑ I am at least 18 years old.</li>
+        <li>☑ I understand body paint is applied directly to the skin.</li>
+        <li>☑ I understand painting may require extended periods of posing.</li>
+        <li>☑ I understand I can establish and communicate my boundaries.</li>
+        <li>☑ I understand compensation is established before accepting a session.</li>
+        <li>☑ I understand recurring work is not guaranteed.</li>
+        <li>☑ I understand applying and interviewing do not guarantee a booking.</li>
+        <li>☑ I confirm that I am at least 18 years old.</li>
       </ul>
     </section>
 
     <section class="card" id="interview">
       <h2>What Happens During the Phone Interview?</h2>
-      <p>The phone interview is a short introductory conversation. It is not a commitment to participate in a shoot.</p>
+      <p><strong style="color:#ffe0cf;">The phone interview is not a job offer, guarantee of work, or commitment to participate in a shoot.</strong></p>
       <div class="pill-grid">
-        <div class="pill-card"><strong>01 — Introduction</strong>Learn more about MVP Media and the current projects.</div>
-        <div class="pill-card"><strong>02 — Your Experience</strong>Discuss any modeling, photography, performance, or creative experience you have. Beginners are welcome.</div>
-        <div class="pill-card"><strong>03 — The Position</strong>Discuss body painting, figure modeling, photography, posing, and typical project expectations.</div>
-        <div class="pill-card"><strong>04 — Your Comfort Level</strong>You can ask questions and discuss boundaries or concerns.</div>
-        <div class="pill-card"><strong>05 — Next Steps</strong>If the project appears to be a good fit for both sides, we can discuss availability and potential booking opportunities.</div>
+        <div class="pill-card"><strong>01 — Introduction</strong>Learn more about Matthew and MVP Media.</div>
+        <div class="pill-card"><strong>02 — Which Opportunity Fits You</strong>Discuss whether you're interested in regular canvas modeling, professional productions, or both.</div>
+        <div class="pill-card"><strong>03 — Experience</strong>Discuss your previous modeling or creative experience. Beginners remain welcome for the regular model opportunity.</div>
+        <div class="pill-card"><strong>04 — Availability</strong>Discuss when and how frequently you're generally available.</div>
+        <div class="pill-card"><strong>05 — Body Paint &amp; Figure Modeling</strong>Discuss the body-paint process, figure-modeling requirements, posing, and project expectations.</div>
+        <div class="pill-card"><strong>06 — Boundaries</strong>Discuss questions, comfort levels, and boundaries.</div>
+        <div class="pill-card"><strong>07 — Compensation</strong>Discuss compensation for any specific opportunity being considered.</div>
+        <div class="pill-card"><strong>08 — Next Steps</strong>If both sides are interested, discuss potential scheduling or future project consideration.</div>
       </div>
     </section>
 
     <section class="cta-card">
       <h2>Still Interested?</h2>
-      <p>If you’ve reviewed the information above and the position sounds like something you’d genuinely be interested in, the next step is a short phone interview.</p>
+      <p>If you've reviewed everything and one or both opportunities sound like a good fit, tell me which modeling track interests you and request a short phone interview.</p>
       <div class="hero-actions" style="justify-content:center; margin-top:16px;">
-        <a class="btn btn-primary" href="mailto:hello@mvpmedia.com?subject=Phone%20Interview%20Request">Request my phone interview</a>
-        <a class="btn btn-secondary" href="/index.html">Complete / review my model application</a>
+        <a class="btn btn-secondary" href="/index.html?track=regular#applicationForm">Regular model</a>
+        <a class="btn btn-secondary" href="/index.html?track=professional#applicationForm">Professional model</a>
+        <a class="btn btn-secondary" href="/index.html?track=both#applicationForm">Both</a>
+        <a class="btn btn-primary" href="mailto:hello@mvpmedia.com?subject=Phone%20Interview%20Request">Request phone interview</a>
       </div>
     </section>
 

@@ -83,6 +83,10 @@ export default async function handler(req, res) {
       worked_with_photographers: body.worked_with_photographers || "",
       comfortable_snapshots: body.comfortable_snapshots || "",
       interests: Array.isArray(body.interests) ? body.interests : [],
+      model_opportunity: body.model_opportunity || "",
+      opportunity_interest: body.opportunity_interest || "",
+      portfolio_link: body.portfolio_link || "",
+      regular_availability: body.regular_availability || "",
       comfort_level: body.comfort_level,
       avoid_concepts: body.avoid_concepts,
       availability: Array.isArray(body.availability) ? body.availability : [],
@@ -102,7 +106,21 @@ export default async function handler(req, res) {
       review_status: "pending"
     };
 
-    const response = await fetch(`${cfg.supabaseUrl}/rest/v1/model_applications`, {
+    const fallbackAnythingElse = [
+      row.anything_else || "",
+      row.model_opportunity ? `Model opportunity: ${row.model_opportunity}` : "",
+      row.opportunity_interest ? `Opportunity interest: ${row.opportunity_interest}` : "",
+      row.portfolio_link ? `Portfolio link: ${row.portfolio_link}` : "",
+      row.regular_availability ? `Regular availability: ${row.regular_availability}` : ""
+    ].filter(Boolean).join("\n\n");
+
+    const legacyRow = { ...row, anything_else: fallbackAnythingElse };
+    delete legacyRow.model_opportunity;
+    delete legacyRow.opportunity_interest;
+    delete legacyRow.portfolio_link;
+    delete legacyRow.regular_availability;
+
+    const insertApplication = (payload) => fetch(`${cfg.supabaseUrl}/rest/v1/model_applications`, {
       method: "POST",
       headers: {
         apikey: cfg.supabaseKey,
@@ -111,8 +129,19 @@ export default async function handler(req, res) {
         Prefer: "return=representation",
         "Content-Profile": "public"
       },
-      body: JSON.stringify(row)
+      body: JSON.stringify(payload)
     });
+
+    let response = await insertApplication(row);
+
+    if (!response.ok) {
+      const detail = await response.text();
+      if (/model_opportunity|opportunity_interest|portfolio_link|regular_availability|schema cache|column/i.test(detail)) {
+        response = await insertApplication(legacyRow);
+      } else {
+        return respond(res, 500, { error: "Failed to save application", detail });
+      }
+    }
 
     if (!response.ok) {
       const detail = await response.text();
