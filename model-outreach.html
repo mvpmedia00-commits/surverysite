@@ -338,6 +338,47 @@
       font-size: 0.88rem;
     }
 
+    .media-showcase {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 16px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+
+    .media-frame {
+      min-height: 420px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.28);
+    }
+
+    .media-frame img,
+    .media-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-frame video {
+      background: #050403;
+    }
+
+    .media-caption {
+      margin-top: 8px;
+      color: #ffe0cf;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .media-caption a {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
     .stats {
       display: grid;
       gap: 12px;
@@ -635,11 +676,12 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase { grid-template-columns: 1fr; }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
       .hero-photo { min-height: 260px; }
       .featured-photos img { min-height: 260px; }
+      .media-frame { min-height: 360px; }
     }
 
     @media (max-width: 560px) {
@@ -654,6 +696,9 @@
       .featured-photos img {
         min-height: 240px;
         max-height: 320px;
+      }
+      .media-frame {
+        min-height: 300px;
       }
       .top-nav .links {
         display: flex;
@@ -709,8 +754,8 @@
         </div>
       </div>
       <div class="hero-photo featured-photos" aria-label="MVP Media body paint and figure modeling examples">
-        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg" alt="MVP Media body paint modeling example" loading="eager">
-        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605586/IMG_2728_hdh3b9.jpg" alt="MVP Media body paint creative photography example" loading="eager">
+        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg" alt="MVP Media body paint modeling example" loading="eager" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
+        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605586/IMG_2728_hdh3b9.jpg" alt="MVP Media body paint creative photography example" loading="eager" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
       </div>
     </section>
 
@@ -736,6 +781,31 @@
           <p>Best if you are open to recurring canvas sessions and would also like to be considered for finished body-art projects.</p>
           <a class="btn btn-primary" href="/index.html?track=both#applicationForm">Select both</a>
         </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-kicker">Featured Body Paint Work</span>
+      <h2>Recent Body Paint Examples</h2>
+      <p class="lead">
+        These examples show the kind of color, coverage, lighting, and camera-ready body-art work applicants may discuss before accepting a session.
+      </p>
+      <div class="media-showcase">
+        <div>
+          <figure class="media-frame">
+            <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785625713/5B1A0399_uawzvr.jpg" alt="MVP Media body paint photography example" loading="lazy" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
+          </figure>
+          <p class="media-caption">Body paint photography example · <a href="https://res.cloudinary.com/dale5sd8p/image/upload/v1785625713/5B1A0399_uawzvr.jpg" target="_blank" rel="noopener noreferrer">Open source</a></p>
+        </div>
+        <div>
+          <figure class="media-frame">
+            <video controls playsinline preload="metadata" poster="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg">
+              <source src="https://res.cloudinary.com/dale5sd8p/video/upload/f_mp4,q_auto/v1785625712/IMG_3581_mkgbfe.mov" type="video/mp4">
+              <a href="https://res.cloudinary.com/dale5sd8p/video/upload/v1785625712/IMG_3581_mkgbfe.mov">View the body paint model video</a>
+            </video>
+          </figure>
+          <p class="media-caption">Body paint model video · <a href="https://res.cloudinary.com/dale5sd8p/video/upload/v1785625712/IMG_3581_mkgbfe.mov" target="_blank" rel="noopener noreferrer">Open source</a></p>
+        </div>
       </div>
     </section>
 
