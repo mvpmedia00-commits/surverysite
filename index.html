@@ -60,11 +60,19 @@
       background-repeat: no-repeat;
     }
 
-    .corner-link {
+    .gate-links,
+    .hero-links {
       position: absolute;
       top: 14px;
       right: 14px;
       z-index: 4;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .corner-link {
       text-decoration: none;
       border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: 999px;
@@ -142,9 +150,6 @@
     }
 
     .hero-about-link {
-      position: absolute;
-      top: 14px;
-      right: 14px;
       text-decoration: none;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -535,14 +540,16 @@
       .page { margin-top: 14px; }
       .lang-actions { grid-template-columns: 1fr; }
       .about-grid { grid-template-columns: 1fr; }
+      .gate-links,
+      .hero-links {
+        left: 18px;
+        right: 18px;
+        justify-content: center;
+      }
       .hero {
         grid-template-columns: 1fr;
         min-height: auto;
         padding-top: 52px;
-      }
-      .hero-about-link {
-        left: 18px;
-        right: auto;
       }
       .hero-photo {
         min-height: 240px;
@@ -563,8 +570,10 @@
 </head>
 <body>
   <section class="lang-gate" id="langGate">
-    <a class="corner-link" href="/about-mvp-media.html">About MVP Media</a>
-    <a class="corner-link" href="/model-outreach.html" style="right: 170px;">For Models</a>
+    <div class="gate-links" aria-label="Helpful links">
+      <a class="corner-link" href="/model-outreach.html">For Models</a>
+      <a class="corner-link" href="/about-mvp-media.html">About MVP Media</a>
+    </div>
     <div class="lang-card">
       <h2 id="langTitle">Choose your language / Elige tu idioma</h2>
       <p id="langIntro">Select English or Spanish before continuing to the survey.</p>
@@ -584,8 +593,10 @@
 
   <main class="page hidden" id="surveyRoot">
     <header class="hero">
-      <a class="hero-about-link" href="/about-mvp-media.html">About MVP Media</a>
-      <a class="hero-about-link" href="/model-outreach.html" style="right: 182px;">For Models</a>
+      <div class="hero-links" aria-label="Helpful links">
+        <a class="hero-about-link" href="/model-outreach.html">For Models</a>
+        <a class="hero-about-link" href="/about-mvp-media.html">About MVP Media</a>
+      </div>
       <div class="hero-copy">
         <h1 id="pageTitle">MVP Media Photography Model Application</h1>
         <p class="intro" id="pageIntro">
