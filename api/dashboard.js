@@ -89,6 +89,20 @@ const toPhotoUrl = (supabaseUrl, value) => {
   return `${supabaseUrl}/storage/v1/object/public/applications/${encodedPath}`;
 };
 
+const extractLegacyField = (text, label) => {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = String(text || "").match(new RegExp(`${escaped}:\\s*([^\\n]+)`, "i"));
+  return match ? match[1].trim() : "";
+};
+
+const withModelTrackFields = (row) => ({
+  ...row,
+  model_opportunity: row.model_opportunity || extractLegacyField(row.anything_else, "Model opportunity") || "Not specified",
+  opportunity_interest: row.opportunity_interest || extractLegacyField(row.anything_else, "Opportunity interest") || "",
+  portfolio_link: row.portfolio_link || extractLegacyField(row.anything_else, "Portfolio link") || "",
+  regular_availability: row.regular_availability || extractLegacyField(row.anything_else, "Regular availability") || ""
+});
+
 export default async function handler(req, res) {
   try {
     if (req.method === "OPTIONS") {
@@ -152,6 +166,7 @@ export default async function handler(req, res) {
     }
 
     const rows = await response.json();
+    const enrichedRows = rows.map(withModelTrackFields);
 
     const eventsResponse = await fetch(`${cfg.supabaseUrl}/rest/v1/application_events?select=event_type,language&form_type=eq.main&order=created_at.desc`, {
       headers: {
@@ -164,8 +179,8 @@ export default async function handler(req, res) {
     });
 
     const eventRows = eventsResponse.ok ? await eventsResponse.json() : [];
-    const analyticsRows = rows.filter((row) => (row.review_status || "pending") !== "denied");
-    const candidates = rows.map((row) => ({
+    const analyticsRows = enrichedRows.filter((row) => (row.review_status || "pending") !== "denied");
+    const candidates = enrichedRows.map((row) => ({
       ...row,
       full_name: row.full_name || "Unnamed",
       review_status: row.review_status || "pending",
@@ -174,7 +189,7 @@ export default async function handler(req, res) {
       full_body_url: toPhotoUrl(cfg.supabaseUrl, row.full_body_filename)
     }));
 
-    const recentPhotos = rows
+    const recentPhotos = enrichedRows
       .filter((row) => row.headshot_filename || row.full_body_filename)
       .slice(0, 20)
       .map((row) => ({
@@ -188,6 +203,7 @@ export default async function handler(req, res) {
       totalApplications: analyticsRows.length,
       bySource: countBy(analyticsRows, "hear_about"),
       byExperience: countBy(analyticsRows, "experience"),
+      byModelOpportunity: countBy(analyticsRows, "model_opportunity"),
       byFrequency: countBy(analyticsRows, "frequency"),
       byCompInterest: countBy(analyticsRows, "comp_interest"),
       byExpectedComp: countBy(analyticsRows, "expected_comp"),

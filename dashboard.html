@@ -106,7 +106,7 @@
 
     .filters {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
     }
 
@@ -222,6 +222,34 @@
       background: #fdeeee;
       color: #8f2e2e;
       border-color: #efc1c1;
+    }
+
+    .track-pill {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #b8d9d5;
+      background: #eff9f8;
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 5px 9px;
+      margin-top: 8px;
+    }
+
+    .track-pill.both {
+      border-color: #dec68b;
+      background: #fff8e7;
+      color: #806015;
+    }
+
+    .track-pill.professional {
+      border-color: #d4c5e6;
+      background: #f5effb;
+      color: #65488d;
     }
 
     .photo-links {
@@ -469,6 +497,7 @@
       <div class="kpis" id="kpis">
         <div class="kpi"><p class="kpi-label">Total Applications</p><p class="kpi-value" id="kpiTotal">0</p></div>
         <div class="kpi"><p class="kpi-label">Top Source</p><p class="kpi-value" id="kpiSource">-</p></div>
+        <div class="kpi"><p class="kpi-label">Top Model Track</p><p class="kpi-value" id="kpiModelTrack">-</p></div>
         <div class="kpi"><p class="kpi-label">Top Experience</p><p class="kpi-value" id="kpiExperience">-</p></div>
         <div class="kpi"><p class="kpi-label">Top Interest</p><p class="kpi-value" id="kpiInterest">-</p></div>
         <div class="kpi"><p class="kpi-label">Pending</p><p class="kpi-value" id="kpiPending">0</p></div>
@@ -517,6 +546,12 @@
             <option value="all">All</option>
           </select>
         </div>
+        <div class="field">
+          <label for="filterOpportunity">Model Track</label>
+          <select id="filterOpportunity">
+            <option value="all">All</option>
+          </select>
+        </div>
       </div>
       <div class="candidate-list" id="candidateList"></div>
     </section>
@@ -529,6 +564,10 @@
       <article class="chart-box">
         <h2>Compensation Interest (Pie)</h2>
         <canvas id="compPie"></canvas>
+      </article>
+      <article class="chart-box">
+        <h2>Model Track Interest (Pie)</h2>
+        <canvas id="modelTrackPie"></canvas>
       </article>
       <article class="chart-box">
         <h2>Monthly Application Trend (Line)</h2>
@@ -627,6 +666,15 @@
 
     const lineItem = (label, value) => `<p class="profile-item"><strong>${label}:</strong> ${value || "-"}</p>`;
 
+    const normalizedTrack = (candidate) => candidate.model_opportunity || "Not specified";
+
+    const trackClass = (track) => {
+      const value = String(track || "").toLowerCase();
+      if (value.includes("both")) return "both";
+      if (value.includes("professional")) return "professional";
+      return "regular";
+    };
+
     const renderProfile = (candidate) => {
       const subtitle = document.getElementById("profileSubtitle");
       const content = document.getElementById("profileContent");
@@ -670,6 +718,10 @@
         <section class="profile-section">
           <h3>Experience</h3>
           <div class="profile-list">
+            ${lineItem("Model track", normalizedTrack(candidate))}
+            ${lineItem("What interests them", candidate.opportunity_interest)}
+            ${lineItem("Portfolio / website", candidate.portfolio_link)}
+            ${lineItem("Regular availability", candidate.regular_availability)}
             ${lineItem("Experience", candidate.experience)}
             ${lineItem("Worked with photographers", candidate.worked_with_photographers)}
             ${lineItem("Comfortable snapshots", candidate.comfortable_snapshots)}
@@ -735,6 +787,7 @@
       const status = document.getElementById("filterStatus").value;
       const experience = document.getElementById("filterExperience").value;
       const source = document.getElementById("filterSource").value;
+      const opportunity = document.getElementById("filterOpportunity").value;
 
       return state.candidates.filter((candidate) => {
         const matchesSearch = !search
@@ -743,7 +796,8 @@
         const matchesStatus = status === "all" || candidate.review_status === status;
         const matchesExperience = experience === "all" || candidate.experience === experience;
         const matchesSource = source === "all" || candidate.hear_about === source;
-        return matchesSearch && matchesStatus && matchesExperience && matchesSource;
+        const matchesOpportunity = opportunity === "all" || normalizedTrack(candidate) === opportunity;
+        return matchesSearch && matchesStatus && matchesExperience && matchesSource && matchesOpportunity;
       });
     };
 
@@ -763,6 +817,7 @@
 
       filtered.forEach((candidate) => {
         const card = document.createElement("article");
+        const track = normalizedTrack(candidate);
         card.className = "candidate";
         card.dataset.candidateId = candidate.id;
         card.innerHTML = `
@@ -770,6 +825,7 @@
             <div>
               <h3 class="candidate-name">${candidate.full_name}</h3>
               <p class="candidate-meta">${candidate.email} · ${candidate.city}, ${candidate.country} · ${candidate.experience} · ${candidate.hear_about}</p>
+              <span class="track-pill ${trackClass(track)}">${track}</span>
               <p class="candidate-meta">Applied: ${formatDate(candidate.created_at)}</p>
             </div>
             <span class="badge ${candidate.review_status}">${candidate.review_status}</span>
@@ -825,6 +881,7 @@
 
       document.getElementById("kpiTotal").textContent = String(data.totalApplications || 0);
       document.getElementById("kpiSource").textContent = topKey(data.bySource);
+      document.getElementById("kpiModelTrack").textContent = topKey(data.byModelOpportunity);
       document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
       document.getElementById("kpiInterest").textContent = topKey(data.byInterest);
       document.getElementById("kpiPending").textContent = String((data.byStatus && data.byStatus.pending) || 0);
@@ -861,6 +918,19 @@
           datasets: [{
             data: compEntries.map((x) => x[1]),
             backgroundColor: chartColors
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      }));
+
+      const modelTrackEntries = toSortedEntries(data.byModelOpportunity);
+      activeCharts.push(new Chart(document.getElementById("modelTrackPie"), {
+        type: "pie",
+        data: {
+          labels: modelTrackEntries.map((x) => x[0]),
+          datasets: [{
+            data: modelTrackEntries.map((x) => x[1]),
+            backgroundColor: ["#0e6b62", "#805d98", "#da7c4f", "#7b9d5e"]
           }]
         },
         options: { responsive: true, maintainAspectRatio: false }
@@ -905,6 +975,7 @@
       document.getElementById("status").textContent = `Dashboard updated. ${state.candidates.length} applicant${state.candidates.length === 1 ? "" : "s"} returned.`;
       addOptions("filterExperience", [...new Set(state.candidates.map((candidate) => candidate.experience))]);
       addOptions("filterSource", [...new Set(state.candidates.map((candidate) => candidate.hear_about))]);
+      addOptions("filterOpportunity", [...new Set(state.candidates.map((candidate) => normalizedTrack(candidate)))]);
       renderCandidates();
     };
 
@@ -919,7 +990,7 @@
       renderDashboard(data);
     };
 
-    ["filterSearch", "filterStatus", "filterExperience", "filterSource"].forEach((id) => {
+    ["filterSearch", "filterStatus", "filterExperience", "filterSource", "filterOpportunity"].forEach((id) => {
       document.getElementById(id).addEventListener("input", renderCandidates);
       document.getElementById(id).addEventListener("change", renderCandidates);
     });
@@ -941,6 +1012,10 @@
         "city",
         "country",
         "hear_about",
+        "model_opportunity",
+        "opportunity_interest",
+        "portfolio_link",
+        "regular_availability",
         "experience",
         "unpaid_tfp_willing",
         "review_status",
@@ -958,6 +1033,10 @@
           candidate.city,
           candidate.country,
           candidate.hear_about,
+          normalizedTrack(candidate),
+          candidate.opportunity_interest,
+          candidate.portfolio_link,
+          candidate.regular_availability,
           candidate.experience,
           candidate.unpaid_tfp_willing ? "Yes" : "No",
           candidate.review_status,
