@@ -253,6 +253,20 @@
       display: block;
     }
 
+    .featured-photos {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 8px;
+      background: rgba(0,0,0,0.24);
+    }
+
+    .featured-photos img {
+      min-height: 344px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
     .section-grid {
       display: grid;
       gap: 16px;
@@ -625,6 +639,7 @@
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
       .hero-photo { min-height: 260px; }
+      .featured-photos img { min-height: 260px; }
     }
 
     @media (max-width: 560px) {
@@ -633,6 +648,13 @@
       .hero-actions { flex-direction: column; }
       .btn { width: 100%; }
       .hero, .card, .quote-card, .cta-card { border-radius: 18px; }
+      .featured-photos {
+        grid-template-columns: 1fr;
+      }
+      .featured-photos img {
+        min-height: 240px;
+        max-height: 320px;
+      }
       .top-nav .links {
         display: flex;
         flex-wrap: nowrap;
@@ -686,8 +708,9 @@
           <span class="badge">18+ Only</span>
         </div>
       </div>
-      <div class="hero-photo">
-        <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="Matthew and the MVP Media creative direction">
+      <div class="hero-photo featured-photos" aria-label="MVP Media body paint and figure modeling examples">
+        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg" alt="MVP Media body paint modeling example" loading="eager">
+        <img src="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605586/IMG_2728_hdh3b9.jpg" alt="MVP Media body paint creative photography example" loading="eager">
       </div>
     </section>
 
