@@ -16,6 +16,7 @@
       --muted: #b8a79a;
       --accent: #b33f2a;
       --accent-2: #efe0cb;
+      --accent-cool: #4fa899;
       --line: rgba(255,255,255,0.14);
       --shadow: 0 20px 44px rgba(0,0,0,0.28);
       --radius: 24px;
@@ -39,6 +40,8 @@
       margin: 0 auto 48px;
       padding-bottom: 24px;
     }
+
+    section[id] { scroll-margin-top: 92px; }
 
     .top-nav {
       position: sticky;
@@ -165,6 +168,28 @@
 
     .hero p { font-size: 1.01rem; }
 
+    .hero-summary {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.24);
+    }
+
+    .hero-summary strong {
+      color: var(--accent-2);
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-summary span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
@@ -240,6 +265,65 @@
 
     .card p + p { margin-top: 10px; }
 
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(79,168,153,0.28);
+      background: rgba(79,168,153,0.1);
+      color: #c8fff2;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 780px;
+      font-size: 1.02rem;
+    }
+
+    .quick-start {
+      margin-top: 16px;
+    }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .decision-card {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      min-height: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.11);
+      background: rgba(255,255,255,0.035);
+    }
+
+    .decision-card strong {
+      color: var(--accent-2);
+      font-size: 1rem;
+    }
+
+    .decision-card p {
+      font-size: 0.94rem;
+    }
+
+    .decision-card .btn {
+      align-self: end;
+      margin-top: 4px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+    }
+
     .stats {
       display: grid;
       gap: 12px;
@@ -295,8 +379,21 @@
       background: rgba(255,255,255,0.03);
     }
 
+    .opportunity-card.featured {
+      border-color: rgba(79,168,153,0.28);
+      background: linear-gradient(145deg, rgba(79,168,153,0.08), rgba(255,255,255,0.03));
+    }
+
     .opportunity-card h3 {
       font-size: clamp(1.35rem, 2vw, 1.65rem);
+    }
+
+    .opportunity-card h4 {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .track-badge {
@@ -343,6 +440,16 @@
       text-align: center;
     }
 
+    .track-note {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(79,168,153,0.22);
+      background: rgba(79,168,153,0.08);
+      color: #dcfff7;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
     .both-card {
       margin-top: 16px;
       text-align: center;
@@ -369,6 +476,13 @@
 
     .comparison-cell strong {
       color: var(--accent-2);
+    }
+
+    .comparison-label {
+      color: #ffffff;
+      font-weight: 800;
+      border-color: rgba(79,168,153,0.24);
+      background: rgba(79,168,153,0.08);
     }
 
     .diagram {
@@ -507,9 +621,10 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid { grid-template-columns: 1fr; }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+      .hero-photo { min-height: 260px; }
     }
 
     @media (max-width: 560px) {
@@ -517,6 +632,19 @@
       .top-nav { flex-direction: column; align-items: flex-start; }
       .hero-actions { flex-direction: column; }
       .btn { width: 100%; }
+      .hero, .card, .quote-card, .cta-card { border-radius: 18px; }
+      .top-nav .links {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        width: 100%;
+      }
+      .top-nav a {
+        padding: 8px 4px;
+        flex: 0 0 auto;
+        font-size: 0.78rem;
+      }
+      .top-nav .links { gap: 4px; }
     }
   </style>
 </head>
@@ -526,10 +654,10 @@
       <div class="brand">MVP Media</div>
       <div class="links">
         <a href="#about" class="active">About</a>
-        <a href="#role">Role</a>
+        <a href="#opportunities">Opportunities</a>
         <a href="#process">Process</a>
+        <a href="#safety">Safety</a>
         <a href="#faq">FAQ</a>
-        <a href="#interview">Interview</a>
       </div>
     </nav>
 
@@ -544,8 +672,12 @@
         <p>
           Thank you for applying through Indeed. Before we schedule a phone interview, I want you to understand who I am, the work I create, what body paint modeling involves, and the two different modeling opportunities available through MVP Media Photography.
         </p>
+        <div class="hero-summary" aria-label="Application summary">
+          <strong>Before the phone call</strong>
+          <span>Review the two tracks, decide what interests you most, and note any questions or boundaries you want to discuss.</span>
+        </div>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#role">Start here — learn about the opportunities</a>
+          <a class="btn btn-primary" href="#opportunities">Choose your track</a>
           <a class="btn btn-secondary" href="https://kavyar.me/mvpmedia" target="_blank" rel="noopener noreferrer">View my work</a>
         </div>
         <div class="badge-row">
@@ -556,6 +688,31 @@
       </div>
       <div class="hero-photo">
         <img src="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="Matthew and the MVP Media creative direction">
+      </div>
+    </section>
+
+    <section class="card quick-start" id="opportunities">
+      <span class="section-kicker">Start Here</span>
+      <h2>Choose the Track That Fits You</h2>
+      <p class="lead">
+        Both tracks are legitimate creative opportunities. The difference is the purpose of the session: regular canvas work supports practice and development, while professional body-paint modeling supports finished productions.
+      </p>
+      <div class="decision-grid">
+        <article class="decision-card">
+          <strong>Regular Canvas Model</strong>
+          <p>Best if you are beginner-friendly, patient, available more than once, and interested in helping develop new body-paint ideas.</p>
+          <a class="btn btn-secondary" href="/index.html?track=regular#applicationForm">Select regular</a>
+        </article>
+        <article class="decision-card">
+          <strong>Professional Model</strong>
+          <p>Best if you have camera confidence, posing experience, or a portfolio and want to be considered for polished creative productions.</p>
+          <a class="btn btn-secondary" href="/index.html?track=professional#applicationForm">Select professional</a>
+        </article>
+        <article class="decision-card">
+          <strong>Both</strong>
+          <p>Best if you are open to recurring canvas sessions and would also like to be considered for finished body-art projects.</p>
+          <a class="btn btn-primary" href="/index.html?track=both#applicationForm">Select both</a>
+        </article>
       </div>
     </section>
 
@@ -602,6 +759,7 @@
     </section>
 
     <section class="card" id="role">
+      <span class="section-kicker">Body Paint Basics</span>
       <h2>What Is a Body Paint Canvas Model?</h2>
       <p>
         A body paint canvas model serves as the human canvas for an artistic body painting project. Professional cosmetic body paint is applied directly to the model’s skin to create a finished piece of wearable artwork. Once the artwork is complete, the model may participate in a professional photography session showcasing the finished design.
@@ -619,6 +777,7 @@
     </section>
 
     <section class="card">
+      <span class="section-kicker">Detailed Track Breakdown</span>
       <h2>Two Ways to Work With MVP Media</h2>
       <p>Not every body paint model serves the same purpose.</p>
       <p>
@@ -627,11 +786,11 @@
       <p>You may be interested in either opportunity, or both.</p>
 
       <div class="opportunity-grid">
-        <article class="opportunity-card">
+        <article class="opportunity-card featured">
           <span class="track-badge">Recurring • Beginner Friendly</span>
           <h3>Regular Body Paint Canvas Model</h3>
           <div>
-            <h3>Become a Regular Living Canvas</h3>
+            <h4>Become a Regular Living Canvas</h4>
             <p>
               This is a recurring modeling opportunity for someone interested in working with me regularly while I practice, refine, and develop body-paint techniques.
             </p>
@@ -643,7 +802,7 @@
             </p>
           </div>
           <div>
-            <h3>Ideal For</h3>
+            <h4>Ideal For</h4>
             <ul class="mini-list">
               <li>Beginners interested in modeling</li>
               <li>Someone seeking recurring creative work</li>
@@ -655,12 +814,12 @@
             </ul>
           </div>
           <div>
-            <h3>Experience</h3>
+            <h4>Experience</h4>
             <p><strong style="color:#ffe0cf;">No previous modeling experience required.</strong></p>
             <p>A professional portfolio is not required for this opportunity.</p>
           </div>
           <div>
-            <h3>Sessions May Include</h3>
+            <h4>Sessions May Include</h4>
             <ul class="mini-list">
               <li>Body-paint practice</li>
               <li>Brush-technique development</li>
@@ -675,20 +834,21 @@
             </ul>
           </div>
           <div>
-            <h3>Schedule</h3>
+            <h4>Schedule</h4>
             <p><strong style="color:#ffe0cf;">Recurring / based on mutual availability</strong></p>
             <p>Some models may work with MVP Media multiple times rather than being booked for only one project.</p>
             <p>This does not promise daily work, guaranteed hours, or guaranteed recurring bookings.</p>
           </div>
+          <div class="track-note">This track is not a lesser version of professional modeling. It is a creative development role where consistency and comfort matter most.</div>
           <div class="priority">Reliability + Availability + Patience + Communication</div>
           <a class="btn btn-primary" href="/index.html?track=regular#applicationForm">I'm interested in regular modeling</a>
         </article>
 
-        <article class="opportunity-card">
+        <article class="opportunity-card featured">
           <span class="track-badge">Project-Based • Professional Productions</span>
           <h3>Professional Body Paint Model</h3>
           <div>
-            <h3>Model for Finished Creative Productions</h3>
+            <h4>Model for Finished Creative Productions</h4>
             <p>
               Professional Body Paint Models are selected for planned body-art concepts where the goal is creating polished, finished photography and visual content.
             </p>
@@ -697,7 +857,7 @@
             </p>
           </div>
           <div>
-            <h3>Ideal For</h3>
+            <h4>Ideal For</h4>
             <ul class="mini-list">
               <li>Experienced models</li>
               <li>Fashion models</li>
@@ -710,12 +870,12 @@
             </ul>
           </div>
           <div>
-            <h3>Experience</h3>
+            <h4>Experience</h4>
             <p><strong style="color:#ffe0cf;">Previous modeling experience preferred.</strong></p>
             <p>A portfolio, modeling Instagram, website, or examples of previous work are strongly encouraged.</p>
           </div>
           <div>
-            <h3>Professional Projects May Include</h3>
+            <h4>Professional Projects May Include</h4>
             <ul class="mini-list">
               <li>Completed body-paint concepts</li>
               <li>Fine-art photography</li>
@@ -729,10 +889,11 @@
             </ul>
           </div>
           <div>
-            <h3>Schedule</h3>
+            <h4>Schedule</h4>
             <p><strong style="color:#ffe0cf;">Project-by-project booking</strong></p>
             <p>Models are contacted when their appearance, experience, availability, and modeling style fit a particular concept.</p>
           </div>
+          <div class="track-note">This track is selected around a specific concept, look, and production goal rather than ongoing practice availability.</div>
           <div class="priority">Experience + Posing + Camera Presence + Professionalism</div>
           <a class="btn btn-primary" href="/index.html?track=professional#applicationForm">I'm interested in professional modeling</a>
         </article>
@@ -748,11 +909,12 @@
     </section>
 
     <section class="card">
+      <span class="section-kicker">Side-by-Side</span>
       <h2>Which Opportunity Fits You?</h2>
       <div class="comparison">
         <div class="comparison-row">
-          <div class="comparison-cell"><strong>Regular Body Paint Canvas Model</strong></div>
-          <div class="comparison-cell"><strong>Professional Body Paint Model</strong></div>
+          <div class="comparison-cell comparison-label"><strong>Regular Body Paint Canvas Model</strong></div>
+          <div class="comparison-cell comparison-label"><strong>Professional Body Paint Model</strong></div>
         </div>
         <div class="comparison-row">
           <div class="comparison-cell"><strong>Purpose:</strong> Practice &amp; creative development</div>
@@ -785,7 +947,8 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="safety">
+      <span class="section-kicker">Comfort, Consent, Boundaries</span>
       <h2>Figure Modeling &amp; Body Paint</h2>
       <p>
         Both regular canvas sessions and professional productions may involve artistic figure modeling.
