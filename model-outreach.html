@@ -261,6 +261,10 @@
       background: rgba(0,0,0,0.24);
     }
 
+    .featured-photos.hero-feature {
+      grid-template-columns: 1fr;
+    }
+
     .featured-photos img {
       min-height: 344px;
       border-radius: 14px;
@@ -753,9 +757,8 @@
           <span class="badge">18+ Only</span>
         </div>
       </div>
-      <div class="hero-photo featured-photos" aria-label="MVP Media body paint and figure modeling examples">
-        <img src="/api/cloudinary-media?asset=hero1" alt="MVP Media body paint modeling example" loading="eager" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
-        <img src="/api/cloudinary-media?asset=hero2" alt="MVP Media body paint creative photography example" loading="eager" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
+      <div class="hero-photo featured-photos hero-feature" aria-label="MVP Media body paint and figure modeling example">
+        <img src="https://drive.google.com/thumbnail?id=1opJK2BvIrNIZPPsh0l7Pa6nbFASChrID&sz=w1600" data-fallbacks="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg|assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="MVP Media body paint modeling hero example" loading="eager">
       </div>
     </section>
 
@@ -793,18 +796,15 @@
       <div class="media-showcase">
         <div>
           <figure class="media-frame">
-            <img src="/api/cloudinary-media?asset=bodypaintPhoto" alt="MVP Media body paint photography example" loading="lazy" onerror="this.onerror=null;this.src='assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg';">
+            <img src="https://drive.google.com/thumbnail?id=1puXkj5DJn76FQu7LKr26tjAWZFcupAjF&sz=w1600" data-fallbacks="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg|assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="MVP Media body paint photography example" loading="lazy">
           </figure>
-          <p class="media-caption">Body paint photography example · <a href="/api/cloudinary-media?asset=bodypaintPhoto" target="_blank" rel="noopener noreferrer">Open media</a></p>
+          <p class="media-caption">Body paint photography example · <a href="https://drive.google.com/file/d/1puXkj5DJn76FQu7LKr26tjAWZFcupAjF/view?usp=sharing" target="_blank" rel="noopener noreferrer">Open media</a></p>
         </div>
         <div>
           <figure class="media-frame">
-            <video controls playsinline preload="metadata" poster="assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg">
-              <source src="/api/cloudinary-media?asset=bodypaintVideo" type="video/mp4">
-              <a href="/api/cloudinary-media?asset=bodypaintVideo">View the body paint model video</a>
-            </video>
+            <img src="https://drive.google.com/thumbnail?id=1uAWZn-IqQhOP7Rbv1UQsMBi6pPbhPnDX&sz=w1600" data-fallbacks="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605586/IMG_2728_hdh3b9.jpg|assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="MVP Media body paint creative photography example" loading="lazy">
           </figure>
-          <p class="media-caption">Body paint model video · <a href="/api/cloudinary-media?asset=bodypaintVideo" target="_blank" rel="noopener noreferrer">Open media</a></p>
+          <p class="media-caption">Body paint creative photography example · <a href="https://drive.google.com/file/d/1uAWZn-IqQhOP7Rbv1UQsMBi6pPbhPnDX/view?usp=sharing" target="_blank" rel="noopener noreferrer">Open media</a></p>
         </div>
       </div>
     </section>
@@ -1223,6 +1223,25 @@
     const sections = Array.from(document.querySelectorAll("section[id], section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".top-nav a"));
     const progressFill = document.getElementById("progressFill");
+
+    const applyImageFallback = (image) => {
+      const fallbacks = String(image.dataset.fallbacks || "").split("|").filter(Boolean);
+      const index = Number(image.dataset.fallbackIndex || "0");
+      if (index >= fallbacks.length) {
+        return;
+      }
+      image.dataset.fallbackIndex = String(index + 1);
+      image.src = fallbacks[index];
+    };
+
+    document.querySelectorAll("img[data-fallbacks]").forEach((image) => {
+      image.addEventListener("error", () => applyImageFallback(image));
+      setTimeout(() => {
+        if (!image.complete || image.naturalWidth === 0) {
+          applyImageFallback(image);
+        }
+      }, 2800);
+    });
 
     const setActiveLink = (id) => {
       navLinks.forEach((link) => {
