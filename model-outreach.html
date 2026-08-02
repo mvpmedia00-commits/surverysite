@@ -370,6 +370,31 @@
       background: #050403;
     }
 
+    .role-media {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .role-video-frame {
+      width: min(100%, 360px);
+      aspect-ratio: 48 / 73;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050403;
+      box-shadow: 0 18px 38px rgba(0,0,0,0.3);
+    }
+
+    .role-video-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .media-caption {
       margin-top: 8px;
       color: #ffe0cf;
@@ -681,6 +706,8 @@
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
       .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase { grid-template-columns: 1fr; }
+      .role-media { grid-template-columns: 1fr; }
+      .role-video-frame { width: min(100%, 340px); }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
       .hero-photo { min-height: 260px; }
@@ -860,15 +887,24 @@
       <p>
         A body paint canvas model serves as the human canvas for an artistic body painting project. Professional cosmetic body paint is applied directly to the model’s skin to create a finished piece of wearable artwork. Once the artwork is complete, the model may participate in a professional photography session showcasing the finished design.
       </p>
-      <div class="diagram" aria-label="Model to body paint to photography">
-        <span class="step-pill">Model</span>
-        <span class="step-arrow">→</span>
-        <span class="step-pill">Body Paint</span>
-        <span class="step-arrow">→</span>
-        <span class="step-pill">Photography</span>
-      </div>
-      <div class="note">
-        You do not need previous body paint experience. Previous modeling experience is helpful, but it is not required.
+      <div class="role-media">
+        <figure class="role-video-frame">
+          <video controls autoplay muted loop playsinline preload="metadata" aria-label="Body paint canvas model video">
+            <source src="assets/videos/bodypaint-canvas-model.mp4" type="video/mp4">
+          </video>
+        </figure>
+        <div>
+          <div class="diagram" aria-label="Model to body paint to photography">
+            <span class="step-pill">Model</span>
+            <span class="step-arrow">→</span>
+            <span class="step-pill">Body Paint</span>
+            <span class="step-arrow">→</span>
+            <span class="step-pill">Photography</span>
+          </div>
+          <div class="note">
+            You do not need previous body paint experience. Previous modeling experience is helpful, but it is not required.
+          </div>
+        </div>
       </div>
     </section>
 
