@@ -658,7 +658,8 @@
       box-shadow: 0 16px 34px rgba(0,0,0,0.28);
     }
 
-    .section-thumb img {
+    .section-thumb img,
+    .section-thumb video {
       width: 100%;
       height: 100%;
       display: block;
@@ -977,7 +978,7 @@
       </p>
       <div class="role-media">
         <figure class="role-video-frame">
-          <video controls playsinline preload="metadata" aria-label="Body paint canvas model video">
+          <video controls playsinline preload="metadata" poster="assets/photos/bodypaint-canvas-model-poster.jpg" aria-label="Body paint canvas model video">
             <source src="assets/videos/bodypaint-canvas-model.mp4" type="video/mp4">
           </video>
         </figure>
@@ -1194,7 +1195,9 @@
       <h2>What Happens During a Body Paint Session?</h2>
       <div class="process-layout">
         <figure class="section-thumb process-thumb">
-          <img src="assets/photos/session-bodypaint-process.jpg" alt="Body paint session setup with models and studio lighting" loading="lazy">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/photos/session-bodypaint-process.jpg" aria-label="Body paint session setup with models and studio lighting">
+            <source src="assets/videos/session-bodypaint-process.mp4" type="video/mp4">
+          </video>
         </figure>
         <div class="timeline">
           <div class="timeline-item">
