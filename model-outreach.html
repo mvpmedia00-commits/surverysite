@@ -639,10 +639,49 @@
       color: #ffe3d2;
     }
 
+    .section-media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 6px;
+    }
+
+    .section-thumb {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      min-height: 0;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050403;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+    }
+
+    .section-thumb img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .process-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 14px;
+    }
+
+    .process-thumb {
+      position: sticky;
+      top: 94px;
+    }
+
     .timeline {
       display: grid;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 0;
     }
 
     .timeline-item {
@@ -741,11 +780,12 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase, .process-layout { grid-template-columns: 1fr; }
       .meet-card { grid-template-columns: 1fr; }
       .meet-photos { max-width: 620px; }
       .role-media { grid-template-columns: 1fr; }
       .role-video-frame { width: min(100%, 340px); }
+      .process-thumb { position: relative; top: auto; max-width: 420px; }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
       .hero-photo { min-height: 260px; }
@@ -753,6 +793,7 @@
     }
 
     @media (max-width: 560px) {
+      section[id] { scroll-margin-top: 168px; }
       .page-shell { width: min(100%, 94vw); }
       .top-nav { flex-direction: column; align-items: flex-start; }
       .hero-actions { flex-direction: column; }
@@ -765,6 +806,7 @@
         min-height: 240px;
         max-height: 320px;
       }
+      .section-media-grid { grid-template-columns: 1fr; }
       .meet-photos { grid-template-columns: 1fr; }
       .meet-photo { max-height: 520px; }
       .top-nav .links {
@@ -1137,35 +1179,48 @@
       <p>
         The exact level of coverage, areas being painted, posing expectations, photography, compensation, and boundaries are discussed before accepting a session.
       </p>
+      <div class="section-media-grid" aria-label="Body paint and figure modeling examples">
+        <figure class="section-thumb">
+          <img src="assets/photos/figure-modeling-bodypaint-01.jpg" alt="Body paint figure modeling example under blue studio light" loading="lazy">
+        </figure>
+        <figure class="section-thumb">
+          <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Body paint figure modeling example with painted wings" loading="lazy">
+        </figure>
+      </div>
       <div class="note">Nothing should be a surprise on shoot day. Your comfort level, boundaries, paint coverage, posing limits, compensation, and image usage should be established before the session.</div>
     </section>
 
     <section class="card" id="process">
       <h2>What Happens During a Body Paint Session?</h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <strong>01 — Pre-Shoot Discussion</strong>
-          <p>Review the concept, compensation, expected session length, wardrobe or figure-modeling requirements, body paint coverage, photography plans, boundaries, and image usage.</p>
-        </div>
-        <div class="timeline-item">
-          <strong>02 — Preparation</strong>
-          <p>Prepare the studio, paints, brushes, lighting, and model for the body painting process.</p>
-        </div>
-        <div class="timeline-item">
-          <strong>03 — Body Paint Application</strong>
-          <p>The model serves as the live canvas while professional cosmetic-grade body paint is applied. Painting may require standing, sitting, changing positions, and remaining relatively still for periods of time. Breaks are provided as needed.</p>
-        </div>
-        <div class="timeline-item">
-          <strong>04 — Final Artwork</strong>
-          <p>The completed design is reviewed and final details or touch-ups are added.</p>
-        </div>
-        <div class="timeline-item">
-          <strong>05 — Photography</strong>
-          <p>The completed artwork may be photographed using editorial, fine-art, portrait, or creative posing.</p>
-        </div>
-        <div class="timeline-item">
-          <strong>06 — Cleanup</strong>
-          <p>The session concludes and the model can remove the body paint.</p>
+      <div class="process-layout">
+        <figure class="section-thumb process-thumb">
+          <img src="assets/photos/session-bodypaint-process.jpg" alt="Body paint session setup with models and studio lighting" loading="lazy">
+        </figure>
+        <div class="timeline">
+          <div class="timeline-item">
+            <strong>01 — Pre-Shoot Discussion</strong>
+            <p>Review the concept, compensation, expected session length, wardrobe or figure-modeling requirements, body paint coverage, photography plans, boundaries, and image usage.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>02 — Preparation</strong>
+            <p>Prepare the studio, paints, brushes, lighting, and model for the body painting process.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>03 — Body Paint Application</strong>
+            <p>The model serves as the live canvas while professional cosmetic-grade body paint is applied. Painting may require standing, sitting, changing positions, and remaining relatively still for periods of time. Breaks are provided as needed.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>04 — Final Artwork</strong>
+            <p>The completed design is reviewed and final details or touch-ups are added.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>05 — Photography</strong>
+            <p>The completed artwork may be photographed using editorial, fine-art, portrait, or creative posing.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>06 — Cleanup</strong>
+            <p>The session concludes and the model can remove the body paint.</p>
+          </div>
         </div>
       </div>
     </section>
