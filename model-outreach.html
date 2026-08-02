@@ -277,6 +277,41 @@
       margin-top: 16px;
     }
 
+    .meet-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .meet-copy {
+      min-width: 0;
+    }
+
+    .meet-photos {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .meet-photo {
+      aspect-ratio: 3 / 4;
+      margin: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050403;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+    }
+
+    .meet-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .card {
       padding: clamp(20px, 3vw, 26px);
     }
@@ -344,14 +379,15 @@
 
     .media-showcase {
       display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
       margin-top: 16px;
       align-items: stretch;
     }
 
     .media-frame {
-      min-height: 420px;
+      aspect-ratio: 3 / 4;
+      min-height: 0;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.12);
@@ -706,13 +742,14 @@
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
       .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase { grid-template-columns: 1fr; }
+      .meet-card { grid-template-columns: 1fr; }
+      .meet-photos { max-width: 620px; }
       .role-media { grid-template-columns: 1fr; }
       .role-video-frame { width: min(100%, 340px); }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
       .hero-photo { min-height: 260px; }
       .featured-photos img { min-height: 260px; }
-      .media-frame { min-height: 360px; }
     }
 
     @media (max-width: 560px) {
@@ -728,9 +765,8 @@
         min-height: 240px;
         max-height: 320px;
       }
-      .media-frame {
-        min-height: 300px;
-      }
+      .meet-photos { grid-template-columns: 1fr; }
+      .meet-photo { max-height: 520px; }
       .top-nav .links {
         display: flex;
         flex-wrap: nowrap;
@@ -840,19 +876,29 @@
     </section>
 
     <section class="section-grid" id="about">
-      <article class="card">
-        <h2>Meet Matthew</h2>
-        <p>
-          I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My creative work focuses on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and transforming ideas into finished photographs.
-        </p>
-        <p>
-          For body paint projects, I approach the human body as a living canvas and collaborate with models to create artwork designed specifically for photography.
-        </p>
-        <div class="stats">
-          <div class="stat"><strong>Photography Since</strong>2015</div>
-          <div class="stat"><strong>Based In</strong>Chicago</div>
-          <div class="stat"><strong>Style</strong>Fashion • Editorial • Portrait</div>
-          <div class="stat"><strong>Role</strong>Creative Director &amp; Photographer</div>
+      <article class="card meet-card">
+        <div class="meet-copy">
+          <h2>Meet Matthew</h2>
+          <p>
+            I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My creative work focuses on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and transforming ideas into finished photographs.
+          </p>
+          <p>
+            For body paint projects, I approach the human body as a living canvas and collaborate with models to create artwork designed specifically for photography.
+          </p>
+          <div class="stats">
+            <div class="stat"><strong>Photography Since</strong>2015</div>
+            <div class="stat"><strong>Based In</strong>Chicago</div>
+            <div class="stat"><strong>Style</strong>Fashion, Editorial, Portrait</div>
+            <div class="stat"><strong>Role</strong>Creative Director &amp; Photographer</div>
+          </div>
+        </div>
+        <div class="meet-photos" aria-label="Photos of Matthew and MVP Media creative work">
+          <figure class="meet-photo">
+            <img src="assets/photos/meet-matthew-camera.jpg" alt="Matthew holding camera equipment at a fashion event" loading="lazy">
+          </figure>
+          <figure class="meet-photo">
+            <img src="assets/photos/meet-matthew-collab.jpg" alt="Matthew with a model in front of an MVP Media display" loading="lazy">
+          </figure>
         </div>
       </article>
 
