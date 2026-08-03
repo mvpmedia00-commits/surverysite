@@ -398,17 +398,17 @@
         <div class="eyebrow">Artist Applications</div>
         <h1>Paint, Draw, and Build Visual Concepts With MVP Media.</h1>
         <p class="lead">
-          MVP Media is looking for artists who can paint, draw, sketch concepts, assist with body-paint designs, and help turn creative ideas into finished visual work.
+          MVP Media is looking for artists who can paint, draw, illustrate, design, sketch concepts, create digital art, paint props or backdrops, and help turn creative ideas into finished visual work.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#applicationForm">Apply as an artist</a>
           <a class="btn btn-secondary" href="https://www.instagram.com/great.camerawork/" target="_blank" rel="noopener noreferrer">View Instagram</a>
         </div>
       </div>
-      <div class="hero-media" aria-label="MVP Media artist and body paint examples">
-        <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Body paint artwork example with painted wings">
-        <img src="assets/photos/figure-modeling-bodypaint-01.jpg" alt="Body paint artwork under blue light">
-        <img src="assets/photos/session-bodypaint-process.jpg" alt="Body paint production setup">
+      <div class="hero-media" aria-label="MVP Media art and creative production examples">
+        <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Colorful painted artwork example">
+        <img src="assets/photos/figure-modeling-bodypaint-01.jpg" alt="Painted artwork under blue light">
+        <img src="assets/photos/session-bodypaint-process.jpg" alt="Creative production setup">
       </div>
     </section>
 
@@ -416,12 +416,15 @@
       <span class="section-kicker">Who This Is For</span>
       <h2>Artist Roles</h2>
       <p>
-        This application is for visual artists, painters, illustrators, sketch artists, body-paint assistants, makeup artists with painting skills, and creative collaborators who want to help develop or execute body-art concepts.
+        This application is for visual artists of all ages: painters, drawing artists, illustrators, digital artists, sketch artists, mural artists, prop painters, makeup artists, and creative collaborators who want to help develop or execute visual concepts.
+      </p>
+      <p style="margin-top:10px;">
+        You do not need body-paint experience to apply. Body paint is one possible project type, but drawing, painting, illustration, design, murals, props, backdrops, and digital art are welcome too.
       </p>
       <div class="grid">
-        <div class="feature"><strong>Body Paint Support</strong>Help plan colors, line work, placement, touch-ups, and detail painting during creative sessions.</div>
-        <div class="feature"><strong>Concept Sketching</strong>Create sketches, mood boards, references, and visual ideas before production day.</div>
-        <div class="feature"><strong>Creative Production</strong>Assist with props, painted backdrops, wearable art, styling details, or set pieces.</div>
+        <div class="feature"><strong>Drawing &amp; Painting</strong>Share your style, technique, subject matter, and examples of finished or in-progress work.</div>
+        <div class="feature"><strong>Concept Development</strong>Create sketches, mood boards, references, character ideas, styling concepts, or visual plans.</div>
+        <div class="feature"><strong>Creative Production</strong>Assist with murals, props, painted backdrops, wearable art, set pieces, or collaborative projects.</div>
       </div>
     </section>
 
@@ -430,7 +433,7 @@
       <h2>What Matters Most</h2>
       <div class="grid">
         <div class="feature"><strong>Portfolio</strong>A website, Instagram, Google Drive folder, or photos of your work are enough for the first review.</div>
-        <div class="feature"><strong>Reliability</strong>Show up prepared, communicate clearly, and be comfortable working around models and production boundaries.</div>
+        <div class="feature"><strong>Reliability</strong>Show up prepared, communicate clearly, and respect project expectations, schedules, and boundaries.</div>
         <div class="feature"><strong>Creative Range</strong>Painting and drawing skill matters more than formal credentials. Beginners with strong work may still apply.</div>
       </div>
     </section>
@@ -445,7 +448,7 @@
         <div class="form-grid">
           <div class="field"><label for="fullName">Full name *</label><input id="fullName" required autocomplete="name"></div>
           <div class="field"><label for="preferredName">Preferred name *</label><input id="preferredName" required></div>
-          <div class="field"><label for="age">Age *</label><input id="age" required type="number" min="18" inputmode="numeric"></div>
+          <div class="field"><label for="age">Age *</label><input id="age" required type="number" min="1" inputmode="numeric"></div>
           <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email"></div>
           <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" autocomplete="tel"></div>
           <div class="field"><label for="instagram">Instagram</label><input id="instagram" placeholder="@handle or https://..."></div>
@@ -453,6 +456,8 @@
           <div class="field"><label for="stateProvince">State / Province</label><input id="stateProvince" autocomplete="address-level1"></div>
           <div class="field"><label for="country">Country *</label><input id="country" required value="United States" autocomplete="country-name"></div>
           <div class="field"><label for="hearAbout">How did you hear about this? *</label><input id="hearAbout" required></div>
+          <div class="field"><label for="guardianName">Parent / guardian name if under 18</label><input id="guardianName"></div>
+          <div class="field"><label for="guardianContact">Parent / guardian contact if under 18</label><input id="guardianContact" placeholder="Phone or email"></div>
         </div>
       </fieldset>
 
@@ -464,9 +469,12 @@
             <label class="choice"><input type="checkbox" name="artistDisciplines" value="Painting">Painting</label>
             <label class="choice"><input type="checkbox" name="artistDisciplines" value="Drawing">Drawing</label>
             <label class="choice"><input type="checkbox" name="artistDisciplines" value="Illustration">Illustration</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Digital art">Digital art</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Murals">Murals</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Prop, backdrop, or set painting">Prop, backdrop, or set painting</label>
             <label class="choice"><input type="checkbox" name="artistDisciplines" value="Body paint">Body paint</label>
             <label class="choice"><input type="checkbox" name="artistDisciplines" value="Makeup artistry">Makeup artistry</label>
-            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Set or prop painting">Set or prop painting</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Other visual art">Other visual art</label>
           </div>
         </div>
         <div class="form-grid" style="margin-top:14px;">
@@ -477,8 +485,9 @@
             <option>Experienced</option>
             <option>Professional / paid artist</option>
           </select></div>
-          <div class="field"><label for="bodyPaintExperience">Body paint experience</label><select id="bodyPaintExperience">
+          <div class="field"><label for="bodyPaintExperience">Body paint experience, if any</label><select id="bodyPaintExperience">
             <option value="">Select one</option>
+            <option>Not interested in body paint</option>
             <option>No body paint experience yet</option>
             <option>Some practice</option>
             <option>Worked on body paint shoots</option>
@@ -487,7 +496,7 @@
           <div class="field"><label for="portfolioLink">Portfolio / sample work link</label><input id="portfolioLink" placeholder="Website, Google Drive, Instagram, Dropbox..."></div>
           <div class="field"><label for="website">Website</label><input id="website" placeholder="https://..."></div>
           <div class="field full"><label for="artistStrengths">Describe your painting/drawing strengths *</label><textarea id="artistStrengths" required placeholder="Line work, realism, abstract color, airbrush, portraits, lettering, speed painting, concept sketching..."></textarea></div>
-          <div class="field full"><label for="toolsMaterials">Tools, materials, or software you use</label><textarea id="toolsMaterials" placeholder="Brushes, airbrush, acrylic, cosmetic body paint, Procreate, Photoshop, pencils, markers..."></textarea></div>
+          <div class="field full"><label for="toolsMaterials">Tools, materials, or software you use</label><textarea id="toolsMaterials" placeholder="Brushes, pencils, markers, acrylic, oil, watercolor, aerosol, Procreate, Photoshop, Illustrator, airbrush, canvas, wood, fabric..."></textarea></div>
         </div>
       </fieldset>
 
@@ -496,11 +505,14 @@
         <div class="field full">
           <span class="sub-label">What kind of work interests you? *</span>
           <div class="choice-grid">
-            <label class="choice"><input type="checkbox" name="preferredWork" value="Body paint assistant">Body paint assistant</label>
-            <label class="choice"><input type="checkbox" name="preferredWork" value="Lead body paint artist">Lead body paint artist</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Drawing or illustration">Drawing or illustration</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Painting projects">Painting projects</label>
             <label class="choice"><input type="checkbox" name="preferredWork" value="Concept sketches">Concept sketches</label>
             <label class="choice"><input type="checkbox" name="preferredWork" value="Painted backdrops or props">Painted backdrops or props</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Digital art or design">Digital art or design</label>
             <label class="choice"><input type="checkbox" name="preferredWork" value="Creative direction support">Creative direction support</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Body paint assistant">Body paint assistant</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Lead body paint artist">Lead body paint artist</label>
             <label class="choice"><input type="checkbox" name="preferredWork" value="Practice or test shoots">Practice or test shoots</label>
           </div>
         </div>
@@ -533,7 +545,7 @@
         <div class="form-grid">
           <div class="field full"><label for="expectedRate">Expected rate or compensation range *</label><input id="expectedRate" required placeholder="Hourly, day rate, project rate, open to discuss..."></div>
           <div class="field full"><label for="whyWork">Why do you want to work with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field full"><label for="goodFit">What makes you a good fit for body paint, drawing, or creative production work? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field full"><label for="goodFit">What makes you a good fit for art, drawing, painting, design, or creative production work? *</label><textarea id="goodFit" required></textarea></div>
           <div class="field full"><label for="anythingElse">Anything else I should know?</label><textarea id="anythingElse"></textarea></div>
         </div>
       </fieldset>
@@ -541,9 +553,9 @@
       <fieldset>
         <legend>5. Confirmation</legend>
         <div class="choice-grid">
-          <label class="choice"><input type="checkbox" name="consents" value="adult" required>I confirm I am at least 18 years old.</label>
           <label class="choice"><input type="checkbox" name="consents" value="truthful" required>I confirm this application is truthful.</label>
           <label class="choice"><input type="checkbox" name="consents" value="contact" required>I agree MVP Media may contact me about artist opportunities.</label>
+          <label class="choice"><input type="checkbox" name="consents" value="guardian_permission">If I am under 18, my parent or guardian knows I am applying and may be contacted.</label>
         </div>
       </fieldset>
 
@@ -558,7 +570,7 @@
       <p>Thank you. Your artist application has been sent to MVP Media for review.</p>
     </section>
 
-    <p class="footer-note">MVP Media Photography - artist applications for adults 18+. Concepts, rates, expectations, and boundaries are discussed before any project is confirmed.</p>
+    <p class="footer-note">MVP Media Photography - artist applications for all ages. Applicants under 18 should include parent or guardian contact information. Concepts, rates, expectations, and boundaries are discussed before any project is confirmed.</p>
   </main>
 
   <script>
@@ -583,6 +595,8 @@
       email: value("email"),
       phone: value("phone"),
       instagram: value("instagram"),
+      guardian_name: value("guardianName"),
+      guardian_contact: value("guardianContact"),
       city: value("city"),
       state_province: value("stateProvince"),
       country: value("country"),
@@ -622,6 +636,8 @@
           email: "email",
           phone: "phone",
           instagram: "instagram",
+          guardian_name: "guardianName",
+          guardian_contact: "guardianContact",
           city: "city",
           state_province: "stateProvince",
           country: "country",
@@ -658,8 +674,12 @@
     };
 
     const validatePayload = (payload) => {
-      if (!payload.email && !payload.phone && !payload.instagram) {
-        return "Please provide at least one contact method: email, phone, or Instagram.";
+      if (!payload.email && !payload.phone && !payload.instagram && !payload.guardian_contact) {
+        return "Please provide at least one contact method: email, phone, Instagram, or parent/guardian contact.";
+      }
+      const age = Number(payload.age);
+      if (Number.isFinite(age) && age < 18 && (!payload.guardian_name || !payload.guardian_contact || !payload.consents.includes("guardian_permission"))) {
+        return "Artists under 18 need parent/guardian name, contact, and guardian permission confirmation.";
       }
       if (payload.artist_disciplines.length === 0) {
         return "Please select at least one art discipline.";
@@ -667,7 +687,7 @@
       if (payload.preferred_work.length === 0) {
         return "Please select at least one work type that interests you.";
       }
-      if (!payload.consents.includes("adult") || !payload.consents.includes("truthful") || !payload.consents.includes("contact")) {
+      if (!payload.consents.includes("truthful") || !payload.consents.includes("contact")) {
         return "Please confirm all required consent items.";
       }
       return "";

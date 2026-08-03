@@ -5,9 +5,11 @@ create table if not exists public.artist_applications (
   created_at timestamptz not null default now(),
   full_name text not null default '',
   preferred_name text not null default '',
-  age int not null default 18,
+  age int not null default 0,
   email text not null default '',
   phone text,
+  guardian_name text,
+  guardian_contact text,
   city text not null default '',
   state_province text,
   country text not null default '',
@@ -38,3 +40,10 @@ create table if not exists public.artist_applications (
 create index if not exists idx_artist_applications_created_at on public.artist_applications (created_at);
 create index if not exists idx_artist_applications_review_status on public.artist_applications (review_status);
 create index if not exists idx_artist_applications_source on public.artist_applications (hear_about);
+
+alter table public.artist_applications
+  add column if not exists guardian_name text,
+  add column if not exists guardian_contact text;
+
+alter table public.artist_applications
+  alter column age set default 0;

@@ -46,7 +46,9 @@ const summarizeArtistApplication = (row) => [
   `Portfolio: ${row.portfolio_link || "Not provided"}`,
   `Instagram: ${row.instagram || "Not provided"}`,
   `Website: ${row.website || "Not provided"}`,
-  `Body paint experience: ${row.body_paint_experience || "Not specified"}`,
+  `Parent/guardian: ${row.guardian_name || "Not provided"}`,
+  `Parent/guardian contact: ${row.guardian_contact || "Not provided"}`,
+  `Body paint interest/experience: ${row.body_paint_experience || "Not specified"}`,
   `Painting/drawing strengths: ${row.artist_strengths || "Not specified"}`,
   `Preferred work: ${row.preferred_work.join(", ") || "Not specified"}`,
   `Tools/materials: ${row.tools_materials || "Not specified"}`,
@@ -79,7 +81,7 @@ const toDashboardFallbackRow = (row) => ({
   hair_color: "Artist applicant - not applicable",
   eye_color: "Artist applicant - not applicable",
   experience: row.experience_level || "Artist application",
-  worked_with_photographers: row.body_paint_experience || "",
+  worked_with_photographers: row.body_paint_experience || row.guardian_contact || "",
   comfortable_snapshots: "Artist applicant",
   interests: row.artist_disciplines,
   model_opportunity: "Artist",
@@ -147,6 +149,8 @@ export default async function handler(req, res) {
     const email = clean(body.email).toLowerCase();
     const phone = clean(body.phone);
     const instagram = clean(body.instagram);
+    const guardianName = clean(body.guardian_name);
+    const guardianContact = clean(body.guardian_contact);
 
     const row = {
       full_name: clean(body.full_name),
@@ -154,6 +158,8 @@ export default async function handler(req, res) {
       age,
       email,
       phone,
+      guardian_name: guardianName,
+      guardian_contact: guardianContact,
       city: clean(body.city),
       state_province: clean(body.state_province),
       country: clean(body.country || "United States"),
@@ -186,12 +192,12 @@ export default async function handler(req, res) {
       }
     }
 
-    if (!Number.isFinite(age) || age < 18) {
-      return respond(res, 400, { error: "Applicant must be at least 18 years old" });
+    if (!Number.isFinite(age) || age < 1 || age > 120) {
+      return respond(res, 400, { error: "Please provide a valid applicant age" });
     }
 
-    if (!email && !phone && !instagram) {
-      return respond(res, 400, { error: "At least one contact method is required: email, phone, or instagram" });
+    if (!email && !phone && !instagram && !guardianContact) {
+      return respond(res, 400, { error: "At least one contact method is required: email, phone, instagram, or guardian contact" });
     }
 
     if (email && !isValidEmail(email)) {
@@ -206,7 +212,11 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "Please select at least one preferred work type" });
     }
 
-    if (!row.consents.includes("truthful") || !row.consents.includes("adult") || !row.consents.includes("contact")) {
+    if (age < 18 && (!guardianName || !guardianContact || !row.consents.includes("guardian_permission"))) {
+      return respond(res, 400, { error: "Artists under 18 require parent/guardian name, contact, and guardian permission confirmation" });
+    }
+
+    if (!row.consents.includes("truthful") || !row.consents.includes("contact")) {
       return respond(res, 400, { error: "Please confirm the required consent items" });
     }
 
@@ -216,6 +226,9 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const detail = await response.text();
       if (/artist_applications|schema cache|relation|does not exist|could not find the table/i.test(detail)) {
+        if (age < 18) {
+          return respond(res, 500, { error: "The artist_applications SQL table must be set up before accepting under-18 artist applications" });
+        }
         response = await insertRow(cfg, "model_applications", toDashboardFallbackRow(row));
         if (!response.ok) {
           const fallbackDetail = await response.text();
