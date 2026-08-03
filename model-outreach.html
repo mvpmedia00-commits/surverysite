@@ -479,6 +479,33 @@
       font-size: 0.88rem;
     }
 
+    .clarity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .clarity-card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .clarity-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffe0cf;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .clarity-card p {
+      font-size: 0.9rem;
+    }
+
     .media-showcase {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -932,7 +959,7 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .media-showcase, .process-layout { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .clarity-grid, .media-showcase, .process-layout { grid-template-columns: 1fr; }
       .meet-card { grid-template-columns: 1fr; }
       .meet-photos { max-width: 620px; }
       .role-media { grid-template-columns: 1fr; }
@@ -1103,6 +1130,20 @@
       <p class="lead">
         Both tracks are structured creative opportunities. The difference is the purpose of the session: regular canvas work supports practice and development, while professional body-paint modeling supports finished productions built around MVP Media's aesthetic and working style.
       </p>
+      <div class="clarity-grid" aria-label="Important modeling details">
+        <div class="clarity-card">
+          <strong>Figure Modeling, Plainly</strong>
+          <p>Some body-paint concepts may include artistic nude or unclothed figure posing. Coverage, painted areas, poses, photography, and limits are discussed before anyone accepts a session.</p>
+        </div>
+        <div class="clarity-card">
+          <strong>No Nude Photos to Apply</strong>
+          <p>Initial review can use normal portfolio images, recent clothed photos, social media, or a modeling page. Sensitive concept details are handled in conversation before booking.</p>
+        </div>
+        <div class="clarity-card">
+          <strong>Pay Before Booking</strong>
+          <p>Current advertised range is $50-$200 per day. Exact compensation and expected time commitment are discussed before accepting any regular canvas or professional production session.</p>
+        </div>
+      </div>
       <div class="decision-grid">
         <article class="decision-card">
           <strong>Regular Canvas Model</strong>
@@ -1119,6 +1160,40 @@
           <p>Best if you are open to recurring canvas sessions and would also like to be considered for finished body-art projects.</p>
           <a class="btn btn-primary" href="/index.html?track=both#applicationForm">Select both</a>
         </article>
+      </div>
+      <div class="comparison">
+        <div class="comparison-row">
+          <div class="comparison-cell comparison-label"><strong>Regular Body Paint Canvas Model</strong></div>
+          <div class="comparison-cell comparison-label"><strong>Professional Body Paint Model</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Purpose:</strong> Practice &amp; creative development</div>
+          <div class="comparison-cell"><strong>Purpose:</strong> Finished creative productions</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Experience:</strong> None required</div>
+          <div class="comparison-cell"><strong>Experience:</strong> Preferred</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Schedule:</strong> Recurring</div>
+          <div class="comparison-cell"><strong>Schedule:</strong> Project-based</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Portfolio:</strong> Not required</div>
+          <div class="comparison-cell"><strong>Portfolio:</strong> Strongly encouraged</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Primary qualities:</strong> Reliability, availability, patience</div>
+          <div class="comparison-cell"><strong>Primary qualities:</strong> Posing, camera presence, professionalism</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Photography:</strong> Tests, practice, and selected creative work</div>
+          <div class="comparison-cell"><strong>Photography:</strong> Finished professional imagery</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Best suited for:</strong> Beginners or models interested in recurring work</div>
+          <div class="comparison-cell"><strong>Best suited for:</strong> Experienced or highly camera-confident models</div>
+        </div>
       </div>
     </section>
 
@@ -1383,45 +1458,6 @@
         <p>Some models may participate in recurring canvas sessions while also being considered for finished professional productions.</p>
         <div class="hero-actions" style="justify-content:center;">
           <a class="btn btn-primary" href="/index.html?track=both#applicationForm">I'm interested in both</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <span class="section-kicker">Side-by-Side</span>
-      <h2>Which Opportunity Fits the Concept?</h2>
-      <div class="comparison">
-        <div class="comparison-row">
-          <div class="comparison-cell comparison-label"><strong>Regular Body Paint Canvas Model</strong></div>
-          <div class="comparison-cell comparison-label"><strong>Professional Body Paint Model</strong></div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Purpose:</strong> Practice &amp; creative development</div>
-          <div class="comparison-cell"><strong>Purpose:</strong> Finished creative productions</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Experience:</strong> None required</div>
-          <div class="comparison-cell"><strong>Experience:</strong> Preferred</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Schedule:</strong> Recurring</div>
-          <div class="comparison-cell"><strong>Schedule:</strong> Project-based</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Portfolio:</strong> Not required</div>
-          <div class="comparison-cell"><strong>Portfolio:</strong> Strongly encouraged</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Primary qualities:</strong> Reliability, availability, patience</div>
-          <div class="comparison-cell"><strong>Primary qualities:</strong> Posing, camera presence, professionalism</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Photography:</strong> Tests, practice, and selected creative work</div>
-          <div class="comparison-cell"><strong>Photography:</strong> Finished professional imagery</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell"><strong>Best suited for:</strong> Beginners or models interested in recurring work</div>
-          <div class="comparison-cell"><strong>Best suited for:</strong> Experienced or highly camera-confident models</div>
         </div>
       </div>
     </section>
