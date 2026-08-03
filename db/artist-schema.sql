@@ -17,6 +17,7 @@ create table if not exists public.artist_applications (
   website text,
   portfolio_link text,
   face_photo_link text not null default '',
+  face_photo_filename text,
   hear_about text not null default '',
   artist_disciplines jsonb not null default '[]'::jsonb,
   preferred_work jsonb not null default '[]'::jsonb,
@@ -45,7 +46,8 @@ create index if not exists idx_artist_applications_source on public.artist_appli
 alter table public.artist_applications
   add column if not exists guardian_name text,
   add column if not exists guardian_contact text,
-  add column if not exists face_photo_link text not null default '';
+  add column if not exists face_photo_link text not null default '',
+  add column if not exists face_photo_filename text;
 
 alter table public.artist_applications
   alter column age set default 0;

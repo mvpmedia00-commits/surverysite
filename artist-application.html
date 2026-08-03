@@ -338,6 +338,22 @@
 
     .status.error { color: #ffb6a4; }
 
+    .file-hint {
+      margin-top: 6px;
+      font-size: 0.84rem;
+      color: rgba(255,255,255,0.58);
+    }
+
+    .photo-preview {
+      display: none;
+      width: 100%;
+      max-height: 260px;
+      margin-top: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      object-fit: cover;
+    }
+
     .success-panel {
       display: none;
       padding: 22px;
@@ -494,7 +510,13 @@
             <option>Experienced body paint artist</option>
           </select></div>
           <div class="field"><label for="portfolioLink">Portfolio / sample work link</label><input id="portfolioLink" placeholder="Website, Google Drive, Instagram, Dropbox..."></div>
-          <div class="field"><label for="facePhotoLink">Recent face photo link *</label><input id="facePhotoLink" required placeholder="Public Google Drive, Instagram, Dropbox, or portfolio image link"></div>
+          <div class="field">
+            <label for="facePhotoUpload">Recent face photo upload</label>
+            <input id="facePhotoUpload" type="file" accept="image/*">
+            <p class="file-hint">Upload a clear recent face photo. Image only, up to 8MB.</p>
+            <img class="photo-preview" id="facePhotoPreview" alt="Recent face photo preview">
+          </div>
+          <div class="field"><label for="facePhotoLink">Recent face photo link</label><input id="facePhotoLink" placeholder="Optional public Google Drive, Instagram, Dropbox, or portfolio image link"></div>
           <div class="field"><label for="website">Website</label><input id="website" placeholder="https://..."></div>
           <div class="field full"><label for="artistStrengths">Describe your painting/drawing strengths *</label><textarea id="artistStrengths" required placeholder="Line work, realism, abstract color, airbrush, portraits, lettering, speed painting, concept sketching..."></textarea></div>
           <div class="field full"><label for="toolsMaterials">Tools, materials, or software you use</label><textarea id="toolsMaterials" placeholder="Brushes, pencils, markers, acrylic, oil, watercolor, aerosol, Procreate, Photoshop, Illustrator, airbrush, canvas, wood, fabric..."></textarea></div>
@@ -582,6 +604,9 @@
     const draftKey = "mvp-artist-application-draft";
     const trackingSessionKey = "mvp-artist-tracking-session-id";
     const trackingStartedKey = "mvp-artist-tracking-started";
+    const maxPhotoSize = 8 * 1024 * 1024;
+    const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
+    const CLOUDINARY_UPLOAD_PRESET = "jobstats";
 
     const getTrackingSessionId = () => {
       try {
@@ -603,6 +628,72 @@
     const setStatus = (message, isError = false) => {
       submitStatus.textContent = message;
       submitStatus.classList.toggle("error", isError);
+    };
+
+    const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const validatePhotoFile = (file, label) => {
+      if (!file) {
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        throw new Error(`${label} must be an image file.`);
+      }
+      if (file.size > maxPhotoSize) {
+        throw new Error(`${label} must be 8MB or smaller.`);
+      }
+    };
+
+    const setupPhotoPreview = (inputId, previewId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if (!input || !preview) {
+        return;
+      }
+
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        if (!file) {
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          return;
+        }
+
+        try {
+          validatePhotoFile(file, "Recent face photo");
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+          document.getElementById("facePhotoLink").setCustomValidity("");
+          setStatus("");
+        } catch (error) {
+          input.value = "";
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          setStatus(error && error.message ? error.message : "Photo file is not valid.", true);
+        }
+      });
+    };
+
+    const uploadPhotoToCloudinary = async (file, folder) => {
+      const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      formData.append("folder", `mvp-applications/${folder}`);
+      formData.append("public_id", `${Date.now()}-${sanitizeFileName(file.name)}`);
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Photo upload failed");
+      }
+
+      const result = await response.json();
+      return result && result.secure_url ? result.secure_url : "";
     };
 
     const trackEvent = (eventType, extras = {}) => {
@@ -637,38 +728,42 @@
       });
     };
 
-    const buildPayload = () => ({
-      full_name: value("fullName"),
-      preferred_name: value("preferredName"),
-      age: value("age"),
-      email: value("email"),
-      phone: value("phone"),
-      instagram: value("instagram"),
-      guardian_name: value("guardianName"),
-      guardian_contact: value("guardianContact"),
-      city: value("city"),
-      state_province: value("stateProvince"),
-      country: value("country"),
-      hear_about: value("hearAbout"),
-      artist_disciplines: checkedValues("artistDisciplines"),
-      preferred_work: checkedValues("preferredWork"),
-      experience_level: value("experienceLevel"),
-      body_paint_experience: value("bodyPaintExperience"),
-      portfolio_link: value("portfolioLink"),
-      face_photo_link: value("facePhotoLink"),
-      website: value("website"),
-      artist_strengths: value("artistStrengths"),
-      tools_materials: value("toolsMaterials"),
-      travel_willing: value("travelWilling"),
-      travel_distance: value("travelDistance"),
-      availability: checkedValues("availability"),
-      availability_notes: value("availabilityNotes"),
-      expected_rate: value("expectedRate"),
-      why_work: value("whyWork"),
-      good_fit: value("goodFit"),
-      anything_else: value("anythingElse"),
-      consents: checkedValues("consents")
-    });
+    const buildPayload = () => {
+      const facePhotoUpload = document.getElementById("facePhotoUpload");
+      return {
+        full_name: value("fullName"),
+        preferred_name: value("preferredName"),
+        age: value("age"),
+        email: value("email"),
+        phone: value("phone"),
+        instagram: value("instagram"),
+        guardian_name: value("guardianName"),
+        guardian_contact: value("guardianContact"),
+        city: value("city"),
+        state_province: value("stateProvince"),
+        country: value("country"),
+        hear_about: value("hearAbout"),
+        artist_disciplines: checkedValues("artistDisciplines"),
+        preferred_work: checkedValues("preferredWork"),
+        experience_level: value("experienceLevel"),
+        body_paint_experience: value("bodyPaintExperience"),
+        portfolio_link: value("portfolioLink"),
+        face_photo_link: value("facePhotoLink"),
+        face_photo_filename: facePhotoUpload && facePhotoUpload.files[0] ? facePhotoUpload.files[0].name : "",
+        website: value("website"),
+        artist_strengths: value("artistStrengths"),
+        tools_materials: value("toolsMaterials"),
+        travel_willing: value("travelWilling"),
+        travel_distance: value("travelDistance"),
+        availability: checkedValues("availability"),
+        availability_notes: value("availabilityNotes"),
+        expected_rate: value("expectedRate"),
+        why_work: value("whyWork"),
+        good_fit: value("goodFit"),
+        anything_else: value("anythingElse"),
+        consents: checkedValues("consents")
+      };
+    };
 
     const saveDraft = () => {
       try {
@@ -725,6 +820,9 @@
     };
 
     const validatePayload = (payload) => {
+      const facePhotoUpload = document.getElementById("facePhotoUpload");
+      const facePhotoFile = facePhotoUpload && facePhotoUpload.files[0];
+      validatePhotoFile(facePhotoFile, "Recent face photo");
       if (!payload.email && !payload.phone && !payload.instagram && !payload.guardian_contact) {
         return "Please provide at least one contact method: email, phone, Instagram, or parent/guardian contact.";
       }
@@ -738,13 +836,36 @@
       if (payload.preferred_work.length === 0) {
         return "Please select at least one work type that interests you.";
       }
-      if (!payload.face_photo_link) {
-        return "Please provide a recent face photo link. MVP Media is public-facing and needs to know who is applying.";
+      if (!payload.face_photo_link && !facePhotoFile) {
+        return "Please upload a recent face photo or provide a public face photo link. MVP Media is public-facing and needs to know who is applying.";
       }
       if (!payload.consents.includes("truthful") || !payload.consents.includes("contact")) {
         return "Please confirm all required consent items.";
       }
       return "";
+    };
+
+    const buildPayloadWithUploads = async () => {
+      const payload = buildPayload();
+      const facePhotoUpload = document.getElementById("facePhotoUpload");
+      const facePhotoFile = facePhotoUpload && facePhotoUpload.files[0];
+      const uploadWarnings = [];
+
+      validatePhotoFile(facePhotoFile, "Recent face photo");
+
+      if (facePhotoFile) {
+        try {
+          payload.face_photo_link = await uploadPhotoToCloudinary(facePhotoFile, "artist-face-photos");
+          payload.face_photo_filename = payload.face_photo_link;
+        } catch (error) {
+          uploadWarnings.push("Face photo upload failed; saved filename only.");
+          payload.face_photo_link = payload.face_photo_link || facePhotoFile.name;
+          payload.face_photo_filename = facePhotoFile.name;
+          console.error(error);
+        }
+      }
+
+      return { payload, uploadWarnings };
     };
 
     form.addEventListener("input", saveDraft);
@@ -755,7 +876,12 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const payload = buildPayload();
-      const customError = validatePayload(payload);
+      let customError = "";
+      try {
+        customError = validatePayload(payload);
+      } catch (error) {
+        customError = error && error.message ? error.message : "Photo file is not valid.";
+      }
       trackApplicationStartedOnce();
       trackEvent("submit_attempt", {
         draft_data: payload,
@@ -779,13 +905,20 @@
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Submitting...";
-      setStatus("Sending artist application...");
+      setStatus("Uploading artist application...");
 
       try {
+        const uploadResult = await buildPayloadWithUploads();
+        const finalPayload = uploadResult.payload;
+        if (uploadResult.uploadWarnings.length) {
+          setStatus(uploadResult.uploadWarnings.join(" "));
+        } else {
+          setStatus("Sending artist application...");
+        }
         const response = await fetch("/api/submit-artist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(finalPayload)
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {
@@ -808,6 +941,7 @@
     });
 
     restoreDraft();
+    setupPhotoPreview("facePhotoUpload", "facePhotoPreview");
     trackEvent("page_visit");
   </script>
 </body>

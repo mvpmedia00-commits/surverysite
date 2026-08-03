@@ -752,7 +752,12 @@
       const availability = pick(draft, ["availability", "availability_notes", "availabilityNotes", "regular_availability", "regularAvailability", "frequency"]);
       const compensation = pick(draft, ["expected_comp", "expectedComp", "expected_rate", "expectedRate", "comp_interest", "compInterest"]);
       const why = pick(draft, ["why_work", "whyWork", "good_fit", "goodFit", "artist_strengths", "artistStrengths"]);
-      const files = [pick(draft, ["headshot_filename", "headshotFilename"]), pick(draft, ["full_body_filename", "fullBodyFilename"])].filter(Boolean).join(", ");
+      const files = [
+        pick(draft, ["headshot_filename", "headshotFilename"]),
+        pick(draft, ["full_body_filename", "fullBodyFilename"]),
+        pick(draft, ["face_photo_filename", "facePhotoFilename"]),
+        pick(draft, ["face_photo_link", "facePhotoLink"])
+      ].filter(Boolean).join(", ");
       const tips = asText(meta.validation_tips || meta.validationTips);
 
       return {

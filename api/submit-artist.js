@@ -45,6 +45,7 @@ const summarizeArtistApplication = (row) => [
   `Experience level: ${row.experience_level || "Not specified"}`,
   `Portfolio: ${row.portfolio_link || "Not provided"}`,
   `Face photo: ${row.face_photo_link || "Not provided"}`,
+  `Face photo filename: ${row.face_photo_filename || "Not provided"}`,
   `Instagram: ${row.instagram || "Not provided"}`,
   `Website: ${row.website || "Not provided"}`,
   `Parent/guardian: ${row.guardian_name || "Not provided"}`,
@@ -102,7 +103,7 @@ const toDashboardFallbackRow = (row) => ({
   good_fit: row.good_fit,
   anything_else: summarizeArtistApplication(row),
   consents: row.consents,
-  headshot_filename: "",
+  headshot_filename: row.face_photo_link || row.face_photo_filename || "",
   full_body_filename: "",
   language: "en",
   review_status: "pending"
@@ -116,6 +117,7 @@ const toLegacyDashboardFallbackRow = (row) => {
     legacy.opportunity_interest ? `Artist work interest: ${legacy.opportunity_interest}` : "",
     legacy.portfolio_link ? `Portfolio link: ${legacy.portfolio_link}` : "",
     row.face_photo_link ? `Face photo link: ${row.face_photo_link}` : "",
+    row.face_photo_filename ? `Face photo filename: ${row.face_photo_filename}` : "",
     legacy.regular_availability ? `Artist availability: ${legacy.regular_availability}` : ""
   ].filter(Boolean).join("\n\n");
   delete legacy.model_opportunity;
@@ -169,6 +171,7 @@ export default async function handler(req, res) {
       website: clean(body.website),
       portfolio_link: clean(body.portfolio_link),
       face_photo_link: clean(body.face_photo_link),
+      face_photo_filename: clean(body.face_photo_filename),
       hear_about: clean(body.hear_about),
       artist_disciplines: asArray(body.artist_disciplines),
       preferred_work: asArray(body.preferred_work),
@@ -188,7 +191,7 @@ export default async function handler(req, res) {
       review_status: "pending"
     };
 
-    const required = ["full_name", "preferred_name", "city", "country", "hear_about", "experience_level", "face_photo_link", "artist_strengths", "expected_rate", "why_work", "good_fit"];
+    const required = ["full_name", "preferred_name", "city", "country", "hear_about", "experience_level", "artist_strengths", "expected_rate", "why_work", "good_fit"];
     for (const field of required) {
       if (!row[field]) {
         return respond(res, 400, { error: `Missing required field: ${field}` });
@@ -215,6 +218,10 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "Please select at least one preferred work type" });
     }
 
+    if (!row.face_photo_link && !row.face_photo_filename) {
+      return respond(res, 400, { error: "Please upload a recent face photo or provide a public face photo link" });
+    }
+
     if (age < 18 && (!guardianName || !guardianContact || !row.consents.includes("guardian_permission"))) {
       return respond(res, 400, { error: "Artists under 18 require parent/guardian name, contact, and guardian permission confirmation" });
     }
@@ -228,14 +235,14 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const detail = await response.text();
-      if (/artist_applications|face_photo_link|schema cache|relation|does not exist|could not find the table/i.test(detail)) {
+      if (/artist_applications|face_photo_link|face_photo_filename|schema cache|relation|does not exist|could not find the table/i.test(detail)) {
         if (age < 18) {
           return respond(res, 500, { error: "The artist_applications SQL table must be set up before accepting under-18 artist applications" });
         }
         response = await insertRow(cfg, "model_applications", toDashboardFallbackRow(row));
         if (!response.ok) {
           const fallbackDetail = await response.text();
-          if (/model_opportunity|opportunity_interest|portfolio_link|face_photo_link|regular_availability|schema cache|column/i.test(fallbackDetail)) {
+          if (/model_opportunity|opportunity_interest|portfolio_link|face_photo_link|face_photo_filename|regular_availability|schema cache|column/i.test(fallbackDetail)) {
             response = await insertRow(cfg, "model_applications", toLegacyDashboardFallbackRow(row));
           } else {
             return respond(res, 500, { error: "Failed to save artist application", detail: fallbackDetail });
