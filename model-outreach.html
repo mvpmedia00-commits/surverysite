@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MVP Media | Fine Art Figure & Body Paint Modeling Opportunities</title>
+  <title>MVP Media | Male-Led Figure & Body Paint Modeling</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
@@ -31,6 +31,7 @@
       color: var(--text);
       background: radial-gradient(circle at top left, rgba(179,63,42,0.24), transparent 24%), linear-gradient(180deg, #13110d 0%, var(--bg) 100%);
       line-height: 1.65;
+      overflow-x: hidden;
     }
 
     a { color: inherit; }
@@ -51,6 +52,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      max-width: 100%;
       padding: 12px 14px;
       margin: 16px 0 18px;
       border: 1px solid var(--line);
@@ -72,6 +74,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .top-nav a {
@@ -109,6 +113,7 @@
       background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
       box-shadow: var(--shadow);
       overflow: hidden;
+      max-width: 100%;
     }
 
     .hero {
@@ -118,6 +123,10 @@
       padding: clamp(24px, 4vw, 42px);
       align-items: center;
       margin-bottom: 16px;
+    }
+
+    .hero > * {
+      min-width: 0;
     }
 
     .eyebrow {
@@ -133,6 +142,9 @@
       text-transform: uppercase;
       font-weight: 700;
       width: fit-content;
+      max-width: 100%;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
       margin-bottom: 10px;
     }
 
@@ -146,6 +158,7 @@
       font-size: clamp(2.25rem, 4.3vw, 3.2rem);
       max-width: 760px;
       margin-bottom: 10px;
+      overflow-wrap: anywhere;
     }
 
     h2 {
@@ -166,7 +179,10 @@
       margin: 0;
     }
 
-    .hero p { font-size: 1.01rem; }
+    .hero p {
+      font-size: 1.01rem;
+      overflow-wrap: anywhere;
+    }
 
     .hero-summary {
       display: grid;
@@ -847,8 +863,29 @@
 
     @media (max-width: 560px) {
       section[id] { scroll-margin-top: 168px; }
-      .page-shell { width: min(100%, 94vw); }
-      .top-nav { flex-direction: column; align-items: flex-start; }
+      .page-shell {
+        width: 100%;
+        max-width: 100vw;
+        padding: 0 16px 24px;
+        overflow-x: hidden;
+      }
+      .top-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: calc(100vw - 32px);
+        max-width: calc(100vw - 32px);
+      }
+      .hero, .card, .quote-card, .cta-card {
+        width: calc(100vw - 32px);
+        max-width: calc(100vw - 32px);
+      }
+      .hero { padding: 24px; }
+      .eyebrow {
+        display: block;
+        width: 100%;
+        font-size: 0.72rem;
+      }
+      h1 { font-size: 2rem; }
       .hero-actions { flex-direction: column; }
       .btn { width: 100%; }
       .hero, .card, .quote-card, .cta-card { border-radius: 18px; }
@@ -900,14 +937,14 @@
 
     <section class="hero" id="top">
       <div>
-        <div class="eyebrow">Fine Art Figure &amp; Body Paint Modeling Opportunities</div>
-        <h1>You Applied. Here’s What Happens Next.</h1>
+        <div class="eyebrow">Male-Led Glamour, Figure &amp; Body Paint Modeling</div>
+        <h1>This Is a Director-Led Visual Project.</h1>
         <p>
-          Thank you for applying through Indeed. Before we schedule a phone interview, I want you to understand who I am, the work I create, what body paint modeling involves, and the two different modeling opportunities available through MVP Media Photography.
+          Thank you for applying through Indeed. MVP Media is a male-led creative organization with a direct glamour, figure, body-paint, and male-gaze-informed visual style. Before we schedule a phone interview, understand the look, the role, the production expectations, and the two different modeling opportunities available.
         </p>
         <div class="hero-summary" aria-label="Application summary">
-          <strong>Before the phone call</strong>
-          <span>Review the two tracks, decide what interests you most, and note any questions or boundaries you want to discuss.</span>
+          <strong>Know the direction first</strong>
+          <span>This is not a model-led concept process. The visual direction comes from Matthew and MVP Media. Questions, rates, and non-negotiable limits are discussed before booking.</span>
         </div>
         <a class="instagram-preview" href="https://www.instagram.com/great.camerawork/" target="_blank" rel="noopener noreferrer" aria-label="Preview and open Instagram great.camerawork">
           <div>
@@ -921,7 +958,7 @@
           </div>
         </a>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#opportunities">Choose your track</a>
+          <a class="btn btn-primary" href="#opportunities">Review the tracks</a>
           <a class="btn btn-secondary" href="https://kavyar.me/mvpmedia" target="_blank" rel="noopener noreferrer">View my work</a>
         </div>
         <div class="badge-row">
@@ -939,7 +976,7 @@
       <span class="section-kicker">Start Here</span>
       <h2>Choose the Track That Fits You</h2>
       <p class="lead">
-        Both tracks are legitimate creative opportunities. The difference is the purpose of the session: regular canvas work supports practice and development, while professional body-paint modeling supports finished productions.
+        Both tracks are directed creative opportunities. The difference is the purpose of the session: regular canvas work supports practice and development, while professional body-paint modeling supports finished productions built around MVP Media's visual direction.
       </p>
       <div class="decision-grid">
         <article class="decision-card">
@@ -990,10 +1027,10 @@
         <div class="meet-copy">
           <h2>Meet Matthew</h2>
           <p>
-            I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My creative work focuses on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and transforming ideas into finished photographs.
+            I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My work is male-led and director-led, with a focus on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and finished photographs with a strong point of view.
           </p>
           <p>
-            For body paint projects, I approach the human body as a living canvas and collaborate with models to create artwork designed specifically for photography.
+            For body paint projects, I approach the human body as a living canvas. I direct the look, posing, lighting, and final image style, and I select models who can bring presence to the frame while following the agreed production direction.
           </p>
           <div class="stats">
             <div class="stat"><strong>Photography Since</strong>2015</div>
@@ -1013,25 +1050,25 @@
       </article>
 
       <article class="card">
-        <h2>About MVP Media Photography</h2>
+        <h2>About the Visual Direction</h2>
         <p>
-          MVP Media Photography is a Chicago-based independent photography and creative media brand focused on fashion, portraiture, editorial concepts, creative photography, and artistic body paint projects.
+          MVP Media Photography is a Chicago-based independent photography and creative media brand focused on glamour, fashion, portraiture, editorial concepts, creative photography, and artistic body paint projects.
         </p>
         <p>
-          Projects range from traditional photography sessions to more experimental concepts involving styling, body art, creative direction, and visual storytelling.
+          Projects range from traditional photography sessions to more experimental work involving styling, body art, creative direction, and visual storytelling from a masculine editorial point of view.
         </p>
         <div class="feature-grid">
           <div class="feature-card">
-            <h3>Artistic</h3>
-            <p>Original concepts designed around color, styling, body art, and visual storytelling.</p>
+            <h3>Male-Led Direction</h3>
+            <p>Concept, lighting, posing, styling, and final image priorities are led by Matthew and MVP Media.</p>
           </div>
           <div class="feature-card">
-            <h3>Collaborative</h3>
-            <p>Models and the creative team communicate about the concept before the session begins.</p>
+            <h3>Glamour Point of View</h3>
+            <p>The imagery is designed around beauty, shape, confidence, sensuality, and camera presence.</p>
           </div>
           <div class="feature-card">
-            <h3>Professional</h3>
-            <p>Project expectations, compensation, boundaries, and image usage are discussed before booking.</p>
+            <h3>Professional Terms</h3>
+            <p>Role, rate, limits, image usage, and production expectations are confirmed before booking.</p>
           </div>
         </div>
       </article>
@@ -1067,11 +1104,11 @@
     <section class="card">
       <span class="section-kicker">Detailed Track Breakdown</span>
       <h2>Two Ways to Work With MVP Media</h2>
-      <p>Not every body paint model serves the same purpose.</p>
+      <p>Not every body paint model serves the same purpose, and this is a director-led environment.</p>
       <p>
         MVP Media works with models in two different capacities: recurring models who serve as regular canvases while I develop and practice body-paint techniques, and professional models selected for completed creative productions.
       </p>
-      <p>You may be interested in either opportunity, or both.</p>
+      <p>The model role is to bring reliability, patience, presence, and the ability to follow posing and production direction. Applicants can be considered for one or both tracks, but final placement is based on fit for the concept and production needs.</p>
 
       <div class="opportunity-grid">
         <article class="opportunity-card featured">
@@ -1083,10 +1120,10 @@
               This is a recurring modeling opportunity for someone interested in working with me regularly while I practice, refine, and develop body-paint techniques.
             </p>
             <p>
-              These sessions allow me to experiment with new designs, colors, brush techniques, placement, photography ideas, and creative concepts using a consistent live canvas.
+              These sessions allow me to experiment with new designs, colors, brush techniques, placement, photography ideas, and creative concepts using a consistent live canvas who can follow direction.
             </p>
             <p>
-              This position places greater importance on <strong style="color:#ffe0cf;">reliability, availability, patience, communication, and comfort with body painting</strong> than previous professional modeling experience.
+              This position places greater importance on <strong style="color:#ffe0cf;">reliability, availability, patience, communication, and comfort with directed body painting</strong> than previous professional modeling experience.
             </p>
           </div>
           <div>
@@ -1127,8 +1164,8 @@
             <p>Some models may work with MVP Media multiple times rather than being booked for only one project.</p>
             <p>This does not promise daily work, guaranteed hours, or guaranteed recurring bookings.</p>
           </div>
-          <div class="track-note">This track is not a lesser version of professional modeling. It is a creative development role where consistency and comfort matter most.</div>
-          <div class="priority">Reliability + Availability + Patience + Communication</div>
+          <div class="track-note">This track is not a lesser version of professional modeling. It is a creative development role where consistency, patience, and following direction matter most.</div>
+          <div class="priority">Reliability + Availability + Patience + Direction</div>
           <a class="btn btn-primary" href="/index.html?track=regular#applicationForm">I'm interested in regular modeling</a>
         </article>
 
@@ -1138,10 +1175,10 @@
           <div>
             <h4>Model for Finished Creative Productions</h4>
             <p>
-              Professional Body Paint Models are selected for planned body-art concepts where the goal is creating polished, finished photography and visual content.
+              Professional Body Paint Models are selected for planned body-art concepts where the goal is creating polished, finished photography and visual content shaped by MVP Media's visual direction.
             </p>
             <p>
-              These projects place greater emphasis on modeling ability, posing, facial expression, camera presence, body awareness, professionalism, and the ability to interpret creative direction.
+              These projects place greater emphasis on modeling ability, posing, facial expression, camera presence, body awareness, professionalism, and the ability to execute creative direction.
             </p>
           </div>
           <div>
@@ -1198,7 +1235,7 @@
 
     <section class="card">
       <span class="section-kicker">Side-by-Side</span>
-      <h2>Which Opportunity Fits You?</h2>
+      <h2>Which Opportunity Fits the Concept?</h2>
       <div class="comparison">
         <div class="comparison-row">
           <div class="comparison-cell comparison-label"><strong>Regular Body Paint Canvas Model</strong></div>
@@ -1225,8 +1262,8 @@
           <div class="comparison-cell"><strong>Primary qualities:</strong> Posing, camera presence, professionalism</div>
         </div>
         <div class="comparison-row">
-          <div class="comparison-cell"><strong>Photography:</strong> Tests, practice and selected creative work</div>
-          <div class="comparison-cell"><strong>Photography:</strong> Finished professional imagery</div>
+          <div class="comparison-cell"><strong>Photography:</strong> Tests, practice, and selected directed work</div>
+          <div class="comparison-cell"><strong>Photography:</strong> Finished directed professional imagery</div>
         </div>
         <div class="comparison-row">
           <div class="comparison-cell"><strong>Best suited for:</strong> Beginners or models interested in recurring work</div>
@@ -1236,16 +1273,16 @@
     </section>
 
     <section class="card" id="safety">
-      <span class="section-kicker">Comfort, Consent, Boundaries</span>
+      <span class="section-kicker">Direction, Limits, Expectations</span>
       <h2>Figure Modeling &amp; Body Paint</h2>
       <p>
         Both regular canvas sessions and professional productions may involve artistic figure modeling.
       </p>
       <p>
-        Some concepts require the model to pose unclothed while cosmetic body paint is applied directly to the skin.
+        Some concepts are built for figure, glamour, or male-gaze-informed presentation. That may require the model to pose unclothed while cosmetic body paint is applied directly to the skin.
       </p>
       <p>
-        The exact level of coverage, areas being painted, posing expectations, photography, compensation, and boundaries are discussed before accepting a session.
+        The director-led concept, required coverage, areas being painted, posing expectations, photography, compensation, and non-negotiable limits are discussed before accepting a session.
       </p>
       <div class="section-media-grid" aria-label="Body paint and figure modeling examples">
         <figure class="section-thumb">
@@ -1255,7 +1292,7 @@
           <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Body paint figure modeling example with painted wings" loading="lazy">
         </figure>
       </div>
-      <div class="note">Nothing should be a surprise on shoot day. Your comfort level, boundaries, paint coverage, posing limits, compensation, and image usage should be established before the session.</div>
+      <div class="note">Nothing should be a surprise on shoot day. The shoot is directed by MVP Media; the agreement is made before shoot day. If a required look or pose is outside the agreed limits, the project is not the right fit.</div>
     </section>
 
     <section class="card" id="process">
@@ -1269,7 +1306,7 @@
         <div class="timeline">
           <div class="timeline-item">
             <strong>01 — Pre-Shoot Discussion</strong>
-            <p>Review the concept, compensation, expected session length, wardrobe or figure-modeling requirements, body paint coverage, photography plans, boundaries, and image usage.</p>
+            <p>Review the director-led concept, compensation, expected session length, required look, wardrobe or figure-modeling requirements, body paint coverage, photography plans, limits, and image usage.</p>
           </div>
           <div class="timeline-item">
             <strong>02 — Preparation</strong>
@@ -1285,7 +1322,7 @@
           </div>
           <div class="timeline-item">
             <strong>05 — Photography</strong>
-            <p>The completed artwork may be photographed using editorial, fine-art, portrait, or creative posing.</p>
+            <p>The completed artwork may be photographed using directed glamour, editorial, fine-art, portrait, or male-gaze-informed posing.</p>
           </div>
           <div class="timeline-item">
             <strong>06 — Cleanup</strong>
@@ -1296,27 +1333,27 @@
     </section>
 
     <section class="card">
-      <h2>What I Expect From Every Model</h2>
-      <p>Regardless of which opportunity interests you, I look for:</p>
+      <h2>What MVP Media Expects From Models</h2>
+      <p>This is not a casual hangout or a model-directed shoot. Regardless of which opportunity interests you, I look for:</p>
       <div class="pill-grid">
         <div class="pill-card"><strong>Reliability</strong>Arrive when agreed and communicate promptly if circumstances change.</div>
-        <div class="pill-card"><strong>Communication</strong>Ask questions and communicate boundaries clearly.</div>
+        <div class="pill-card"><strong>Communication</strong>Ask important questions before booking, then arrive ready to work within the agreed direction.</div>
         <div class="pill-card"><strong>Patience</strong>Body painting can require extended periods of standing, sitting, or holding positions.</div>
-        <div class="pill-card"><strong>Professionalism</strong>Treat the project as a professional creative collaboration.</div>
-        <div class="pill-card"><strong>Creative Direction</strong>Be willing to receive reasonable artistic and posing direction within the boundaries established before the session.</div>
-        <div class="pill-card"><strong>Respect</strong>Maintain a respectful working environment throughout the project.</div>
+        <div class="pill-card"><strong>Professionalism</strong>Treat the session as a directed production.</div>
+        <div class="pill-card"><strong>Creative Direction</strong>Be prepared to follow posing, styling, stillness, expression, and camera direction within the terms agreed before booking.</div>
+        <div class="pill-card"><strong>Respect</strong>Respect the photographer, artists, crew, schedule, and production flow.</div>
       </div>
     </section>
 
     <section class="card">
-      <h2>What You Can Expect From Me</h2>
+      <h2>What You Can Expect From MVP Media</h2>
       <div class="pill-grid">
-        <div class="pill-card"><strong>Clear Project Details</strong>The concept should be explained before booking.</div>
+        <div class="pill-card"><strong>Clear Project Details</strong>The concept, look, and model role are explained before booking.</div>
         <div class="pill-card"><strong>Discussed Compensation</strong>Compensation is agreed upon before the project.</div>
-        <div class="pill-card"><strong>Boundary Discussion</strong>Comfort levels and posing limits are discussed beforehand.</div>
+        <div class="pill-card"><strong>Limit Discussion</strong>Non-negotiable limits are discussed before booking so the selected model fits the concept.</div>
         <div class="pill-card"><strong>Image Usage Discussion</strong>How photographs may be used should be discussed before the shoot.</div>
-        <div class="pill-card"><strong>Professional Communication</strong>Applicants should have the opportunity to ask questions before deciding whether to participate.</div>
-        <div class="pill-card"><strong>Breaks During Sessions</strong>Models can communicate when they need a break.</div>
+        <div class="pill-card"><strong>Professional Communication</strong>Questions are handled before the shoot; shoot day is for production.</div>
+        <div class="pill-card"><strong>Breaks During Sessions</strong>Reasonable breaks are part of longer sessions.</div>
       </div>
     </section>
 
@@ -1346,7 +1383,7 @@
         </details>
         <details>
           <summary>Is this figure modeling?</summary>
-          <p>Some projects involve artistic figure modeling. The specific requirements will be discussed before booking.</p>
+          <p>Some projects involve artistic figure modeling for glamour, body-paint, or male-gaze-informed visual concepts. The specific requirements are discussed before booking.</p>
         </details>
         <details>
           <summary>Will body paint be applied directly to my skin?</summary>
@@ -1361,12 +1398,12 @@
           <p>Yes. Breaks can be incorporated during longer sessions.</p>
         </details>
         <details>
-          <summary>Can I discuss my boundaries beforehand?</summary>
-          <p>Yes. Applicants should discuss boundaries, body paint coverage, posing limits, and comfort levels before accepting a project.</p>
+          <summary>Are limits discussed before booking?</summary>
+          <p>Yes. Limits, body paint coverage, posing requirements, and comfort levels are discussed before booking. MVP Media selects models whose limits fit the concept; the concept is not redesigned on shoot day.</p>
         </details>
         <details>
           <summary>Will I be photographed?</summary>
-          <p>Most body paint projects are created for photography. The photography portion and intended image usage should be discussed before booking.</p>
+          <p>Most body paint projects are created for photography. The photography is directed around MVP Media's glamour, fine-art, and editorial point of view, and intended image usage is discussed before booking.</p>
         </details>
         <details>
           <summary>Do I need to send nude photographs to apply?</summary>
@@ -1374,7 +1411,7 @@
         </details>
         <details>
           <summary>Is this an automatic job offer?</summary>
-          <p>No. Applying or completing the pre-interview process does not guarantee selection or booking. The phone interview is used to determine whether the project is a good fit for both parties.</p>
+          <p>No. Applying or completing the pre-interview process does not guarantee selection or booking. The phone interview is used to determine whether the applicant fits MVP Media's concept, style, and production needs.</p>
         </details>
         <details>
           <summary>Is there an age requirement?</summary>
@@ -1388,11 +1425,13 @@
       <p>Before requesting your interview, please make sure you’ve reviewed the following:</p>
       <ul class="check-list">
         <li>☑ I understand what body paint canvas modeling involves.</li>
+        <li>☑ I understand MVP Media is male-led and director-led.</li>
+        <li>☑ I understand the imagery may be created for a glamour or male-gaze-informed point of view.</li>
         <li>☑ I understand the difference between regular canvas modeling and professional project modeling.</li>
         <li>☑ I understand that some projects involve artistic figure modeling.</li>
         <li>☑ I understand body paint is applied directly to the skin.</li>
         <li>☑ I understand painting may require extended periods of posing.</li>
-        <li>☑ I understand I can establish and communicate my boundaries.</li>
+        <li>☑ I understand limits are discussed before booking and the selected model must fit the concept.</li>
         <li>☑ I understand compensation is established before accepting a session.</li>
         <li>☑ I understand recurring work is not guaranteed.</li>
         <li>☑ I understand applying and interviewing do not guarantee a booking.</li>
@@ -1405,19 +1444,19 @@
       <p><strong style="color:#ffe0cf;">The phone interview is not a job offer, guarantee of work, or commitment to participate in a shoot.</strong></p>
       <div class="pill-grid">
         <div class="pill-card"><strong>01 — Introduction</strong>Learn more about Matthew and MVP Media.</div>
-        <div class="pill-card"><strong>02 — Which Opportunity Fits You</strong>Discuss whether you're interested in regular canvas modeling, professional productions, or both.</div>
+        <div class="pill-card"><strong>02 — Production Fit</strong>Discuss whether MVP Media may consider you for regular canvas modeling, professional productions, or both.</div>
         <div class="pill-card"><strong>03 — Experience</strong>Discuss your previous modeling or creative experience. Beginners remain welcome for the regular model opportunity.</div>
         <div class="pill-card"><strong>04 — Availability</strong>Discuss when and how frequently you're generally available.</div>
-        <div class="pill-card"><strong>05 — Body Paint &amp; Figure Modeling</strong>Discuss the body-paint process, figure-modeling requirements, posing, and project expectations.</div>
-        <div class="pill-card"><strong>06 — Boundaries</strong>Discuss questions, comfort levels, and boundaries.</div>
+        <div class="pill-card"><strong>05 — Body Paint &amp; Figure Modeling</strong>Discuss the body-paint process, figure-modeling requirements, male-gaze-informed posing, and project expectations.</div>
+        <div class="pill-card"><strong>06 — Limits &amp; Fit</strong>Confirm whether your limits fit the concept and production direction.</div>
         <div class="pill-card"><strong>07 — Compensation</strong>Discuss compensation for any specific opportunity being considered.</div>
-        <div class="pill-card"><strong>08 — Next Steps</strong>If both sides are interested, discuss potential scheduling or future project consideration.</div>
+        <div class="pill-card"><strong>08 — Next Steps</strong>If MVP Media wants to move forward, discuss potential scheduling or future project consideration.</div>
       </div>
     </section>
 
     <section class="cta-card">
-      <h2>Still Interested?</h2>
-      <p>If you've reviewed everything and one or both opportunities sound like a good fit, tell me which modeling track interests you and request a short phone interview.</p>
+      <h2>Still Interested in This Direction?</h2>
+      <p>If you understand the male-led, director-led visual style and want to be considered, select the track that best matches your experience and request a short phone interview.</p>
       <div class="hero-actions" style="justify-content:center; margin-top:16px;">
         <a class="btn btn-secondary" href="/index.html?track=regular#applicationForm">Regular model</a>
         <a class="btn btn-secondary" href="/index.html?track=professional#applicationForm">Professional model</a>
@@ -1426,7 +1465,7 @@
       </div>
     </section>
 
-    <p class="footer-note">MVP Media Photography — Chicago, Illinois<br>All modeling projects are intended for adults 18+. Project participation is voluntary. Specific concepts, compensation, boundaries, body paint coverage, posing requirements, photography, and image usage should be discussed and agreed upon before booking.</p>
+    <p class="footer-note">MVP Media Photography — Chicago, Illinois<br>Male-led and director-led visual projects for adults 18+. Project participation is voluntary. Specific concepts, compensation, limits, body paint coverage, posing requirements, photography, and image usage are discussed and agreed upon before booking.</p>
   </main>
 
   <script>
