@@ -14,7 +14,7 @@ const allowedEvents = new Set([
   "submit_error"
 ]);
 
-const allowedForms = new Set(["main", "artistic"]);
+const allowedForms = new Set(["main", "artistic", "artist"]);
 
 const trimTo = (value, max) => String(value || "").trim().slice(0, max);
 

@@ -143,6 +143,8 @@
       font-size: clamp(1.35rem, 3vw, 2rem);
       font-weight: 800;
       color: var(--accent);
+      line-height: 1.05;
+      overflow-wrap: anywhere;
     }
 
     .metric-sub {
@@ -278,6 +280,84 @@
       text-align: right;
     }
 
+    .attempt-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .attempt-card,
+    .attempt-snapshot {
+      border: 1px solid rgba(125, 211, 252, 0.12);
+      border-radius: 14px;
+      background: rgba(7, 12, 22, 0.7);
+      padding: 12px;
+    }
+
+    .attempt-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .attempt-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .attempt-head strong {
+      color: #ffffff;
+      font-size: 0.98rem;
+    }
+
+    .attempt-head span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .data-pill {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      padding: 8px 10px;
+      min-width: 0;
+    }
+
+    .data-pill strong {
+      display: block;
+      color: var(--accent-2);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .data-pill span {
+      display: block;
+      color: #d9e5ff;
+      font-size: 0.86rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .data-pill.wide {
+      grid-column: 1 / -1;
+    }
+
+    .attempt-warning {
+      color: #fecaca;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
     .event-list {
       display: grid;
       gap: 10px;
@@ -335,6 +415,7 @@
     .badge.submit_error { background: rgba(248, 113, 113, 0.98); color: #08111f; border-color: rgba(248, 113, 113, 1); }
     .badge.main { background: rgba(245, 158, 11, 0.88); color: #08111f; border-color: rgba(245, 158, 11, 1); }
     .badge.artistic { background: rgba(125, 211, 252, 0.88); color: #08111f; border-color: rgba(125, 211, 252, 1); }
+    .badge.artist { background: rgba(52, 211, 153, 0.88); color: #08111f; border-color: rgba(52, 211, 153, 1); }
 
     .event-details {
       margin-top: 12px;
@@ -419,6 +500,7 @@
       .filters { grid-template-columns: 1fr; }
       .summary-grid { grid-template-columns: 1fr; }
       .json-grid { grid-template-columns: 1fr; }
+      .data-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -428,7 +510,7 @@
       <p class="eyebrow">Behavior telemetry</p>
       <h1>Application Events Dashboard</h1>
       <p>
-        Monitor the full applicant journey across both survey flows. This view tracks visits,
+        Monitor the full applicant journey across model, artistic, and artist application flows. This view tracks visits,
         language clicks, start rates, submit attempts, saves, and errors so you can see where applicants drop off.
       </p>
       <div class="head-actions">
@@ -452,7 +534,7 @@
         <div class="metric"><p class="metric-label">Submit Errors</p><p class="metric-value" id="kpiErrors">0</p><p class="metric-sub">Validation or server failures</p></div>
         <div class="metric"><p class="metric-label">Completion Rate</p><p class="metric-value" id="kpiCompletion">0%</p><p class="metric-sub">Success / starts</p></div>
         <div class="metric"><p class="metric-label">Top Event</p><p class="metric-value" id="kpiTopEvent">-</p><p class="metric-sub">Most common event type</p></div>
-        <div class="metric"><p class="metric-label">Top Form</p><p class="metric-value" id="kpiTopForm">-</p><p class="metric-sub">Main vs artistic</p></div>
+        <div class="metric"><p class="metric-label">Top Form</p><p class="metric-value" id="kpiTopForm">-</p><p class="metric-sub">Model, artistic, or artist</p></div>
         <div class="metric"><p class="metric-label">Top Language</p><p class="metric-value" id="kpiTopLanguage">-</p><p class="metric-sub">Most selected language</p></div>
       </div>
     </section>
@@ -467,7 +549,7 @@
           </article>
           <article class="chart-box">
             <h2>Form Types</h2>
-            <p>Main survey vs artistic survey activity.</p>
+            <p>Model, artistic, and artist application activity.</p>
             <div class="chart-frame"><canvas id="formTypeChart"></canvas></div>
           </article>
           <article class="chart-box">
@@ -530,6 +612,11 @@
             <p>Most repeated submit failures.</p>
             <div class="summary-list" id="errorSummary"></div>
           </article>
+        </section>
+        <section class="card">
+          <h2>Submit Attempt Intelligence</h2>
+          <p>Recent people who pressed submit, with what they were applying for and the useful draft data collected before final validation.</p>
+          <div class="attempt-list" id="attemptSummary"></div>
         </section>
         <section class="card">
           <h2>Notes</h2>
@@ -598,6 +685,153 @@
       } catch {
         return String(value ?? "");
       }
+    };
+
+    const asText = (value) => {
+      if (Array.isArray(value)) {
+        return value.filter(Boolean).join(", ");
+      }
+      if (value && typeof value === "object") {
+        return Object.values(value).filter(Boolean).join(", ");
+      }
+      return String(value ?? "").trim();
+    };
+
+    const pick = (obj, keys) => {
+      for (const key of keys) {
+        const value = asText(obj?.[key]);
+        if (value) {
+          return value;
+        }
+      }
+      return "";
+    };
+
+    const labelForForm = (formType) => {
+      const value = String(formType || "").toLowerCase();
+      if (value === "main") return "Model Application";
+      if (value === "artistic") return "Artistic / Nude Model";
+      if (value === "artist") return "Artist Application";
+      return formType || "Unknown";
+    };
+
+    const summarizeAttempt = (event) => {
+      const draft = event.draft_data || {};
+      const meta = event.metadata || {};
+      const formType = String(event.form_type || "");
+      const name = pick(draft, ["full_name", "fullName", "preferred_name", "preferredName"]) || "Unknown applicant";
+      const contact = pick(draft, ["email", "phone", "instagram", "guardian_contact", "guardianContact"]);
+      const age = pick(draft, ["age"]);
+      const location = [pick(draft, ["city"]), pick(draft, ["state_province", "stateProvince"]), pick(draft, ["country"])].filter(Boolean).join(", ");
+      const portfolio = pick(draft, ["portfolio_link", "portfolioLink", "website", "instagram"]);
+
+      const appliedFor = pick(draft, [
+        "model_opportunity",
+        "modelOpportunity",
+        "opportunity_interest",
+        "opportunityInterest",
+        "preferred_work",
+        "preferredWork",
+        "interests",
+        "artist_disciplines",
+        "artistDisciplines",
+        "experience_types",
+        "experienceTypes"
+      ]);
+
+      const experience = pick(draft, [
+        "experience",
+        "experience_level",
+        "experienceLevel",
+        "previous_modeling_experience",
+        "previousModelingExperience",
+        "worked_with_photographers",
+        "workedWithPhotographers"
+      ]);
+
+      const availability = pick(draft, ["availability", "availability_notes", "availabilityNotes", "regular_availability", "regularAvailability", "frequency"]);
+      const compensation = pick(draft, ["expected_comp", "expectedComp", "expected_rate", "expectedRate", "comp_interest", "compInterest"]);
+      const why = pick(draft, ["why_work", "whyWork", "good_fit", "goodFit", "artist_strengths", "artistStrengths"]);
+      const files = [pick(draft, ["headshot_filename", "headshotFilename"]), pick(draft, ["full_body_filename", "fullBodyFilename"])].filter(Boolean).join(", ");
+      const tips = asText(meta.validation_tips || meta.validationTips);
+
+      return {
+        name,
+        contact,
+        age,
+        location,
+        portfolio,
+        appliedFor,
+        experience,
+        availability,
+        compensation,
+        why,
+        files,
+        tips,
+        stage: pick(meta, ["stage"]) || "-",
+        formLabel: labelForForm(formType)
+      };
+    };
+
+    const dataPill = (label, value, wide = false) => {
+      const text = asText(value) || "-";
+      return `<div class="data-pill${wide ? " wide" : ""}"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(text)}</span></div>`;
+    };
+
+    const renderAttemptSnapshot = (event) => {
+      const item = summarizeAttempt(event);
+      return `
+        <div class="attempt-snapshot">
+          <div class="data-grid">
+            ${dataPill("Applicant", item.name)}
+            ${dataPill("Contact", item.contact)}
+            ${dataPill("Applying For", item.appliedFor || item.formLabel, true)}
+            ${dataPill("Age / Location", [item.age, item.location].filter(Boolean).join(" · "))}
+            ${dataPill("Experience", item.experience)}
+            ${dataPill("Availability", item.availability)}
+            ${dataPill("Compensation", item.compensation)}
+            ${dataPill("Portfolio", item.portfolio)}
+            ${item.why ? dataPill("Why / Strengths", item.why, true) : ""}
+            ${item.files ? dataPill("Files", item.files, true) : ""}
+            ${item.tips ? `<p class="attempt-warning">${escapeHtml(item.tips)}</p>` : ""}
+          </div>
+        </div>
+      `;
+    };
+
+    const renderAttemptSummary = () => {
+      const target = document.getElementById("attemptSummary");
+      const attempts = state.events.filter((event) => event.event_type === "submit_attempt").slice(0, 8);
+      if (attempts.length === 0) {
+        target.innerHTML = '<p class="empty">No submit attempts in the recent event window.</p>';
+        return;
+      }
+
+      target.innerHTML = attempts.map((event) => {
+        const item = summarizeAttempt(event);
+        return `
+          <article class="attempt-card">
+            <div class="attempt-head">
+              <div>
+                <strong>${escapeHtml(item.name)}</strong>
+                <span>${escapeHtml(item.contact || "No contact captured")}</span>
+              </div>
+              <div class="badges">
+                <span class="badge submit_attempt">attempt</span>
+                <span class="badge ${escapeHtml(event.form_type || "")}">${escapeHtml(item.formLabel)}</span>
+              </div>
+            </div>
+            <div class="data-grid">
+              ${dataPill("Applied For", item.appliedFor || item.formLabel, true)}
+              ${dataPill("Age / Location", [item.age, item.location].filter(Boolean).join(" · "))}
+              ${dataPill("Experience", item.experience)}
+              ${dataPill("Compensation", item.compensation)}
+              ${dataPill("Source", event.source_page || "-")}
+              ${dataPill("Time", fmtDate(event.created_at))}
+            </div>
+          </article>
+        `;
+      }).join("");
     };
 
     const addOptions = (selectId, values) => {
@@ -679,6 +913,7 @@
         const errorMessage = escapeHtml(event.error_message || "");
         const draft = escapeHtml(fmtJson(event.draft_data));
         const metadata = escapeHtml(fmtJson(event.metadata));
+        const isAttempt = event.event_type === "submit_attempt";
 
         return `
           <article class="event-card">
@@ -696,6 +931,7 @@
             <p class="event-meta">Source: ${sourcePage}</p>
             <p class="event-meta">Application ID: ${applicationId}</p>
             ${errorMessage ? `<p class="event-meta">Error: ${errorMessage}</p>` : ""}
+            ${isAttempt ? renderAttemptSnapshot(event) : ""}
             <details class="event-details">
               <summary>Inspect payload</summary>
               <div class="json-grid">
@@ -831,6 +1067,7 @@
 
       renderSummaryList("sourceSummary", data.bySourcePage, (key) => key.length > 64 ? `${key.slice(0, 64)}...` : key);
       renderSummaryList("errorSummary", data.byErrorMessage, (key) => key.length > 64 ? `${key.slice(0, 64)}...` : key);
+      renderAttemptSummary();
       renderEvents();
     };
 
@@ -865,11 +1102,20 @@
         "application_id",
         "error_message",
         "draft_data",
-        "metadata"
+        "metadata",
+        "attempt_applicant",
+        "attempt_contact",
+        "attempt_applied_for",
+        "attempt_age_location",
+        "attempt_experience",
+        "attempt_compensation",
+        "attempt_portfolio",
+        "attempt_validation_tips"
       ];
 
       const lines = [headers.join(",")];
       rows.forEach((event) => {
+        const attempt = event.event_type === "submit_attempt" ? summarizeAttempt(event) : {};
         lines.push([
           event.id,
           event.created_at,
@@ -881,7 +1127,15 @@
           event.application_id,
           event.error_message,
           fmtJson(event.draft_data),
-          fmtJson(event.metadata)
+          fmtJson(event.metadata),
+          attempt.name || "",
+          attempt.contact || "",
+          attempt.appliedFor || "",
+          [attempt.age, attempt.location].filter(Boolean).join(" · "),
+          attempt.experience || "",
+          attempt.compensation || "",
+          attempt.portfolio || "",
+          attempt.tips || ""
         ].map(csvEscape).join(","));
       });
 

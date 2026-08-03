@@ -579,6 +579,22 @@
     const submitStatus = document.getElementById("submitStatus");
     const successPanel = document.getElementById("successPanel");
     const draftKey = "mvp-artist-application-draft";
+    const trackingSessionKey = "mvp-artist-tracking-session-id";
+    const trackingStartedKey = "mvp-artist-tracking-started";
+
+    const getTrackingSessionId = () => {
+      try {
+        const existing = localStorage.getItem(trackingSessionKey);
+        if (existing) {
+          return existing;
+        }
+        const created = `artist-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+        localStorage.setItem(trackingSessionKey, created);
+        return created;
+      } catch {
+        return `artist-${Date.now()}`;
+      }
+    };
 
     const value = (id) => document.getElementById(id).value.trim();
     const checkedValues = (name) => Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
@@ -586,6 +602,38 @@
     const setStatus = (message, isError = false) => {
       submitStatus.textContent = message;
       submitStatus.classList.toggle("error", isError);
+    };
+
+    const trackEvent = (eventType, extras = {}) => {
+      fetch("/api/track-application-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: getTrackingSessionId(),
+          form_type: "artist",
+          event_type: eventType,
+          language: "en",
+          source_page: window.location.pathname,
+          ...extras
+        })
+      }).catch(() => {});
+    };
+
+    const trackApplicationStartedOnce = () => {
+      try {
+        if (localStorage.getItem(trackingStartedKey)) {
+          return;
+        }
+        localStorage.setItem(trackingStartedKey, "1");
+      } catch {}
+      trackEvent("application_started", {
+        draft_data: {
+          city: value("city"),
+          country: value("country"),
+          artist_disciplines: checkedValues("artistDisciplines"),
+          preferred_work: checkedValues("preferredWork")
+        }
+      });
     };
 
     const buildPayload = () => ({
@@ -695,13 +743,29 @@
 
     form.addEventListener("input", saveDraft);
     form.addEventListener("change", saveDraft);
+    form.addEventListener("input", trackApplicationStartedOnce);
+    form.addEventListener("change", trackApplicationStartedOnce);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const payload = buildPayload();
       const customError = validatePayload(payload);
+      trackApplicationStartedOnce();
+      trackEvent("submit_attempt", {
+        draft_data: payload,
+        metadata: {
+          stage: "before_client_validation"
+        }
+      });
 
       if (!form.checkValidity() || customError) {
+        trackEvent("submit_error", {
+          error_message: "client_validation_failed",
+          draft_data: payload,
+          metadata: {
+            validation_tips: [customError || "Please review required fields and try again."]
+          }
+        });
         setStatus(customError || "Please review required fields and try again.", true);
         form.reportValidity();
         return;
@@ -721,11 +785,16 @@
         if (!response.ok) {
           throw new Error(data.error || "Could not submit artist application.");
         }
+        trackEvent("submit_success", { application_id: data.id || null });
         localStorage.removeItem(draftKey);
         form.style.display = "none";
         successPanel.classList.add("show");
         successPanel.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch (error) {
+        trackEvent("submit_error", {
+          error_message: error.message || "submit_exception",
+          draft_data: payload
+        });
         setStatus(error.message || "Could not submit. Please try again.", true);
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit artist application";
@@ -733,6 +802,7 @@
     });
 
     restoreDraft();
+    trackEvent("page_visit");
   </script>
 </body>
 </html>
