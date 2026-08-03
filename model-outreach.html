@@ -490,15 +490,28 @@
 
     .role-media {
       display: grid;
-      grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
-      gap: 18px;
-      align-items: center;
+      grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
       margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .role-media > div {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
     }
 
     .role-video-frame {
-      width: min(100%, 360px);
-      aspect-ratio: 48 / 73;
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 3 / 4;
+      margin: 0;
+      justify-self: start;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.12);
@@ -872,7 +885,7 @@
       .meet-card { grid-template-columns: 1fr; }
       .meet-photos { max-width: 620px; }
       .role-media { grid-template-columns: 1fr; }
-      .role-video-frame { width: min(100%, 340px); }
+      .role-video-frame { justify-self: center; }
       .process-thumb { position: relative; top: auto; max-width: 420px; }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .top-nav .links { overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
@@ -921,6 +934,30 @@
       .section-media-grid { grid-template-columns: 1fr; }
       .meet-photos { grid-template-columns: 1fr; }
       .meet-photo { max-height: 520px; }
+      .role-media {
+        padding: 12px;
+        gap: 14px;
+      }
+      .role-video-frame {
+        max-width: 100%;
+        border-radius: 14px;
+      }
+      .diagram {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+        margin: 4px 0;
+      }
+      .step-pill {
+        width: 100%;
+      }
+      .step-arrow {
+        justify-self: center;
+        transform: rotate(90deg);
+      }
+      .role-media .note {
+        margin-top: 0;
+      }
       .top-nav .links {
         display: flex;
         flex-wrap: nowrap;
