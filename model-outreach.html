@@ -388,6 +388,18 @@
       object-fit: cover;
     }
 
+    .meet-video {
+      grid-column: 1 / -1;
+      aspect-ratio: 16 / 9;
+    }
+
+    .meet-video video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .card {
       padding: clamp(20px, 3vw, 26px);
     }
@@ -1128,6 +1140,11 @@
           </figure>
           <figure class="meet-photo">
             <img src="assets/photos/meet-matthew-collab.jpg" alt="Matthew with a model in front of an MVP Media display" loading="lazy">
+          </figure>
+          <figure class="meet-photo meet-video">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/photos/meet-matthew-profile-loop-poster.jpg" aria-label="MVP Media behind-the-scenes video">
+              <source src="assets/videos/meet-matthew-profile-loop.mp4" type="video/mp4">
+            </video>
           </figure>
         </div>
       </article>
