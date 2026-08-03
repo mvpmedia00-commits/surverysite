@@ -494,6 +494,7 @@
             <option>Experienced body paint artist</option>
           </select></div>
           <div class="field"><label for="portfolioLink">Portfolio / sample work link</label><input id="portfolioLink" placeholder="Website, Google Drive, Instagram, Dropbox..."></div>
+          <div class="field"><label for="facePhotoLink">Recent face photo link *</label><input id="facePhotoLink" required placeholder="Public Google Drive, Instagram, Dropbox, or portfolio image link"></div>
           <div class="field"><label for="website">Website</label><input id="website" placeholder="https://..."></div>
           <div class="field full"><label for="artistStrengths">Describe your painting/drawing strengths *</label><textarea id="artistStrengths" required placeholder="Line work, realism, abstract color, airbrush, portraits, lettering, speed painting, concept sketching..."></textarea></div>
           <div class="field full"><label for="toolsMaterials">Tools, materials, or software you use</label><textarea id="toolsMaterials" placeholder="Brushes, pencils, markers, acrylic, oil, watercolor, aerosol, Procreate, Photoshop, Illustrator, airbrush, canvas, wood, fabric..."></textarea></div>
@@ -654,6 +655,7 @@
       experience_level: value("experienceLevel"),
       body_paint_experience: value("bodyPaintExperience"),
       portfolio_link: value("portfolioLink"),
+      face_photo_link: value("facePhotoLink"),
       website: value("website"),
       artist_strengths: value("artistStrengths"),
       tools_materials: value("toolsMaterials"),
@@ -693,6 +695,7 @@
           experience_level: "experienceLevel",
           body_paint_experience: "bodyPaintExperience",
           portfolio_link: "portfolioLink",
+          face_photo_link: "facePhotoLink",
           website: "website",
           artist_strengths: "artistStrengths",
           tools_materials: "toolsMaterials",
@@ -734,6 +737,9 @@
       }
       if (payload.preferred_work.length === 0) {
         return "Please select at least one work type that interests you.";
+      }
+      if (!payload.face_photo_link) {
+        return "Please provide a recent face photo link. MVP Media is public-facing and needs to know who is applying.";
       }
       if (!payload.consents.includes("truthful") || !payload.consents.includes("contact")) {
         return "Please confirm all required consent items.";
