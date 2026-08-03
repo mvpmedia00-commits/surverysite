@@ -314,11 +314,18 @@
       border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .hero-photo img {
+    .hero-photo img,
+    .hero-photo iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
+    }
+
+    .hero-photo img { object-fit: cover; }
+
+    .hero-photo iframe {
+      border: 0;
+      background: #050403;
     }
 
     .featured-photos {
@@ -333,7 +340,8 @@
       grid-template-columns: 1fr;
     }
 
-    .featured-photos img {
+    .featured-photos img,
+    .featured-photos iframe {
       min-height: 344px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.1);
@@ -463,15 +471,21 @@
     }
 
     .media-frame img,
-    .media-frame video {
+    .media-frame video,
+    .media-frame iframe {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .media-frame video {
+    .media-frame video,
+    .media-frame iframe {
       background: #050403;
+    }
+
+    .media-frame iframe {
+      border: 0;
     }
 
     .role-media {
@@ -727,11 +741,16 @@
     }
 
     .section-thumb img,
-    .section-thumb video {
+    .section-thumb video,
+    .section-thumb iframe {
       width: 100%;
       height: 100%;
       display: block;
       object-fit: cover;
+    }
+
+    .section-thumb iframe {
+      border: 0;
     }
 
     .process-layout {
@@ -968,7 +987,7 @@
         </div>
       </div>
       <div class="hero-photo featured-photos hero-feature" aria-label="MVP Media body paint and figure modeling example">
-        <img src="https://lh3.googleusercontent.com/d/1opJK2BvIrNIZPPsh0l7Pa6nbFASChrID=s1600" data-fallbacks="https://res.cloudinary.com/dale5sd8p/image/upload/v1785605567/IMG_2548_w3fawy.jpg|assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg" alt="MVP Media body paint modeling hero example" loading="eager">
+        <iframe src="https://drive.google.com/file/d/1MiyZCkQvzK8y4jzVJUF2NMbjzvdRt_pp/preview" title="MVP Media modeling direction hero video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="eager"></iframe>
       </div>
     </section>
 
@@ -1286,10 +1305,10 @@
       </p>
       <div class="section-media-grid" aria-label="Body paint and figure modeling examples">
         <figure class="section-thumb">
-          <img src="assets/photos/figure-modeling-bodypaint-01.jpg" alt="Body paint figure modeling example under blue studio light" loading="lazy">
+          <iframe src="https://drive.google.com/file/d/15F6KeQuw8gQjs3gRzk0oELaV2FNT6zTg/preview" title="MVP Media direction and limits video one" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </figure>
         <figure class="section-thumb">
-          <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Body paint figure modeling example with painted wings" loading="lazy">
+          <iframe src="https://drive.google.com/file/d/1JIPPQMKM83g72gNRYFLdJwCaYyNynPFF/preview" title="MVP Media direction and limits video two" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </figure>
       </div>
       <div class="note">Nothing is left to chance on shoot day. MVP Media sets the direction, and every look, pose, and expectation is locked in before the session begins. If a required element falls outside those pre-agreed limits, the project simply isn’t the right fit.</div>
