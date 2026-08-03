@@ -594,6 +594,30 @@
       margin-top: 14px;
     }
 
+    .logo-showcase {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .logo-card {
+      aspect-ratio: 3 / 4;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050403;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+    }
+
+    .logo-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .feature-card {
       padding: 18px;
       border-radius: 18px;
@@ -957,6 +981,7 @@
         min-height: 240px;
         max-height: 320px;
       }
+      .logo-showcase { grid-template-columns: 1fr; }
       .section-media-grid { grid-template-columns: 1fr; }
       .meet-photos { grid-template-columns: 1fr; }
       .meet-photo { max-height: 520px; }
@@ -1174,6 +1199,14 @@
         <p>
           Shoots are planned, structured, and led so the final images reflect a cohesive artistic point of view.
         </p>
+        <div class="logo-showcase" aria-label="MVP Media branded photography artwork">
+          <figure class="logo-card">
+            <img src="assets/photos/mvp-action-figure-logo.png" alt="MVP Media LLC Photography action figure logo artwork" loading="lazy">
+          </figure>
+          <figure class="logo-card">
+            <img src="assets/photos/mvp-professional-photographer-logo.jpg" alt="MVP professional photographer logo artwork" loading="lazy">
+          </figure>
+        </div>
         <div class="feature-grid">
           <div class="feature-card">
             <h3>Creative Direction</h3>
