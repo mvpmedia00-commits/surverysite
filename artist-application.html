@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media | Artist Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #100d0b;
+      --panel: #181310;
+      --panel-2: #211913;
+      --text: #fbf4ec;
+      --muted: #bdaea2;
+      --accent: #b7442f;
+      --accent-2: #f0dfc7;
+      --green: #4fa899;
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 22px 48px rgba(0,0,0,0.32);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, rgba(183,68,47,0.28), transparent 26%), linear-gradient(180deg, #16110d 0%, var(--bg) 100%);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; }
+
+    .page-shell {
+      width: min(1120px, 94vw);
+      margin: 0 auto 48px;
+      padding-bottom: 24px;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0 18px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(17,14,12,0.86);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      color: var(--accent-2);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.84rem;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.88rem;
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .links a:hover {
+      color: var(--text);
+      background: rgba(183,68,47,0.16);
+    }
+
+    .hero, .card, form {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 26px;
+      align-items: center;
+      padding: clamp(24px, 4vw, 42px);
+      margin-bottom: 16px;
+    }
+
+    .eyebrow, .section-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(79,168,153,0.28);
+      background: rgba(79,168,153,0.12);
+      color: #d9fff7;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4.6vw, 3.6rem);
+      max-width: 760px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(1.55rem, 2.5vw, 2rem);
+      color: #ffd8c3;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      color: var(--accent-2);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    p, li {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .lead { font-size: 1.02rem; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn, button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease;
+    }
+
+    .btn:hover, button:hover { transform: translateY(-2px); }
+
+    .btn-primary, button {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #8f2f20);
+      box-shadow: 0 14px 28px rgba(183,68,47,0.24);
+    }
+
+    .btn-secondary {
+      color: #fff;
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.36);
+    }
+
+    .hero-media {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px;
+      min-height: 420px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      background: rgba(0,0,0,0.28);
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      min-height: 190px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050403;
+    }
+
+    .hero-media img:first-child {
+      grid-row: span 2;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .card {
+      padding: clamp(20px, 3vw, 26px);
+      margin-bottom: 16px;
+    }
+
+    .feature {
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .feature strong {
+      display: block;
+      color: var(--accent-2);
+      margin-bottom: 6px;
+    }
+
+    form {
+      padding: clamp(20px, 3vw, 28px);
+      margin-bottom: 16px;
+    }
+
+    fieldset {
+      margin: 0 0 18px;
+      padding: 0 0 18px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    legend {
+      width: 100%;
+      margin-bottom: 14px;
+      color: #ffd8c3;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label, .sub-label {
+      color: var(--accent-2);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.32);
+      color: var(--text);
+      font: inherit;
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 118px;
+      resize: vertical;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(79,168,153,0.75);
+      box-shadow: 0 0 0 3px rgba(79,168,153,0.14);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px 12px;
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.035);
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .choice input {
+      width: auto;
+      margin-top: 5px;
+      accent-color: var(--accent);
+    }
+
+    .submit-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .status {
+      min-height: 28px;
+      color: #d9fff7;
+      font-weight: 700;
+    }
+
+    .status.error { color: #ffb6a4; }
+
+    .success-panel {
+      display: none;
+      padding: 22px;
+      border: 1px solid rgba(79,168,153,0.32);
+      border-radius: 18px;
+      background: rgba(79,168,153,0.11);
+    }
+
+    .success-panel.show { display: block; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.58);
+      margin: 22px 0 0;
+    }
+
+    @media (max-width: 860px) {
+      .hero, .grid, .form-grid { grid-template-columns: 1fr; }
+      .hero-media { min-height: 300px; }
+      .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .top-nav { border-radius: 18px; align-items: flex-start; }
+      .links { overflow-x: auto; white-space: nowrap; flex-wrap: nowrap; padding-bottom: 2px; }
+    }
+
+    @media (max-width: 560px) {
+      .top-nav { flex-direction: column; }
+      .hero, .card, form { border-radius: 18px; }
+      .hero-actions, .submit-row { flex-direction: column; align-items: stretch; }
+      .btn, button { width: 100%; }
+      .hero-media {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        min-height: 0;
+      }
+      .hero-media img {
+        min-height: 0;
+        height: auto;
+        aspect-ratio: 1;
+      }
+      .hero-media img:first-child { grid-row: auto; }
+      .choice-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="top-nav" aria-label="Page navigation">
+      <div class="brand">MVP Media</div>
+      <div class="links">
+        <a href="/model-outreach.html">For Models</a>
+        <a href="#roles">Artist Roles</a>
+        <a href="#applicationForm">Apply</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Artist Applications</div>
+        <h1>Paint, Draw, and Build Visual Concepts With MVP Media.</h1>
+        <p class="lead">
+          MVP Media is looking for artists who can paint, draw, sketch concepts, assist with body-paint designs, and help turn creative ideas into finished visual work.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#applicationForm">Apply as an artist</a>
+          <a class="btn btn-secondary" href="https://www.instagram.com/great.camerawork/" target="_blank" rel="noopener noreferrer">View Instagram</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-label="MVP Media artist and body paint examples">
+        <img src="assets/photos/figure-modeling-bodypaint-02.jpg" alt="Body paint artwork example with painted wings">
+        <img src="assets/photos/figure-modeling-bodypaint-01.jpg" alt="Body paint artwork under blue light">
+        <img src="assets/photos/session-bodypaint-process.jpg" alt="Body paint production setup">
+      </div>
+    </section>
+
+    <section class="card" id="roles">
+      <span class="section-kicker">Who This Is For</span>
+      <h2>Artist Roles</h2>
+      <p>
+        This application is for visual artists, painters, illustrators, sketch artists, body-paint assistants, makeup artists with painting skills, and creative collaborators who want to help develop or execute body-art concepts.
+      </p>
+      <div class="grid">
+        <div class="feature"><strong>Body Paint Support</strong>Help plan colors, line work, placement, touch-ups, and detail painting during creative sessions.</div>
+        <div class="feature"><strong>Concept Sketching</strong>Create sketches, mood boards, references, and visual ideas before production day.</div>
+        <div class="feature"><strong>Creative Production</strong>Assist with props, painted backdrops, wearable art, styling details, or set pieces.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <span class="section-kicker">Before You Apply</span>
+      <h2>What Matters Most</h2>
+      <div class="grid">
+        <div class="feature"><strong>Portfolio</strong>A website, Instagram, Google Drive folder, or photos of your work are enough for the first review.</div>
+        <div class="feature"><strong>Reliability</strong>Show up prepared, communicate clearly, and be comfortable working around models and production boundaries.</div>
+        <div class="feature"><strong>Creative Range</strong>Painting and drawing skill matters more than formal credentials. Beginners with strong work may still apply.</div>
+      </div>
+    </section>
+
+    <form id="applicationForm" novalidate>
+      <span class="section-kicker">Apply</span>
+      <h2>Artist Application</h2>
+      <p class="lead">Tell me what you make, how you work, and what kind of artist role fits you best.</p>
+
+      <fieldset>
+        <legend>1. Contact</legend>
+        <div class="form-grid">
+          <div class="field"><label for="fullName">Full name *</label><input id="fullName" required autocomplete="name"></div>
+          <div class="field"><label for="preferredName">Preferred name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="age">Age *</label><input id="age" required type="number" min="18" inputmode="numeric"></div>
+          <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email"></div>
+          <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" autocomplete="tel"></div>
+          <div class="field"><label for="instagram">Instagram</label><input id="instagram" placeholder="@handle or https://..."></div>
+          <div class="field"><label for="city">City *</label><input id="city" required autocomplete="address-level2"></div>
+          <div class="field"><label for="stateProvince">State / Province</label><input id="stateProvince" autocomplete="address-level1"></div>
+          <div class="field"><label for="country">Country *</label><input id="country" required value="United States" autocomplete="country-name"></div>
+          <div class="field"><label for="hearAbout">How did you hear about this? *</label><input id="hearAbout" required></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Art Skills</legend>
+        <div class="field full">
+          <span class="sub-label">What do you do? *</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Painting">Painting</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Drawing">Drawing</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Illustration">Illustration</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Body paint">Body paint</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Makeup artistry">Makeup artistry</label>
+            <label class="choice"><input type="checkbox" name="artistDisciplines" value="Set or prop painting">Set or prop painting</label>
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top:14px;">
+          <div class="field"><label for="experienceLevel">Experience level *</label><select id="experienceLevel" required>
+            <option value="">Select one</option>
+            <option>Beginner with samples</option>
+            <option>Intermediate</option>
+            <option>Experienced</option>
+            <option>Professional / paid artist</option>
+          </select></div>
+          <div class="field"><label for="bodyPaintExperience">Body paint experience</label><select id="bodyPaintExperience">
+            <option value="">Select one</option>
+            <option>No body paint experience yet</option>
+            <option>Some practice</option>
+            <option>Worked on body paint shoots</option>
+            <option>Experienced body paint artist</option>
+          </select></div>
+          <div class="field"><label for="portfolioLink">Portfolio / sample work link</label><input id="portfolioLink" placeholder="Website, Google Drive, Instagram, Dropbox..."></div>
+          <div class="field"><label for="website">Website</label><input id="website" placeholder="https://..."></div>
+          <div class="field full"><label for="artistStrengths">Describe your painting/drawing strengths *</label><textarea id="artistStrengths" required placeholder="Line work, realism, abstract color, airbrush, portraits, lettering, speed painting, concept sketching..."></textarea></div>
+          <div class="field full"><label for="toolsMaterials">Tools, materials, or software you use</label><textarea id="toolsMaterials" placeholder="Brushes, airbrush, acrylic, cosmetic body paint, Procreate, Photoshop, pencils, markers..."></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Work Fit</legend>
+        <div class="field full">
+          <span class="sub-label">What kind of work interests you? *</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Body paint assistant">Body paint assistant</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Lead body paint artist">Lead body paint artist</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Concept sketches">Concept sketches</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Painted backdrops or props">Painted backdrops or props</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Creative direction support">Creative direction support</label>
+            <label class="choice"><input type="checkbox" name="preferredWork" value="Practice or test shoots">Practice or test shoots</label>
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top:14px;">
+          <div class="field"><label for="travelWilling">Can you travel for shoots?</label><select id="travelWilling">
+            <option value="">Select one</option>
+            <option>Chicago only</option>
+            <option>Chicago suburbs</option>
+            <option>Open to travel with expenses discussed</option>
+            <option>Remote concept work only</option>
+          </select></div>
+          <div class="field"><label for="travelDistance">Travel notes</label><input id="travelDistance" placeholder="Distance, transport limits, remote only..."></div>
+          <div class="field full">
+            <span class="sub-label">General availability</span>
+            <div class="choice-grid">
+              <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Weekends">Weekends</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Short notice">Short notice</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Planned projects only">Planned projects only</label>
+              <label class="choice"><input type="checkbox" name="availability" value="Remote concept work">Remote concept work</label>
+            </div>
+          </div>
+          <div class="field full"><label for="availabilityNotes">Availability notes</label><textarea id="availabilityNotes"></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Compensation and Notes</legend>
+        <div class="form-grid">
+          <div class="field full"><label for="expectedRate">Expected rate or compensation range *</label><input id="expectedRate" required placeholder="Hourly, day rate, project rate, open to discuss..."></div>
+          <div class="field full"><label for="whyWork">Why do you want to work with MVP Media? *</label><textarea id="whyWork" required></textarea></div>
+          <div class="field full"><label for="goodFit">What makes you a good fit for body paint, drawing, or creative production work? *</label><textarea id="goodFit" required></textarea></div>
+          <div class="field full"><label for="anythingElse">Anything else I should know?</label><textarea id="anythingElse"></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>5. Confirmation</legend>
+        <div class="choice-grid">
+          <label class="choice"><input type="checkbox" name="consents" value="adult" required>I confirm I am at least 18 years old.</label>
+          <label class="choice"><input type="checkbox" name="consents" value="truthful" required>I confirm this application is truthful.</label>
+          <label class="choice"><input type="checkbox" name="consents" value="contact" required>I agree MVP Media may contact me about artist opportunities.</label>
+        </div>
+      </fieldset>
+
+      <div class="submit-row">
+        <button id="submitBtn" type="submit">Submit artist application</button>
+        <p class="status" id="submitStatus" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <section class="success-panel" id="successPanel">
+      <h2>Application Received</h2>
+      <p>Thank you. Your artist application has been sent to MVP Media for review.</p>
+    </section>
+
+    <p class="footer-note">MVP Media Photography - artist applications for adults 18+. Concepts, rates, expectations, and boundaries are discussed before any project is confirmed.</p>
+  </main>
+
+  <script>
+    const form = document.getElementById("applicationForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitStatus = document.getElementById("submitStatus");
+    const successPanel = document.getElementById("successPanel");
+    const draftKey = "mvp-artist-application-draft";
+
+    const value = (id) => document.getElementById(id).value.trim();
+    const checkedValues = (name) => Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
+
+    const setStatus = (message, isError = false) => {
+      submitStatus.textContent = message;
+      submitStatus.classList.toggle("error", isError);
+    };
+
+    const buildPayload = () => ({
+      full_name: value("fullName"),
+      preferred_name: value("preferredName"),
+      age: value("age"),
+      email: value("email"),
+      phone: value("phone"),
+      instagram: value("instagram"),
+      city: value("city"),
+      state_province: value("stateProvince"),
+      country: value("country"),
+      hear_about: value("hearAbout"),
+      artist_disciplines: checkedValues("artistDisciplines"),
+      preferred_work: checkedValues("preferredWork"),
+      experience_level: value("experienceLevel"),
+      body_paint_experience: value("bodyPaintExperience"),
+      portfolio_link: value("portfolioLink"),
+      website: value("website"),
+      artist_strengths: value("artistStrengths"),
+      tools_materials: value("toolsMaterials"),
+      travel_willing: value("travelWilling"),
+      travel_distance: value("travelDistance"),
+      availability: checkedValues("availability"),
+      availability_notes: value("availabilityNotes"),
+      expected_rate: value("expectedRate"),
+      why_work: value("whyWork"),
+      good_fit: value("goodFit"),
+      anything_else: value("anythingElse"),
+      consents: checkedValues("consents")
+    });
+
+    const saveDraft = () => {
+      try {
+        localStorage.setItem(draftKey, JSON.stringify(buildPayload()));
+      } catch {}
+    };
+
+    const restoreDraft = () => {
+      try {
+        const draft = JSON.parse(localStorage.getItem(draftKey) || "{}");
+        const map = {
+          full_name: "fullName",
+          preferred_name: "preferredName",
+          age: "age",
+          email: "email",
+          phone: "phone",
+          instagram: "instagram",
+          city: "city",
+          state_province: "stateProvince",
+          country: "country",
+          hear_about: "hearAbout",
+          experience_level: "experienceLevel",
+          body_paint_experience: "bodyPaintExperience",
+          portfolio_link: "portfolioLink",
+          website: "website",
+          artist_strengths: "artistStrengths",
+          tools_materials: "toolsMaterials",
+          travel_willing: "travelWilling",
+          travel_distance: "travelDistance",
+          availability_notes: "availabilityNotes",
+          expected_rate: "expectedRate",
+          why_work: "whyWork",
+          good_fit: "goodFit",
+          anything_else: "anythingElse"
+        };
+
+        Object.entries(map).forEach(([key, id]) => {
+          if (draft[key] !== undefined) {
+            document.getElementById(id).value = draft[key];
+          }
+        });
+
+        ["artist_disciplines", "preferred_work", "availability", "consents"].forEach((key) => {
+          const name = key === "artist_disciplines" ? "artistDisciplines" : key === "preferred_work" ? "preferredWork" : key;
+          (draft[key] || []).forEach((item) => {
+            const input = Array.from(form.querySelectorAll(`input[name="${name}"]`)).find((option) => option.value === item);
+            if (input) input.checked = true;
+          });
+        });
+      } catch {}
+    };
+
+    const validatePayload = (payload) => {
+      if (!payload.email && !payload.phone && !payload.instagram) {
+        return "Please provide at least one contact method: email, phone, or Instagram.";
+      }
+      if (payload.artist_disciplines.length === 0) {
+        return "Please select at least one art discipline.";
+      }
+      if (payload.preferred_work.length === 0) {
+        return "Please select at least one work type that interests you.";
+      }
+      if (!payload.consents.includes("adult") || !payload.consents.includes("truthful") || !payload.consents.includes("contact")) {
+        return "Please confirm all required consent items.";
+      }
+      return "";
+    };
+
+    form.addEventListener("input", saveDraft);
+    form.addEventListener("change", saveDraft);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = buildPayload();
+      const customError = validatePayload(payload);
+
+      if (!form.checkValidity() || customError) {
+        setStatus(customError || "Please review required fields and try again.", true);
+        form.reportValidity();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+      setStatus("Sending artist application...");
+
+      try {
+        const response = await fetch("/api/submit-artist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || "Could not submit artist application.");
+        }
+        localStorage.removeItem(draftKey);
+        form.style.display = "none";
+        successPanel.classList.add("show");
+        successPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (error) {
+        setStatus(error.message || "Could not submit. Please try again.", true);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit artist application";
+      }
+    });
+
+    restoreDraft();
+  </script>
+</body>
+</html>

@@ -28,6 +28,16 @@
       "source": "/artistic-nude-survey.html",
       "destination": "/artistic-nude-survey-en",
       "permanent": true
+    },
+    {
+      "source": "/artists",
+      "destination": "/artist-application",
+      "permanent": false
+    },
+    {
+      "source": "/artist",
+      "destination": "/artist-application",
+      "permanent": false
     }
   ],
   "headers": [
