@@ -141,7 +141,7 @@
                 <div class="hidden md:flex items-center gap-x-8 text-sm">
                     <a href="#jobs" class="hover:text-white transition-colors">Oportunidades</a>
                     <a href="#quiz" class="hover:text-white transition-colors">Encuentra Tu Match</a>
-                    <a href="#swipe" class="hover:text-white transition-colors">Modo Swipe</a>
+                    <a href="#swipe" class="hover:text-white transition-colors">Modo Deslizar</a>
                     <button onclick="showCreatorDashboard()"
                             class="px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-full flex items-center gap-x-2">
                         <i class="fa-solid fa-user-shield text-xs"></i>
@@ -238,15 +238,15 @@
 
                 <div class="flex flex-wrap gap-2 mt-4">
                     <span class="mood-tag">Bodypaint</span>
-                    <span class="mood-tag">Studio</span>
+                    <span class="mood-tag">Estudio</span>
                     <span class="mood-tag">Sensual</span>
-                    <span class="mood-tag">Fine Art</span>
+                    <span class="mood-tag">Bellas Artes</span>
                 </div>
             </div>
 
             <div class="md:text-right">
                 <div class="text-sm text-zinc-400 mb-1">Compensacion</div>
-                <div class="text-2xl font-semibold">$450–$650 <span class="text-xs font-normal text-zinc-500">/ day</span></div>
+                <div class="text-2xl font-semibold">$450-$650 <span class="text-xs font-normal text-zinc-500">/ dia</span></div>
                 <div class="text-xs text-emerald-400 mt-0.5">Pago • 18+ • 3 cupos disponibles</div>
 
                 <button onclick="applyToJob(4)"
@@ -352,7 +352,7 @@
                 <button onclick="showSwipeMode()"
                         class="flex items-center gap-x-2 px-4 h-9 border border-zinc-700 hover:bg-zinc-900 rounded-2xl text-xs font-medium">
                     <i class="fa-solid fa-hand-pointer"></i>
-                    <span>Probar Modo Swipe</span>
+                    <span>Probar Modo Deslizar</span>
                 </button>
             </div>
         </div>
@@ -372,14 +372,14 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2" id="filter-buttons">
-                    <button onclick="toggleFilter(this, 'all')" class="filter-btn active px-5 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="all">All</button>
-                    <button onclick="toggleFilter(this, 'beginner')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="beginner">Principiante Friendly</button>
-                    <button onclick="toggleFilter(this, 'paid')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="paid">Paid</button>
+                    <button onclick="toggleFilter(this, 'all')" class="filter-btn active px-5 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="all">Todo</button>
+                    <button onclick="toggleFilter(this, 'beginner')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="beginner">Apto Para Principiantes</button>
+                    <button onclick="toggleFilter(this, 'paid')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="paid">Pagado</button>
                     <button onclick="toggleFilter(this, '18+')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="18+">18+</button>
 
                     <div class="w-px h-6 bg-zinc-800 mx-1"></div>
 
-                    <button onclick="toggleFilter(this, 'portrait')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="portrait">Portrait</button>
+                    <button onclick="toggleFilter(this, 'portrait')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="portrait">Retrato</button>
                     <button onclick="toggleFilter(this, 'boudoir')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="boudoir">Glamour</button>
                     <button onclick="toggleFilter(this, 'bodypaint')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="bodypaint">Bodypaint</button>
                     <button onclick="toggleFilter(this, 'erotic')" class="filter-btn px-4 py-2 text-xs font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl" data-filter="erotic">Bellas Artes / Sensual</button>
@@ -407,7 +407,7 @@
 
     <div id="swipe" class="max-w-screen-2xl mx-auto px-8 py-14 border-t border-zinc-800 bg-zinc-950">
         <div class="max-w-md mx-auto text-center mb-8">
-            <h2 class="text-3xl font-semibold tracking-tight">Modo Swipe</h2>
+            <h2 class="text-3xl font-semibold tracking-tight">Modo Deslizar</h2>
             <p class="text-zinc-400 mt-2 text-sm">Acelera tus postulaciones. Desliza a la derecha lo que te interese.</p>
         </div>
 
@@ -439,7 +439,7 @@
                 <div class="grid sm:grid-cols-2 gap-3 text-sm">
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Oportunidades creativas pagadas</div>
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Acuerdos escritos claros</div>
-                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Principiante-friendly direction</div>
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Direccion apta para principiantes</div>
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Terminos profesionales de uso de imagen</div>
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Oportunidades para construir portafolio</div>
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">Ambiente de produccion respetuoso</div>
@@ -503,7 +503,7 @@
 
                     <div>
                         <label class="text-xs font-medium text-zinc-400 block mb-1.5">Instagram o enlace de portafolio</label>
-                        <input type="url" placeholder="https://instagram.com/yourhandle" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
+                        <input type="url" placeholder="https://instagram.com/tuusuario" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
                     </div>
 
                     <div>
@@ -514,7 +514,7 @@
                     <div>
                         <label class="text-xs font-medium text-zinc-400 block mb-2">Tu nivel de comodidad para este proyecto</label>
                         <select id="comfort-select" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#c8102e]">
-                            <option value="lingerie">Lenceria / Sugerido Nude</option>
+                            <option value="lingerie">Lenceria / Desnudo sugerido</option>
                             <option value="artistic-nude">Desnudo Artistico</option>
                             <option value="erotic-nude">Erotico / Desnudo Completo</option>
                             <option value="bodypaint">Bodypaint (desnudo permitido)</option>
@@ -556,133 +556,133 @@
         let jobs = [
             {
                 id: 1,
-                title: "General Model — Portrait & Fashion",
+                title: "Modelo General - Retrato y Moda",
                 category: "portrait",
                 level: 1,
-                compensation: "Paid / TFP / Collaboration",
-                location: "Studio + Location",
-                type: "Modeling / Portfolio Building",
+                compensation: "Pagado / TFP / Colaboracion",
+                location: "Estudio + locacion",
+                type: "Modelaje / Construccion de portafolio",
                 age: "18+",
-                experience: "Principiante Friendly",
+                experience: "Apto para principiantes",
                 comfort: ["no-nudity", "lingerie"],
-                mood: ["Urban", "Soft Glam", "Minimal"],
-                description: "Seeking models for portrait, fashion, lifestyle, editorial, and branding projects. Perfect for building a strong portfolio.",
-                goodFor: "New models, fashion enthusiasts, those wanting clean professional work",
-                includes: "Portraits, fashion looks, lifestyle imagery, social media content",
+                mood: ["Urbano", "Glamour suave", "Minimalista"],
+                description: "Buscamos modelos para retrato, moda, estilo de vida, editorial y proyectos de marca. Ideal para construir un portafolio fuerte.",
+                goodFor: "Modelos nuevas, personas interesadas en moda y quienes buscan trabajo profesional cuidado",
+                includes: "Retratos, looks de moda, imagenes de estilo de vida y contenido para redes sociales",
                 paid: true,
                 beginner: true,
                 featured: true
             },
             {
                 id: 2,
-                title: "Boudoir / Glamour Model",
+                title: "Modelo Boudoir / Glamour",
                 category: "boudoir",
                 level: 2,
-                compensation: "Paid or Portfolio Collaboration",
-                location: "Private Studio",
-                type: "Adult Creative / Glamour",
+                compensation: "Pagado o colaboracion de portafolio",
+                location: "Estudio privado",
+                type: "Creativo adulto / Glamour",
                 age: "18+",
-                experience: "Principiante to Intermediate",
+                experience: "Principiante a intermedio",
                 comfort: ["lingerie", "artistic-nude"],
-                mood: ["Sensual", "Luxury", "Soft Glam"],
-                description: "Casting for beautiful boudoir, glamour, lingerie, and implied nude photography. Pre-planned concepts with clear communication.",
-                goodFor: "Models comfortable with sensual and elegant imagery",
-                includes: "Lenceria sets, implied nude, sensual editorial, portfolio building",
+                mood: ["Sensual", "Lujo", "Glamour suave"],
+                description: "Casting para fotografia boudoir, glamour, lenceria y desnudo sugerido. Conceptos planificados con comunicacion clara.",
+                goodFor: "Modelos comodas con imagenes sensuales y elegantes",
+                includes: "Sets de lenceria, desnudo sugerido, editorial sensual y construccion de portafolio",
                 paid: true,
                 beginner: true,
                 featured: true
             },
             {
                 id: 3,
-                title: "Desnudo Artistico / Erotic Creative Model",
+                title: "Modelo De Desnudo Artistico / Creativo Erotico",
                 category: "erotic",
                 level: 4,
-                compensation: "Paid / Collaboration / Platform Agreement",
-                location: "Studio",
-                type: "Adult Creative Content",
-                age: "18+ only",
-                experience: "Intermediate+",
+                compensation: "Pagado / Colaboracion / Acuerdo de plataforma",
+                location: "Estudio",
+                type: "Contenido creativo adulto",
+                age: "Solo 18+",
+                experience: "Intermedio+",
                 comfort: ["artistic-nude", "erotic-nude"],
-                mood: ["Dark Editorial", "Sensual", "Bold"],
-                description: "Open calls for nude, erotic, and artistic nude projects. Focus on body-positive, empowered imagery and subscription-style content.",
-                goodFor: "Con experiencia models who enjoy creative freedom and sensual expression",
-                includes: "Fine art nude, erotic concepts, body-focused work, video elements",
+                mood: ["Editorial oscuro", "Sensual", "Audaz"],
+                description: "Convocatorias para proyectos de desnudo, erotico y desnudo artistico. Enfoque en imagenes corporales positivas, empoderadas y contenido tipo suscripcion.",
+                goodFor: "Modelos con experiencia que disfrutan la libertad creativa y la expresion sensual",
+                includes: "Desnudo de bellas artes, conceptos eroticos, trabajo enfocado en el cuerpo y elementos de video",
                 paid: true,
                 beginner: false,
                 featured: false
             },
             {
                 id: 4,
-                title: "Nude Bodypaint Model — Liquid Gold",
+                title: "Modelo Bodypaint Desnudo - Oro Liquido",
                 category: "bodypaint",
                 level: 3,
-                compensation: "$450–$650 / day",
-                location: "Private Studio",
-                type: "Artistic / Adult Creative",
+                compensation: "$450-$650 / dia",
+                location: "Estudio privado",
+                type: "Artistico / Creativo adulto",
                 age: "18+",
-                experience: "All Levels Welcome",
+                experience: "Todos los niveles bienvenidos",
                 comfort: ["bodypaint", "artistic-nude"],
-                mood: ["Bodypaint", "Fine Art", "Neon"],
-                description: "Artistic nude bodypaint series exploring color, texture, light, and movement. Professional body artist on set. Multiple creative looks.",
-                goodFor: "Models who enjoy transformation, color, and high-concept artistic work",
-                includes: "Full body paint, artistic nude poses, creative direction, high-end lighting",
+                mood: ["Bodypaint", "Bellas artes", "Neon"],
+                description: "Serie de bodypaint desnudo artistico explorando color, textura, luz y movimiento. Artista corporal profesional en set. Varios looks creativos.",
+                goodFor: "Modelos que disfrutan transformacion, color y trabajo artistico conceptual",
+                includes: "Pintura corporal completa, poses de desnudo artistico, direccion creativa e iluminacion de alto nivel",
                 paid: true,
                 beginner: true,
                 featured: true
             },
             {
                 id: 5,
-                title: "Social Media Content Creator / Reels Model",
+                title: "Creadora De Contenido Para Redes / Modelo De Reels",
                 category: "content",
                 level: 2,
-                compensation: "Paid / Revenue Share / Collab",
-                location: "Studio + On Location",
-                type: "Photo & Video Content",
+                compensation: "Pagado / Participacion en ingresos / Colaboracion",
+                location: "Estudio + locacion",
+                type: "Contenido de foto y video",
                 age: "18+",
-                experience: "Principiante to Con experiencia",
+                experience: "Principiante a con experiencia",
                 comfort: ["lingerie", "artistic-nude"],
-                mood: ["Urban", "Bold", "Minimal"],
-                description: "Creators wanted for Instagram Reels, TikTok, and promotional content. High-energy, flirty, and fashion-forward concepts.",
-                goodFor: "Outgoing creators who enjoy being on camera and building personal brands",
-                includes: "Short-form video, modeling, behind-the-scenes, branded content",
+                mood: ["Urbano", "Audaz", "Minimalista"],
+                description: "Buscamos creadoras para Instagram Reels, TikTok y contenido promocional. Conceptos con energia, coquetos y orientados a moda.",
+                goodFor: "Creadoras expresivas que disfrutan estar en camara y construir su marca personal",
+                includes: "Video corto, modelaje, detras de camaras y contenido de marca",
                 paid: true,
                 beginner: true,
                 featured: false
             },
             {
                 id: 6,
-                title: "High-Fashion Editorial Model",
+                title: "Modelo Editorial De Alta Moda",
                 category: "portrait",
                 level: 3,
-                compensation: "Paid",
-                location: "Studio + Rooftop",
-                type: "Fashion / Editorial",
+                compensation: "Pagado",
+                location: "Estudio + azotea",
+                type: "Moda / Editorial",
                 age: "18+",
-                experience: "Intermediate",
+                experience: "Intermedio",
                 comfort: ["lingerie", "artistic-nude"],
-                mood: ["Luxury", "Dark Editorial", "Magazine Style"],
-                description: "Editorial fashion shoot with dramatic lighting and high-fashion styling. Strong focus on posing, movement, and expression.",
-                goodFor: "Models with runway or strong posing experience looking for editorial tear sheets",
-                includes: "High-fashion looks, dramatic lighting, magazine-style imagery",
+                mood: ["Lujo", "Editorial oscuro", "Estilo revista"],
+                description: "Sesion editorial de moda con iluminacion dramatica y estilismo de alta moda. Enfoque fuerte en poses, movimiento y expresion.",
+                goodFor: "Modelos con experiencia en pasarela o poses que buscan imagenes editoriales",
+                includes: "Looks de alta moda, iluminacion dramatica e imagenes estilo revista",
                 paid: true,
                 beginner: false,
                 featured: true
             },
             {
                 id: 7,
-                title: "Outdoor Location Shoot — Golden Hour",
+                title: "Sesion En Exterior - Hora Dorada",
                 category: "portrait",
                 level: 2,
-                compensation: "TFP + Travel Stipend",
-                location: "Various Scenic Locations",
-                type: "Lifestyle / Fashion",
+                compensation: "TFP + apoyo de transporte",
+                location: "Varias locaciones escenicas",
+                type: "Estilo de vida / Moda",
                 age: "18+",
-                experience: "All Levels",
+                experience: "Todos los niveles",
                 comfort: ["no-nudity", "lingerie"],
-                mood: ["Soft Glam", "Urban", "Minimal"],
-                description: "Beautiful outdoor golden hour shoots in scenic locations. Wardrobe provided. Great for natural light portfolio work.",
-                goodFor: "Models who love natural environments and relaxed, authentic energy",
-                includes: "Fashion, lifestyle, natural light portraits, movement shots",
+                mood: ["Glamour suave", "Urbano", "Minimalista"],
+                description: "Sesiones hermosas en exterior durante la hora dorada en locaciones escenicas. Vestuario incluido. Ideal para portafolio con luz natural.",
+                goodFor: "Modelos que aman ambientes naturales y una energia relajada y autentica",
+                includes: "Moda, estilo de vida, retratos con luz natural y tomas en movimiento",
                 paid: false,
                 beginner: true,
                 featured: false
@@ -699,6 +699,14 @@
 
         function isMatureCategory(category) {
             return category === 'boudoir' || category === 'bodypaint' || category === 'erotic';
+        }
+
+        function comfortLabel(value) {
+            return value === 'no-nudity' ? 'Sin Desnudo' :
+                   value === 'lingerie' ? 'Lenceria' :
+                   value === 'artistic-nude' ? 'Desnudo Artistico' :
+                   value === 'erotic-nude' ? 'Desnudo Erotico' :
+                   value === 'bodypaint' ? 'Bodypaint' : value;
         }
 
         function setBoardSegment(button, segment) {
@@ -720,8 +728,8 @@
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center">
                         <i class="fa-solid fa-search text-4xl text-zinc-700 mb-4"></i>
-                        <p class="text-zinc-400">No opportunities match your current filters.</p>
-                        <button onclick="resetFilters()" class="mt-4 text-xs underline">Clear all filters</button>
+                        <p class="text-zinc-400">Ninguna oportunidad coincide con tus filtros actuales.</p>
+                        <button onclick="resetFilters()" class="mt-4 text-xs underline">Limpiar todos los filtros</button>
                     </div>
                 `;
                 return;
@@ -734,13 +742,7 @@
                 const levelColor = job.level <= 2 ? 'bg-emerald-900 text-emerald-300' :
                                   job.level === 3 ? 'bg-amber-900 text-amber-300' : 'bg-rose-900 text-rose-300';
 
-                const comfortBadges = job.comfort.map(c => {
-                    const label = c === 'no-nudity' ? 'Sin Desnudo' :
-                                 c === 'lingerie' ? 'Lenceria' :
-                                 c === 'artistic-nude' ? 'Desnudo Artistico' :
-                                 c === 'erotic-nude' ? 'Desnudo Erotico' : 'Bodypaint';
-                    return `<span class="px-2 py-px text-[9px] bg-zinc-800 rounded">${label}</span>`;
-                }).join('');
+                const comfortBadges = job.comfort.map(c => `<span class="px-2 py-px text-[9px] bg-zinc-800 rounded">${comfortLabel(c)}</span>`).join('');
 
                 const moodBadges = job.mood.slice(0, 3).map(m =>
                     `<span class="mood-tag">${m}</span>`
@@ -750,11 +752,11 @@
                     <div class="job-header p-5 flex flex-col justify-between" style="background: linear-gradient(135deg, #1f1f23 0%, #27272a 100%)">
                         <div class="flex justify-between items-start">
                             <div>
-                                <span class="level-badge ${levelColor}">LEVEL ${job.level}</span>
+                                <span class="level-badge ${levelColor}">NIVEL ${job.level}</span>
                                 ${job.beginner ? `<span class="ml-1.5 px-2 py-px text-[9px] bg-emerald-900/70 text-emerald-300 rounded">Principiante OK</span>` : ''}
                             </div>
-                            ${job.paid ? `<span class="text-[10px] px-2.5 py-px bg-emerald-900/70 text-emerald-300 rounded-full font-medium">PAID</span>` :
-                                         `<span class="text-[10px] px-2.5 py-px bg-zinc-700 text-zinc-300 rounded-full">TFP / COLLAB</span>`}
+                            ${job.paid ? `<span class="text-[10px] px-2.5 py-px bg-emerald-900/70 text-emerald-300 rounded-full font-medium">PAGADO</span>` :
+                                         `<span class="text-[10px] px-2.5 py-px bg-zinc-700 text-zinc-300 rounded-full">TFP / COLAB</span>`}
                         </div>
 
                         <div>
@@ -926,7 +928,7 @@
                 resultsDiv.innerHTML = `
                     <div class="text-zinc-500">
                         <i class="fa-solid fa-magic text-4xl mb-4 opacity-40"></i>
-                        <p class="text-sm">Answer a few more questions<br>to see personalized matches</p>
+                        <p class="text-sm">Responde unas preguntas mas<br>para ver matches personalizados</p>
                     </div>
                 `;
                 applyBtn.disabled = true;
@@ -966,7 +968,7 @@
                             <div class="font-medium text-sm truncate">${job.title}</div>
                             <div class="text-[10px] text-zinc-400">${job.compensation}</div>
                         </div>
-                        <div class="text-xs px-3 py-1 bg-zinc-800 rounded-xl whitespace-nowrap">View</div>
+                        <div class="text-xs px-3 py-1 bg-zinc-800 rounded-xl whitespace-nowrap">Ver</div>
                     </div>
                 `;
             });
@@ -1007,14 +1009,14 @@
             const modal = document.getElementById('job-modal');
             const content = document.getElementById('modal-content');
 
-            const levelText = job.level <= 2 ? 'Principiante Friendly' : job.level === 3 ? 'Intermediate' : 'Advanced Creative';
+            const levelText = job.level <= 2 ? 'Apto para principiantes' : job.level === 3 ? 'Intermedio' : 'Creativo avanzado';
 
             content.innerHTML = `
                 <div class="p-8">
                     <div class="flex justify-between items-start">
                         <div>
                             <div class="flex items-center gap-x-3">
-                                <span class="px-3 py-1 text-xs rounded-full ${job.paid ? 'bg-emerald-900 text-emerald-300' : 'bg-zinc-700'}">${job.paid ? 'PAID OPPORTUNITY' : 'TFP / COLLAB'}</span>
+                                <span class="px-3 py-1 text-xs rounded-full ${job.paid ? 'bg-emerald-900 text-emerald-300' : 'bg-zinc-700'}">${job.paid ? 'OPORTUNIDAD PAGADA' : 'TFP / COLAB'}</span>
                                 <span class="text-xs text-zinc-400">${job.age}</span>
                             </div>
                             <h2 class="text-4xl font-semibold tracking-tighter mt-3 pr-8">${job.title}</h2>
@@ -1030,12 +1032,12 @@
                                 <p class="text-zinc-300">${job.description}</p>
 
                                 <div class="mt-6">
-                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">GOOD FIT FOR</div>
+                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">IDEAL PARA</div>
                                     <p>${job.goodFor}</p>
                                 </div>
 
                                 <div class="mt-5">
-                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">WHAT THIS PROJECT INCLUDES</div>
+                                    <div class="font-medium text-xs tracking-widest text-zinc-400 mb-2">QUE INCLUYE ESTE PROYECTO</div>
                                     <p>${job.includes}</p>
                                 </div>
                             </div>
@@ -1043,27 +1045,26 @@
 
                         <div class="space-y-6 text-xs">
                             <div>
-                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">COMPENSATION</div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">COMPENSACION</div>
                                 <div class="text-lg font-semibold">${job.compensation}</div>
                             </div>
 
                             <div>
-                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">EXPERIENCE LEVEL</div>
-                                <div>Level ${job.level} — ${levelText}</div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">NIVEL DE EXPERIENCIA</div>
+                                <div>Nivel ${job.level} - ${levelText}</div>
                             </div>
 
                             <div>
-                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">COMFORT LEVELS</div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">NIVELES DE COMODIDAD</div>
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     ${job.comfort.map(c => {
-                                        const label = c.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
-                                        return `<span class="px-3 py-px bg-zinc-800 text-xs rounded-full">${label}</span>`;
+                                        return `<span class="px-3 py-px bg-zinc-800 text-xs rounded-full">${comfortLabel(c)}</span>`;
                                     }).join('')}
                                 </div>
                             </div>
 
                             <div>
-                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">MOOD / VIBE</div>
+                                <div class="font-medium text-xs tracking-widest text-zinc-400 mb-1.5">ESTILO / AMBIENTE</div>
                                 <div class="flex flex-wrap gap-1">${job.mood.map(m => `<span class="mood-tag">${m}</span>`).join('')}</div>
                             </div>
                         </div>
@@ -1071,12 +1072,12 @@
                 </div>
 
                 <div class="border-t border-zinc-700 px-8 py-5 bg-zinc-950 flex items-center justify-between">
-                    <button onclick="closeJobModal()" class="px-6 py-3 text-sm font-medium">Close</button>
+                    <button onclick="closeJobModal()" class="px-6 py-3 text-sm font-medium">Cerrar</button>
 
                     <div class="flex gap-x-3">
                         <button onclick="toggleSaveJob(${job.id}, this); event.target.closest('.modal').querySelector('button[onclick*=\'closeJobModal\']').click()"
                                 class="px-5 py-3 text-sm border border-zinc-700 hover:bg-zinc-900 rounded-2xl flex items-center gap-x-2">
-                            <i class="fa-regular fa-heart mr-1"></i> Save for Later
+                            <i class="fa-regular fa-heart mr-1"></i> Guardar para despues
                         </button>
 
                         <button onclick="closeJobModal(); applyToJob(${job.id})"
@@ -1194,8 +1195,8 @@
                 container.innerHTML = `
                     <div class="text-center py-8">
                         <i class="fa-solid fa-heart text-5xl text-emerald-500 mb-4"></i>
-                        <div class="font-medium">You've gone through today's matches!</div>
-                        <button onclick="initializeSwipe()" class="mt-5 text-xs px-6 py-2 border border-zinc-700 rounded-2xl">Start Over</button>
+                        <div class="font-medium">Ya revisaste los matches de hoy.</div>
+                        <button onclick="initializeSwipe()" class="mt-5 text-xs px-6 py-2 border border-zinc-700 rounded-2xl">Empezar de nuevo</button>
                     </div>
                 `;
                 return;
@@ -1209,8 +1210,8 @@
             card.innerHTML = `
                 <div class="p-5">
                     <div class="flex justify-between mb-4">
-                        <span class="level-badge ${job.level <= 2 ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'}">LEVEL ${job.level}</span>
-                        ${job.paid ? `<span class="text-emerald-400 text-xs">PAID</span>` : ''}
+                        <span class="level-badge ${job.level <= 2 ? 'bg-emerald-900 text-emerald-300' : 'bg-amber-900 text-amber-300'}">NIVEL ${job.level}</span>
+                        ${job.paid ? `<span class="text-emerald-400 text-xs">PAGADO</span>` : ''}
                     </div>
 
                     <div class="font-semibold text-2xl tracking-tight leading-none pr-4">${job.title}</div>
@@ -1311,7 +1312,7 @@
                         <div class="px-8 py-5 border-b border-zinc-700 flex items-center justify-between">
                             <div>
                                 <span class="font-semibold">MVP Media • Panel de Creadoras</span>
-                                <span class="ml-3 text-xs px-2 py-px bg-zinc-800 rounded">7 applicants this week</span>
+                                <span class="ml-3 text-xs px-2 py-px bg-zinc-800 rounded">7 solicitantes esta semana</span>
                             </div>
                             <button onclick="event.target.closest('.fixed').remove()" class="text-xl text-zinc-400 hover:text-white">×</button>
                         </div>
@@ -1320,46 +1321,46 @@
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="text-xs text-zinc-400 border-b border-zinc-700">
-                                        <th class="text-left pb-3 font-normal">Applicant</th>
-                                        <th class="text-left pb-3 font-normal">Applied For</th>
-                                        <th class="text-left pb-3 font-normal">Comfort</th>
-                                        <th class="text-left pb-3 font-normal">Fit Score</th>
-                                        <th class="text-left pb-3 font-normal">Status</th>
+                                        <th class="text-left pb-3 font-normal">Solicitante</th>
+                                        <th class="text-left pb-3 font-normal">Se postulo a</th>
+                                        <th class="text-left pb-3 font-normal">Comodidad</th>
+                                        <th class="text-left pb-3 font-normal">Puntaje de ajuste</th>
+                                        <th class="text-left pb-3 font-normal">Estado</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-zinc-800 text-xs">
                                     <tr>
                                         <td class="py-4">Aaliyah R. <span class="text-[10px] text-zinc-500">@aaliyahcreates</span></td>
-                                        <td class="py-4">Nude Bodypaint — Liquid Gold</td>
+                                        <td class="py-4">Bodypaint Desnudo - Oro Liquido</td>
                                         <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Bodypaint</span></td>
                                         <td class="py-4"><span class="font-mono text-emerald-400">94</span></td>
-                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Good Fit</span></td>
-                                        <td class="py-4"><button class="text-xs underline">Contact</button></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Buen ajuste</span></td>
+                                        <td class="py-4"><button class="text-xs underline">Contactar</button></td>
                                     </tr>
                                     <tr>
                                         <td class="py-4">Jordan K. <span class="text-[10px] text-zinc-500">@jordankmodel</span></td>
-                                        <td class="py-4">Boudoir / Glamour Model</td>
+                                        <td class="py-4">Modelo Boudoir / Glamour</td>
                                         <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Lenceria</span></td>
                                         <td class="py-4"><span class="font-mono text-emerald-400">81</span></td>
-                                        <td class="py-4"><span class="px-3 py-px bg-amber-900 text-amber-300 text-[10px] rounded">Needs Info</span></td>
-                                        <td class="py-4"><button class="text-xs underline">Contact</button></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-amber-900 text-amber-300 text-[10px] rounded">Necesita informacion</span></td>
+                                        <td class="py-4"><button class="text-xs underline">Contactar</button></td>
                                     </tr>
                                     <tr>
                                         <td class="py-4">Maya S. <span class="text-[10px] text-zinc-500">@mayasensual</span></td>
-                                        <td class="py-4">Desnudo Artistico / Erotic Creative</td>
+                                        <td class="py-4">Desnudo Artistico / Creativo Erotico</td>
                                         <td class="py-4"><span class="px-2 py-px bg-zinc-800 rounded text-[10px]">Desnudo Erotico</span></td>
                                         <td class="py-4"><span class="font-mono text-emerald-400">88</span></td>
-                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Scheduled</span></td>
-                                        <td class="py-4"><button class="text-xs underline">View Notes</button></td>
+                                        <td class="py-4"><span class="px-3 py-px bg-emerald-900 text-emerald-300 text-[10px] rounded">Programada</span></td>
+                                        <td class="py-4"><button class="text-xs underline">Ver notas</button></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="px-8 py-4 bg-zinc-950 text-xs flex justify-between items-center text-zinc-400">
-                            <div>Showing recent applicants. Full CRM available in Collab Expert.</div>
-                            <button class="underline">Export CSV</button>
+                            <div>Mostrando solicitantes recientes. CRM completo disponible en el panel de colaboracion.</div>
+                            <button class="underline">Exportar CSV</button>
                         </div>
                     </div>
                 </div>
@@ -1377,7 +1378,7 @@
             setInterval(() => {
                 days--;
                 if (days < 0) days = 0;
-                el.innerHTML = `Closes in ${days} day${days === 1 ? '' : 's'}`;
+                el.innerHTML = `Cierra en ${days} dia${days === 1 ? '' : 's'}`;
             }, 1000 * 60 * 60 * 24);
         }
 

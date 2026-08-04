@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media - Artist Application Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #f2ede3;
+      --panel: #fffdf9;
+      --text: #1d1a14;
+      --muted: #5e564b;
+      --accent: #7a3f1e;
+      --line: #d8cfc2;
+      --radius: 16px;
+      --shadow: 0 14px 30px rgba(20, 18, 14, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 92% 5%, rgba(122, 63, 30, 0.14), transparent 35%),
+        linear-gradient(180deg, #f8f3ea, var(--bg));
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      width: min(1100px, 94vw);
+      margin: 24px auto 36px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .head,
+    .card,
+    .chart-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .head h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+    }
+
+    .head p,
+    .status {
+      color: var(--muted);
+    }
+
+    .head-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn,
+    .toolbar-btn,
+    .actions button,
+    .modal-close {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--accent);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 7px 12px;
+      text-decoration: none;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .kpi-label {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .kpi-value {
+      margin: 6px 0 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .filters-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit;
+      background: #fff;
+      width: 100%;
+    }
+
+    .artist-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .artist {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .artist-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .artist-name {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .artist-meta {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pill-row,
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 1px solid #e1c7ae;
+      background: #fff7ed;
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 5px 9px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: 1px solid transparent;
+    }
+
+    .badge.pending { background: #fff5dc; color: #8a6511; border-color: #ecd39a; }
+    .badge.approved { background: #eaf8ef; color: #1f6d43; border-color: #bfe5cf; }
+    .badge.contacted,
+    .badge.scheduled { background: #eaf2fb; color: #285d8f; border-color: #bfd6ef; }
+    .badge.archived { background: #f1eef8; color: #5d438a; border-color: #d8cceb; }
+    .badge.denied { background: #fdeeee; color: #8f2e2e; border-color: #efc1c1; }
+
+    .actions .view-profile {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .chart-box canvas {
+      width: 100%;
+      height: 260px;
+    }
+
+    .modal {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      width: min(920px, 96vw);
+    }
+
+    .modal::backdrop { background: rgba(20, 18, 14, 0.45); }
+
+    .modal-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      padding: 18px;
+      box-shadow: 0 24px 60px rgba(20, 18, 14, 0.22);
+      max-height: 86vh;
+      overflow: auto;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title { margin: 0; }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .profile-section {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .profile-section.wide { grid-column: 1 / -1; }
+    .profile-section h3 { margin: 0 0 8px; font-size: 1rem; }
+    .profile-list { display: grid; gap: 6px; }
+    .profile-item { margin: 0; color: var(--muted); overflow-wrap: anywhere; }
+    .profile-item strong { color: var(--text); }
+
+    @media (max-width: 780px) {
+      .charts,
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/site-theme.css">
+</head>
+<body>
+  <main class="wrap">
+    <section class="head">
+      <h1>MVP Media - Artist Application Dashboard</h1>
+      <p>Review visual artists, body paint artists, illustrators, painters, and creative collaborators.</p>
+      <div class="head-actions">
+        <a class="nav-btn" href="/dashboard.html">Open Model Dashboard</a>
+        <a class="nav-btn" href="/artistic-nude-dashboard.html">Open Artistic Nude Dashboard</a>
+        <a class="nav-btn" href="/application-events-dashboard.html">Open Application Events Dashboard</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="status" id="status">Loading artist dashboard data...</p>
+      <div class="kpis">
+        <div class="kpi"><p class="kpi-label">Total Artists</p><p class="kpi-value" id="kpiTotal">0</p></div>
+        <div class="kpi"><p class="kpi-label">Top Discipline</p><p class="kpi-value" id="kpiDiscipline">-</p></div>
+        <div class="kpi"><p class="kpi-label">Top Work Type</p><p class="kpi-value" id="kpiWork">-</p></div>
+        <div class="kpi"><p class="kpi-label">Top Experience</p><p class="kpi-value" id="kpiExperience">-</p></div>
+        <div class="kpi"><p class="kpi-label">Pending</p><p class="kpi-value" id="kpiPending">0</p></div>
+        <div class="kpi"><p class="kpi-label">Approved</p><p class="kpi-value" id="kpiApproved">0</p></div>
+        <div class="kpi"><p class="kpi-label">Page Visits</p><p class="kpi-value" id="kpiVisits">0</p></div>
+        <div class="kpi"><p class="kpi-label">Save Errors</p><p class="kpi-value" id="kpiSaveErrors">0</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="filters-head">
+        <p class="status">Artist Review - click a card or View Artist Detail to open the full profile.</p>
+        <button class="toolbar-btn" id="exportCsvBtn" type="button">Export Filtered CSV</button>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="filterSearch">Search name/email/portfolio</label>
+          <input id="filterSearch" type="text" placeholder="Search artists">
+        </div>
+        <div class="field">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="contacted">Contacted</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="approved">Approved</option>
+            <option value="archived">Archived</option>
+            <option value="denied">Denied</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterExperience">Experience</label>
+          <select id="filterExperience"><option value="all">All</option></select>
+        </div>
+        <div class="field">
+          <label for="filterSource">Source</label>
+          <select id="filterSource"><option value="all">All</option></select>
+        </div>
+        <div class="field">
+          <label for="filterDiscipline">Discipline</label>
+          <select id="filterDiscipline"><option value="all">All</option></select>
+        </div>
+      </div>
+      <div class="artist-list" id="artistList"></div>
+    </section>
+
+    <section class="charts">
+      <article class="chart-box">
+        <h2>Artist Disciplines</h2>
+        <canvas id="disciplineBar"></canvas>
+      </article>
+      <article class="chart-box">
+        <h2>Preferred Work</h2>
+        <canvas id="workBar"></canvas>
+      </article>
+      <article class="chart-box">
+        <h2>Application Status</h2>
+        <canvas id="statusPie"></canvas>
+      </article>
+      <article class="chart-box">
+        <h2>Monthly Artist Applications</h2>
+        <canvas id="trendLine"></canvas>
+      </article>
+    </section>
+  </main>
+
+  <dialog class="modal" id="profileModal" aria-labelledby="profileTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="profileTitle">Artist Detail</h2>
+          <p class="status" id="profileSubtitle"></p>
+        </div>
+        <button type="button" class="modal-close" id="closeProfileModal" aria-label="Close artist detail">Close</button>
+      </div>
+      <div class="profile-grid" id="profileContent"></div>
+    </div>
+  </dialog>
+
+  <script>
+    const state = {
+      dashboard: null,
+      artists: [],
+      activeArtistId: null
+    };
+
+    const activeCharts = [];
+    const adminFetch = async (url, options = {}) => fetch(url, options);
+    const chartColors = ["#7a3f1e", "#0e6b62", "#805d98", "#da7c4f", "#4f7fa8", "#be5f77"];
+
+    const topKey = (counts) => {
+      const entries = Object.entries(counts || {});
+      if (entries.length === 0) return "-";
+      entries.sort((a, b) => b[1] - a[1]);
+      return entries[0][0];
+    };
+
+    const toSortedEntries = (obj) => Object.entries(obj || {}).sort((a, b) => b[1] - a[1]);
+    const destroyCharts = () => {
+      activeCharts.forEach((chart) => chart.destroy());
+      activeCharts.length = 0;
+    };
+
+    const formatDate = (value) => {
+      if (!value) return "";
+      try {
+        return new Date(value).toLocaleString();
+      } catch {
+        return value;
+      }
+    };
+
+    const formatList = (value) => Array.isArray(value) ? (value.length ? value.join(", ") : "-") : (value || "-");
+    const lineItem = (label, value) => `<p class="profile-item"><strong>${label}:</strong> ${value || "-"}</p>`;
+    const firstListValue = (value) => Array.isArray(value) && value.length ? value[0] : "Not specified";
+
+    const addOptions = (selectId, values) => {
+      const select = document.getElementById(selectId);
+      const current = select.value;
+      while (select.options.length > 1) select.remove(1);
+      values
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b))
+        .forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+      if (Array.from(select.options).some((option) => option.value === current)) {
+        select.value = current;
+      }
+    };
+
+    const renderProfile = (artist) => {
+      document.getElementById("profileSubtitle").textContent = `${artist.email || artist.phone || "No direct contact"} · Applied ${formatDate(artist.created_at)}`;
+      document.getElementById("profileContent").innerHTML = `
+        <section class="profile-section">
+          <h3>Basic</h3>
+          <div class="profile-list">
+            ${lineItem("Full Name", artist.full_name)}
+            ${lineItem("Preferred Name", artist.preferred_name)}
+            ${lineItem("Age", artist.age ? String(artist.age) : "-")}
+            ${lineItem("Email", artist.email)}
+            ${lineItem("Phone", artist.phone)}
+            ${lineItem("City", artist.city)}
+            ${lineItem("State / Province", artist.state_province)}
+            ${lineItem("Country", artist.country)}
+            ${lineItem("Source", artist.hear_about)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Links</h3>
+          <div class="profile-list">
+            ${lineItem("Instagram", artist.instagram)}
+            ${lineItem("Website", artist.website)}
+            ${lineItem("Portfolio", artist.portfolio_link)}
+            ${artist.face_photo_link ? `<p class="profile-item"><strong>Face Photo:</strong> <a href="${artist.face_photo_link}" target="_blank" rel="noopener noreferrer">Open photo</a></p>` : lineItem("Face Photo", "")}
+            ${lineItem("Face Photo File", artist.face_photo_filename)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Guardian</h3>
+          <div class="profile-list">
+            ${lineItem("Guardian Name", artist.guardian_name)}
+            ${lineItem("Guardian Contact", artist.guardian_contact)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Artist Profile</h3>
+          <div class="profile-list">
+            ${lineItem("Disciplines", formatList(artist.artist_disciplines))}
+            ${lineItem("Preferred Work", formatList(artist.preferred_work))}
+            ${lineItem("Experience Level", artist.experience_level)}
+            ${lineItem("Body Paint Experience", artist.body_paint_experience)}
+            ${lineItem("Tools / Materials", artist.tools_materials)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Availability</h3>
+          <div class="profile-list">
+            ${lineItem("Availability", formatList(artist.availability))}
+            ${lineItem("Availability Notes", artist.availability_notes)}
+            ${lineItem("Travel Willing", artist.travel_willing)}
+            ${lineItem("Travel Distance", artist.travel_distance)}
+          </div>
+        </section>
+        <section class="profile-section">
+          <h3>Compensation</h3>
+          <div class="profile-list">
+            ${lineItem("Expected Rate", artist.expected_rate)}
+            ${lineItem("Review Status", artist.review_status)}
+            ${lineItem("Admin Notes", artist.admin_notes)}
+          </div>
+        </section>
+        <section class="profile-section wide">
+          <h3>Written Answers</h3>
+          <div class="profile-list">
+            ${lineItem("Strengths", artist.artist_strengths)}
+            ${lineItem("Why work with MVP", artist.why_work)}
+            ${lineItem("Good fit", artist.good_fit)}
+            ${lineItem("Anything else", artist.anything_else)}
+            ${lineItem("Consents", formatList(artist.consents))}
+          </div>
+        </section>
+      `;
+    };
+
+    const openProfileModal = (artistId) => {
+      const artist = state.artists.find((item) => item.id === artistId);
+      if (!artist) return;
+      state.activeArtistId = artistId;
+      document.getElementById("profileTitle").textContent = `${artist.full_name} - Artist Detail`;
+      renderProfile(artist);
+      const modal = document.getElementById("profileModal");
+      if (typeof modal.showModal === "function") modal.showModal();
+    };
+
+    const closeProfileModal = () => {
+      state.activeArtistId = null;
+      const modal = document.getElementById("profileModal");
+      if (modal.open && typeof modal.close === "function") modal.close();
+    };
+
+    const getFilteredArtists = () => {
+      const search = document.getElementById("filterSearch").value.trim().toLowerCase();
+      const status = document.getElementById("filterStatus").value;
+      const experience = document.getElementById("filterExperience").value;
+      const source = document.getElementById("filterSource").value;
+      const discipline = document.getElementById("filterDiscipline").value;
+
+      return state.artists.filter((artist) => {
+        const searchText = [artist.full_name, artist.email, artist.phone, artist.instagram, artist.portfolio_link, artist.website].join(" ").toLowerCase();
+        const matchesSearch = !search || searchText.includes(search);
+        const matchesStatus = status === "all" || artist.review_status === status;
+        const matchesExperience = experience === "all" || artist.experience_level === experience;
+        const matchesSource = source === "all" || artist.hear_about === source;
+        const matchesDiscipline = discipline === "all" || (Array.isArray(artist.artist_disciplines) && artist.artist_disciplines.includes(discipline));
+        return matchesSearch && matchesStatus && matchesExperience && matchesSource && matchesDiscipline;
+      });
+    };
+
+    const renderArtists = () => {
+      const list = document.getElementById("artistList");
+      const filtered = getFilteredArtists();
+      list.innerHTML = "";
+
+      if (filtered.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "status";
+        empty.textContent = "No artists match these filters.";
+        list.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach((artist) => {
+        const card = document.createElement("article");
+        card.className = "artist";
+        card.dataset.artistId = artist.id;
+        card.innerHTML = `
+          <div class="artist-top">
+            <div>
+              <h3 class="artist-name">${artist.full_name}</h3>
+              <p class="artist-meta">${artist.email || artist.phone || "No contact"} · ${artist.city}, ${artist.country} · ${artist.experience_level || "No experience listed"} · ${artist.hear_about}</p>
+              <p class="artist-meta">Applied: ${formatDate(artist.created_at)}</p>
+            </div>
+            <span class="badge ${artist.review_status}">${artist.review_status}</span>
+          </div>
+          <div class="pill-row">
+            <span class="pill">${firstListValue(artist.artist_disciplines)}</span>
+            <span class="pill">${firstListValue(artist.preferred_work)}</span>
+            ${artist.expected_rate ? `<span class="pill">${artist.expected_rate}</span>` : ""}
+          </div>
+          <p class="artist-meta">${artist.artist_strengths || ""}</p>
+          <div class="actions">
+            <button class="view-profile" data-view-id="${artist.id}">View Artist Detail</button>
+            <button class="pending" data-id="${artist.id}" data-status="pending">Set Pending</button>
+            <button class="contacted" data-id="${artist.id}" data-status="contacted">Contacted</button>
+            <button class="scheduled" data-id="${artist.id}" data-status="scheduled">Scheduled</button>
+            <button class="approve" data-id="${artist.id}" data-status="approved">Approve</button>
+            <button class="archived" data-id="${artist.id}" data-status="archived">Archive</button>
+            <button class="deny" data-id="${artist.id}" data-status="denied">Deny</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    };
+
+    const updateArtistStatus = async (id, status) => {
+      const response = await adminFetch("/api/dashboard-artist", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Status update failed");
+      }
+    };
+
+    const renderDashboard = (data) => {
+      const tracking = data.tracking || {};
+      document.getElementById("kpiTotal").textContent = String(data.totalApplications || 0);
+      document.getElementById("kpiDiscipline").textContent = topKey(data.byDiscipline);
+      document.getElementById("kpiWork").textContent = topKey(data.byPreferredWork);
+      document.getElementById("kpiExperience").textContent = topKey(data.byExperience);
+      document.getElementById("kpiPending").textContent = String((data.byStatus && data.byStatus.pending) || 0);
+      document.getElementById("kpiApproved").textContent = String((data.byStatus && data.byStatus.approved) || 0);
+      document.getElementById("kpiVisits").textContent = String(tracking.totalVisits || 0);
+      document.getElementById("kpiSaveErrors").textContent = String(tracking.submitErrors || 0);
+
+      destroyCharts();
+      const disciplineEntries = toSortedEntries(data.byDiscipline).slice(0, 10);
+      activeCharts.push(new Chart(document.getElementById("disciplineBar"), {
+        type: "bar",
+        data: { labels: disciplineEntries.map((x) => x[0]), datasets: [{ label: "Artists", data: disciplineEntries.map((x) => x[1]), backgroundColor: "#7a3f1e" }] },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: "y" }
+      }));
+
+      const workEntries = toSortedEntries(data.byPreferredWork).slice(0, 10);
+      activeCharts.push(new Chart(document.getElementById("workBar"), {
+        type: "bar",
+        data: { labels: workEntries.map((x) => x[0]), datasets: [{ label: "Selections", data: workEntries.map((x) => x[1]), backgroundColor: "#0e6b62" }] },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: "y" }
+      }));
+
+      const statusEntries = toSortedEntries(data.byStatus);
+      activeCharts.push(new Chart(document.getElementById("statusPie"), {
+        type: "pie",
+        data: { labels: statusEntries.map((x) => x[0]), datasets: [{ data: statusEntries.map((x) => x[1]), backgroundColor: chartColors }] },
+        options: { responsive: true, maintainAspectRatio: false }
+      }));
+
+      const trendEntries = (data.trendByMonth || []).slice();
+      activeCharts.push(new Chart(document.getElementById("trendLine"), {
+        type: "line",
+        data: { labels: trendEntries.map((x) => x.month), datasets: [{ label: "Artists", data: trendEntries.map((x) => x.count), borderColor: "#da7c4f", backgroundColor: "rgba(218,124,79,0.2)", fill: true, tension: 0.25 }] },
+        options: { responsive: true, maintainAspectRatio: false }
+      }));
+
+      state.artists = data.artists || [];
+      document.getElementById("status").textContent = `Artist dashboard updated. ${state.artists.length} artist${state.artists.length === 1 ? "" : "s"} returned.`;
+      addOptions("filterExperience", [...new Set(state.artists.map((artist) => artist.experience_level))]);
+      addOptions("filterSource", [...new Set(state.artists.map((artist) => artist.hear_about))]);
+      addOptions("filterDiscipline", [...new Set(state.artists.flatMap((artist) => Array.isArray(artist.artist_disciplines) ? artist.artist_disciplines : []))]);
+      renderArtists();
+    };
+
+    const loadDashboard = async () => {
+      const response = await adminFetch("/api/dashboard-artist");
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.detail || detail.error || "Artist dashboard load failed");
+      }
+      const data = await response.json();
+      state.dashboard = data;
+      renderDashboard(data);
+    };
+
+    ["filterSearch", "filterStatus", "filterExperience", "filterSource", "filterDiscipline"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", renderArtists);
+      document.getElementById(id).addEventListener("change", renderArtists);
+    });
+
+    const csvEscape = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      const rows = getFilteredArtists();
+      if (rows.length === 0) {
+        document.getElementById("status").textContent = "No filtered artists to export.";
+        return;
+      }
+
+      const headers = [
+        "id",
+        "created_at",
+        "full_name",
+        "email",
+        "phone",
+        "city",
+        "country",
+        "hear_about",
+        "artist_disciplines",
+        "preferred_work",
+        "experience_level",
+        "expected_rate",
+        "review_status",
+        "portfolio_link",
+        "face_photo_link"
+      ];
+
+      const lines = [headers.join(",")];
+      rows.forEach((artist) => {
+        lines.push([
+          artist.id,
+          artist.created_at,
+          artist.full_name,
+          artist.email,
+          artist.phone,
+          artist.city,
+          artist.country,
+          artist.hear_about,
+          formatList(artist.artist_disciplines),
+          formatList(artist.preferred_work),
+          artist.experience_level,
+          artist.expected_rate,
+          artist.review_status,
+          artist.portfolio_link,
+          artist.face_photo_link
+        ].map(csvEscape).join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `artist-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("artistList").addEventListener("click", async (event) => {
+      const clicked = event.target;
+      if (!(clicked instanceof Element)) return;
+
+      const actionButton = clicked.closest("button");
+      if (!actionButton) {
+        const card = clicked.closest(".artist");
+        if (card && card.dataset.artistId) openProfileModal(card.dataset.artistId);
+        return;
+      }
+
+      const viewId = actionButton.dataset.viewId;
+      if (viewId) {
+        openProfileModal(viewId);
+        return;
+      }
+
+      const id = actionButton.dataset.id;
+      const status = actionButton.dataset.status;
+      if (!id || !status) return;
+
+      actionButton.disabled = true;
+      try {
+        await updateArtistStatus(id, status);
+        await loadDashboard();
+      } catch (error) {
+        document.getElementById("status").textContent = error && error.message ? error.message : "Could not update artist status.";
+      } finally {
+        actionButton.disabled = false;
+      }
+    });
+
+    document.getElementById("closeProfileModal").addEventListener("click", closeProfileModal);
+    document.getElementById("profileModal").addEventListener("click", (event) => {
+      if (event.target === event.currentTarget) closeProfileModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeProfileModal();
+    });
+
+    (async () => {
+      try {
+        await loadDashboard();
+      } catch (error) {
+        document.getElementById("status").textContent = error && error.message ? error.message : "Could not load artist dashboard data.";
+      }
+    })();
+  </script>
+</body>
+</html>

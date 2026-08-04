@@ -338,6 +338,18 @@
 
     .status.error { color: #ffb6a4; }
 
+    .error-panel {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 182, 164, 0.36);
+      border-radius: 12px;
+      background: rgba(80, 22, 20, 0.66);
+      color: #fff1ea;
+    }
+
+    .error-panel strong { display: block; margin-bottom: 6px; color: #ffd4c8; }
+    .error-panel ul { margin: 8px 0 0 18px; padding: 0; }
+
     .file-hint {
       margin-top: 6px;
       font-size: 0.84rem;
@@ -586,6 +598,7 @@
       <div class="submit-row">
         <button id="submitBtn" type="submit">Submit artist application</button>
         <p class="status" id="submitStatus" aria-live="polite"></p>
+        <div class="error-panel" id="submitErrorPanel" hidden aria-live="polite"></div>
       </div>
     </form>
 
@@ -601,6 +614,7 @@
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const submitStatus = document.getElementById("submitStatus");
+    const submitErrorPanel = document.getElementById("submitErrorPanel");
     const successPanel = document.getElementById("successPanel");
     const draftKey = "mvp-artist-application-draft";
     const trackingSessionKey = "mvp-artist-tracking-session-id";
@@ -629,6 +643,46 @@
     const setStatus = (message, isError = false) => {
       submitStatus.textContent = message;
       submitStatus.classList.toggle("error", isError);
+    };
+
+    const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    })[char]);
+
+    const getFieldLabel = (control) => {
+      const id = control && control.id ? control.id : "";
+      const label = id ? document.querySelector(`label[for='${id}']`) : null;
+      return label ? label.textContent.replace(/\s*\*\s*$/, "").trim() : control.name || id || "Required field";
+    };
+
+    const getInvalidFieldTips = () => Array.from(form.querySelectorAll("input, select, textarea"))
+      .filter((control) => !control.checkValidity())
+      .slice(0, 8)
+      .map((control) => control.validity && control.validity.typeMismatch ? "Enter a valid email address." : `Complete: ${getFieldLabel(control)}.`);
+
+    const setSubmitIssue = (message, tips = []) => {
+      setStatus(message, true);
+      if (!submitErrorPanel) {
+        return;
+      }
+      const list = tips.length > 0
+        ? `<ul>${tips.map((tip) => `<li>${escapeHtml(tip)}</li>`).join("")}</ul>`
+        : "";
+      submitErrorPanel.innerHTML = `<strong>What To Fix</strong><div>${escapeHtml(message)}</div>${list}`;
+      submitErrorPanel.hidden = false;
+      submitErrorPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    const clearSubmitIssue = () => {
+      if (!submitErrorPanel) {
+        return;
+      }
+      submitErrorPanel.hidden = true;
+      submitErrorPanel.innerHTML = "";
     };
 
     const sanitizeFileName = (fileName) => fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -873,9 +927,12 @@
     form.addEventListener("change", saveDraft);
     form.addEventListener("input", trackApplicationStartedOnce);
     form.addEventListener("change", trackApplicationStartedOnce);
+    form.addEventListener("input", clearSubmitIssue);
+    form.addEventListener("change", clearSubmitIssue);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      clearSubmitIssue();
       const payload = buildPayload();
       let customError = "";
       try {
@@ -892,14 +949,18 @@
       });
 
       if (!form.checkValidity() || customError) {
+        const visibleTips = [...getInvalidFieldTips(), ...(customError ? [customError] : [])];
         trackEvent("submit_error", {
           error_message: "client_validation_failed",
           draft_data: payload,
           metadata: {
-            validation_tips: [customError || "Please review required fields and try again."]
+            validation_tips: visibleTips.length > 0 ? visibleTips : ["Please review required fields and try again."]
           }
         });
-        setStatus(customError || "Please review required fields and try again.", true);
+        setSubmitIssue(
+          customError || "Please review required fields and try again.",
+          visibleTips.length > 0 ? visibleTips : ["Complete all required fields marked with *."]
+        );
         form.reportValidity();
         return;
       }

@@ -35,8 +35,9 @@ export default async function handler(req, res) {
     ["submit-application", "./submit-application.js"],
     ["submit-artistic-nude", "./submit-artistic-nude.js"],
     ["dashboard", "./dashboard.js"],
+    ["dashboard-artist", "./dashboard-artist.js"],
     ["dashboard-artistic-nude", "./dashboard-artistic-nude.js"],
-      ["dashboard-application-events", "./dashboard-application-events.js"],
+    ["dashboard-application-events", "./dashboard-application-events.js"],
     ["admin-login", "./admin-login.js"]
   ];
 

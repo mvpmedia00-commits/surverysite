@@ -816,7 +816,10 @@
     };
 
     const setError = (id, msg) => {
-      document.getElementById(id).textContent = msg;
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = msg;
+      }
     };
 
     const setSubmitIssue = (message, tips = []) => {
