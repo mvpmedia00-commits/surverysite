@@ -91,6 +91,7 @@
       background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012));
       box-shadow: var(--shadow);
       overflow: hidden;
+      scroll-margin-top: 108px;
     }
 
     .hero {
@@ -214,7 +215,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 16px;
       margin: 16px 0;
     }
@@ -243,30 +244,40 @@
     }
 
     fieldset {
+      display: grid;
+      gap: 14px;
+      position: relative;
       margin: 0 0 18px;
-      padding: 0 0 18px;
-      border: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 54px 18px 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.16);
     }
 
     legend {
-      width: 100%;
-      margin-bottom: 14px;
+      position: absolute;
+      top: 15px;
+      left: 18px;
+      width: calc(100% - 36px);
+      padding: 0;
       color: #ffd8c3;
       font-family: "Cormorant Garamond", serif;
       font-size: 1.45rem;
       font-weight: 600;
+      line-height: 1.05;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      min-width: 0;
     }
 
     .field {
       display: grid;
       gap: 7px;
+      min-width: 0;
     }
 
     .field.full { grid-column: 1 / -1; }
@@ -279,6 +290,7 @@
 
     input, select, textarea {
       width: 100%;
+      min-width: 0;
       border: 1px solid rgba(255,255,255,0.14);
       border-radius: 14px;
       background: rgba(0,0,0,0.32);
@@ -286,6 +298,12 @@
       font: inherit;
       padding: 12px 13px;
       outline: none;
+    }
+
+    input[type="file"] {
+      min-height: 52px;
+      padding: 10px;
+      line-height: 1.25;
     }
 
     textarea {
@@ -300,23 +318,30 @@
 
     .choice-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
+      min-width: 0;
     }
 
     .choice {
       display: flex;
       align-items: flex-start;
       gap: 9px;
+      min-width: 0;
+      min-height: 52px;
       padding: 11px 12px;
       border: 1px solid rgba(255,255,255,0.11);
       border-radius: 14px;
       background: rgba(255,255,255,0.035);
       color: var(--muted);
       font-weight: 500;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .choice input {
+      flex: 0 0 auto;
       width: auto;
       margin-top: 5px;
       accent-color: var(--accent);
@@ -331,6 +356,7 @@
     }
 
     .status {
+      flex: 1 1 280px;
       min-height: 28px;
       color: #d9fff7;
       font-weight: 700;
@@ -339,6 +365,7 @@
     .status.error { color: #ffb6a4; }
 
     .error-panel {
+      flex: 1 0 100%;
       margin-top: 12px;
       padding: 14px 16px;
       border: 1px solid rgba(255, 182, 164, 0.36);
@@ -354,6 +381,7 @@
       margin-top: 6px;
       font-size: 0.84rem;
       color: rgba(255,255,255,0.58);
+      overflow-wrap: anywhere;
     }
 
     .photo-preview {
@@ -386,7 +414,8 @@
     @media (max-width: 860px) {
       .hero, .grid, .form-grid { grid-template-columns: 1fr; }
       .hero-media { min-height: 300px; }
-      .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      fieldset { padding: 52px 16px 16px; }
+      .choice-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
       .top-nav { border-radius: 18px; align-items: flex-start; }
       .links { overflow-x: auto; white-space: nowrap; flex-wrap: nowrap; padding-bottom: 2px; }
     }
@@ -394,8 +423,11 @@
     @media (max-width: 560px) {
       .top-nav { flex-direction: column; }
       .hero, .card, form { border-radius: 18px; }
+      .hero, .card, form { scroll-margin-top: 132px; }
       .hero-actions, .submit-row { flex-direction: column; align-items: stretch; }
       .btn, button { width: 100%; }
+      fieldset { padding: 50px 14px 14px; }
+      legend { left: 14px; width: calc(100% - 28px); }
       .hero-media {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         min-height: 0;
