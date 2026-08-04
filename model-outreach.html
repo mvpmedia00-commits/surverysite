@@ -894,15 +894,23 @@
 
     .direction-layout {
       display: grid;
-      grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+      grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
       gap: 18px;
       align-items: stretch;
       margin-top: 16px;
     }
 
     .direction-layout .section-thumb {
-      aspect-ratio: 16 / 10;
-      min-height: 240px;
+      aspect-ratio: 720 / 1096;
+      min-height: 0;
+      max-width: 320px;
+      justify-self: center;
+      width: 100%;
+    }
+
+    .direction-layout .section-thumb video {
+      object-fit: contain;
+      background: #050403;
     }
 
     .direction-points {
@@ -1090,7 +1098,7 @@
       }
       .section-media-grid { grid-template-columns: 1fr; }
       .direction-layout .section-thumb {
-        min-height: 210px;
+        max-width: 280px;
       }
       .meet-photos { grid-template-columns: 1fr; }
       .meet-photo { max-height: 520px; }
@@ -1490,8 +1498,8 @@
       </p>
       <div class="direction-layout">
         <figure class="section-thumb">
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/photos/session-bodypaint-process-new-poster.jpg" aria-label="MVP Media body paint direction and studio expectations video">
-            <source src="assets/videos/direction-bodypaint-01-original.mp4" type="video/mp4">
+          <video controls playsinline preload="metadata" poster="assets/photos/direction-bodypaint-with-sound-poster.jpg" aria-label="MVP Media body paint direction and studio expectations video with sound">
+            <source src="assets/videos/direction-bodypaint-with-sound.mp4" type="video/mp4">
           </video>
         </figure>
         <div class="direction-points">
