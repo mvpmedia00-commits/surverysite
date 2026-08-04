@@ -1,5 +1,6 @@
 /* Shared MVP survey theme. Loaded after page-specific styles to keep the site visually uniform. */
 :root {
+  color-scheme: light dark;
   --bg: #f5f1e9 !important;
   --panel: rgba(255, 253, 248, 0.92) !important;
   --panel-2: rgba(255, 255, 255, 0.72) !important;
@@ -15,20 +16,36 @@
   --ok: #136f40 !important;
   --error: #9e1b1b !important;
   --shadow: 0 24px 70px rgba(30, 25, 15, 0.14) !important;
+  --page-bg: linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 82% 8%, rgba(12, 117, 104, 0.2), transparent 30%),
+    radial-gradient(circle at 12% 18%, rgba(197, 111, 72, 0.13), transparent 28%),
+    linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%);
+  --surface-bg: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86));
+  --hero-bg: linear-gradient(135deg, rgba(255, 253, 249, 0.96), rgba(255, 250, 240, 0.82)),
+    linear-gradient(130deg, rgba(12, 117, 104, 0.18), rgba(197, 111, 72, 0.11));
+  --soft-accent-bg: rgba(12, 117, 104, 0.08);
+  --soft-accent-border: rgba(12, 117, 104, 0.2);
+  --field-bg: rgba(255, 255, 255, 0.78);
+  --field-focus-bg: #fff;
+  --field-border: rgba(61, 53, 43, 0.16);
+  --field-focus-ring: rgba(12, 117, 104, 0.14);
+  --label: #2a261f;
+  --media-bg: #fff;
+  --media-border: rgba(30, 27, 22, 0.18);
+  --media-shadow: 0 18px 38px rgba(30, 25, 15, 0.14);
+  --secondary-bg: rgba(255, 255, 255, 0.78);
+  --button-bg: linear-gradient(135deg, var(--accent), #09584f);
+  --button-shadow: 0 16px 28px rgba(12, 117, 104, 0.26);
 }
 
 html {
-  background: #f5f1e9;
+  background: var(--bg);
 }
 
 body {
   color: var(--text) !important;
-  background:
-    linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
-    radial-gradient(circle at 82% 8%, rgba(12, 117, 104, 0.2), transparent 30%),
-    radial-gradient(circle at 12% 18%, rgba(197, 111, 72, 0.13), transparent 28%),
-    linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%) !important;
+  background: var(--page-bg) !important;
   background-size: 44px 44px, 44px 44px, auto, auto, auto !important;
 }
 
@@ -95,14 +112,12 @@ details,
 .success {
   color: var(--text) !important;
   border-color: var(--line) !important;
-  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86)) !important;
+  background: var(--surface-bg) !important;
   box-shadow: var(--shadow) !important;
 }
 
 .hero {
-  background:
-    linear-gradient(135deg, rgba(255, 253, 249, 0.96), rgba(255, 250, 240, 0.82)),
-    linear-gradient(130deg, rgba(12, 117, 104, 0.18), rgba(197, 111, 72, 0.11)) !important;
+  background: var(--hero-bg) !important;
 }
 
 .hero::before,
@@ -132,8 +147,8 @@ details,
 .comfort-pill,
 .level-badge {
   color: var(--ink) !important;
-  border-color: rgba(12, 117, 104, 0.2) !important;
-  background: rgba(12, 117, 104, 0.08) !important;
+  border-color: var(--soft-accent-border) !important;
+  background: var(--soft-accent-bg) !important;
   box-shadow: none !important;
 }
 
@@ -141,23 +156,23 @@ input,
 select,
 textarea {
   color: var(--text) !important;
-  border-color: rgba(61, 53, 43, 0.16) !important;
-  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: var(--field-border) !important;
+  background: var(--field-bg) !important;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--accent) !important;
-  background: #fff !important;
-  box-shadow: 0 0 0 4px rgba(12, 117, 104, 0.14) !important;
+  background: var(--field-focus-bg) !important;
+  box-shadow: 0 0 0 4px var(--field-focus-ring) !important;
 }
 
 label,
 .sub-label,
 summary,
 .choice {
-  color: #2a261f !important;
+  color: var(--label) !important;
 }
 
 button,
@@ -168,15 +183,15 @@ button,
 .signal-icon {
   color: #fff !important;
   border-color: transparent !important;
-  background: linear-gradient(135deg, var(--accent), #09584f) !important;
-  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+  background: var(--button-bg) !important;
+  box-shadow: var(--button-shadow) !important;
 }
 
 button.secondary,
 .btn-secondary {
   color: var(--accent) !important;
   border-color: var(--line) !important;
-  background: rgba(255, 255, 255, 0.78) !important;
+  background: var(--secondary-bg) !important;
   box-shadow: none !important;
 }
 
@@ -196,14 +211,25 @@ a:hover {
 .section-thumb,
 .role-video-frame,
 .photo-preview {
-  background: #fff !important;
-  border-color: rgba(30, 27, 22, 0.18) !important;
-  box-shadow: 0 18px 38px rgba(30, 25, 15, 0.14) !important;
+  background: var(--media-bg) !important;
+  border-color: var(--media-border) !important;
+  box-shadow: var(--media-shadow) !important;
 }
 
 .hero-summary strong,
 .instagram-preview strong,
-.media-caption a {
+.media-caption,
+.media-caption a,
+.card strong,
+.opportunity-card strong,
+.pill-card strong,
+.feature-card strong,
+.timeline-item strong,
+[style*="#ffe0cf"],
+[style*="#ffe2d0"],
+[style*="#ffe3d2"],
+[style*="#fff1df"],
+[style*="#ffffff"] {
   color: var(--accent) !important;
 }
 
@@ -214,7 +240,7 @@ a:hover {
 [class*="bg-[#1a1a1e"],
 [class*="bg-[#1f1f23"],
 [class*="bg-[#27272a"] {
-  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86)) !important;
+  background: var(--surface-bg) !important;
 }
 
 [class*="border-zinc-"],
@@ -239,8 +265,8 @@ button[class*="bg-white"],
 a[class*="bg-[#c8102e"],
 button[class*="bg-[#c8102e"] {
   color: #fff !important;
-  background: linear-gradient(135deg, var(--accent), #09584f) !important;
-  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+  background: var(--button-bg) !important;
+  box-shadow: var(--button-shadow) !important;
 }
 
 button,
@@ -256,15 +282,56 @@ a[class*="bg-[#c8102e"],
 a[class*="bg-white"],
 a[class*="border-zinc-"],
 button[class*="border-zinc-"] {
-  background: linear-gradient(135deg, var(--accent), #09584f) !important;
+  background: var(--button-bg) !important;
   border-color: transparent !important;
-  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+  box-shadow: var(--button-shadow) !important;
 }
 
 button.secondary,
 .btn-secondary {
   color: var(--accent) !important;
   border-color: var(--line) !important;
-  background: rgba(255, 255, 255, 0.78) !important;
+  background: var(--secondary-bg) !important;
   box-shadow: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #050403 !important;
+    --panel: rgba(17, 14, 12, 0.86) !important;
+    --panel-2: rgba(255, 255, 255, 0.035) !important;
+    --text: #f7eee4 !important;
+    --muted: #c9b8a7 !important;
+    --accent: #d8b86f !important;
+    --accent-2: #b33f2a !important;
+    --accent-3: #d8b86f !important;
+    --accent-cool: #d8b86f !important;
+    --green: #d8b86f !important;
+    --ink: #fff1df !important;
+    --line: rgba(255, 255, 255, 0.13) !important;
+    --ok: #7fdbab !important;
+    --error: #ffb6a4 !important;
+    --shadow: 0 26px 80px rgba(0, 0, 0, 0.45) !important;
+    --page-bg: linear-gradient(90deg, rgba(216, 184, 111, 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(216, 184, 111, 0.025) 1px, transparent 1px),
+      radial-gradient(circle at 12% 4%, rgba(216, 184, 111, 0.1), transparent 30%),
+      radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.045), transparent 34%),
+      linear-gradient(180deg, #080706 0%, #050403 48%, var(--bg) 100%);
+    --surface-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    --hero-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+      linear-gradient(135deg, rgba(179, 63, 42, 0.14), rgba(216, 184, 111, 0.08));
+    --soft-accent-bg: rgba(179, 63, 42, 0.16);
+    --soft-accent-border: rgba(216, 184, 111, 0.28);
+    --field-bg: rgba(0, 0, 0, 0.32);
+    --field-focus-bg: rgba(0, 0, 0, 0.52);
+    --field-border: rgba(255, 255, 255, 0.14);
+    --field-focus-ring: rgba(216, 184, 111, 0.12);
+    --label: #ffe0cf;
+    --media-bg: #050403;
+    --media-border: rgba(216, 184, 111, 0.24);
+    --media-shadow: 0 30px 70px rgba(0, 0, 0, 0.42);
+    --secondary-bg: rgba(0, 0, 0, 0.34);
+    --button-bg: linear-gradient(135deg, #b33f2a, #8d2d1d);
+    --button-shadow: 0 16px 28px rgba(179, 63, 42, 0.28);
+  }
 }
