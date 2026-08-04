@@ -313,6 +313,46 @@
       color: #ffffff;
     }
 
+    .survey-check-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(10px);
+    }
+
+    .survey-check-backdrop.show {
+      display: flex;
+    }
+
+    .survey-check-modal {
+      width: min(520px, 100%);
+      border: 1px solid rgba(216,184,111,0.28);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(24, 19, 15, 0.98), rgba(10, 8, 7, 0.98));
+      box-shadow: 0 26px 80px rgba(0,0,0,0.52);
+      padding: 22px;
+    }
+
+    .survey-check-modal h2 {
+      margin-bottom: 8px;
+    }
+
+    .survey-check-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .survey-check-actions .btn {
+      flex: 1 1 190px;
+    }
+
     .badge-row {
       display: flex;
       flex-wrap: wrap;
@@ -1593,10 +1633,28 @@
     <p class="footer-note">MVP Media Photography — Chicago, Illinois<br>Fine art figure, glamour, and body-paint projects for adults 18+. Project participation is voluntary. Specific concepts, compensation, limits, body paint coverage, posing requirements, photography, and image usage are discussed and agreed upon before booking.</p>
   </main>
 
+  <div class="survey-check-backdrop" id="surveyCheckModal" role="dialog" aria-modal="true" aria-labelledby="surveyCheckTitle" aria-describedby="surveyCheckText">
+    <div class="survey-check-modal">
+      <div class="eyebrow">Before You Continue</div>
+      <h2 id="surveyCheckTitle">Did you already complete the model survey?</h2>
+      <p id="surveyCheckText">
+        If you have not completed it yet, click No and finish the model survey first. If you already submitted it, you can request the phone interview or close this message.
+      </p>
+      <div class="survey-check-actions">
+        <a class="btn btn-primary" id="surveyCheckNo" href="/index.html#applicationForm">No, take me to the survey</a>
+        <a class="btn btn-secondary" href="mailto:hello@mvpmedia.com?subject=Phone%20Interview%20Request">Yes, request phone interview</a>
+        <button class="btn btn-secondary" id="surveyCheckClose" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const sections = Array.from(document.querySelectorAll("section[id], section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".top-nav a"));
     const progressFill = document.getElementById("progressFill");
+    const surveyCheckModal = document.getElementById("surveyCheckModal");
+    const surveyCheckNo = document.getElementById("surveyCheckNo");
+    const surveyCheckClose = document.getElementById("surveyCheckClose");
 
     const applyImageFallback = (image) => {
       const fallbacks = String(image.dataset.fallbacks || "").split("|").filter(Boolean);
@@ -1637,6 +1695,35 @@
     }, { threshold: 0.35 });
 
     sections.forEach((section) => observer.observe(section));
+
+    const openSurveyCheck = (href) => {
+      surveyCheckNo.href = href;
+      surveyCheckModal.classList.add("show");
+      surveyCheckClose.focus();
+    };
+
+    const closeSurveyCheck = () => {
+      surveyCheckModal.classList.remove("show");
+    };
+
+    document.querySelectorAll("a[href*='/index.html?track='][href$='#applicationForm']").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        openSurveyCheck(link.href);
+      });
+    });
+
+    surveyCheckClose.addEventListener("click", closeSurveyCheck);
+    surveyCheckModal.addEventListener("click", (event) => {
+      if (event.target === surveyCheckModal) {
+        closeSurveyCheck();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && surveyCheckModal.classList.contains("show")) {
+        closeSurveyCheck();
+      }
+    });
   </script>
 </body>
 </html>
