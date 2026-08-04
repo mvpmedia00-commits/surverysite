@@ -1,0 +1,270 @@
+/* Shared MVP survey theme. Loaded after page-specific styles to keep the site visually uniform. */
+:root {
+  --bg: #f5f1e9 !important;
+  --panel: rgba(255, 253, 248, 0.92) !important;
+  --panel-2: rgba(255, 255, 255, 0.72) !important;
+  --text: #181714 !important;
+  --muted: #625a4e !important;
+  --accent: #0c7568 !important;
+  --accent-2: #c56f48 !important;
+  --accent-3: #c56f48 !important;
+  --accent-cool: #0c7568 !important;
+  --green: #0c7568 !important;
+  --ink: #102b28 !important;
+  --line: rgba(61, 53, 43, 0.14) !important;
+  --ok: #136f40 !important;
+  --error: #9e1b1b !important;
+  --shadow: 0 24px 70px rgba(30, 25, 15, 0.14) !important;
+}
+
+html {
+  background: #f5f1e9;
+}
+
+body {
+  color: var(--text) !important;
+  background:
+    linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 82% 8%, rgba(12, 117, 104, 0.2), transparent 30%),
+    radial-gradient(circle at 12% 18%, rgba(197, 111, 72, 0.13), transparent 28%),
+    linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%) !important;
+  background-size: 44px 44px, 44px 44px, auto, auto, auto !important;
+}
+
+p,
+li,
+.intro,
+.lead,
+.trust-note,
+.file-hint,
+.status,
+.footer-note,
+.top-nav a,
+.links a {
+  color: var(--muted) !important;
+}
+
+h1,
+h2,
+h3,
+legend,
+.brand,
+.top-nav .brand,
+.section-kicker,
+.eyebrow,
+.step-title,
+.stat strong,
+.decision-card strong,
+.comparison-cell strong,
+.timeline-item strong,
+.pill-card strong {
+  color: var(--accent) !important;
+  text-shadow: none !important;
+}
+
+.hero,
+.card,
+.quote-card,
+.cta-card,
+.about-section,
+.trust-signals,
+.process,
+.intro-card,
+form,
+fieldset,
+.top-nav,
+.lang-card,
+.progress-panel,
+.decision-card,
+.clarity-card,
+.feature-card,
+.opportunity-card,
+.comparison-cell,
+.timeline-item,
+.pill-card,
+details,
+.check-list li,
+.stat,
+.role-media,
+.hero-summary,
+.job-context-chip,
+.mvp-dark,
+.mvp-dark .card,
+.modal,
+.success {
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86)) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.hero {
+  background:
+    linear-gradient(135deg, rgba(255, 253, 249, 0.96), rgba(255, 250, 240, 0.82)),
+    linear-gradient(130deg, rgba(12, 117, 104, 0.18), rgba(197, 111, 72, 0.11)) !important;
+}
+
+.hero::before,
+.hero::after {
+  display: none !important;
+}
+
+.lang-gate {
+  background-image:
+    linear-gradient(rgba(10, 9, 8, 0.54), rgba(10, 9, 8, 0.54)),
+    url("../assets/photos/grok-image-61418e24-21cc-47d3-a63a-9202fa674ecb.jpg") !important;
+}
+
+.about-card,
+.choice,
+.badge,
+.track-badge,
+.step-pill,
+.priority,
+.track-note,
+.comparison-label,
+.note,
+.instagram-preview,
+.section-kicker,
+.eyebrow,
+.mood-tag,
+.comfort-pill,
+.level-badge {
+  color: var(--ink) !important;
+  border-color: rgba(12, 117, 104, 0.2) !important;
+  background: rgba(12, 117, 104, 0.08) !important;
+  box-shadow: none !important;
+}
+
+input,
+select,
+textarea {
+  color: var(--text) !important;
+  border-color: rgba(61, 53, 43, 0.16) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent) !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 4px rgba(12, 117, 104, 0.14) !important;
+}
+
+label,
+.sub-label,
+summary,
+.choice {
+  color: #2a261f !important;
+}
+
+button,
+.btn,
+.btn-primary,
+.filter-active,
+.nav-active,
+.signal-icon {
+  color: #fff !important;
+  border-color: transparent !important;
+  background: linear-gradient(135deg, var(--accent), #09584f) !important;
+  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+}
+
+button.secondary,
+.btn-secondary {
+  color: var(--accent) !important;
+  border-color: var(--line) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  box-shadow: none !important;
+}
+
+.accent-red,
+.lang-job-link,
+.nav-active,
+a:hover {
+  color: var(--accent) !important;
+}
+
+.job-header,
+.job-card,
+.hero-photo,
+.media-frame,
+.meet-photo,
+.logo-card,
+.section-thumb,
+.role-video-frame,
+.photo-preview {
+  background: #fff !important;
+  border-color: rgba(30, 27, 22, 0.18) !important;
+  box-shadow: 0 18px 38px rgba(30, 25, 15, 0.14) !important;
+}
+
+.hero-summary strong,
+.instagram-preview strong,
+.media-caption a {
+  color: var(--accent) !important;
+}
+
+[class*="bg-zinc-"],
+[class*="bg-neutral-"],
+[class*="bg-stone-"],
+[class*="bg-[#0f0f0f"],
+[class*="bg-[#1a1a1e"],
+[class*="bg-[#1f1f23"],
+[class*="bg-[#27272a"] {
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86)) !important;
+}
+
+[class*="border-zinc-"],
+[class*="border-neutral-"],
+[class*="border-stone-"] {
+  border-color: var(--line) !important;
+}
+
+[class*="text-zinc-"],
+[class*="text-neutral-"],
+[class*="text-stone-"] {
+  color: var(--muted) !important;
+}
+
+[class*="text-[#c8102e"],
+.accent-red {
+  color: var(--accent) !important;
+}
+
+a[class*="bg-white"],
+button[class*="bg-white"],
+a[class*="bg-[#c8102e"],
+button[class*="bg-[#c8102e"] {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--accent), #09584f) !important;
+  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+}
+
+button,
+.btn,
+a[class*=" rounded-"],
+a[class*="rounded-"] {
+  color: #fff !important;
+}
+
+button:not(.secondary),
+.btn-primary,
+a[class*="bg-[#c8102e"],
+a[class*="bg-white"],
+a[class*="border-zinc-"],
+button[class*="border-zinc-"] {
+  background: linear-gradient(135deg, var(--accent), #09584f) !important;
+  border-color: transparent !important;
+  box-shadow: 0 16px 28px rgba(12, 117, 104, 0.26) !important;
+}
+
+button.secondary,
+.btn-secondary {
+  color: var(--accent) !important;
+  border-color: var(--line) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  box-shadow: none !important;
+}

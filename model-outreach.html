@@ -9,16 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f0d0b;
-      --panel: #171311;
-      --panel-2: #201a16;
-      --text: #f8f2eb;
-      --muted: #b8a79a;
+      --bg: #050403;
+      --panel: rgba(17, 14, 12, 0.86);
+      --panel-2: rgba(255, 255, 255, 0.035);
+      --text: #f7eee4;
+      --muted: #c9b8a7;
       --accent: #b33f2a;
-      --accent-2: #efe0cb;
-      --accent-cool: #4fa899;
-      --line: rgba(255,255,255,0.14);
-      --shadow: 0 20px 44px rgba(0,0,0,0.28);
+      --accent-2: #d8b86f;
+      --accent-cool: #d8b86f;
+      --ink: #fff1df;
+      --line: rgba(255,255,255,0.13);
+      --shadow: 0 26px 80px rgba(0,0,0,0.45);
       --radius: 24px;
     }
 
@@ -29,7 +30,13 @@
       margin: 0;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--text);
-      background: radial-gradient(circle at top left, rgba(179,63,42,0.24), transparent 24%), linear-gradient(180deg, #13110d 0%, var(--bg) 100%);
+      background:
+        linear-gradient(90deg, rgba(216, 184, 111, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(216, 184, 111, 0.025) 1px, transparent 1px),
+        radial-gradient(circle at 12% 4%, rgba(216, 184, 111, 0.1), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.045), transparent 34%),
+        linear-gradient(180deg, #080706 0%, #050403 48%, var(--bg) 100%);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
       line-height: 1.65;
       overflow-x: hidden;
     }
@@ -55,9 +62,9 @@
       max-width: 100%;
       padding: 12px 14px;
       margin: 16px 0 18px;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(216,184,111,0.18);
       border-radius: 999px;
-      background: rgba(17, 14, 12, 0.86);
+      background: var(--panel);
       backdrop-filter: blur(12px);
       box-shadow: var(--shadow);
     }
@@ -81,7 +88,7 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid rgba(255,255,255,0.2);
-      background: #ffffff;
+      background: #050403;
     }
 
     .top-nav .links {
@@ -117,14 +124,14 @@
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent), #d87a58);
+      background: linear-gradient(90deg, var(--accent), #8d2d1d);
       transition: width 180ms ease;
     }
 
     .hero, .card, .quote-card {
-      border: 1px solid var(--line);
+      border: 1px solid rgba(216,184,111,0.18);
       border-radius: var(--radius);
-      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      background: linear-gradient(145deg, rgba(255,255,255,0.038), rgba(255,255,255,0.012));
       box-shadow: var(--shadow);
       overflow: hidden;
       max-width: 100%;
@@ -172,13 +179,14 @@
       font-size: clamp(2.25rem, 4.3vw, 3.2rem);
       max-width: 760px;
       margin-bottom: 10px;
+      color: #ffffff;
       overflow-wrap: anywhere;
     }
 
     h2 {
       font-size: clamp(1.5rem, 2.4vw, 2rem);
       margin-bottom: 10px;
-      color: #ffd7c1;
+      color: var(--accent-2);
     }
 
     h3 {
@@ -229,7 +237,7 @@
       padding: 12px;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 18px;
-      background: linear-gradient(135deg, rgba(179,63,42,0.16), rgba(79,168,153,0.08));
+      background: linear-gradient(135deg, rgba(179,63,42,0.16), rgba(216,184,111,0.08));
       text-decoration: none;
       transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
     }
@@ -237,7 +245,7 @@
     .instagram-preview:hover {
       transform: translateY(-2px);
       border-color: rgba(255,255,255,0.24);
-      background: linear-gradient(135deg, rgba(179,63,42,0.22), rgba(79,168,153,0.12));
+      background: linear-gradient(135deg, rgba(179,63,42,0.22), rgba(216,184,111,0.12));
     }
 
     .instagram-preview strong {
@@ -427,9 +435,9 @@
       margin-bottom: 10px;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(79,168,153,0.28);
-      background: rgba(79,168,153,0.1);
-      color: #c8fff2;
+      border: 1px solid rgba(216,184,111,0.28);
+      background: rgba(179,63,42,0.14);
+      color: var(--accent-2);
       font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -673,8 +681,8 @@
     }
 
     .opportunity-card.featured {
-      border-color: rgba(79,168,153,0.28);
-      background: linear-gradient(145deg, rgba(79,168,153,0.08), rgba(255,255,255,0.03));
+      border-color: rgba(216,184,111,0.28);
+      background: linear-gradient(145deg, rgba(179,63,42,0.14), rgba(255,255,255,0.03));
     }
 
     .opportunity-card h3 {
@@ -736,9 +744,9 @@
     .track-note {
       padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid rgba(79,168,153,0.22);
-      background: rgba(79,168,153,0.08);
-      color: #dcfff7;
+      border: 1px solid rgba(216,184,111,0.22);
+      background: rgba(179,63,42,0.12);
+      color: var(--ink);
       font-weight: 700;
       line-height: 1.55;
     }
@@ -774,8 +782,8 @@
     .comparison-label {
       color: #ffffff;
       font-weight: 800;
-      border-color: rgba(79,168,153,0.24);
-      background: rgba(79,168,153,0.08);
+      border-color: rgba(216,184,111,0.24);
+      background: rgba(179,63,42,0.12);
     }
 
     .diagram {
@@ -947,7 +955,7 @@
       margin-top: 16px;
       text-align: center;
       background: linear-gradient(135deg, rgba(179,63,42,0.18), rgba(255,255,255,0.03));
-      border: 1px solid rgba(179,63,42,0.24);
+      border: 1px solid rgba(216,184,111,0.18);
     }
 
     .footer-note {
@@ -1054,6 +1062,7 @@
       .top-nav .links { gap: 4px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/site-theme.css">
 </head>
 <body>
   <main class="page-shell">
@@ -1273,7 +1282,7 @@
       <article class="card">
         <h2>About the Visual Direction</h2>
         <p>
-          MVP Media Photography is a creative studio specializing in fine art figure work, artistic nudes, body paint, artistic glamour, and editorial concepts that celebrate the female form with intention and craftsmanship.
+          MVP Media Photography is a creative studio specializing in fine art figure work, artistic nudes, body paint, artistic glamour, and editorial concepts built with intention and craftsmanship.
         </p>
         <p>
           Shoots are planned, structured, and led so the final images reflect a cohesive artistic point of view.
@@ -1469,7 +1478,7 @@
         Both regular canvas sessions and professional productions may involve artistic figure modeling.
       </p>
       <p>
-        Some concepts are built for figure work, artistic glamour, or classic feminine presentation. That may require the model to pose unclothed while cosmetic body paint is applied directly to the skin.
+        Some concepts are built for figure work, artistic glamour, or classic studio presentation. That may require the model to pose unclothed while cosmetic body paint is applied directly to the skin.
       </p>
       <p>
         The concept, required coverage, areas being painted, posing expectations, photography, compensation, and non-negotiable limits are discussed before accepting a session.
@@ -1565,7 +1574,7 @@
         </details>
         <details>
           <summary>Is this figure modeling?</summary>
-          <p>Some projects involve artistic figure modeling for glamour, body-paint, or classic feminine visual concepts. The specific requirements are discussed before booking.</p>
+          <p>Some projects involve artistic figure modeling for glamour, body-paint, or classic visual concepts. The specific requirements are discussed before booking.</p>
         </details>
         <details>
           <summary>Will body paint be applied directly to my skin?</summary>
@@ -1608,7 +1617,7 @@
       <ul class="check-list">
         <li>☑ I understand what body paint canvas modeling involves.</li>
         <li>☑ I understand MVP Media projects are built around a clear studio vision.</li>
-        <li>☑ I understand the imagery may focus on fine art figure work, glamour, body paint, and classic feminine presentation.</li>
+        <li>☑ I understand the imagery may focus on fine art figure work, glamour, body paint, and classic studio presentation.</li>
         <li>☑ I understand the difference between regular canvas modeling and professional project modeling.</li>
         <li>☑ I understand that some projects involve artistic figure modeling.</li>
         <li>☑ I understand body paint is applied directly to the skin.</li>
