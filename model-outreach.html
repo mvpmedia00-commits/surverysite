@@ -892,6 +892,33 @@
       border: 0;
     }
 
+    .direction-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+
+    .direction-layout .section-thumb {
+      aspect-ratio: 16 / 10;
+      min-height: 240px;
+    }
+
+    .direction-points {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .direction-points strong {
+      color: var(--accent-2);
+    }
+
     .process-layout {
       display: grid;
       grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
@@ -1007,7 +1034,7 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .clarity-grid, .media-showcase, .process-layout { grid-template-columns: 1fr; }
+      .stats, .feature-grid, .pill-grid, .opportunity-grid, .comparison-row, .decision-grid, .clarity-grid, .media-showcase, .direction-layout, .process-layout { grid-template-columns: 1fr; }
       .meet-card { grid-template-columns: 1fr; }
       .meet-photos { max-width: 620px; }
       .role-media { grid-template-columns: 1fr; }
@@ -1062,6 +1089,9 @@
         grid-template-columns: 1fr;
       }
       .section-media-grid { grid-template-columns: 1fr; }
+      .direction-layout .section-thumb {
+        min-height: 210px;
+      }
       .meet-photos { grid-template-columns: 1fr; }
       .meet-photo { max-height: 520px; }
       .role-media {
@@ -1292,7 +1322,7 @@
         <div class="meet-copy">
           <h2>Meet Matthew</h2>
           <p>
-            I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My work focuses on visually striking concepts, expressive posing, body art, fashion-inspired imagery, and finished photographs with a clear studio point of view.
+            I’m Matthew, the photographer and creative director behind MVP Media Photography. I’ve worked in photography since 2015, creating fashion, glamour, portrait, editorial, event, and artistic photography. My work focuses on visually striking concepts, expressive posing, body art, artistic nudes, fashion-inspired imagery, and finished photographs with a clear studio point of view.
           </p>
           <p>
             For body paint projects, I approach the human body as a living canvas. I direct the look, posing, lighting, and final image style, and I select models who can bring presence to the frame while following the agreed production direction.
@@ -1458,6 +1488,18 @@
       <p>
         The concept, required coverage, areas being painted, posing expectations, photography, compensation, and non-negotiable limits are discussed before accepting a session.
       </p>
+      <div class="direction-layout">
+        <figure class="section-thumb">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/photos/session-bodypaint-process-new-poster.jpg" aria-label="MVP Media body paint direction and studio expectations video">
+            <source src="assets/videos/direction-bodypaint-01-original.mp4" type="video/mp4">
+          </video>
+        </figure>
+        <div class="direction-points">
+          <p><strong>Direction:</strong> MVP Media sets the visual goal, posing style, and final image direction before the shoot.</p>
+          <p><strong>Limits:</strong> Body paint coverage, figure modeling comfort, and non-negotiable boundaries are discussed before booking.</p>
+          <p><strong>Expectations:</strong> Models should arrive ready to follow the agreed concept, timing, stillness, and camera direction.</p>
+        </div>
+      </div>
       <div class="note">Nothing is left to chance on shoot day. MVP Media sets the direction, and every look, pose, and expectation is locked in before the session begins. If a required element falls outside those pre-agreed limits, the project simply isn’t the right fit.</div>
     </section>
 
