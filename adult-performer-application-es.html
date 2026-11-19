@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Media Solicitud para performer adulto</title>
+  <meta name="description" content="Solicitud de casting para performers adultos (18+) de MVP Media. Tus límites se revisan en privado y se hablan antes de agendar.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="assets/site-theme.css">
+  <style>
+    .page { padding: 18px 0 48px; }
+    .hero { margin-bottom: 16px; }
+    .hero p { margin: 8px 0 0; }
+    .progress-panel { margin-bottom: 16px; padding: 16px; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .progress-track { margin: 10px 0; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; }
+    .grid.two { display: grid; gap: 12px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid rgba(122, 30, 66, 0.22); background: #fff; }
+    .choice input { min-height: 0 !important; width: 1.15rem; height: 1.15rem; margin-top: 3px; }
+    .sub-label { font-weight: 650; }
+    .error { margin: 0 0 12px; color: #9e1b1b; font-weight: 650; }
+    .error:empty { display: none; }
+    .pay-usd { font-size: 0.78em !important; font-weight: 500; }
+    .lang-switch { display: flex; gap: 14px; align-items: center; margin: 0 0 10px; }
+    .lang-switch a { color: var(--accent) !important; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+    .lang-switch a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+    .wizard-actions, .submit-row, .draft-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .photo-preview { display: none; width: min(100%, 280px); border-radius: 16px; margin-top: 8px; }
+    .review-list { display: grid; gap: 12px; margin: 0; }
+    .review-list div { padding-bottom: 10px; border-bottom: 1px solid rgba(122, 30, 66, 0.16); }
+    .review-list dt { font-weight: 700; }
+    .review-list dd { margin: 4px 0 0; }
+    .draft-prompt { margin: 0 0 16px; padding: 16px 18px; border-radius: 20px; border: 1px solid rgba(122, 30, 66, 0.2); background: #fffdfb; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .success { display: none; margin-top: 16px; padding: 22px 18px; }
+    @media (min-width: 761px) {
+      .grid.two { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" id="inviteGate" hidden>
+      <h1>This link is not available</h1>
+    </section>
+    <div id="applicationShell" hidden>
+    <header class="hero">
+      <nav class="lang-switch" aria-label="Idioma">
+        <a href="/adult-performer-application" lang="en">EN</a>
+        <a href="/adult-performer-application-es" aria-current="page" lang="es">ES</a>
+      </nav>
+      <h1>Solicitud para performer adulto</h1>
+      <p>Para personas adultas de 18 años o más.</p>
+      <p>Tus límites se revisan en privado y se hablan antes de agendar.</p>
+    </header>
+
+    <section class="draft-prompt" id="draftPrompt" hidden>
+      <p>Hay un borrador guardado en este dispositivo.</p>
+      <div class="draft-actions">
+        <button type="button" id="restoreDraftBtn">Recuperar borrador</button>
+        <button type="button" class="secondary" id="discardDraftBtn">Empezar de cero</button>
+      </div>
+    </section>
+
+    <form id="applicationForm" novalidate>
+      <div class="progress-panel" aria-live="polite">
+        <div class="progress-meta">
+          <span id="stepLabel">1 / 7</span>
+          <span id="autosaveStatus">Se guarda solo en este dispositivo</span>
+        </div>
+        <p class="step-title" id="stepTitle">1) Datos básicos</p>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <fieldset>
+        <legend>1) Datos básicos</legend>
+        <div class="grid two">
+          <div class="field">
+            <label for="name">Nombre *</label>
+            <input id="name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="age">Edad *</label>
+            <input id="age" name="age" type="number" inputmode="numeric" min="18" max="120" required>
+            <p class="field-hint">Tienes que tener 18 años o más.</p>
+          </div>
+          <div class="field">
+            <label for="city">Ciudad *</label>
+            <input id="city" name="city" autocomplete="address-level2" required>
+          </div>
+          <div class="field">
+            <label for="instagram">Instagram *</label>
+            <input id="instagram" name="instagram" placeholder="@username" autocomplete="off" required>
+          </div>
+          <div class="field">
+            <label for="email">Correo *</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="whatsapp">WhatsApp</label>
+            <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000">
+          </div>
+        </div>
+        <p class="error" id="basicError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>2) Experiencia e historial</legend>
+        <div class="field">
+          <span class="sub-label">Nivel de experiencia *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="experienceLevel" value="None" required>Ninguna</label>
+            <label class="choice"><input type="radio" name="experienceLevel" value="A few shoots">Unas pocas sesiones</label>
+            <label class="choice"><input type="radio" name="experienceLevel" value="Experienced">Con experiencia</label>
+            <label class="choice"><input type="radio" name="experienceLevel" value="Agency-represented">Con agencia</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Actos que ya has hecho en cámara</span>
+          <p class="field-hint">Marca cada acto que ya has hecho frente a la cámara.</p>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Solo">Solo</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Toy">Juguete</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="GG">GG</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="BG">BG</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Anal">Anal</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="DP">DP</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Group">Grupal</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="POV">POV</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Strap-on">Strap-on</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Fetish/BDSM">Fetiche/BDSM</label>
+            <label class="choice"><input type="checkbox" name="actsPerformed" value="Other">Otro</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="actsWontDo">Actos que no vas a hacer</label>
+          <textarea id="actsWontDo" name="actsWontDo"></textarea>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Te hiciste la prueba de ITS en los últimos 6 meses? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="stiTested" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="stiTested" value="No">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Puedes hacerte la prueba antes de agendar? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="willingToTest" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="willingToTest" value="No">No</label>
+          </div>
+        </div>
+        <p class="error" id="experienceError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>3) Límites y trabajo que quieres</legend>
+        <div class="field">
+          <label for="hardSoftLimits">Lista de límites duros y suaves *</label>
+          <textarea id="hardSoftLimits" name="hardSoftLimits" required></textarea>
+          <p class="field-hint">Escribe los límites que quieres que revisemos antes de hablar de una reserva. Escribe Ninguno si no tienes nada más.</p>
+        </div>
+        <div class="field">
+          <span class="sub-label">Categorías soft</span>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="softCategories" value="Artistic nude">Desnudo artístico</label>
+            <label class="choice"><input type="checkbox" name="softCategories" value="Implied">Implícito</label>
+            <label class="choice"><input type="checkbox" name="softCategories" value="Lingerie">Lencería</label>
+            <label class="choice"><input type="checkbox" name="softCategories" value="Boudoir">Boudoir</label>
+            <label class="choice"><input type="checkbox" name="softCategories" value="Bodypaint">Pintura corporal</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Categorías hard</span>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="hardCategories" value="Solo">Solo</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="Toy">Juguete</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="GG">GG</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="BG">BG</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="Anal">Anal</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="DP/Group">DP/Grupal</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="POV">POV</label>
+            <label class="choice"><input type="checkbox" name="hardCategories" value="Fetish">Fetiche</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Aplicas a trabajo explícito o de plataforma de pago? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Soft only">Solo soft</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Unsure">No lo tengo claro</label>
+          </div>
+        </div>
+        <p class="error" id="limitsError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>4) Disponibilidad y pago</legend>
+        <div class="field">
+          <span class="sub-label">Días disponibles *</span>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weekdays">Entre semana</label>
+            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weeknights">Noches entre semana</label>
+            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weekends">Fines de semana</label>
+            <label class="choice"><input type="checkbox" name="availabilityDays" value="Flexible">Horario flexible</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿A cuál nivel aplicas? *</span>
+          <p class="field-hint">USD aproximado a unos 4.000 COP por dólar.</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="payTier" value="Tier 1" required><span>Nivel 1 — $300.000 COP <span class="pay-usd">(≈ US$75)</span> — desnudo total, sesión de 5 horas</span></label>
+            <label class="choice"><input type="radio" name="payTier" value="Tier 2"><span>Nivel 2 — $2.000.000 COP <span class="pay-usd">(≈ US$500)</span> — porno hardcore, 16 horas divididas en cuatro sesiones de 4 horas: video, actuación y sexo en cámara sin condón.</span></label>
+            <label class="choice"><input type="radio" name="payTier" value="Both">Ambos</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Te cubren el viaje? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="travelCovered" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="travelCovered" value="No">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Puedes hacer noche o varios días? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="overnightMultiday" value="No">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">¿Tienes tu propio vestuario, juguetes o props? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="ownWardrobe" value="Yes" required>Sí</label>
+            <label class="choice"><input type="radio" name="ownWardrobe" value="No">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="notes">Notas</label>
+          <textarea id="notes" name="notes"></textarea>
+        </div>
+        <p class="error" id="availabilityError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>5) Fotos</legend>
+        <p class="field-hint">Si pones Instagram, estas fotos son opcionales. Igual, una foto de la cara, una de cuerpo completo de frente y una de espalda ayudan para el casting. Cada imagen puede pesar hasta 8 MB.</p>
+        <div class="field">
+          <label for="headshot">Foto de la cara</label>
+          <input id="headshot" name="headshot" type="file" accept="image/*">
+          <img class="photo-preview" id="headshotPreview" alt="">
+        </div>
+        <div class="field">
+          <label for="fullBodyFront">Cuerpo completo de frente</label>
+          <input id="fullBodyFront" name="fullBodyFront" type="file" accept="image/*">
+          <img class="photo-preview" id="fullBodyFrontPreview" alt="">
+        </div>
+        <div class="field">
+          <label for="fullBodyRear">Cuerpo completo de espalda</label>
+          <input id="fullBodyRear" name="fullBodyRear" type="file" accept="image/*">
+          <img class="photo-preview" id="fullBodyRearPreview" alt="">
+        </div>
+        <div class="field">
+          <label for="explicitSamples">Set de muestras explícitas (opcional)</label>
+          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
+          <p class="field-hint">Puedes elegir más de una imagen. Hasta 8 archivos, de 8 MB cada uno.</p>
+        </div>
+        <div class="field">
+          <label for="sceneVideoLink">Enlace del video de la escena (opcional)</label>
+          <input id="sceneVideoLink" name="sceneVideoLink" type="url" placeholder="https://">
+        </div>
+        <p class="error" id="photosError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>6) Consentimiento</legend>
+        <div class="field">
+          <span class="sub-label">Lista de consentimiento *</span>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="consent" value="18-plus">Confirmo que tengo al menos 18 años.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="adult-explicit-content">Entiendo que esta solicitud es para contenido adulto y explícito.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="voluntary">Entiendo que participar es voluntario.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="can-decline">Entiendo que puedo rechazar cualquier concepto antes de agendar.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="comp-usage-release">Entiendo que la compensación, el uso y la cesión se acuerdan antes, incluso la distribución en plataformas de pago.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="sti-disclosure">Acepto contarle mis ITS a las personas con las que trabaje.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">Acepto que MVP Media me contacte.</label>
+            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">Entiendo que el Nivel 2 incluye sexo en cámara sin condón y acepto hacerme pruebas de ITS recientes antes de la reserva.</label>
+          </div>
+        </div>
+        <p class="error" id="consentError"></p>
+      </fieldset>
+
+      <fieldset hidden>
+        <legend>Revisión</legend>
+        <p class="field-hint">Revisa tus respuestas. No se envía nada hasta que tú envíes la solicitud.</p>
+        <dl class="review-list" id="reviewList"></dl>
+      </fieldset>
+
+      <div class="wizard-actions">
+        <button type="button" class="secondary" id="prevStepBtn">Atrás</button>
+        <button type="button" id="nextStepBtn">Continuar</button>
+      </div>
+      <div class="submit-row">
+        <button type="submit" id="submitBtn" disabled hidden>Enviar solicitud</button>
+      </div>
+      <p class="status" id="submitStatus" aria-live="polite"></p>
+    </form>
+
+    <section class="success" id="successMessage" aria-live="polite">
+      <h2>Recibimos tu solicitud</h2>
+      <p>Gracias. Tus límites se revisan en privado antes de que alguien hable de una reserva.</p>
+    </section>
+    </div>
+  </main>
+
+  <script>
+    const SUBMIT_ENDPOINT = "";
+
+    const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
+    const CLOUDINARY_UPLOAD_PRESET = "jobstats";
+    const AUTOSAVE_KEY = "mvp-adult-performer-application-draft-es";
+    const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+    const MAX_SAMPLE_FILES = 8;
+    const CONSENT_VALUES = [
+      "18-plus",
+      "adult-explicit-content",
+      "voluntary",
+      "can-decline",
+      "comp-usage-release",
+      "sti-disclosure",
+      "contact"
+    ];
+
+    const form = document.getElementById("applicationForm");
+    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
+    const prevStepBtn = document.getElementById("prevStepBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const stepLabel = document.getElementById("stepLabel");
+    const stepTitle = document.getElementById("stepTitle");
+    const progressFill = document.getElementById("progressFill");
+    const autosaveStatus = document.getElementById("autosaveStatus");
+    const submitStatus = document.getElementById("submitStatus");
+    const draftPrompt = document.getElementById("draftPrompt");
+    const reviewList = document.getElementById("reviewList");
+    let currentStep = 0;
+    let autosaveEnabled = false;
+
+    const setError = (id, message) => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = message || "";
+    };
+
+    const clearErrors = () => {
+      ["basicError", "experienceError", "limitsError", "availabilityError", "photosError", "consentError"].forEach((id) => setError(id, ""));
+    };
+
+    const valueOf = (id) => {
+      const element = document.getElementById(id);
+      return element ? String(element.value || "").trim() : "";
+    };
+
+    const selectedRadio = (name) => {
+      const element = form.querySelector(`input[type="radio"][name="${name}"]:checked`);
+      return element ? element.value : "";
+    };
+
+    const checkedValues = (name) => Array.from(form.querySelectorAll(`input[type="checkbox"][name="${name}"]:checked`)).map((element) => element.value);
+
+    const fileOf = (id) => {
+      const element = document.getElementById(id);
+      return element && element.files && element.files[0] ? element.files[0] : null;
+    };
+
+    const showBlank = (value) => value ? value : "—";
+
+    const escapeHtml = (value) => String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+    const needsTier2Consent = () => selectedRadio("payTier") === "Tier 2" || selectedRadio("payTier") === "Both";
+
+    const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
+
+    const consentsComplete = () => requiredConsentValues().every((value) => checkedValues("consent").includes(value));
+
+    const syncTier2Consent = () => {
+      const choice = document.getElementById("tier2ConsentChoice");
+      const input = document.getElementById("tier2Consent");
+      const show = needsTier2Consent();
+      if (choice) choice.hidden = !show;
+      if (input && !show) input.checked = false;
+    };
+
+    const updateSubmitState = () => {
+      syncTier2Consent();
+      submitBtn.disabled = !consentsComplete();
+    };
+
+    const choiceLabel = (element) => {
+      if (!element) return "";
+      const label = element.closest("label");
+      return label ? label.textContent.replace(/\s+/g, " ").trim() : element.value;
+    };
+
+    const selectedRadioLabel = (name) => choiceLabel(form.querySelector(`input[type="radio"][name="${name}"]:checked`));
+
+    const checkedLabels = (name) => Array.from(form.querySelectorAll(`input[type="checkbox"][name="${name}"]:checked`)).map(choiceLabel).join(", ");
+
+    const renderReview = () => {
+      const rows = [
+        ["Nombre", valueOf("name")],
+        ["Edad", valueOf("age")],
+        ["Ciudad", valueOf("city")],
+        ["Instagram", valueOf("instagram")],
+        ["Correo", valueOf("email")],
+        ["WhatsApp", valueOf("whatsapp")],
+        ["Nivel de experiencia", selectedRadioLabel("experienceLevel")],
+        ["Actos que ya has hecho en cámara", checkedLabels("actsPerformed")],
+        ["Actos que no vas a hacer", valueOf("actsWontDo")],
+        ["Prueba de ITS en los últimos 6 meses", selectedRadioLabel("stiTested")],
+        ["Prueba antes de agendar", selectedRadioLabel("willingToTest")],
+        ["Lista de límites duros y suaves", valueOf("hardSoftLimits")],
+        ["Categorías soft", checkedLabels("softCategories")],
+        ["Categorías hard", checkedLabels("hardCategories")],
+        ["Trabajo explícito o de plataforma de pago", selectedRadioLabel("explicitPaidPlatform")],
+        ["Días disponibles", checkedLabels("availabilityDays")],
+        ["¿A cuál nivel aplicas?", selectedRadioLabel("payTier")],
+        ["¿Te cubren el viaje?", selectedRadioLabel("travelCovered")],
+        ["Noche o varios días", selectedRadioLabel("overnightMultiday")],
+        ["Vestuario, juguetes o props", selectedRadioLabel("ownWardrobe")],
+        ["Notas", valueOf("notes")],
+        ["Foto de la cara", fileOf("headshot") ? fileOf("headshot").name : "No subiste foto"],
+        ["Cuerpo completo de frente", fileOf("fullBodyFront") ? fileOf("fullBodyFront").name : "No subiste foto"],
+        ["Cuerpo completo de espalda", fileOf("fullBodyRear") ? fileOf("fullBodyRear").name : "No subiste foto"],
+        ["Set de muestras explícitas", document.getElementById("explicitSamples").files.length
+          ? Array.from(document.getElementById("explicitSamples").files).map((file) => file.name).join(", ")
+          : "No subiste fotos"],
+        ["Enlace del video", valueOf("sceneVideoLink")],
+        ["Consentimiento", `${checkedValues("consent").length} de ${requiredConsentValues().length} casillas marcadas`]
+      ];
+      reviewList.innerHTML = rows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(showBlank(value))}</dd></div>`).join("");
+    };
+
+    const updateStep = () => {
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
+      });
+      const legend = fieldsets[currentStep].querySelector("legend");
+      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+      stepTitle.textContent = legend ? legend.textContent.trim() : "";
+      progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
+      prevStepBtn.hidden = currentStep === 0;
+      const onReview = currentStep === fieldsets.length - 1;
+      nextStepBtn.hidden = onReview;
+      submitBtn.hidden = !onReview;
+      if (onReview) renderReview();
+      updateSubmitState();
+      submitStatus.textContent = "";
+    };
+
+    const imageError = (file, label) => {
+      if (!file) return "";
+      if (!file.type.startsWith("image/")) return `${label} tiene que ser una imagen.`;
+      if (file.size > MAX_PHOTO_BYTES) return `${label} tiene que pesar 8 MB o menos.`;
+      return "";
+    };
+
+    const validateStep = (index) => {
+      clearErrors();
+      if (index === 0) {
+        const age = Number(valueOf("age"));
+        const email = document.getElementById("email");
+        if (!valueOf("name") || !valueOf("city") || !valueOf("instagram") || !valueOf("age") || !email.checkValidity() || !Number.isFinite(age) || age < 18) {
+          setError("basicError", "Completa nombre, edad de 18 o más, ciudad, Instagram y un correo válido.");
+          return false;
+        }
+      }
+      if (index === 1) {
+        if (!selectedRadio("experienceLevel") || !selectedRadio("stiTested") || !selectedRadio("willingToTest")) {
+          setError("experienceError", "Elige tu nivel de experiencia y responde las dos preguntas de la prueba de ITS.");
+          return false;
+        }
+      }
+      if (index === 2) {
+        if (!valueOf("hardSoftLimits") || !selectedRadio("explicitPaidPlatform")) {
+          setError("limitsError", "Escribe tu lista de límites y elige si aplicas a trabajo explícito o de plataforma de pago.");
+          return false;
+        }
+      }
+      if (index === 3) {
+        if (!checkedValues("availabilityDays").length || !selectedRadio("payTier") || !selectedRadio("travelCovered") || !selectedRadio("overnightMultiday") || !selectedRadio("ownWardrobe")) {
+          setError("availabilityError", "Elige los días, un nivel de pago, y Sí o No para el viaje, la noche y tu propio vestuario.");
+          return false;
+        }
+      }
+      if (index === 4) {
+        const problems = [
+          imageError(fileOf("headshot"), "La foto de la cara"),
+          imageError(fileOf("fullBodyFront"), "La foto de cuerpo de frente"),
+          imageError(fileOf("fullBodyRear"), "La foto de cuerpo de espalda")
+        ].filter(Boolean);
+        const samples = Array.from(document.getElementById("explicitSamples").files || []);
+        if (samples.length > MAX_SAMPLE_FILES) problems.push("El set explícito puede tener hasta 8 imágenes.");
+        samples.forEach((file, fileIndex) => {
+          const message = imageError(file, `La muestra ${fileIndex + 1}`);
+          if (message) problems.push(message);
+        });
+        const video = document.getElementById("sceneVideoLink");
+        if (valueOf("sceneVideoLink") && !video.checkValidity()) problems.push("El enlace del video tiene que ser una dirección web que empiece por https://.");
+        if (problems.length) {
+          setError("photosError", problems[0]);
+          return false;
+        }
+      }
+      if (index === 5 && !consentsComplete()) {
+        setError("consentError", "Marca todas las casillas de consentimiento antes de continuar.");
+        return false;
+      }
+      return true;
+    };
+
+    const serializeDraft = () => {
+      const draft = { currentStep };
+      Array.from(form.elements).forEach((element) => {
+        if (element.type === "file" || element.type === "submit" || element.type === "button") return;
+        if (element.type === "checkbox") {
+          draft[`check:${element.name}:${element.value}`] = element.checked;
+          return;
+        }
+        if (element.type === "radio") {
+          if (element.checked) draft[`radio:${element.name}`] = element.value;
+          return;
+        }
+        if (element.id) draft[`field:${element.id}`] = element.value;
+      });
+      return draft;
+    };
+
+    const saveDraft = () => {
+      if (!autosaveEnabled) return;
+      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(serializeDraft()));
+      autosaveStatus.textContent = "Borrador guardado en este dispositivo";
+    };
+
+    const restoreDraft = () => {
+      const raw = localStorage.getItem(AUTOSAVE_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      Object.entries(draft).forEach(([key, value]) => {
+        if (key.startsWith("field:")) {
+          const element = document.getElementById(key.slice(6));
+          if (element && element.type !== "file") element.value = value;
+        }
+        if (key.startsWith("check:")) {
+          const [, name, checkboxValue] = key.split(":");
+          const checkbox = form.querySelector(`input[type="checkbox"][name="${CSS.escape(name)}"][value="${CSS.escape(checkboxValue)}"]`);
+          if (checkbox) checkbox.checked = Boolean(value);
+        }
+        if (key.startsWith("radio:")) {
+          const radio = form.querySelector(`input[type="radio"][name="${CSS.escape(key.slice(6))}"][value="${CSS.escape(String(value))}"]`);
+          if (radio) radio.checked = true;
+        }
+      });
+      currentStep = Math.min(Math.max(Number(draft.currentStep) || 0, 0), fieldsets.length - 1);
+      autosaveStatus.textContent = "Borrador recuperado";
+    };
+
+    const sanitizeFileName = (name) => String(name || "photo").toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "photo";
+
+    const uploadPhoto = async (file, folder) => {
+      const body = new FormData();
+      body.append("file", file);
+      body.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      body.append("folder", `mvp-applications/${folder}`);
+      body.append("public_id", `${Date.now()}-${sanitizeFileName(file.name)}`);
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: "POST",
+        body
+      });
+      if (!response.ok) throw new Error("No se pudo subir la foto");
+      const result = await response.json();
+      if (!result || !result.secure_url) throw new Error("No se pudo subir la foto");
+      return result.secure_url;
+    };
+
+    const buildPayload = async () => {
+      const samples = Array.from(document.getElementById("explicitSamples").files || []);
+      const payload = {
+        name: valueOf("name"),
+        age: Number(valueOf("age")),
+        city: valueOf("city"),
+        instagram: valueOf("instagram"),
+        email: valueOf("email"),
+        whatsapp: valueOf("whatsapp"),
+        experience_level: selectedRadio("experienceLevel"),
+        acts_performed: checkedValues("actsPerformed"),
+        acts_wont_do: valueOf("actsWontDo"),
+        sti_tested_last_6_months: selectedRadio("stiTested"),
+        willing_to_test_before_booking: selectedRadio("willingToTest"),
+        hard_soft_limits: valueOf("hardSoftLimits"),
+        soft_categories: checkedValues("softCategories"),
+        hard_categories: checkedValues("hardCategories"),
+        explicit_paid_platform: selectedRadio("explicitPaidPlatform"),
+        availability_days: checkedValues("availabilityDays"),
+        pay_tier: selectedRadio("payTier"),
+        travel_covered: selectedRadio("travelCovered"),
+        overnight_multiday: selectedRadio("overnightMultiday"),
+        own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
+        notes: valueOf("notes"),
+        headshot_url: "",
+        full_body_front_url: "",
+        full_body_rear_url: "",
+        explicit_sample_urls: [],
+        scene_video_link: valueOf("sceneVideoLink"),
+        consents: checkedValues("consent")
+      };
+      if (fileOf("headshot")) payload.headshot_url = await uploadPhoto(fileOf("headshot"), "adult-performer-headshot");
+      if (fileOf("fullBodyFront")) payload.full_body_front_url = await uploadPhoto(fileOf("fullBodyFront"), "adult-performer-full-body-front");
+      if (fileOf("fullBodyRear")) payload.full_body_rear_url = await uploadPhoto(fileOf("fullBodyRear"), "adult-performer-full-body-rear");
+      for (const file of samples) {
+        payload.explicit_sample_urls.push(await uploadPhoto(file, "adult-performer-explicit-sample"));
+      }
+      return payload;
+    };
+
+    const setupPreview = (inputId, previewId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        const problem = imageError(file, "Esta foto");
+        if (!file || problem) {
+          if (problem) setError("photosError", problem);
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          if (problem) input.value = "";
+          return;
+        }
+        setError("photosError", "");
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      });
+    };
+
+    nextStepBtn.addEventListener("click", () => {
+      if (!validateStep(currentStep)) return;
+      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
+      updateStep();
+      saveDraft();
+    });
+
+    prevStepBtn.addEventListener("click", () => {
+      currentStep = Math.max(currentStep - 1, 0);
+      clearErrors();
+      updateStep();
+      saveDraft();
+    });
+
+    document.getElementById("restoreDraftBtn").addEventListener("click", () => {
+      try {
+        restoreDraft();
+      } catch (error) {
+        localStorage.removeItem(AUTOSAVE_KEY);
+      }
+      draftPrompt.hidden = true;
+      autosaveEnabled = true;
+      updateStep();
+    });
+
+    document.getElementById("discardDraftBtn").addEventListener("click", () => {
+      localStorage.removeItem(AUTOSAVE_KEY);
+      draftPrompt.hidden = true;
+      autosaveEnabled = true;
+      autosaveStatus.textContent = "Se guarda solo en este dispositivo";
+    });
+
+    form.addEventListener("input", () => {
+      updateSubmitState();
+      saveDraft();
+    });
+    form.addEventListener("change", () => {
+      updateSubmitState();
+      saveDraft();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      for (let index = 0; index < fieldsets.length - 1; index += 1) {
+        if (!validateStep(index)) {
+          currentStep = index;
+          updateStep();
+          return;
+        }
+      }
+      updateSubmitState();
+      if (submitBtn.disabled) {
+        currentStep = 5;
+        updateStep();
+        setError("consentError", "Marca todas las casillas de consentimiento antes de enviar.");
+        return;
+      }
+      if (!SUBMIT_ENDPOINT) {
+        submitStatus.textContent = "Este formulario todavía no está conectado a una dirección de envío. No se envió nada.";
+        return;
+      }
+      submitBtn.disabled = true;
+      submitStatus.textContent = "Subiendo fotos y enviando tu solicitud...";
+      try {
+        const payload = await buildPayload();
+        const response = await fetch(SUBMIT_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error("No se pudo enviar");
+        localStorage.removeItem(AUTOSAVE_KEY);
+        form.hidden = true;
+        document.getElementById("successMessage").style.display = "block";
+      } catch (error) {
+        submitStatus.textContent = "No se pudo enviar. Revisa tus fotos e inténtalo de nuevo.";
+        updateSubmitState();
+      }
+    });
+
+    const beginApplication = () => {
+      const invite = new URLSearchParams(window.location.search).get("invite") || "";
+      document.querySelectorAll(".lang-switch a").forEach((link) => {
+        const url = new URL(link.getAttribute("href"), window.location.origin);
+        if (invite) url.searchParams.set("invite", invite);
+        link.setAttribute("href", `${url.pathname}${url.search}`);
+      });
+      setupPreview("headshot", "headshotPreview");
+      setupPreview("fullBodyFront", "fullBodyFrontPreview");
+      setupPreview("fullBodyRear", "fullBodyRearPreview");
+      if (localStorage.getItem(AUTOSAVE_KEY)) {
+        draftPrompt.hidden = false;
+        autosaveStatus.textContent = "Hay un borrador guardado en este dispositivo";
+      } else {
+        autosaveEnabled = true;
+      }
+      updateStep();
+    };
+
+    const inviteGate = document.getElementById("inviteGate");
+    const applicationShell = document.getElementById("applicationShell");
+    const inviteToken = new URLSearchParams(window.location.search).get("invite") || "";
+    const showUnavailable = () => {
+      if (applicationShell) applicationShell.remove();
+      if (inviteGate) inviteGate.hidden = false;
+    };
+
+    if (!/^[A-Za-z0-9_-]{20,128}$/.test(inviteToken)) {
+      showUnavailable();
+    } else {
+      fetch("/api/performer-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invite: inviteToken })
+      }).then((response) => response.json().then((data) => ({ ok: response.ok, data })).catch(() => ({ ok: false, data: null })))
+        .then((result) => {
+          if (!result.ok || !result.data || result.data.available !== true) {
+            showUnavailable();
+            return;
+          }
+          if (inviteGate) inviteGate.remove();
+          applicationShell.hidden = false;
+          beginApplication();
+        })
+        .catch(showUnavailable);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mvpstats.xyz/docs/adult-performer-application.schema.json",
+  "title": "Adult performer application",
+  "description": "JSON body posted by adult-performer-application.html. No database table or API route is provisioned yet. The page posts this object to the SUBMIT_ENDPOINT constant in that file.",
+  "type": "object",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "pay_tier": { "enum": ["Tier 2", "Both"] } },
+        "required": ["pay_tier"]
+      },
+      "then": {
+        "properties": {
+          "consents": { "contains": { "const": "tier2-unprotected-sti" } }
+        }
+      }
+    }
+  ],
+  "required": [
+    "name",
+    "age",
+    "city",
+    "instagram",
+    "email",
+    "whatsapp",
+    "experience_level",
+    "acts_performed",
+    "acts_wont_do",
+    "sti_tested_last_6_months",
+    "willing_to_test_before_booking",
+    "hard_soft_limits",
+    "soft_categories",
+    "hard_categories",
+    "explicit_paid_platform",
+    "availability_days",
+    "pay_tier",
+    "travel_covered",
+    "overnight_multiday",
+    "own_wardrobe_toys_props",
+    "notes",
+    "headshot_url",
+    "full_body_front_url",
+    "full_body_rear_url",
+    "explicit_sample_urls",
+    "scene_video_link",
+    "consents"
+  ],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "age": { "type": "integer", "minimum": 18, "maximum": 120 },
+    "city": { "type": "string", "minLength": 1 },
+    "instagram": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "format": "email" },
+    "whatsapp": { "type": "string", "description": "Optional WhatsApp number. Empty when the applicant leaves it blank." },
+    "experience_level": {
+      "type": "string",
+      "enum": ["None", "A few shoots", "Experienced", "Agency-represented"]
+    },
+    "acts_performed": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
+      }
+    },
+    "acts_wont_do": { "type": "string" },
+    "sti_tested_last_6_months": { "type": "string", "enum": ["Yes", "No"] },
+    "willing_to_test_before_booking": { "type": "string", "enum": ["Yes", "No"] },
+    "hard_soft_limits": { "type": "string", "minLength": 1 },
+    "soft_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Artistic nude", "Implied", "Lingerie", "Boudoir", "Bodypaint"]
+      }
+    },
+    "hard_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP/Group", "POV", "Fetish"]
+      }
+    },
+    "explicit_paid_platform": {
+      "type": "string",
+      "enum": ["Yes", "Soft only", "Unsure"]
+    },
+    "availability_days": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Weekdays", "Weeknights", "Weekends", "Flexible"]
+      }
+    },
+    "pay_tier": {
+      "type": "string",
+      "enum": ["Tier 1", "Tier 2", "Both"],
+      "description": "Tier 1 is COP 300.000 (about $75 USD) for a full nude 5-hour session. Tier 2 is COP 2.000.000 (about $500 USD) for hardcore work, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom. USD is approximate at about 4,000 COP per dollar. The Spanish page shows Nivel 1, Nivel 2, and Ambos, and still stores these English values."
+    },
+    "travel_covered": { "type": "string", "enum": ["Yes", "No"] },
+    "overnight_multiday": { "type": "string", "enum": ["Yes", "No"] },
+    "own_wardrobe_toys_props": { "type": "string", "enum": ["Yes", "No"] },
+    "notes": { "type": "string" },
+    "headshot_url": { "type": "string" },
+    "full_body_front_url": { "type": "string" },
+    "full_body_rear_url": { "type": "string" },
+    "explicit_sample_urls": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "scene_video_link": { "type": "string" },
+    "consents": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "18-plus",
+          "adult-explicit-content",
+          "voluntary",
+          "can-decline",
+          "comp-usage-release",
+          "sti-disclosure",
+          "contact",
+          "tier2-unprotected-sti"
+        ]
+      },
+      "description": "tier2-unprotected-sti is required when pay_tier is Tier 2 or Both. It is omitted for Tier 1."
+    }
+  }
+}

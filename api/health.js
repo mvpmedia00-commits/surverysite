@@ -38,7 +38,8 @@ export default async function handler(req, res) {
     ["dashboard-artist", "./dashboard-artist.js"],
     ["dashboard-artistic-nude", "./dashboard-artistic-nude.js"],
     ["dashboard-application-events", "./dashboard-application-events.js"],
-    ["admin-login", "./admin-login.js"]
+    ["admin-login", "./admin-login.js"],
+    ["performer-invite", "./performer-invite.js"]
   ];
 
   for (const [name, path] of targets) {
