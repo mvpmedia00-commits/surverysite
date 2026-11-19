@@ -16,11 +16,7 @@
   --ok: #136f40 !important;
   --error: #9e1b1b !important;
   --shadow: 0 24px 70px rgba(30, 25, 15, 0.14) !important;
-  --page-bg: linear-gradient(90deg, rgba(12, 117, 104, 0.05) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(197, 111, 72, 0.05) 1px, transparent 1px),
-    radial-gradient(circle at 82% 8%, rgba(12, 117, 104, 0.2), transparent 30%),
-    radial-gradient(circle at 12% 18%, rgba(197, 111, 72, 0.13), transparent 28%),
-    linear-gradient(180deg, #fbf7ef 0%, var(--bg) 62%, #ebe3d6 100%);
+  --page-bg: linear-gradient(180deg, #fbf7ef 0%, #f3eee4 100%);
   --surface-bg: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(250, 244, 235, 0.86));
   --hero-bg: linear-gradient(135deg, rgba(255, 253, 249, 0.96), rgba(255, 250, 240, 0.82)),
     linear-gradient(130deg, rgba(12, 117, 104, 0.18), rgba(197, 111, 72, 0.11));
@@ -295,6 +291,224 @@ button.secondary,
   box-shadow: none !important;
 }
 
+/* Mobile-first layout for applicants. Page CSS loads first; these rules keep public pages consistent. */
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
+  line-height: 1.5 !important;
+  background-size: auto !important;
+  overflow-x: hidden !important;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 20;
+  transform: translateY(-160%);
+  background: var(--accent) !important;
+  color: #fff !important;
+  padding: 12px 16px;
+  border-radius: 999px;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+h1 {
+  font-size: clamp(2rem, 8vw, 3.4rem) !important;
+  line-height: 1.05 !important;
+  margin: 0 0 8px !important;
+}
+
+h2, legend, summary {
+  font-size: clamp(1.45rem, 4vw, 2rem) !important;
+  line-height: 1.2 !important;
+}
+
+p, li, label, .sub-label, .field-hint, .file-hint {
+  font-size: 1.02rem !important;
+  line-height: 1.45 !important;
+}
+
+.page,
+.wrap,
+.container {
+  width: min(760px, calc(100% - 28px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.hero,
+.lang-card,
+.about-section,
+.progress-panel,
+form,
+fieldset,
+.card {
+  border-radius: 20px !important;
+}
+
+.hero {
+  min-height: 0 !important;
+  padding: 22px 18px !important;
+}
+
+.hero-links,
+.gate-links {
+  position: static !important;
+  margin: 0 0 10px !important;
+  justify-content: flex-start !important;
+}
+
+.hero-links {
+  grid-column: 1 / -1;
+}
+
+.hero-photo {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.hero-photo img,
+.meet-photo img,
+.logo-card img {
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  display: block;
+  object-fit: cover;
+}
+
+.top-nav,
+.top-nav ul,
+.top-nav .links {
+  flex-wrap: wrap !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  gap: 8px 12px !important;
+}
+
+.top-nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  white-space: normal !important;
+}
+
+input,
+select,
+textarea,
+button,
+.btn,
+.choice,
+.file-trigger,
+summary {
+  font-size: 1.05rem !important;
+}
+
+input,
+select,
+textarea {
+  min-height: 52px !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+}
+
+textarea {
+  min-height: 140px !important;
+}
+
+.choice {
+  min-height: 52px !important;
+  padding: 12px 14px !important;
+  align-items: center !important;
+  border-radius: 14px !important;
+}
+
+button,
+.btn,
+.file-trigger {
+  min-height: 52px !important;
+  padding: 14px 18px !important;
+  border-radius: 999px !important;
+}
+
+.progress-track {
+  height: 10px !important;
+  border-radius: 999px !important;
+  background: rgba(12, 117, 104, 0.15) !important;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100% !important;
+  background: var(--accent) !important;
+}
+
+.step-title,
+#stepLabel {
+  font-size: 1.15rem !important;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 3px !important;
+}
+
+.choice:focus-within {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 3px !important;
+}
+
+.about-section summary {
+  cursor: pointer;
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+
+.scroll-cue {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  .hero,
+  .hero-copy,
+  .about-grid,
+  .grid,
+  .two,
+  .lang-actions,
+  .wizard-actions,
+  .submit-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-photo {
+    min-height: 0 !important;
+    max-height: 180px !important;
+  }
+
+  #applicationForm button,
+  .lang-actions button,
+  .wizard-actions button,
+  .submit-row button,
+  .about-start {
+    width: 100% !important;
+  }
+
+  .page,
+  .wrap,
+  .container {
+    width: min(100% - 20px, 760px) !important;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #050403 !important;
@@ -312,11 +526,7 @@ button.secondary,
     --ok: #7fdbab !important;
     --error: #ffb6a4 !important;
     --shadow: 0 26px 80px rgba(0, 0, 0, 0.45) !important;
-    --page-bg: linear-gradient(90deg, rgba(216, 184, 111, 0.035) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(216, 184, 111, 0.025) 1px, transparent 1px),
-      radial-gradient(circle at 12% 4%, rgba(216, 184, 111, 0.1), transparent 30%),
-      radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.045), transparent 34%),
-      linear-gradient(180deg, #080706 0%, #050403 48%, var(--bg) 100%);
+    --page-bg: linear-gradient(180deg, #100e0c 0%, #050403 100%);
     --surface-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
     --hero-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
       linear-gradient(135deg, rgba(179, 63, 42, 0.14), rgba(216, 184, 111, 0.08));

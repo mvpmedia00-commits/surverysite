@@ -636,6 +636,7 @@
   <link rel="stylesheet" href="assets/site-theme.css">
 </head>
 <body>
+  <a class="skip-link" id="skipLink" href="#applicationForm">Skip to the application</a>
   <section class="lang-gate" id="langGate">
     <div class="gate-links" aria-label="Helpful links">
       <a class="corner-link about-link" href="/about-mvp-media.html">About MVP Media</a>
@@ -676,8 +677,8 @@
       </div>
     </header>
 
-    <section class="about-section" id="aboutMvpGeneral">
-      <h2 id="aboutTitle">About MVP Media Photography</h2>
+    <details class="about-section" id="aboutMvpGeneral">
+      <summary id="aboutTitle">About MVP Media Photography</summary>
       <p id="aboutP1">MVP Media Photography is a creative studio specializing in fine art figure work, body paint, artistic glamour, editorial concepts, and polished visual storytelling.</p>
       <p id="aboutP2">We work with new and experienced models who are comfortable serving as the living subject of studio-led photography and body-paint projects.</p>
       <p id="aboutP3">Our focus is on intentional figure imagery, body paint, studio studies, and creative concepts that prioritize strong visual impact and polished artistic presentation.</p>
@@ -700,7 +701,7 @@
         </article>
       </div>
       <button type="button" class="about-start" id="startGeneralApplicationBtn">Start General Application</button>
-    </section>
+    </details>
 
     <form id="applicationForm" novalidate>
       <div class="progress-panel" aria-live="polite">
@@ -709,7 +710,7 @@
           <span id="autosaveStatus">Autosaved as you type</span>
         </div>
         <p class="step-title" id="stepTitle">Take your time. You can review every section before submitting.</p>
-        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" aria-label="Application progress"><div class="progress-fill" id="progressFill"></div></div>
         <p class="trust-note" id="trustNote">Your application is reviewed privately by MVP Media. Contact details and photos are used only for casting, scheduling, and portfolio review.</p>
         <ul class="instruction-list" id="instructionList" aria-label="Submission instructions">
           <li id="instruction1">Complete all required fields marked with *</li>
@@ -1150,6 +1151,9 @@
         legend5: "5) Photos And Final Questions",
         legendConsent: "Consent",
         submitBtn: "Submit Application",
+        prevStep: "Back",
+        nextStep: "Continue",
+        skipLink: "Skip to the application",
         successTitle: "Application Received",
         successText: "Thank you for applying to MVP Media Photography. We review every application and will contact selected applicants regarding upcoming creative opportunities.",
         labelFullName: "Full Name *",
@@ -1331,6 +1335,9 @@
         legend5: "5) Fotos y preguntas finales",
         legendConsent: "Consentimiento",
         submitBtn: "Enviar solicitud",
+        prevStep: "Atrás",
+        nextStep: "Continuar",
+        skipLink: "Ir a la solicitud",
         successTitle: "Recibimos tu solicitud",
         successText: "Gracias por postularte a MVP Media Photography. Revisamos cada solicitud y contactaremos a las personas seleccionadas para las próximas oportunidades.",
         labelFullName: "Nombre completo *",
@@ -1502,6 +1509,12 @@
       document.getElementById("legend5").textContent = t.legend5;
       document.getElementById("legendConsent").textContent = t.legendConsent;
       document.getElementById("submitBtn").textContent = t.submitBtn;
+      prevStepBtn.textContent = t.prevStep;
+      nextStepBtn.textContent = t.nextStep;
+      const skipLink = document.getElementById("skipLink");
+      if (skipLink) {
+        skipLink.textContent = t.skipLink;
+      }
       document.getElementById("successTitle").textContent = t.successTitle;
       document.getElementById("successText").textContent = t.successText;
       document.title = t.pageTitle;
@@ -1772,29 +1785,58 @@
     }, { passive: true });
 
     const updateStep = () => {
-      fieldsets.forEach((fieldset) => {
-        fieldset.hidden = false;
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
       });
 
       const t = i18n[selectedLanguage] || i18n.en;
-      stepLabel.textContent = t.stepLabel;
-      stepTitle.textContent = t.stepTitle;
-      progressFill.style.width = "100%";
-      prevStepBtn.hidden = true;
-      nextStepBtn.hidden = true;
-      submitBtn.hidden = false;
+      const legend = fieldsets[currentStep].querySelector("legend");
+      const stepName = legend ? legend.textContent.trim() : t.stepLabel;
+      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+      stepTitle.textContent = stepName;
+      const progress = Math.round(((currentStep + 1) / fieldsets.length) * 100);
+      progressFill.style.width = `${progress}%`;
+      const progressTrack = document.getElementById("progressTrack");
+      if (progressTrack) {
+        progressTrack.setAttribute("aria-valuenow", String(currentStep + 1));
+        progressTrack.setAttribute("aria-valuemax", String(fieldsets.length));
+        progressTrack.setAttribute("aria-valuetext", stepName);
+      }
+      prevStepBtn.hidden = currentStep === 0;
+      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+      submitBtn.hidden = currentStep !== fieldsets.length - 1;
       submitStatus.textContent = "";
       clearSubmitIssue();
+      if (!prevStepBtn.hidden) {
+        prevStepBtn.textContent = t.prevStep;
+      }
+      if (!nextStepBtn.hidden) {
+        nextStepBtn.textContent = t.nextStep;
+      }
     };
 
     const validateCurrentStep = () => {
-      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"));
-      const invalid = controls.find((control) => !control.checkValidity());
-      if (invalid) {
-        invalid.reportValidity();
-        invalid.focus();
+      const step = fieldsets[currentStep];
+      const controls = Array.from(step.querySelectorAll("input, select, textarea"))
+        .filter((control) => !control.disabled && control.type !== "hidden" && !control.closest("[hidden]"));
+      const invalid = controls.filter((control) => !control.checkValidity());
+      const t = i18n[selectedLanguage] || i18n.en;
+      const tips = [];
+      if (step.querySelector("#interestsGroup") && !checkAtLeastOne("input[name='interests']")) {
+        tips.push(t.msgInterest);
+      }
+      if (step.querySelector("#availabilityGroup") && !checkAtLeastOne("input[name='availability']")) {
+        tips.push(t.msgAvailability);
+      }
+      if (invalid.length > 0 || tips.length > 0) {
+        const fieldTips = invalid.slice(0, 6).map((control) => `${t.completePrefix}: ${getFieldLabel(control)}.`);
+        setSubmitIssue(t.reviewFields, [...fieldTips, ...tips]);
+        if (invalid[0]) {
+          invalid[0].focus();
+        }
         return false;
       }
+      clearSubmitIssue();
       return true;
     };
 
@@ -2273,14 +2315,19 @@
             validation_tips: visibleTips
           }
         });
+        const firstInvalid = form.querySelector("input:invalid, select:invalid, textarea:invalid");
+        if (firstInvalid) {
+          const stepIndex = fieldsets.findIndex((fieldset) => fieldset.contains(firstInvalid));
+          if (stepIndex >= 0) {
+            currentStep = stepIndex;
+            updateStep();
+          }
+          firstInvalid.focus();
+        }
         setSubmitIssue(
           t.reviewFields,
           visibleTips.length > 0 ? visibleTips : [t.completeRequired]
         );
-        const firstInvalid = form.querySelector("input:invalid, select:invalid, textarea:invalid");
-        if (firstInvalid) {
-          firstInvalid.focus();
-        }
         return;
       }
 
