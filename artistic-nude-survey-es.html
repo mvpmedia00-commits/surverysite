@@ -346,9 +346,6 @@
       flex-wrap: wrap;
     }
 
-    .wizard-actions {
-      display: none;
-    }
 
     .bot-field {
       position: absolute;
@@ -485,19 +482,19 @@
         <input id="website" name="website" tabindex="-1" autocomplete="off">
       </div>
       <fieldset>
-        <legend>1) Informacion Basica</legend>
+        <legend>1) Información básica</legend>
         <div class="grid two">
-          <div class="field"><label for="preferredName">Nombre Preferido *</label><input id="preferredName" required></div>
+          <div class="field"><label for="preferredName">Nombre con el que debemos llamarte *</label><input id="preferredName" required></div>
           <div class="field"><label for="age">Edad (18+) *</label><input id="age" type="number" min="18" required></div>
-          <div class="field"><label for="email">Correo Electronico</label><input id="email" type="email"></div>
-          <div class="field"><label for="phone">Telefono / WhatsApp</label><input id="phone"></div>
+          <div class="field"><label for="email">Correo electrónico</label><input id="email" type="email"></div>
+          <div class="field"><label for="phone">Teléfono / WhatsApp</label><input id="phone"></div>
           <div class="field"><label for="city">Ciudad *</label><input id="city" required></div>
-          <div class="field"><label for="country">Pais *</label><input id="country" required></div>
+          <div class="field"><label for="country">País *</label><input id="country" required></div>
           <div class="field"><label for="instagram">Instagram / Portafolio / Enlace De Plataforma</label><input id="instagram" placeholder="@usuario o https://..."></div>
           <div class="field">
-            <label for="hearAbout">Como supiste de MVP Media? *</label>
+            <label for="hearAbout">¿Cómo nos conociste? *</label>
             <select id="hearAbout" required>
-              <option value="">Selecciona una opcion</option>
+              <option value="">Elige una opción</option>
               <option>Instagram</option>
               <option>TikTok</option>
               <option>Facebook</option>
@@ -513,28 +510,30 @@
       </fieldset>
 
       <fieldset>
-        <legend>2) Experiencia</legend>
+        <legend>2) Experiencia previa</legend>
         <div class="field">
-          <span class="sub-label">Que experiencia en modelaje o contenido tienes? (Selecciona todo lo que aplique)</span>
+          <span class="sub-label">¿Qué has hecho antes?</span>
+          <p class="field-hint">Solo trabajo pasado. Elige cada tipo que ya hiciste, o “Sin experiencia aún”.</p>
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="experienceTypes" value="Fashion">Moda</label>
             <label class="choice"><input type="checkbox" name="experienceTypes" value="Portrait">Retrato</label>
             <label class="choice"><input type="checkbox" name="experienceTypes" value="Boudoir">Boudoir</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lenceria</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Traje de bano</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Desnudo implicito</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Desnudo artistico</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Desnudo erotico</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Lingerie">Lencería</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Swimwear">Traje de baño</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Implied nude">Desnudo implícito</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Artistic nude">Desnudo artístico</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Erotic nude">Desnudo erótico</label>
             <label class="choice"><input type="checkbox" name="experienceTypes" value="Nude bodypaint">Bodypaint desnudo</label>
             <label class="choice"><input type="checkbox" name="experienceTypes" value="OnlyFans / fan content">OnlyFans / contenido para fans</label>
             <label class="choice"><input type="checkbox" name="experienceTypes" value="Video content">Contenido en video</label>
-            <label class="choice"><input type="checkbox" name="experienceTypes" value="Sin experiencia aun">Sin experiencia aun</label>
+            <label class="choice"><input type="checkbox" name="experienceTypes" value="Sin experiencia aun">Sin experiencia aún</label>
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Has trabajado con fotografos antes?</span>
+          <span class="sub-label">¿Has trabajado antes con un fotógrafo?</span>
+          <p class="field-hint">Esto es solo sobre sesiones de fotos que ya hiciste.</p>
           <div class="choices inline">
-            <label class="choice"><input type="radio" name="worked" value="Yes">Si</label>
+            <label class="choice"><input type="radio" name="worked" value="Yes">Sí</label>
             <label class="choice"><input type="radio" name="worked" value="No">No</label>
             <label class="choice"><input type="radio" name="worked" value="Un poco">Un poco</label>
           </div>
@@ -542,15 +541,16 @@
       </fieldset>
 
       <fieldset>
-        <legend>3) Interes De Contenido</legend>
+        <legend>3) El trabajo que quieres</legend>
         <div class="field">
-          <span class="sub-label">Que tipos de proyectos te interesan? (Selecciona al menos uno) *</span>
+          <span class="sub-label">¿Para qué quieres que te contraten? *</span>
+          <p class="field-hint">Trabajo futuro con MVP Media. Puedes elegir proyectos que todavía no has hecho.</p>
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="interests" value="Boudoir">Boudoir</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Lingerie">Lenceria</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Implied nude">Desnudo implicito</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Artistic nude">Desnudo artistico</label>
-            <label class="choice"><input type="checkbox" name="interests" value="Erotic nude">Desnudo erotico</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Lingerie">Lencería</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Implied nude">Desnudo implícito</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Artistic nude">Desnudo artístico</label>
+            <label class="choice"><input type="checkbox" name="interests" value="Erotic nude">Desnudo erótico</label>
             <label class="choice"><input type="checkbox" name="interests" value="Nude bodypaint">Bodypaint desnudo</label>
             <label class="choice"><input type="checkbox" name="interests" value="Glamour nude">Desnudo glamour</label>
             <label class="choice"><input type="checkbox" name="interests" value="Fotos para suscripcion adulta">Fotos para suscripcion adulta</label>
@@ -560,9 +560,10 @@
           <div class="error" id="interestsError"></div>
         </div>
         <div class="field">
-          <span class="sub-label">Estas abierta/o a contenido en plataformas de pago o suscripcion?</span>
+          <span class="sub-label">¿Harías fotos o videos para un sitio de pago?</span>
+          <p class="field-hint">Esto es contenido que se vende en una página de suscripción. Es distinto de una sesión normal.</p>
           <div class="choices inline">
-            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Yes">Si</label>
+            <label class="choice"><input type="radio" name="paidPlatformOpen" value="Yes">Sí</label>
             <label class="choice"><input type="radio" name="paidPlatformOpen" value="No">No</label>
             <label class="choice"><input type="radio" name="paidPlatformOpen" value="Tal vez">Tal vez</label>
             <label class="choice"><input type="radio" name="paidPlatformOpen" value="Solo con acuerdo separado">Solo con acuerdo separado</label>
@@ -570,28 +571,11 @@
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend>4) Comodidad y Limites</legend>
-        <div class="field">
-          <span class="sub-label">Que niveles te sientes comoda/o conversando? (Selecciona al menos uno) *</span>
-          <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Lingerie">Lenceria</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Implied nude">Desnudo implicito</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless">Topless</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Desnudo completo no explicito">Desnudo completo no explicito</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Erotic nude">Desnudo erotico</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Nude bodypaint">Bodypaint desnudo</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Video content">Contenido en video</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Sesiones en exterior / locacion">Sesiones en exterior / locacion</label>
-          </div>
-          <div class="error" id="nudityComfortError"></div>
-        </div>
-      </fieldset>
 
       <fieldset>
-        <legend>5) Disponibilidad y Pago</legend>
+        <legend>4) Disponibilidad y pago</legend>
         <div class="field">
-          <span class="sub-label">Cuando estas disponible? (Selecciona al menos una opcion) *</span>
+          <span class="sub-label">¿En qué momentos de la semana puedes sesionar? Elige todos los que te sirvan. *</span>
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="availability" value="Entre semana">Entre semana</label>
             <label class="choice"><input type="checkbox" name="availability" value="Noches entre semana">Noches entre semana</label>
@@ -601,18 +585,18 @@
           <div class="error" id="availabilityError"></div>
         </div>
         <div class="field">
-          <span class="sub-label">Estas dispuesta/o a viajar para sesiones?</span>
+          <span class="sub-label">¿Puedes viajar para una sesión?</span>
           <div class="choices inline">
-            <label class="choice"><input type="radio" name="travel" value="Yes">Si</label>
+            <label class="choice"><input type="radio" name="travel" value="Yes">Sí</label>
             <label class="choice"><input type="radio" name="travel" value="No">No</label>
             <label class="choice"><input type="radio" name="travel" value="Solo local">Solo local</label>
             <label class="choice"><input type="radio" name="travel" value="Con gastos de viaje cubiertos">Con gastos de viaje cubiertos</label>
           </div>
         </div>
         <div class="field">
-          <label for="expectedComp">Compensacion esperada por sesion *</label>
+          <label for="expectedComp">¿Cuánto esperas por sesión (USD)? *</label>
           <select id="expectedComp" required>
-            <option value="">Selecciona una opcion</option>
+            <option value="">Elige una opción</option>
             <option>Menos de $100</option>
             <option>$100–$200</option>
             <option>$200–$400</option>
@@ -625,35 +609,35 @@
       </fieldset>
 
       <fieldset>
-        <legend>6) Fotos</legend>
+        <legend>5) Fotos</legend>
         <div class="grid two">
           <div class="field">
             <label for="headshot">Foto de rostro</label>
             <input id="headshot" type="file" accept="image/*">
-            <p class="file-hint" id="headshotHint">Sube una foto de rostro, o asegurate de completar arriba tu enlace de Instagram / portafolio. Hasta 8MB.</p>
+            <p class="file-hint" id="headshotHint">Una foto clara y reciente de tu rostro. O usa el enlace de Instagram o portafolio del primer paso. Máximo 8 MB.</p>
             <img class="photo-preview" id="headshotPreview" alt="Foto de rostro preview">
           </div>
           <div class="field">
             <label for="fullBody">Foto de cuerpo completo</label>
             <input id="fullBody" type="file" accept="image/*">
-            <p class="file-hint" id="fullBodyHint">Sube una foto de cuerpo completo o agrega el enlace de portafolio arriba. Hasta 8MB.</p>
+            <p class="file-hint" id="fullBodyHint">Una foto reciente de la cabeza a los pies. O usa el enlace de portafolio del primer paso. Máximo 8 MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Vista previa cuerpo completo">
           </div>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>7) Final</legend>
-        <div class="field"><label for="whyWork">Por que te interesa el modelaje creativo adulto con MVP Media? *</label><textarea id="whyWork" required></textarea></div>
-        <div class="field"><label for="anythingElse">Que te haria sentir segura/o y comoda/o en una sesion? *</label><textarea id="anythingElse" required></textarea></div>
+        <legend>6) Final</legend>
+        <div class="field"><label for="whyWork">¿Por qué te interesa el modelaje creativo adulto con MVP Media? *</label><textarea id="whyWork" required></textarea></div>
+        <div class="field"><label for="anythingElse">¿Qué te haría sentir en calma y con confianza en una sesión? *</label><textarea id="anythingElse" required></textarea></div>
         <div class="field">
           <div class="choices">
-            <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">Confirmo que tengo al menos 18 anos.</label>
+            <label class="choice"><input type="checkbox" name="confirm18Truth" value="yes">Confirmo que tengo al menos 18 años.</label>
             <label class="choice"><input type="checkbox" name="consent" value="adult-content">Entiendo que esta solicitud es para contenido adulto: desnudo, erotico, boudoir, bodypaint y suscripcion.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="voluntary">Entiendo que la participacion es voluntaria.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="voluntary">Entiendo que participar es voluntario.</label>
             <label class="choice"><input type="checkbox" name="consent" value="boundaries">Entiendo que puedo rechazar cualquier concepto antes de agendar.</label>
             <label class="choice"><input type="checkbox" name="consent" value="terms">Entiendo que compensacion, uso y terminos de cesion se conversan antes de la sesion.</label>
-            <label class="choice"><input type="checkbox" name="consent" value="contact">Doy consentimiento para ser contactada/o por MVP Media.</label>
+            <label class="choice"><input type="checkbox" name="consent" value="contact">Acepto que MVP Media me contacte.</label>
           </div>
           <div class="error" id="consentError"></div>
           <div class="error" id="confirm18Error"></div>
@@ -661,8 +645,8 @@
       </fieldset>
 
       <div class="wizard-actions">
-        <button type="button" class="secondary" id="prevStepBtn">Anterior</button>
-        <button type="button" id="nextStepBtn">Siguiente</button>
+        <button type="button" class="secondary" id="prevStepBtn">Atrás</button>
+        <button type="button" id="nextStepBtn">Continuar</button>
       </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Enviar Solicitud De Modelo Creativa Adulta</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
@@ -744,7 +728,7 @@
         return;
       }
       const list = tips.length > 0 ? `<ul>${tips.map((tip) => '<li>' + tip + '</li>').join("")}</ul>` : "";
-      submitErrorPanel.innerHTML = `<strong>Que corregir</strong><div>${message}</div>${list}`;
+      submitErrorPanel.innerHTML = `<strong>Qué corregir</strong><div>${message}</div>${list}`;
       submitErrorPanel.hidden = false;
     };
 
@@ -771,27 +755,71 @@
     };
 
     const updateStep = () => {
-      fieldsets.forEach((fieldset) => {
-        fieldset.hidden = false;
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
       });
 
-      stepLabel.textContent = "Encuesta completa visible abajo";
-      stepTitle.textContent = "Toma tu tiempo. Los limites y niveles de comodidad se pueden revisar antes de enviar.";
-      progressFill.style.width = "100%";
-      prevStepBtn.hidden = true;
-      nextStepBtn.hidden = true;
-      submitBtn.hidden = false;
+      stepLabel.textContent = "Full survey visible below";
+      stepTitle.textContent = "Take your time. Boundaries and comfort levels can be reviewed before submitting.";
+      const legend = fieldsets[currentStep].querySelector("legend");
+      const stepName = legend ? legend.textContent.trim() : "";
+      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+      stepTitle.textContent = stepName;
+      progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
+      prevStepBtn.hidden = currentStep === 0;
+      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+      submitBtn.hidden = currentStep !== fieldsets.length - 1;
       submitStatus.textContent = "";
     };
 
     const validateCurrentStep = () => {
-      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"));
-      const invalid = controls.find((control) => !control.checkValidity());
-      if (invalid) {
-        invalid.reportValidity();
-        invalid.focus();
+      const step = fieldsets[currentStep];
+      const lang = document.documentElement.lang || "en";
+      const controls = Array.from(step.querySelectorAll("input, select, textarea"))
+        .filter((control) => !control.disabled && control.type !== "hidden" && !control.closest("[hidden]"));
+      const invalid = controls.filter((control) => !control.checkValidity());
+      const messages = {
+        en: {
+          review: "Please review the required fields and try again.",
+          prefix: "Complete",
+          interests: "Choose at least one project type.",
+          availability: "Choose at least one time of the week."
+        },
+        es: {
+          review: "Revisa los campos obligatorios e inténtalo de nuevo.",
+          prefix: "Completa",
+          interests: "Elige al menos un tipo de proyecto.",
+          availability: "Elige al menos un horario de la semana."
+        },
+        pt: {
+          review: "Revise os campos obrigatórios e tente de novo.",
+          prefix: "Preencha",
+          interests: "Escolha pelo menos um tipo de projeto.",
+          availability: "Escolha pelo menos um horário da semana."
+        }
+      };
+      const copy = messages[lang.slice(0, 2)] || messages.en;
+      const tips = [];
+      for (const name of ["interests", "availability"]) {
+        if (step.querySelector(`input[name='${name}']`) && !checkAtLeastOne(`input[name='${name}']`)) {
+          tips.push(copy[name]);
+        }
+      }
+      if (invalid.length || tips.length) {
+        const fieldTips = invalid.slice(0, 6).map((control) => {
+          const explicit = control.id ? document.querySelector(`label[for='${control.id}']`) : null;
+          const field = control.closest(".field");
+          const sub = field ? field.querySelector(".sub-label") : null;
+          const label = explicit ? explicit.textContent : sub ? sub.textContent : control.name;
+          return `${copy.prefix}: ${label.replace(/\s*\*\s*$/, "").trim()}.`;
+        });
+        setSubmitIssue(copy.review, [...fieldTips, ...tips]);
+        if (invalid[0]) {
+          invalid[0].focus();
+        }
         return false;
       }
+      clearSubmitIssue();
       return true;
     };
 
@@ -1072,7 +1100,7 @@
         comfortable_snapshots: "Yes",
         experience: checkedValues("input[name='experienceTypes']").join(", ") || "No especificado",
         interests: checkedValues("input[name='interests']"),
-        nudity_comfort_levels: checkedValues("input[name='nudityComfortLevels']"),
+        nudity_comfort_levels: [],
         comfort_level: "No especificado",
         avoid_concepts: "",
         hard_limits: "",
@@ -1119,7 +1147,6 @@
       const focusableGroups = [
         { test: () => !getValue("instagram") && !getValue("email") && !getValue("phone"), selector: "#instagram" },
         { test: () => !checkAtLeastOne("input[name='interests']"), selector: "input[name='interests']" },
-        { test: () => !checkAtLeastOne("input[name='nudityComfortLevels']"), selector: "input[name='nudityComfortLevels']" },
         { test: () => !checkAtLeastOne("input[name='availability']"), selector: "input[name='availability']" },
         { test: () => checkedValues("input[name='consent']").length < 5, selector: "input[name='consent']" },
         { test: () => checkedValues("input[name='confirm18Truth']").length === 0, selector: "input[name='confirm18Truth']" }
@@ -1174,11 +1201,6 @@
         validationTips.push("Selecciona al menos un interes de proyecto.");
       }
 
-      if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
-        setError("nudityComfortError", "Selecciona al menos un nivel de comodidad.");
-        hasErrors = true;
-        validationTips.push("Selecciona al menos un nivel de comodidad.");
-      }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Selecciona al menos una opcion de disponibilidad.");
@@ -1206,11 +1228,24 @@
             validation_tips: validationTips
           }
         });
-        setSubmitIssue("Revisa los campos obligatorios e intenta de nuevo.", validationTips);
-        if (form.checkValidity()) {
-          focusFirstMissingField();
-        } else {
-          form.reportValidity();
+        setSubmitIssue("Revisa los campos obligatorios e inténtalo de nuevo.", validationTips);
+        const firstInvalid = form.querySelector("input:invalid, select:invalid, textarea:invalid");
+        if (firstInvalid) {
+          const stepIndex = fieldsets.findIndex((fieldset) => fieldset.contains(firstInvalid));
+          if (stepIndex >= 0) {
+            currentStep = stepIndex;
+            fieldsets.forEach((fieldset, index) => {
+              fieldset.hidden = index !== currentStep;
+            });
+            const legend = fieldsets[currentStep].querySelector("legend");
+            stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+            stepTitle.textContent = legend ? legend.textContent.trim() : "";
+            progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
+            prevStepBtn.hidden = currentStep === 0;
+            nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+            submitBtn.hidden = currentStep !== fieldsets.length - 1;
+          }
+          firstInvalid.focus();
         }
         return;
       }

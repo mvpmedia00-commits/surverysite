@@ -503,12 +503,13 @@
       <span class="section-kicker">Apply</span>
       <h2>Artist Application</h2>
       <p class="lead">Tell me what you make, how you work, and what kind of artist role fits you best.</p>
+      <p class="step-title" id="stepTitle">1. Contact</p>
 
       <fieldset>
         <legend>1. Contact</legend>
         <div class="form-grid">
           <div class="field"><label for="fullName">Full name *</label><input id="fullName" required autocomplete="name"></div>
-          <div class="field"><label for="preferredName">Preferred name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="preferredName">Name we should call you *</label><input id="preferredName" required></div>
           <div class="field"><label for="age">Age *</label><input id="age" required type="number" min="1" inputmode="numeric"></div>
           <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email"></div>
           <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" autocomplete="tel"></div>
@@ -627,6 +628,10 @@
         </div>
       </fieldset>
 
+      <div class="wizard-actions">
+        <button type="button" class="secondary" id="prevStepBtn">Back</button>
+        <button type="button" id="nextStepBtn">Continue</button>
+      </div>
       <div class="submit-row">
         <button id="submitBtn" type="submit">Submit artist application</button>
         <p class="status" id="submitStatus" aria-live="polite"></p>
@@ -962,6 +967,49 @@
     form.addEventListener("input", clearSubmitIssue);
     form.addEventListener("change", clearSubmitIssue);
 
+    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
+    let currentStep = 0;
+    const prevStepBtn = document.getElementById("prevStepBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const stepTitle = document.getElementById("stepTitle");
+    const showArtistStep = () => {
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
+      });
+      const legend = fieldsets[currentStep].querySelector("legend");
+      stepTitle.textContent = `${currentStep + 1} / ${fieldsets.length} · ${legend ? legend.textContent.trim() : ""}`;
+      prevStepBtn.hidden = currentStep === 0;
+      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+      submitBtn.hidden = currentStep !== fieldsets.length - 1;
+    };
+    const validateArtistStep = () => {
+      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"))
+        .filter((control) => !control.disabled && !control.closest("[hidden]"));
+      const invalid = controls.find((control) => !control.checkValidity());
+      if (invalid) {
+        const label = invalid.id ? document.querySelector(`label[for='${invalid.id}']`) : null;
+        setSubmitIssue("Please review the required fields and try again.", [`Complete: ${label ? label.textContent.replace(/\s*\*\s*$/, "").trim() : "this question"}.`]);
+        invalid.focus();
+        return false;
+      }
+      clearSubmitIssue();
+      return true;
+    };
+    prevStepBtn.addEventListener("click", () => {
+      currentStep = Math.max(currentStep - 1, 0);
+      showArtistStep();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    nextStepBtn.addEventListener("click", () => {
+      if (!validateArtistStep()) {
+        return;
+      }
+      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
+      showArtistStep();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    showArtistStep();
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearSubmitIssue();
@@ -993,7 +1041,15 @@
           customError || "Please review required fields and try again.",
           visibleTips.length > 0 ? visibleTips : ["Complete all required fields marked with *."]
         );
-        form.reportValidity();
+        const firstInvalid = form.querySelector("input:invalid, select:invalid, textarea:invalid");
+        if (firstInvalid) {
+          const stepIndex = fieldsets.findIndex((fieldset) => fieldset.contains(firstInvalid));
+          if (stepIndex >= 0) {
+            currentStep = stepIndex;
+            showArtistStep();
+          }
+          firstInvalid.focus();
+        }
         return;
       }
 

@@ -417,9 +417,6 @@
       flex-wrap: wrap;
     }
 
-    .wizard-actions {
-      display: none;
-    }
 
     .bot-field {
       position: absolute;
@@ -562,7 +559,7 @@
       <fieldset>
         <legend>1) Basic Info</legend>
         <div class="grid two">
-          <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="preferredName">Name we should call you *</label><input id="preferredName" required></div>
           <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
           <div class="field"><label for="email">Email Address</label><input id="email" type="email"></div>
           <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone"></div>
@@ -607,7 +604,7 @@
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Have you worked with photographers before?</span>
+          <span class="sub-label">Have you worked with a photographer before?</span>
           <div class="choices inline">
             <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
             <label class="choice"><input type="radio" name="worked" value="No">No</label>
@@ -648,7 +645,7 @@
       <fieldset>
         <legend>4) Comfort &amp; Boundaries</legend>
         <div class="field">
-          <span class="sub-label">What levels are you comfortable discussing? (Select at least one) *</span>
+          <span class="sub-label">Which of these are you willing to do? Choose every one that applies. *</span>
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Lingerie">Lingerie</label>
             <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Implied nude">Implied nude</label>
@@ -666,7 +663,7 @@
       <fieldset>
         <legend>5) Availability &amp; Pay</legend>
         <div class="field">
-          <span class="sub-label">When are you available? (Select at least one) *</span>
+          <span class="sub-label">Which times of the week can you shoot? Choose every time that works. *</span>
           <div class="choices inline">
             <label class="choice"><input type="checkbox" name="availability" value="Weekdays">Weekdays</label>
             <label class="choice"><input type="checkbox" name="availability" value="Weeknights">Weeknights</label>
@@ -710,15 +707,15 @@
         <legend>6) Photos</legend>
         <div class="grid two">
           <div class="field">
-            <label for="headshot">Headshot</label>
+            <label for="headshot">Face photo</label>
             <input id="headshot" type="file" accept="image/*">
-            <p class="file-hint" id="headshotHint">Upload a headshot, or make sure your Instagram / portfolio link is filled in above. Up to 8MB.</p>
-            <img class="photo-preview" id="headshotPreview" alt="Headshot preview">
+            <p class="file-hint" id="headshotHint">A clear, recent photo of your face. Or use the Instagram or portfolio link from the first step. Up to 8 MB.</p>
+            <img class="photo-preview" id="headshotPreview" alt="Face photo preview">
           </div>
           <div class="field">
-            <label for="fullBody">Full Body Photo</label>
+            <label for="fullBody">Full-body photo</label>
             <input id="fullBody" type="file" accept="image/*">
-            <p class="file-hint" id="fullBodyHint">Upload a full-body photo or provide portfolio link above. Up to 8MB.</p>
+            <p class="file-hint" id="fullBodyHint">A recent photo from head to toe. Or use the portfolio link from the first step. Up to 8 MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Full body preview">
           </div>
         </div>
@@ -743,8 +740,8 @@
       </fieldset>
 
       <div class="wizard-actions">
-        <button type="button" class="secondary" id="prevStepBtn">Previous</button>
-        <button type="button" id="nextStepBtn">Next</button>
+        <button type="button" class="secondary" id="prevStepBtn">Back</button>
+        <button type="button" id="nextStepBtn">Continue</button>
       </div>
       <div class="submit-row"><button type="submit" id="submitBtn">Submit Artistic Survey</button></div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
@@ -856,27 +853,74 @@
     };
 
     const updateStep = () => {
-      fieldsets.forEach((fieldset) => {
-        fieldset.hidden = false;
+      fieldsets.forEach((fieldset, index) => {
+        fieldset.hidden = index !== currentStep;
       });
 
       stepLabel.textContent = "Full survey visible below";
       stepTitle.textContent = "Take your time. Boundaries and comfort levels can be reviewed before submitting.";
-      progressFill.style.width = "100%";
-      prevStepBtn.hidden = true;
-      nextStepBtn.hidden = true;
-      submitBtn.hidden = false;
+      const legend = fieldsets[currentStep].querySelector("legend");
+      const stepName = legend ? legend.textContent.trim() : "";
+      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+      stepTitle.textContent = stepName;
+      progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
+      prevStepBtn.hidden = currentStep === 0;
+      nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+      submitBtn.hidden = currentStep !== fieldsets.length - 1;
       submitStatus.textContent = "";
     };
 
     const validateCurrentStep = () => {
-      const controls = Array.from(fieldsets[currentStep].querySelectorAll("input, select, textarea"));
-      const invalid = controls.find((control) => !control.checkValidity());
-      if (invalid) {
-        invalid.reportValidity();
-        invalid.focus();
+      const step = fieldsets[currentStep];
+      const lang = document.documentElement.lang || "en";
+      const controls = Array.from(step.querySelectorAll("input, select, textarea"))
+        .filter((control) => !control.disabled && control.type !== "hidden" && !control.closest("[hidden]"));
+      const invalid = controls.filter((control) => !control.checkValidity());
+      const messages = {
+        en: {
+          review: "Please review the required fields and try again.",
+          prefix: "Complete",
+          interests: "Choose at least one project type.",
+          nudityComfortLevels: "Choose at least one option you are willing to do.",
+          availability: "Choose at least one time of the week."
+        },
+        es: {
+          review: "Revisa los campos obligatorios e inténtalo de nuevo.",
+          prefix: "Completa",
+          interests: "Elige al menos un tipo de proyecto.",
+          nudityComfortLevels: "Elige al menos una opción que aceptas hacer.",
+          availability: "Elige al menos un horario de la semana."
+        },
+        pt: {
+          review: "Revise os campos obrigatórios e tente de novo.",
+          prefix: "Preencha",
+          interests: "Escolha pelo menos um tipo de projeto.",
+          nudityComfortLevels: "Escolha pelo menos uma opção que você aceita fazer.",
+          availability: "Escolha pelo menos um horário da semana."
+        }
+      };
+      const copy = messages[lang.slice(0, 2)] || messages.en;
+      const tips = [];
+      for (const name of ["interests", "nudityComfortLevels", "availability"]) {
+        if (step.querySelector(`input[name='${name}']`) && !checkAtLeastOne(`input[name='${name}']`)) {
+          tips.push(copy[name]);
+        }
+      }
+      if (invalid.length || tips.length) {
+        const fieldTips = invalid.slice(0, 6).map((control) => {
+          const explicit = control.id ? document.querySelector(`label[for='${control.id}']`) : null;
+          const field = control.closest(".field");
+          const sub = field ? field.querySelector(".sub-label") : null;
+          const label = explicit ? explicit.textContent : sub ? sub.textContent : control.name;
+          return `${copy.prefix}: ${label.replace(/\s*\*\s*$/, "").trim()}.`;
+        });
+        setSubmitIssue(copy.review, [...fieldTips, ...tips]);
+        if (invalid[0]) {
+          invalid[0].focus();
+        }
         return false;
       }
+      clearSubmitIssue();
       return true;
     };
 
@@ -1274,7 +1318,24 @@
           "Please review required fields and try again.",
           validationTips.length > 0 ? validationTips : ["Complete all required fields marked with *."]
         );
-        form.reportValidity();
+        const firstInvalid = form.querySelector("input:invalid, select:invalid, textarea:invalid");
+        if (firstInvalid) {
+          const stepIndex = fieldsets.findIndex((fieldset) => fieldset.contains(firstInvalid));
+          if (stepIndex >= 0) {
+            currentStep = stepIndex;
+            fieldsets.forEach((fieldset, index) => {
+              fieldset.hidden = index !== currentStep;
+            });
+            const legend = fieldsets[currentStep].querySelector("legend");
+            stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
+            stepTitle.textContent = legend ? legend.textContent.trim() : "";
+            progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
+            prevStepBtn.hidden = currentStep === 0;
+            nextStepBtn.hidden = currentStep === fieldsets.length - 1;
+            submitBtn.hidden = currentStep !== fieldsets.length - 1;
+          }
+          firstInvalid.focus();
+        }
         return;
       }
 
