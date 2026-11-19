@@ -46,7 +46,8 @@
       animation: riseIn 420ms ease-out;
     }
 
-    .hidden { display: none; }
+    .hidden,
+    [hidden] { display: none !important; }
 
     .lang-gate.hidden {
       display: none;
@@ -446,7 +447,8 @@
     .error-panel strong { display: block; margin-bottom: 6px; color: #ffd4c8; }
     .error-panel ul { margin: 8px 0 0 18px; padding: 0; }
 
-    .file-hint {
+    .file-hint,
+    .field-hint {
       margin: -2px 0 0;
       color: var(--muted);
       font-size: 0.82rem;
@@ -727,13 +729,13 @@
         <legend id="legend1">1) Basic Information</legend>
         <div class="grid two">
           <div class="field"><label for="fullName">Full Name *</label><input id="fullName" required></div>
-          <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required></div>
+          <div class="field"><label for="preferredName">Preferred Name *</label><input id="preferredName" required><p class="field-hint" id="preferredNameHint">A nickname or the name you use, if it is different from your full name.</p></div>
           <div class="field"><label for="age">Age (18+) *</label><input id="age" type="number" min="18" required></div>
           <div class="field"><label for="email">Email Address *</label><input id="email" type="email" required></div>
           <div class="field"><label for="city">City *</label><input id="city" required></div>
           <div class="field"><label for="country">Country *</label><input id="country" required></div>
-          <div class="field"><label for="instagram">Instagram Profile</label><input id="instagram"></div>
-          <div class="field"><label for="tiktok">TikTok Profile</label><input id="tiktok"></div>
+          <div class="field"><label for="instagram">Instagram username (optional)</label><input id="instagram" placeholder="@username"><p class="field-hint" id="instagramHint">If you add Instagram, face and full-body photos are optional.</p></div>
+          <div class="field"><label for="tiktok">TikTok username (optional)</label><input id="tiktok" placeholder="@username"></div>
           <div class="field">
             <label for="hearAbout">How did you hear about us? *</label>
             <select id="hearAbout" required>
@@ -753,13 +755,13 @@
       <fieldset>
         <legend id="legend2">2) Profile Snapshot</legend>
         <div class="grid two">
-          <div class="field"><label for="height">Height *</label><input id="height" required></div>
-          <div class="field"><label for="clothingSize">Clothing Size *</label><input id="clothingSize" required></div>
-          <div class="field"><label for="braSize">Bra Size (Optional)</label><input id="braSize"></div>
-          <div class="field"><label for="bustMeasurement">Bust Measurement (Optional)</label><input id="bustMeasurement"></div>
-          <div class="field"><label for="waistMeasurement">Waist Measurement *</label><input id="waistMeasurement" required></div>
-          <div class="field"><label for="hipMeasurement">Hip Measurement (Optional)</label><input id="hipMeasurement"></div>
-          <div class="field"><label for="shoeSize">Shoe Size (Optional)</label><input id="shoeSize"></div>
+          <div class="field"><label for="height">Height *</label><input id="height" placeholder="Example: 5 ft 7 in or 170 cm" required></div>
+          <div class="field"><label for="clothingSize">Clothing size *</label><input id="clothingSize" placeholder="Example: M, 6, or 38" required></div>
+          <div class="field"><label for="braSize">Bra size (optional)</label><input id="braSize" placeholder="Example: 34B"></div>
+          <div class="field"><label for="bustMeasurement">Bust measurement (optional)</label><input id="bustMeasurement" placeholder="Example: 34 in or 86 cm"></div>
+          <div class="field"><label for="waistMeasurement">Waist measurement *</label><input id="waistMeasurement" placeholder="Example: 26 in or 66 cm" required></div>
+          <div class="field"><label for="hipMeasurement">Hip measurement (optional)</label><input id="hipMeasurement" placeholder="Example: 36 in or 91 cm"></div>
+          <div class="field"><label for="shoeSize">Shoe size (optional)</label><input id="shoeSize" placeholder="Example: US 8 or EU 39"></div>
           <div class="field"><label for="hairColor">Hair Color (Optional)</label><input id="hairColor"></div>
           <div class="field"><label for="eyeColor">Eye Color (Optional)</label><input id="eyeColor"></div>
           <div class="field">
@@ -773,16 +775,16 @@
             </select>
           </div>
           <div class="field">
-            <span class="sub-label" id="workedLabel">Have you worked with photographers before?</span>
+            <span class="sub-label" id="workedLabel">Have you worked with a photographer before? *</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="worked" value="Yes">Yes</label>
+              <label class="choice"><input type="radio" name="worked" value="Yes" required>Yes</label>
               <label class="choice"><input type="radio" name="worked" value="No">No</label>
             </div>
           </div>
           <div class="field">
-            <span class="sub-label" id="snapshotsLabel">Can you provide recent snapshots later if selected?</span>
+            <span class="sub-label" id="snapshotsLabel">If we choose you, can you send a few recent photos of yourself? *</span>
             <div class="choices inline">
-              <label class="choice"><input type="radio" name="snapshots" value="Yes">Yes</label>
+              <label class="choice"><input type="radio" name="snapshots" value="Yes" required>Yes</label>
               <label class="choice"><input type="radio" name="snapshots" value="No">No</label>
             </div>
           </div>
@@ -799,11 +801,12 @@
             <label class="choice"><input type="radio" name="modelOpportunity" value="Both">Both</label>
             <label class="choice"><input type="radio" name="modelOpportunity" value="I'm not sure yet - I'd like to discuss it">I'm not sure yet - I'd like to discuss it</label>
           </div>
+          <p class="field-hint" id="opportunityHint">Regular means ongoing sessions. Professional means project-based shoots. Choose Both if either works for you.</p>
         </div>
 
         <div class="field">
-          <label for="opportunityInterest" id="opportunityInterestLabel">What interests you about this opportunity? *</label>
-          <textarea id="opportunityInterest" required></textarea>
+          <label for="opportunityInterest" id="opportunityInterestLabel">Why does that role fit you? *</label>
+          <textarea id="opportunityInterest" placeholder="A sentence or two is enough." required></textarea>
         </div>
 
         <div class="field" id="portfolioField" hidden>
@@ -851,7 +854,7 @@
 
         <div class="field">
           <label for="avoidConcepts">Any concepts you would not participate in? *</label>
-          <textarea id="avoidConcepts" required></textarea>
+          <textarea id="avoidConcepts" placeholder="Write None if you have no limits." required></textarea>
         </div>
       </fieldset>
 
@@ -867,6 +870,7 @@
               <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
             </div>
             <div class="error" id="availabilityError"></div>
+            <p class="field-hint" id="availabilityHint">Choose the times of day you can work. This is not how many shoots you want.</p>
           </div>
 
           <div class="field">
@@ -878,6 +882,7 @@
               <option value="Monthly">Monthly</option>
               <option value="Occasionally">Occasionally</option>
             </select>
+            <p class="field-hint" id="frequencyHint">Choose how often you can take a session. This is separate from which days of the week you are free.</p>
           </div>
 
           <div class="field">
@@ -890,7 +895,7 @@
 
           <div class="field">
             <label for="travelDistance">Maximum travel distance *</label>
-            <select id="travelDistance" required>
+            <select id="travelDistance">
               <option value="">Select one</option>
               <option value="5 km">5 km</option>
               <option value="10 km">10 km</option>
@@ -922,9 +927,9 @@
           </div>
 
           <div class="field">
-            <span class="sub-label" id="unpaidTfpLabel">Open to unpaid shoots in exchange for edited pictures?</span>
+            <span class="sub-label" id="unpaidTfpLabel">Would you also do an unpaid session if you receive the edited photos? *</span>
             <div class="choices">
-              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes">Yes</label>
+              <label class="choice"><input type="radio" name="unpaidTfpWilling" value="Yes" required>Yes</label>
               <label class="choice"><input type="radio" name="unpaidTfpWilling" value="No">No</label>
             </div>
             <div class="error" id="unpaidTfpError"></div>
@@ -955,9 +960,9 @@
             <p class="file-hint" id="fullBodyHint">Required if you do not provide Instagram. Image only, up to 8MB.</p>
             <img class="photo-preview" id="fullBodyPreview" alt="Full body photo preview">
           </div>
-          <div class="field"><label for="whyWork">Why would you like to work with MVP Media Photography? *</label><textarea id="whyWork" required></textarea></div>
-          <div class="field"><label for="goodFit">Anything you want us to know about your style or experience? (Optional)</label><textarea id="goodFit"></textarea></div>
-          <div class="field"><label for="anythingElse">Anything else you would like us to know? (Optional)</label><textarea id="anythingElse"></textarea></div>
+          <div class="field"><label for="whyWork">Why do you want to work with MVP Media Photography? *</label><textarea id="whyWork" placeholder="Tell us what draws you to this studio." required></textarea></div>
+          <div class="field"><label for="goodFit">Anything about your look, style, or past work we should know? (Optional)</label><textarea id="goodFit" placeholder="Skip this if you already covered it above."></textarea></div>
+          <div class="field"><label for="anythingElse">Anything else we should know? (Optional)</label><textarea id="anythingElse" placeholder="Scheduling notes or details that were not asked above."></textarea></div>
         </div>
       </fieldset>
 
@@ -1063,8 +1068,16 @@
 
     const getFieldLabel = (control) => {
       const id = control && control.id ? control.id : "";
-      const label = id ? document.querySelector(`label[for='${id}']`) : null;
-      return label ? label.textContent.replace(/\s*\*\s*$/, "").trim() : control.name || id || "Required field";
+      const explicit = id ? document.querySelector(`label[for='${id}']`) : null;
+      if (explicit) {
+        return explicit.textContent.replace(/\s*\*\s*$/, "").trim();
+      }
+      const field = control && control.closest ? control.closest(".field") : null;
+      const subLabel = field ? field.querySelector(".sub-label") : null;
+      if (subLabel) {
+        return subLabel.textContent.replace(/\s*\*\s*$/, "").trim();
+      }
+      return control.name || id || "Required field";
     };
 
     const getInvalidFieldTips = () => {
@@ -1140,31 +1153,44 @@
         successTitle: "Application Received",
         successText: "Thank you for applying to MVP Media Photography. We review every application and will contact selected applicants regarding upcoming creative opportunities.",
         labelFullName: "Full Name *",
-        labelPreferredName: "Preferred Name *",
+        labelPreferredName: "Name we should call you *",
+        preferredNameHint: "A nickname or the name you use, if it is different from your full name.",
         labelAge: "Age (18+) *",
         labelEmail: "Email Address *",
         labelCity: "City *",
         labelCountry: "Country *",
-        labelInstagram: "Instagram Profile",
-        labelTikTok: "TikTok Profile",
+        labelInstagram: "Instagram username (optional)",
+        instagramHint: "If you add Instagram, face and full-body photos are optional.",
+        instagramPlaceholder: "@username",
+        labelTikTok: "TikTok username (optional)",
+        tiktokPlaceholder: "@username",
         labelHearAbout: "How did you hear about us? *",
-        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Referral", "Friend", "Website", "Other"],
+        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Someone in the industry referred me", "A friend told me", "Website", "Other"],
         labelHeight: "Height *",
-        labelClothingSize: "Clothing Size *",
-        labelBraSize: "Bra Size (Optional)",
-        labelBustMeasurement: "Bust Measurement (Optional)",
-        labelWaistMeasurement: "Waist Measurement *",
-        labelHipMeasurement: "Hip Measurement (Optional)",
-        labelShoeSize: "Shoe Size (Optional)",
-        labelHairColor: "Hair Color (Optional)",
-        labelEyeColor: "Eye Color (Optional)",
-        labelExperience: "Modeling Experience *",
-        experienceOptions: ["Never", "Beginner", "Some Experience", "Experienced"],
-        labelWorked: "Have you worked with photographers before?",
-        labelSnapshots: "Can you provide recent snapshots later if selected?",
+        heightPlaceholder: "Example: 5 ft 7 in or 170 cm",
+        labelClothingSize: "Clothing size *",
+        clothingPlaceholder: "Example: M, 6, or 38",
+        labelBraSize: "Bra size (optional)",
+        braPlaceholder: "Example: 34B",
+        labelBustMeasurement: "Bust measurement (optional)",
+        bustPlaceholder: "Example: 34 in or 86 cm",
+        labelWaistMeasurement: "Waist measurement *",
+        waistPlaceholder: "Example: 26 in or 66 cm",
+        labelHipMeasurement: "Hip measurement (optional)",
+        hipPlaceholder: "Example: 36 in or 91 cm",
+        labelShoeSize: "Shoe size (optional)",
+        shoePlaceholder: "Example: US 8 or EU 39",
+        labelHairColor: "Hair color (optional)",
+        hairPlaceholder: "Example: dark brown",
+        labelEyeColor: "Eye color (optional)",
+        eyePlaceholder: "Example: brown",
+        labelExperience: "How much modeling have you done? *",
+        experienceOptions: ["I have never modeled", "Beginner: only a few shoots", "Some experience: several shoots", "Experienced: regular or paid work"],
+        labelWorked: "Have you worked with a photographer before? *",
+        labelSnapshots: "If we choose you, can you send a few recent photos of yourself? *",
         yes: "Yes",
         no: "No",
-        labelInterests: "Project interests (select at least one) *",
+        labelInterests: "What kinds of shoots are you willing to do? Choose every one that applies. *",
         interestPortrait: "Portrait",
         interestLifestyle: "Lifestyle",
         interestFashion: "Fashion",
@@ -1175,49 +1201,59 @@
         interestArtisticNude: "Artistic Nude Photography",
         interestSocial: "Social Media Content",
         interestVideo: "Video Content",
-        labelComfortLevel: "Overall comfort level for glamour/swimwear/artistic projects *",
-        comfortOptions: ["Not Comfortable", "Maybe", "Comfortable"],
-        labelAvoidConcepts: "Any concepts you would not participate in? *",
-        labelAvailability: "Availability (select at least one) *",
-        availabilityWeekdays: "Weekdays",
+        labelComfortLevel: "How do you feel about glamour, swimwear, or artistic figure work? *",
+        comfortOptions: ["I am not comfortable with that work", "Maybe. I want to discuss it first", "I am comfortable with that work"],
+        labelAvoidConcepts: "What will you not do on a shoot? *",
+        avoidPlaceholder: "Write None if you have no limits. Otherwise list poses, wardrobe, or themes you will not do.",
+        labelAvailability: "When during the week can you shoot? Choose every time that works. *",
+        availabilityHint: "Choose the times of day you can work. This is not how many shoots you want.",
+        availabilityWeekdays: "Weekdays, daytime",
         availabilityWeeknights: "Weeknights",
         availabilityWeekends: "Weekends",
-        availabilityFlexible: "Flexible",
-        labelFrequency: "How often are you available? *",
-        frequencyOptions: ["Weekly", "Bi-Weekly", "Monthly", "Occasionally"],
-        labelOpportunity: "Which modeling opportunity interests you most? *",
-        opportunityRegular: "Regular Body Paint Canvas Model",
-        opportunityProfessional: "Professional Body Paint Model",
-        opportunityBoth: "Both",
-        opportunityUnsure: "I'm not sure yet - I'd like to discuss it",
-        labelOpportunityInterest: "What interests you about this opportunity? *",
-        labelPortfolio: "Portfolio / Modeling Instagram / Website (Optional)",
-        portfolioPlaceholder: "@handle or https://...",
-        labelRegularAvailability: "How often are you generally available? *",
-        regularOccasionally: "Occasionally",
-        regular12: "1-2 days per week",
-        regular34: "3-4 days per week",
-        regular5: "5+ days per week",
-        regularVaries: "Availability varies",
-        labelTravelWilling: "Willing to travel for shoots? *",
-        labelTravelDistance: "Maximum travel distance *",
-        travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "100 km+"],
-        labelCompInterest: "Interested in *",
-        compInterestOptions: ["Paid Shoots", "Portfolio Building", "Both"],
-        labelExpectedComp: "Expected compensation per session (USD) *",
-        labelUnpaidTfpWilling: "Open to unpaid shoots in exchange for edited pictures?",
+        availabilityFlexible: "My schedule is flexible",
+        labelFrequency: "How often can you book a shoot? *",
+        frequencyHint: "Choose how often you can take a session. This is separate from which days of the week you are free.",
+        frequencyOptions: ["About once a week", "About every two weeks", "About once a month", "Only now and then"],
+        labelOpportunity: "Which body-paint role are you applying for? *",
+        opportunityHint: "Regular means ongoing sessions, and we will ask how many days you can work. Professional means project-based shoots, and we will ask for a portfolio link. Choose Both if either works for you.",
+        opportunityRegular: "Regular model: ongoing body-paint sessions",
+        opportunityProfessional: "Professional model: project-based body-paint shoots",
+        opportunityBoth: "Both regular and professional work",
+        opportunityUnsure: "I am not sure yet. I want to talk about it first.",
+        labelOpportunityInterest: "Why does that role fit you? *",
+        opportunityInterestPlaceholder: "A sentence or two is enough.",
+        labelPortfolio: "Link to your portfolio, modeling Instagram, or website (optional)",
+        portfolioPlaceholder: "@username or https://...",
+        labelRegularAvailability: "For regular body-paint sessions, how many days a week can you usually work? *",
+        regularOccasionally: "Only once in a while, not every week",
+        regular12: "1 or 2 days a week",
+        regular34: "3 or 4 days a week",
+        regular5: "5 or more days a week",
+        regularVaries: "It changes from week to week",
+        labelTravelWilling: "Can you travel outside your city for a shoot? *",
+        labelTravelDistance: "How far from your city can you travel? *",
+        travelDistanceOptions: ["Up to 5 km", "Up to 10 km", "Up to 25 km", "Up to 50 km", "More than 100 km"],
+        labelCompInterest: "What kind of booking do you want? *",
+        compInterestOptions: ["Paid shoots", "Portfolio shoots, including low pay or trade", "Both paid and portfolio shoots"],
+        labelExpectedComp: "If a session is paid, what do you expect per session (USD)? *",
+        labelUnpaidTfpWilling: "Would you also do an unpaid session if you receive the edited photos? *",
         expectedCompOptions: ["Under $50", "$50-$100", "$100-$200", "$200+"],
-        labelHeadshotRequired: "Headshot *",
-        labelHeadshotSuggested: "Headshot (Suggested)",
-        labelFullBodyRequired: "Full Body Photo *",
-        labelFullBodySuggested: "Full Body Photo (Suggested)",
-        photoRequiredHint: "Required if you do not provide Instagram. Image only, up to 8MB.",
-        photoSuggestedHint: "Suggested because you provided Instagram. Image only, up to 8MB.",
-        labelWhyWork: "Why would you like to work with MVP Media Photography? *",
-        labelGoodFit: "Anything you want us to know about your style or experience? (Optional)",
-        labelAnythingElse: "Anything else you would like us to know? (Optional)",
+        labelHeadshotRequired: "Face photo *",
+        labelHeadshotSuggested: "Face photo (optional)",
+        labelFullBodyRequired: "Full-body photo *",
+        labelFullBodySuggested: "Full-body photo (optional)",
+        photoHeadshotRequiredHint: "A clear, recent photo of your face. Required when you do not give an Instagram username. Image only, up to 8 MB.",
+        photoHeadshotSuggestedHint: "Optional because you gave an Instagram username. A clear, recent photo of your face helps. Image only, up to 8 MB.",
+        photoFullBodyRequiredHint: "A recent photo from head to toe, in fitted clothes. Required when you do not give an Instagram username. Image only, up to 8 MB.",
+        photoFullBodySuggestedHint: "Optional because you gave an Instagram username. A recent head-to-toe photo helps. Image only, up to 8 MB.",
+        labelWhyWork: "Why do you want to work with MVP Media Photography? *",
+        whyPlaceholder: "Tell us what draws you to this studio.",
+        labelGoodFit: "Anything about your look, style, or past work we should know? (Optional)",
+        goodFitPlaceholder: "Skip this if you already covered it above.",
+        labelAnythingElse: "Anything else we should know? (Optional)",
+        anythingPlaceholder: "Scheduling notes or details that were not asked above.",
         consentAge: "I confirm I am at least 18 years old.",
-        consentSelection: "I understand this application does not guarantee selection.",
+        consentSelection: "I understand that sending this application does not guarantee a booking.",
         consentVoluntary: "I understand all project participation is voluntary.",
         consentDetails: "I understand project details will be discussed before booking.",
         consentContact: "I consent to being contacted regarding future opportunities.",
@@ -1226,7 +1262,7 @@
         msgInterest: "Please select at least one interest.",
         msgAvailability: "Please select at least one availability option.",
         msgConsent: "All consent items must be checked before submission.",
-        msgRegularAvailability: "Select how often you are generally available for regular canvas sessions.",
+        msgRegularAvailability: "Choose how many days a week you can work regular body-paint sessions.",
         msgUnpaidTfp: "",
         heroAlt: "MVP Media hero",
         headshotPreviewAlt: "Headshot preview",
@@ -1298,31 +1334,44 @@
         successTitle: "Recibimos tu solicitud",
         successText: "Gracias por postularte a MVP Media Photography. Revisamos cada solicitud y contactaremos a las personas seleccionadas para las próximas oportunidades.",
         labelFullName: "Nombre completo *",
-        labelPreferredName: "Nombre de preferencia *",
+        labelPreferredName: "Nombre con el que debemos llamarte *",
+        preferredNameHint: "Un apodo o el nombre que usas, si es distinto de tu nombre completo.",
         labelAge: "Edad (18+) *",
         labelEmail: "Correo electrónico *",
         labelCity: "Ciudad *",
         labelCountry: "País *",
-        labelInstagram: "Perfil de Instagram",
-        labelTikTok: "Perfil de TikTok",
+        labelInstagram: "Usuario de Instagram (opcional)",
+        instagramHint: "Si escribes tu Instagram, las fotos de rostro y de cuerpo completo son opcionales.",
+        instagramPlaceholder: "@usuario",
+        labelTikTok: "Usuario de TikTok (opcional)",
+        tiktokPlaceholder: "@usuario",
         labelHearAbout: "¿Cómo nos conociste? *",
-        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Recomendación", "Amigo", "Sitio web", "Otro"],
+        hearAboutOptions: ["Indeed", "Instagram", "Facebook", "Me recomendó alguien del medio", "Me lo contó un amigo", "Sitio web", "Otro"],
         labelHeight: "Altura *",
+        heightPlaceholder: "Ejemplo: 170 cm o 5 ft 7 in",
         labelClothingSize: "Talla de ropa *",
+        clothingPlaceholder: "Ejemplo: M, 6 o 38",
         labelBraSize: "Talla de brasier (opcional)",
+        braPlaceholder: "Ejemplo: 34B",
         labelBustMeasurement: "Medida de busto (opcional)",
+        bustPlaceholder: "Ejemplo: 86 cm o 34 in",
         labelWaistMeasurement: "Medida de cintura *",
+        waistPlaceholder: "Ejemplo: 66 cm o 26 in",
         labelHipMeasurement: "Medida de cadera (opcional)",
+        hipPlaceholder: "Ejemplo: 91 cm o 36 in",
         labelShoeSize: "Talla de calzado (opcional)",
+        shoePlaceholder: "Ejemplo: 39 EU o 8 US",
         labelHairColor: "Color de cabello (opcional)",
+        hairPlaceholder: "Ejemplo: castaño oscuro",
         labelEyeColor: "Color de ojos (opcional)",
-        labelExperience: "Experiencia como modelo *",
-        experienceOptions: ["Nunca", "Principiante", "Algo de experiencia", "Con experiencia"],
-        labelWorked: "¿Has trabajado con fotógrafos antes?",
-        labelSnapshots: "Si te seleccionamos, ¿puedes enviar fotos recientes después?",
+        eyePlaceholder: "Ejemplo: café",
+        labelExperience: "¿Cuánta experiencia tienes como modelo? *",
+        experienceOptions: ["Nunca he modelado", "Principiante: solo unas pocas sesiones", "Algo de experiencia: varias sesiones", "Con experiencia: trabajo habitual o pagado"],
+        labelWorked: "¿Has trabajado antes con un fotógrafo? *",
+        labelSnapshots: "Si te elegimos, ¿puedes enviar algunas fotos recientes tuyas? *",
         yes: "Sí",
         no: "No",
-        labelInterests: "Intereses del proyecto (elige al menos uno) *",
+        labelInterests: "¿Qué tipos de sesión aceptas hacer? Elige todos los que apliquen. *",
         interestPortrait: "Retrato",
         interestLifestyle: "Estilo de vida",
         interestFashion: "Moda",
@@ -1333,49 +1382,59 @@
         interestArtisticNude: "Desnudo artístico",
         interestSocial: "Contenido para redes",
         interestVideo: "Video",
-        labelComfortLevel: "¿Qué tan cómodo te sientes con proyectos de glamour, traje de baño o fotografía artística? *",
-        comfortOptions: ["No me siento cómodo", "Tal vez", "Me siento cómodo"],
-        labelAvoidConcepts: "¿Hay conceptos en los que no participarías? *",
-        labelAvailability: "Disponibilidad (elige al menos una) *",
-        availabilityWeekdays: "Días de semana",
-        availabilityWeeknights: "Noches entre semana",
+        labelComfortLevel: "¿Cómo te sientes con trabajo de glamour, traje de baño o figura artística? *",
+        comfortOptions: ["No acepto ese tipo de trabajo", "Tal vez. Quiero hablarlo primero", "Sí acepto ese tipo de trabajo"],
+        labelAvoidConcepts: "¿Qué no vas a hacer en una sesión? *",
+        avoidPlaceholder: "Escribe Ninguno si no tienes límites. Si los tienes, anota poses, vestuario o temas que no harás.",
+        labelAvailability: "¿En qué momentos de la semana puedes sesionar? Elige todos los que te sirvan. *",
+        availabilityHint: "Elige el horario en el que puedes trabajar. No es cuántas sesiones quieres.",
+        availabilityWeekdays: "Entre semana, de día",
+        availabilityWeeknights: "Entre semana, de noche",
         availabilityWeekends: "Fines de semana",
-        availabilityFlexible: "Flexible",
-        labelFrequency: "¿Con qué frecuencia puedes participar? *",
-        frequencyOptions: ["Semanal", "Quincenal", "Mensual", "De vez en cuando"],
-        labelOpportunity: "¿Qué oportunidad de modelaje te interesa más? *",
-        opportunityRegular: "Modelo habitual de pintura corporal",
-        opportunityProfessional: "Modelo profesional de pintura corporal",
-        opportunityBoth: "Ambas",
-        opportunityUnsure: "Aún no lo sé; quiero conversarlo",
-        labelOpportunityInterest: "¿Qué te interesa de esta oportunidad? *",
-        labelPortfolio: "Portafolio, Instagram de modelaje o sitio web (opcional)",
+        availabilityFlexible: "Mi horario es flexible",
+        labelFrequency: "¿Cada cuánto puedes agendar una sesión? *",
+        frequencyHint: "Elige cada cuánto puedes tomar una sesión. Es distinto de los días de la semana en los que estás libre.",
+        frequencyOptions: ["Más o menos una vez por semana", "Más o menos cada dos semanas", "Más o menos una vez al mes", "Solo de vez en cuando"],
+        labelOpportunity: "¿A qué trabajo de pintura corporal estás aplicando? *",
+        opportunityHint: "Habitual significa sesiones continuas; te preguntaremos cuántos días puedes trabajar. Profesional significa sesiones por proyecto; te pediremos un enlace de portafolio. Elige ambas si te sirven las dos.",
+        opportunityRegular: "Modelo habitual: sesiones continuas de pintura corporal",
+        opportunityProfessional: "Modelo profesional: sesiones por proyecto",
+        opportunityBoth: "Trabajo habitual y profesional",
+        opportunityUnsure: "Aún no lo sé. Quiero hablarlo primero.",
+        labelOpportunityInterest: "¿Por qué te queda bien esa opción? *",
+        opportunityInterestPlaceholder: "Con una o dos frases basta.",
+        labelPortfolio: "Enlace a tu portafolio, Instagram de modelaje o sitio web (opcional)",
         portfolioPlaceholder: "@usuario o https://...",
-        labelRegularAvailability: "¿Con qué frecuencia sueles estar disponible? *",
-        regularOccasionally: "De vez en cuando",
-        regular12: "1 o 2 días por semana",
-        regular34: "3 o 4 días por semana",
-        regular5: "5 días o más por semana",
-        regularVaries: "Mi disponibilidad varía",
-        labelTravelWilling: "¿Puedes viajar para las sesiones? *",
-        labelTravelDistance: "Distancia máxima de viaje *",
-        travelDistanceOptions: ["5 km", "10 km", "25 km", "50 km", "Más de 100 km"],
-        labelCompInterest: "Te interesa *",
-        compInterestOptions: ["Sesiones pagadas", "Armar portafolio", "Ambas"],
-        labelExpectedComp: "Pago esperado por sesión (USD) *",
-        labelUnpaidTfpWilling: "¿Aceptas sesiones sin pago a cambio de fotos editadas?",
-        expectedCompOptions: ["Menos de $50", "$50-$100", "$100-$200", "Más de $200"],
-        labelHeadshotRequired: "Foto de rostro *",
-        labelHeadshotSuggested: "Foto de rostro (sugerida)",
+        labelRegularAvailability: "Para las sesiones habituales de pintura corporal, ¿cuántos días a la semana puedes trabajar normalmente? *",
+        regularOccasionally: "Solo de vez en cuando, no cada semana",
+        regular12: "1 o 2 días a la semana",
+        regular34: "3 o 4 días a la semana",
+        regular5: "5 días o más a la semana",
+        regularVaries: "Cambia de una semana a otra",
+        labelTravelWilling: "¿Puedes viajar fuera de tu ciudad para una sesión? *",
+        labelTravelDistance: "¿Qué tan lejos de tu ciudad puedes viajar? *",
+        travelDistanceOptions: ["Hasta 5 km", "Hasta 10 km", "Hasta 25 km", "Hasta 50 km", "Más de 100 km"],
+        labelCompInterest: "¿Qué tipo de sesión buscas? *",
+        compInterestOptions: ["Sesiones pagadas", "Sesiones de portafolio, con pago bajo o a cambio de fotos", "Sesiones pagadas y de portafolio"],
+        labelExpectedComp: "Si la sesión es pagada, ¿cuánto esperas por sesión (USD)? *",
+        labelUnpaidTfpWilling: "¿También harías una sesión sin pago si recibes las fotos editadas? *",
+        expectedCompOptions: ["Menos de $50", "$50 a $100", "$100 a $200", "$200 o más"],
+        labelHeadshotRequired: "Foto de tu rostro *",
+        labelHeadshotSuggested: "Foto de tu rostro (opcional)",
         labelFullBodyRequired: "Foto de cuerpo completo *",
-        labelFullBodySuggested: "Foto de cuerpo completo (sugerida)",
-        photoRequiredHint: "Obligatoria si no compartes Instagram. Solo imagen, máximo 8 MB.",
-        photoSuggestedHint: "Sugerida porque compartiste Instagram. Solo imagen, máximo 8 MB.",
-        labelWhyWork: "¿Por qué te gustaría trabajar con MVP Media Photography? *",
-        labelGoodFit: "¿Quieres contarnos algo de tu estilo o tu experiencia? (Opcional)",
-        labelAnythingElse: "¿Hay algo más que quieras contarnos? (Opcional)",
+        labelFullBodySuggested: "Foto de cuerpo completo (opcional)",
+        photoHeadshotRequiredHint: "Una foto clara y reciente de tu rostro. Obligatoria si no escribes un usuario de Instagram. Solo imagen, máximo 8 MB.",
+        photoHeadshotSuggestedHint: "Opcional porque escribiste un usuario de Instagram. Una foto clara y reciente de tu rostro ayuda. Solo imagen, máximo 8 MB.",
+        photoFullBodyRequiredHint: "Una foto reciente de la cabeza a los pies, con ropa ajustada. Obligatoria si no escribes un usuario de Instagram. Solo imagen, máximo 8 MB.",
+        photoFullBodySuggestedHint: "Opcional porque escribiste un usuario de Instagram. Una foto reciente de cuerpo completo ayuda. Solo imagen, máximo 8 MB.",
+        labelWhyWork: "¿Por qué quieres trabajar con MVP Media Photography? *",
+        whyPlaceholder: "Cuéntanos qué te llama de este estudio.",
+        labelGoodFit: "¿Hay algo de tu imagen, tu estilo o trabajos anteriores que debamos saber? (Opcional)",
+        goodFitPlaceholder: "Sáltalo si ya lo contaste arriba.",
+        labelAnythingElse: "¿Hay algo más que debamos saber? (Opcional)",
+        anythingPlaceholder: "Notas de horario o detalles que no te preguntamos arriba.",
         consentAge: "Confirmo que tengo al menos 18 años.",
-        consentSelection: "Entiendo que esta solicitud no garantiza que me seleccionen.",
+        consentSelection: "Entiendo que enviar esta solicitud no garantiza que me contraten.",
         consentVoluntary: "Entiendo que participar en cualquier proyecto es voluntario.",
         consentDetails: "Entiendo que hablaremos los detalles del proyecto antes de agendar.",
         consentContact: "Acepto que me contacten sobre futuras oportunidades.",
@@ -1384,7 +1443,7 @@
         msgInterest: "Elige al menos un interés.",
         msgAvailability: "Elige al menos una opción de disponibilidad.",
         msgConsent: "Marca todas las casillas de consentimiento antes de enviar.",
-        msgRegularAvailability: "Indica con qué frecuencia puedes asistir a las sesiones habituales.",
+        msgRegularAvailability: "Elige cuántos días a la semana puedes trabajar en las sesiones habituales.",
         msgUnpaidTfp: "",
         heroAlt: "Foto principal de MVP Media",
         headshotPreviewAlt: "Vista previa de la foto de rostro",
@@ -1503,10 +1562,34 @@
       if (fullBodyPreview) {
         fullBodyPreview.alt = t.fullBodyPreviewAlt;
       }
-      const portfolioLink = document.getElementById("portfolioLink");
-      if (portfolioLink) {
-        portfolioLink.placeholder = t.portfolioPlaceholder;
-      }
+      const setPlaceholder = (id, text) => {
+        const field = document.getElementById(id);
+        if (field) {
+          field.placeholder = text;
+        }
+      };
+      setPlaceholder("portfolioLink", t.portfolioPlaceholder);
+      setPlaceholder("instagram", t.instagramPlaceholder);
+      setPlaceholder("tiktok", t.tiktokPlaceholder);
+      setPlaceholder("height", t.heightPlaceholder);
+      setPlaceholder("clothingSize", t.clothingPlaceholder);
+      setPlaceholder("braSize", t.braPlaceholder);
+      setPlaceholder("bustMeasurement", t.bustPlaceholder);
+      setPlaceholder("waistMeasurement", t.waistPlaceholder);
+      setPlaceholder("hipMeasurement", t.hipPlaceholder);
+      setPlaceholder("shoeSize", t.shoePlaceholder);
+      setPlaceholder("hairColor", t.hairPlaceholder);
+      setPlaceholder("eyeColor", t.eyePlaceholder);
+      setPlaceholder("avoidConcepts", t.avoidPlaceholder);
+      setPlaceholder("opportunityInterest", t.opportunityInterestPlaceholder);
+      setPlaceholder("whyWork", t.whyPlaceholder);
+      setPlaceholder("goodFit", t.goodFitPlaceholder);
+      setPlaceholder("anythingElse", t.anythingPlaceholder);
+      setText("preferredNameHint", t.preferredNameHint);
+      setText("instagramHint", t.instagramHint);
+      setText("opportunityHint", t.opportunityHint);
+      setText("availabilityHint", t.availabilityHint);
+      setText("frequencyHint", t.frequencyHint);
       ["headshot", "fullBody"].forEach((id) => {
         const button = document.getElementById(`${id}Button`);
         const name = document.getElementById(`${id}FileName`);
@@ -1943,10 +2026,10 @@
         fullBodyLabel.textContent = instagramProvided ? t.labelFullBodySuggested : t.labelFullBodyRequired;
       }
       if (headshotHint) {
-        headshotHint.textContent = instagramProvided ? t.photoSuggestedHint : t.photoRequiredHint;
+        headshotHint.textContent = instagramProvided ? t.photoHeadshotSuggestedHint : t.photoHeadshotRequiredHint;
       }
       if (fullBodyHint) {
-        fullBodyHint.textContent = instagramProvided ? t.photoSuggestedHint : t.photoRequiredHint;
+        fullBodyHint.textContent = instagramProvided ? t.photoFullBodySuggestedHint : t.photoFullBodyRequiredHint;
       }
     };
 
@@ -2010,14 +2093,15 @@
       const travelAnswer = selectedRadioValue("travel");
       const travelDistance = document.getElementById("travelDistance");
       const travelDistanceField = travelDistance ? travelDistance.closest(".field") : null;
-      const hideTravelDetails = travelAnswer === "No";
+      const showTravelDistance = travelAnswer === "Yes";
 
       if (travelDistanceField) {
-        travelDistanceField.hidden = hideTravelDetails;
+        travelDistanceField.hidden = !showTravelDistance;
       }
       if (travelDistance) {
-        travelDistance.disabled = hideTravelDetails;
-        if (hideTravelDetails) {
+        travelDistance.disabled = !showTravelDistance;
+        travelDistance.required = showTravelDistance;
+        if (!showTravelDistance) {
           travelDistance.value = "";
         }
       }
