@@ -302,6 +302,9 @@
 
   <script>
     const SUBMIT_ENDPOINT = "";
+    // Invite gate is temporarily off at Matthew's request so the plain URL shows the form.
+    // Set REQUIRE_INVITE to true to require a valid ?invite= token again.
+    const REQUIRE_INVITE = false;
 
     const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
     const CLOUDINARY_UPLOAD_PRESET = "jobstats";
@@ -643,12 +646,29 @@
     const inviteGate = document.getElementById("inviteGate");
     const applicationShell = document.getElementById("applicationShell");
     const inviteToken = new URLSearchParams(window.location.search).get("invite") || "";
+    const inviteTokenLooksValid = /^[A-Za-z0-9_-]{20,128}$/.test(inviteToken);
     const showUnavailable = () => {
       if (applicationShell) applicationShell.remove();
       if (inviteGate) inviteGate.hidden = false;
     };
+    const showForm = () => {
+      if (inviteGate) inviteGate.remove();
+      if (applicationShell) applicationShell.hidden = false;
+      beginApplication();
+    };
+    const logInviteOpen = () => {
+      if (!inviteTokenLooksValid) return;
+      fetch("/api/performer-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invite: inviteToken })
+      }).catch(() => {});
+    };
 
-    if (!/^[A-Za-z0-9_-]{20,128}$/.test(inviteToken)) {
+    if (!REQUIRE_INVITE) {
+      showForm();
+      logInviteOpen();
+    } else if (!inviteTokenLooksValid) {
       showUnavailable();
     } else {
       fetch("/api/performer-invite", {
@@ -661,9 +681,7 @@
             showUnavailable();
             return;
           }
-          if (inviteGate) inviteGate.remove();
-          applicationShell.hidden = false;
-          beginApplication();
+          showForm();
         })
         .catch(showUnavailable);
     }
