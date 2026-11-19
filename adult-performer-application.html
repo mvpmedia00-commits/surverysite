@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MVP Media Adult Performer Application</title>
   <meta name="description" content="Apply for adult (18+) performer casting with MVP Media. Boundaries are reviewed privately and discussed before booking.">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="assets/site-theme.css">
   <style>
     .page { padding: 18px 0 48px; }
@@ -41,6 +42,10 @@
 </head>
 <body>
   <main class="page">
+    <section class="hero" id="inviteGate" hidden>
+      <h1>This link is not available</h1>
+    </section>
+    <div id="applicationShell" hidden>
     <header class="hero">
       <nav class="lang-switch" aria-label="Language">
         <a href="/adult-performer-application" aria-current="page" lang="en">EN</a>
@@ -207,7 +212,7 @@
           <p class="field-hint">USD approximate at about 4,000 COP per dollar.</p>
           <div class="choices">
             <label class="choice"><input type="radio" name="payTier" value="Tier 1" required><span>Tier 1 — COP 300.000 <span class="pay-usd">(≈ $75 USD)</span> — full nude, 5-hour session</span></label>
-            <label class="choice"><input type="radio" name="payTier" value="Tier 2"><span>Tier 2 — COP 2.000.000 <span class="pay-usd">(≈ $500 USD)</span> — hardcore, 16-hour session</span></label>
+            <label class="choice"><input type="radio" name="payTier" value="Tier 2"><span>Tier 2 — COP 2.000.000 <span class="pay-usd">(≈ $500 USD)</span> — hardcore, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom.</span></label>
             <label class="choice"><input type="radio" name="payTier" value="Both">Both</label>
           </div>
         </div>
@@ -281,6 +286,7 @@
             <label class="choice"><input type="checkbox" name="consent" value="comp-usage-release">I understand compensation, usage, and release terms are agreed in advance, including paid-platform distribution.</label>
             <label class="choice"><input type="checkbox" name="consent" value="sti-disclosure">I agree to STI disclosure to partners.</label>
             <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to be contacted by MVP Media.</label>
+            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">I understand Tier 2 includes sex on camera without a condom and agree to current STI testing before booking.</label>
           </div>
         </div>
         <p class="error" id="consentError"></p>
@@ -306,6 +312,7 @@
       <h2>Application received</h2>
       <p>Thank you. Your boundaries will be reviewed privately before anyone discusses a booking.</p>
     </section>
+    </div>
   </main>
 
   <script>
@@ -375,8 +382,23 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
+    const needsTier2Consent = () => selectedRadio("payTier") === "Tier 2" || selectedRadio("payTier") === "Both";
+
+    const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
+
+    const consentsComplete = () => requiredConsentValues().every((value) => checkedValues("consent").includes(value));
+
+    const syncTier2Consent = () => {
+      const choice = document.getElementById("tier2ConsentChoice");
+      const input = document.getElementById("tier2Consent");
+      const show = needsTier2Consent();
+      if (choice) choice.hidden = !show;
+      if (input && !show) input.checked = false;
+    };
+
     const updateSubmitState = () => {
-      submitBtn.disabled = checkedValues("consent").length !== CONSENT_VALUES.length;
+      syncTier2Consent();
+      submitBtn.disabled = !consentsComplete();
     };
 
     const renderReview = () => {
@@ -399,7 +421,7 @@
         ["Availability days", checkedValues("availabilityDays").join(", ")],
         ["Which tier are you applying for?", {
           "Tier 1": "Tier 1 — COP 300.000 (≈ $75 USD) — full nude, 5-hour session",
-          "Tier 2": "Tier 2 — COP 2.000.000 (≈ $500 USD) — hardcore, 16-hour session",
+          "Tier 2": "Tier 2 — COP 2.000.000 (≈ $500 USD) — hardcore, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom.",
           "Both": "Both"
         }[selectedRadio("payTier")] || ""],
         ["Travel covered", selectedRadio("travelCovered")],
@@ -413,7 +435,7 @@
           ? Array.from(document.getElementById("explicitSamples").files).map((file) => file.name).join(", ")
           : "Not uploaded"],
         ["Scene video link", valueOf("sceneVideoLink")],
-        ["Consent", `${checkedValues("consent").length} of ${CONSENT_VALUES.length} boxes ticked`]
+        ["Consent", `${checkedValues("consent").length} of ${requiredConsentValues().length} boxes ticked`]
       ];
       reviewList.innerHTML = rows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(showBlank(value))}</dd></div>`).join("");
     };
@@ -489,7 +511,7 @@
           return false;
         }
       }
-      if (index === 5 && checkedValues("consent").length !== CONSENT_VALUES.length) {
+      if (index === 5 && !consentsComplete()) {
         setError("consentError", "Tick every consent box before you continue.");
         return false;
       }
@@ -699,17 +721,52 @@
       }
     });
 
-    setupPreview("headshot", "headshotPreview");
-    setupPreview("fullBodyFront", "fullBodyFrontPreview");
-    setupPreview("fullBodyRear", "fullBodyRearPreview");
+    const beginApplication = () => {
+      const invite = new URLSearchParams(window.location.search).get("invite") || "";
+      document.querySelectorAll(".lang-switch a").forEach((link) => {
+        const url = new URL(link.getAttribute("href"), window.location.origin);
+        if (invite) url.searchParams.set("invite", invite);
+        link.setAttribute("href", `${url.pathname}${url.search}`);
+      });
+      setupPreview("headshot", "headshotPreview");
+      setupPreview("fullBodyFront", "fullBodyFrontPreview");
+      setupPreview("fullBodyRear", "fullBodyRearPreview");
+      if (localStorage.getItem(AUTOSAVE_KEY)) {
+        draftPrompt.hidden = false;
+        autosaveStatus.textContent = "A draft is saved on this device";
+      } else {
+        autosaveEnabled = true;
+      }
+      updateStep();
+    };
 
-    if (localStorage.getItem(AUTOSAVE_KEY)) {
-      draftPrompt.hidden = false;
-      autosaveStatus.textContent = "A draft is saved on this device";
+    const inviteGate = document.getElementById("inviteGate");
+    const applicationShell = document.getElementById("applicationShell");
+    const inviteToken = new URLSearchParams(window.location.search).get("invite") || "";
+    const showUnavailable = () => {
+      if (applicationShell) applicationShell.remove();
+      if (inviteGate) inviteGate.hidden = false;
+    };
+
+    if (!/^[A-Za-z0-9_-]{20,128}$/.test(inviteToken)) {
+      showUnavailable();
     } else {
-      autosaveEnabled = true;
+      fetch("/api/performer-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invite: inviteToken })
+      }).then((response) => response.json().then((data) => ({ ok: response.ok, data })).catch(() => ({ ok: false, data: null })))
+        .then((result) => {
+          if (!result.ok || !result.data || result.data.available !== true) {
+            showUnavailable();
+            return;
+          }
+          if (inviteGate) inviteGate.remove();
+          applicationShell.hidden = false;
+          beginApplication();
+        })
+        .catch(showUnavailable);
     }
-    updateStep();
   </script>
 </body>
 </html>

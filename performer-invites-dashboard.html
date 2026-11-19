@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performer invite links</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="assets/site-theme.css">
+  <style>
+    .page { padding: 18px 0 48px; }
+    .hero, .card { margin-bottom: 16px; padding: 18px; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 12px; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .invite { border: 1px solid rgba(122, 30, 66, 0.18); border-radius: 20px; padding: 14px; margin: 0 0 12px; background: #fffdfb; }
+    .invite h2 { margin: 0 0 6px; font-size: 1.35rem !important; }
+    .meta { margin: 0 0 8px; }
+    .status { min-height: 1.2em; }
+    button.secondary { width: auto; }
+    .blocked { opacity: 0.72; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>Performer invites</h1>
+      <p>Create a private link for each person. A blocked link stops working immediately.</p>
+    </header>
+
+    <section class="card" id="loginCard">
+      <form id="loginForm">
+        <div class="field">
+          <label for="password">Admin password</label>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit">Sign in</button>
+        <p class="status" id="loginStatus" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="adminApp" hidden>
+      <form class="card" id="createForm">
+        <h2>New invite</h2>
+        <div class="field">
+          <label for="label">Name or label *</label>
+          <input id="label" required>
+        </div>
+        <div class="field">
+          <label for="notes">Notes</label>
+          <textarea id="notes"></textarea>
+        </div>
+        <button type="submit">Create invite</button>
+        <p class="status" id="createStatus" aria-live="polite"></p>
+      </form>
+      <section class="card">
+        <div class="row">
+          <h2>Links</h2>
+          <button type="button" class="secondary" id="refreshBtn">Refresh</button>
+          <button type="button" class="secondary" id="signOutBtn">Sign out</button>
+        </div>
+        <p class="status" id="listStatus" aria-live="polite"></p>
+        <div id="inviteList"></div>
+      </section>
+    </section>
+  </main>
+  <script>
+    const TOKEN_KEY = "mvp-admin-session";
+    const loginCard = document.getElementById("loginCard");
+    const adminApp = document.getElementById("adminApp");
+    const loginStatus = document.getElementById("loginStatus");
+    const createStatus = document.getElementById("createStatus");
+    const listStatus = document.getElementById("listStatus");
+    const inviteList = document.getElementById("inviteList");
+    let adminToken = sessionStorage.getItem(TOKEN_KEY) || "";
+
+    const escapeHtml = (value) => String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+    const showLogin = (message) => {
+      adminApp.hidden = true;
+      loginCard.hidden = false;
+      if (message) loginStatus.textContent = message;
+    };
+
+    const showAdmin = () => {
+      loginCard.hidden = true;
+      adminApp.hidden = false;
+    };
+
+    const adminFetch = async (url, options = {}) => {
+      const headers = { ...(options.headers || {}) };
+      if (adminToken) headers.Authorization = `Bearer ${adminToken}`;
+      const response = await fetch(url, { ...options, headers });
+      if (response.status === 401) {
+        adminToken = "";
+        sessionStorage.removeItem(TOKEN_KEY);
+        showLogin("Sign in again.");
+      }
+      return response;
+    };
+
+    const linkFor = (token, path) => `${window.location.origin}${path}?invite=${encodeURIComponent(token)}`;
+
+    const formatWhen = (value) => {
+      if (!value) return "Never";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+    };
+
+    const renderInvites = (invites) => {
+      inviteList.innerHTML = "";
+      if (!invites.length) {
+        listStatus.textContent = "No invites yet.";
+        return;
+      }
+      listStatus.textContent = `${invites.length} invite${invites.length === 1 ? "" : "s"}.`;
+      invites.forEach((invite) => {
+        const card = document.createElement("article");
+        card.className = `invite${invite.blocked ? " blocked" : ""}`;
+        const en = linkFor(invite.token, "/adult-performer-application");
+        const es = linkFor(invite.token, "/adult-performer-application-es");
+        card.innerHTML = `
+          <h2>${escapeHtml(invite.label || "Untitled")}</h2>
+          <p class="meta">${invite.blocked ? "Blocked" : "Active"} · Opened ${invite.open_count || 0} time${invite.open_count === 1 ? "" : "s"} · Last opened ${escapeHtml(formatWhen(invite.last_opened))}</p>
+          <p class="meta">${escapeHtml(invite.notes || "")}</p>
+          <div class="row">
+            <button type="button" data-copy="${escapeHtml(en)}">Copy English link</button>
+            <button type="button" data-copy="${escapeHtml(es)}">Copy Spanish link</button>
+            <button type="button" class="secondary" data-block="${escapeHtml(invite.id)}" data-blocked="${invite.blocked ? "true" : "false"}">${invite.blocked ? "Unblock" : "Block"}</button>
+          </div>
+        `;
+        inviteList.appendChild(card);
+      });
+    };
+    globalThis.renderInvites = renderInvites;
+
+    const loadInvites = async () => {
+      listStatus.textContent = "Loading invites...";
+      const response = await adminFetch("/api/performer-invite");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        listStatus.textContent = data.error || "Could not load invites.";
+        inviteList.innerHTML = "";
+        return;
+      }
+      renderInvites(data.invites || []);
+    };
+
+    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginStatus.textContent = "Signing in...";
+      const response = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: document.getElementById("password").value })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.token) {
+        loginStatus.textContent = data.error || "Could not sign in.";
+        return;
+      }
+      adminToken = data.token;
+      sessionStorage.setItem(TOKEN_KEY, adminToken);
+      document.getElementById("password").value = "";
+      loginStatus.textContent = "";
+      showAdmin();
+      loadInvites();
+    });
+
+    document.getElementById("createForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      createStatus.textContent = "Creating...";
+      const response = await adminFetch("/api/performer-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          label: document.getElementById("label").value,
+          notes: document.getElementById("notes").value
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        createStatus.textContent = data.error || "Could not create the invite.";
+        return;
+      }
+      document.getElementById("label").value = "";
+      document.getElementById("notes").value = "";
+      createStatus.textContent = "Invite created.";
+      loadInvites();
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadInvites);
+    document.getElementById("signOutBtn").addEventListener("click", () => {
+      adminToken = "";
+      sessionStorage.removeItem(TOKEN_KEY);
+      showLogin("");
+    });
+
+    inviteList.addEventListener("click", async (event) => {
+      const copy = event.target.closest("[data-copy]");
+      if (copy) {
+        const text = copy.getAttribute("data-copy");
+        try {
+          await navigator.clipboard.writeText(text);
+          listStatus.textContent = "Link copied.";
+        } catch {
+          listStatus.textContent = text;
+        }
+        return;
+      }
+      const block = event.target.closest("[data-block]");
+      if (!block) return;
+      const blocked = block.getAttribute("data-blocked") !== "true";
+      block.disabled = true;
+      const response = await adminFetch("/api/performer-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "set-blocked", id: block.getAttribute("data-block"), blocked })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        listStatus.textContent = data.error || "Could not update the invite.";
+        block.disabled = false;
+        return;
+      }
+      loadInvites();
+    });
+
+    if (adminToken) {
+      showAdmin();
+      loadInvites();
+    }
+  </script>
+</body>
+</html>

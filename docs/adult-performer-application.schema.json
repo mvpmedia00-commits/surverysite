@@ -5,6 +5,19 @@
   "description": "JSON body posted by adult-performer-application.html. No database table or API route is provisioned yet. The page posts this object to the SUBMIT_ENDPOINT constant in that file.",
   "type": "object",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "pay_tier": { "enum": ["Tier 2", "Both"] } },
+        "required": ["pay_tier"]
+      },
+      "then": {
+        "properties": {
+          "consents": { "contains": { "const": "tier2-unprotected-sti" } }
+        }
+      }
+    }
+  ],
   "required": [
     "name",
     "age",
@@ -89,7 +102,7 @@
     "pay_tier": {
       "type": "string",
       "enum": ["Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1 is COP 300.000 (about $75 USD) for a full nude 5-hour session. Tier 2 is COP 2.000.000 (about $500 USD) for a hardcore 16-hour session. USD is approximate at about 4,000 COP per dollar. The Spanish page shows Nivel 1, Nivel 2, and Ambos, and still stores these English values."
+      "description": "Tier 1 is COP 300.000 (about $75 USD) for a full nude 5-hour session. Tier 2 is COP 2.000.000 (about $500 USD) for hardcore work, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom. USD is approximate at about 4,000 COP per dollar. The Spanish page shows Nivel 1, Nivel 2, and Ambos, and still stores these English values."
     },
     "travel_covered": { "type": "string", "enum": ["Yes", "No"] },
     "overnight_multiday": { "type": "string", "enum": ["Yes", "No"] },
@@ -106,7 +119,7 @@
     "consents": {
       "type": "array",
       "minItems": 7,
-      "maxItems": 7,
+      "maxItems": 8,
       "uniqueItems": true,
       "items": {
         "type": "string",
@@ -117,9 +130,11 @@
           "can-decline",
           "comp-usage-release",
           "sti-disclosure",
-          "contact"
+          "contact",
+          "tier2-unprotected-sti"
         ]
-      }
+      },
+      "description": "tier2-unprotected-sti is required when pay_tier is Tier 2 or Both. It is omitted for Tier 1."
     }
   }
 }
