@@ -536,25 +536,6 @@
       <fieldset>
         <legend>4) Disponibilidade e pagamento</legend>
         <div class="field">
-          <span class="sub-label">Em quais momentos da semana você pode ensaiar? Escolha todos que servem. *</span>
-          <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="availability" value="Dias de semana">Dias de semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Noites de semana">Noites de semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Fins de semana">Fins de semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
-          </div>
-          <div class="error" id="availabilityError"></div>
-        </div>
-        <div class="field">
-          <span class="sub-label">Você pode viajar para um ensaio?</span>
-          <div class="choices inline">
-            <label class="choice"><input type="radio" name="travel" value="Yes">Sim</label>
-            <label class="choice"><input type="radio" name="travel" value="No">Não</label>
-            <label class="choice"><input type="radio" name="travel" value="Somente local">Somente local</label>
-            <label class="choice"><input type="radio" name="travel" value="Com viagem paga">Com viagem paga</label>
-          </div>
-        </div>
-        <div class="field">
           <label for="expectedComp">Quanto você espera por ensaio (USD)? *</label>
           <select id="expectedComp" required>
             <option value="">Escolha uma opção</option>
@@ -744,25 +725,22 @@
         en: {
           review: "Please review the required fields and try again.",
           prefix: "Complete",
-          interests: "Choose at least one project type.",
-          availability: "Choose at least one time of the week."
+          interests: "Choose at least one project type."
         },
         es: {
           review: "Revisa los campos obligatorios e inténtalo de nuevo.",
           prefix: "Completa",
-          interests: "Elige al menos un tipo de proyecto.",
-          availability: "Elige al menos un horario de la semana."
+          interests: "Elige al menos un tipo de proyecto."
         },
         pt: {
           review: "Revise os campos obrigatórios e tente de novo.",
           prefix: "Preencha",
-          interests: "Escolha pelo menos um tipo de projeto.",
-          availability: "Escolha pelo menos um horário da semana."
+          interests: "Escolha pelo menos um tipo de projeto."
         }
       };
       const copy = messages[lang.slice(0, 2)] || messages.en;
       const tips = [];
-      for (const name of ["interests", "availability"]) {
+      for (const name of ["interests"]) {
         if (step.querySelector(`input[name='${name}']`) && !checkAtLeastOne(`input[name='${name}']`)) {
           tips.push(copy[name]);
         }
@@ -1047,7 +1025,6 @@
     const buildPayload = () => {
       const headshot = document.getElementById("headshot");
       const fullBody = document.getElementById("fullBody");
-      const travelAnswer = selectedRadioValue("travel");
 
       return {
         full_name: getValue("preferredName"),
@@ -1070,10 +1047,10 @@
         avoid_concepts: "",
         hard_limits: "",
         special_conditions: selectedRadioValue("paidPlatformOpen") ? `Plataforma paga: ${selectedRadioValue("paidPlatformOpen")}` : "Nao especificado",
-        availability: checkedValues("input[name='availability']"),
+        availability: [],
         frequency: "Nao especificado",
-        travel_willing: travelAnswer || "Nao especificado",
-        travel_distance: travelAnswer === "No" ? "Nao aplicavel" : "Nao especificado",
+        travel_willing: "",
+        travel_distance: "",
         comp_interest: "Definido em compensacao esperada",
         compensation_types: [],
         unpaid_tfp_willing: false,
@@ -1143,12 +1120,6 @@
         validationTips.push("selecione pelo menos um interesse de projeto");
       }
 
-
-      if (!checkAtLeastOne("input[name='availability']")) {
-        setError("availabilityError", "Selecione pelo menos uma opcao de disponibilidade.");
-        hasErrors = true;
-        validationTips.push("selecione pelo menos uma opcao de disponibilidade");
-      }
 
       if (checkedValues("input[name='consent']").length < 5) {
         setError("consentError", "Todos os itens de consentimento sao obrigatorios.");

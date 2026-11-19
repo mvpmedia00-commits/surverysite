@@ -574,25 +574,6 @@
       <fieldset>
         <legend>4) Disponibilidad y pago</legend>
         <div class="field">
-          <span class="sub-label">¿En qué momentos de la semana puedes sesionar? Elige todos los que te sirvan. *</span>
-          <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="availability" value="Entre semana">Entre semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Noches entre semana">Noches entre semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Fines de semana">Fines de semana</label>
-            <label class="choice"><input type="checkbox" name="availability" value="Flexible">Flexible</label>
-          </div>
-          <div class="error" id="availabilityError"></div>
-        </div>
-        <div class="field">
-          <span class="sub-label">¿Puedes viajar para una sesión?</span>
-          <div class="choices inline">
-            <label class="choice"><input type="radio" name="travel" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="travel" value="No">No</label>
-            <label class="choice"><input type="radio" name="travel" value="Solo local">Solo local</label>
-            <label class="choice"><input type="radio" name="travel" value="Con gastos de viaje cubiertos">Con gastos de viaje cubiertos</label>
-          </div>
-        </div>
-        <div class="field">
           <label for="expectedComp">¿Cuánto esperas por sesión (USD)? *</label>
           <select id="expectedComp" required>
             <option value="">Elige una opción</option>
@@ -781,25 +762,22 @@
         en: {
           review: "Please review the required fields and try again.",
           prefix: "Complete",
-          interests: "Choose at least one project type.",
-          availability: "Choose at least one time of the week."
+          interests: "Choose at least one project type."
         },
         es: {
           review: "Revisa los campos obligatorios e inténtalo de nuevo.",
           prefix: "Completa",
-          interests: "Elige al menos un tipo de proyecto.",
-          availability: "Elige al menos un horario de la semana."
+          interests: "Elige al menos un tipo de proyecto."
         },
         pt: {
           review: "Revise os campos obrigatórios e tente de novo.",
           prefix: "Preencha",
-          interests: "Escolha pelo menos um tipo de projeto.",
-          availability: "Escolha pelo menos um horário da semana."
+          interests: "Escolha pelo menos um tipo de projeto."
         }
       };
       const copy = messages[lang.slice(0, 2)] || messages.en;
       const tips = [];
-      for (const name of ["interests", "availability"]) {
+      for (const name of ["interests"]) {
         if (step.querySelector(`input[name='${name}']`) && !checkAtLeastOne(`input[name='${name}']`)) {
           tips.push(copy[name]);
         }
@@ -1081,7 +1059,6 @@
     const buildPayload = () => {
       const headshot = document.getElementById("headshot");
       const fullBody = document.getElementById("fullBody");
-      const travelAnswer = selectedRadioValue("travel");
 
       return {
         full_name: getValue("preferredName"),
@@ -1104,10 +1081,10 @@
         avoid_concepts: "",
         hard_limits: "",
         special_conditions: selectedRadioValue("paidPlatformOpen") ? `Plataforma de pago: ${selectedRadioValue("paidPlatformOpen")}` : "No especificado",
-        availability: checkedValues("input[name='availability']"),
+        availability: [],
         frequency: "No especificado",
-        travel_willing: travelAnswer || "No especificado",
-        travel_distance: travelAnswer === "No" ? "No aplica" : "No especificado",
+        travel_willing: "",
+        travel_distance: "",
         comp_interest: "Definido en compensacion esperada",
         compensation_types: [],
         unpaid_tfp_willing: false,
@@ -1146,7 +1123,6 @@
       const focusableGroups = [
         { test: () => !getValue("instagram") && !getValue("email") && !getValue("phone"), selector: "#instagram" },
         { test: () => !checkAtLeastOne("input[name='interests']"), selector: "input[name='interests']" },
-        { test: () => !checkAtLeastOne("input[name='availability']"), selector: "input[name='availability']" },
         { test: () => checkedValues("input[name='consent']").length < 5, selector: "input[name='consent']" },
         { test: () => checkedValues("input[name='confirm18Truth']").length === 0, selector: "input[name='confirm18Truth']" }
       ];
@@ -1200,12 +1176,6 @@
         validationTips.push("Selecciona al menos un interes de proyecto.");
       }
 
-
-      if (!checkAtLeastOne("input[name='availability']")) {
-        setError("availabilityError", "Selecciona al menos una opcion de disponibilidad.");
-        hasErrors = true;
-        validationTips.push("Selecciona al menos una opcion de disponibilidad.");
-      }
 
       if (checkedValues("input[name='consent']").length < 5) {
         setError("consentError", "Todos los consentimientos son obligatorios.");
