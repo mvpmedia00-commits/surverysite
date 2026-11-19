@@ -533,27 +533,9 @@
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend>4) O seu limite</legend>
-        <div class="field">
-          <span class="sub-label">Até onde o trabalho pode ir? *</span>
-          <p class="field-hint">O seu limite. Não é a sua experiência passada nem o trabalho que você quer conseguir.</p>
-          <div class="choices inline">
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Lingerie">Lingerie</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Implied nude">Implied nude</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Topless">Topless</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Nude completo nao explicito">Nu completo, sem conteúdo explícito</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Erotic nude">Erotic nude</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Nude bodypaint">Nude bodypaint</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Video content">Video content</label>
-            <label class="choice"><input type="checkbox" name="nudityComfortLevels" value="Ensaios externos / em locacao">Ensaios externos / em locação</label>
-          </div>
-          <div class="error" id="nudityComfortError"></div>
-        </div>
-      </fieldset>
 
       <fieldset>
-        <legend>5) Disponibilidade e Pagamento</legend>
+        <legend>4) Disponibilidade e pagamento</legend>
         <div class="field">
           <span class="sub-label">Em quais momentos da semana você pode ensaiar? Escolha todos que servem. *</span>
           <div class="choices inline">
@@ -589,7 +571,7 @@
       </fieldset>
 
       <fieldset>
-        <legend>6) Fotos</legend>
+        <legend>5) Fotos</legend>
         <div class="grid two">
           <div class="field">
             <label for="headshot">Foto de rosto</label>
@@ -607,7 +589,7 @@
       </fieldset>
 
       <fieldset>
-        <legend>7) Final</legend>
+        <legend>6) Final</legend>
         <div class="field"><label for="whyWork">Por que voce tem interesse em modelagem criativa adulta com a MVP Media? *</label><textarea id="whyWork" required></textarea></div>
         <div class="field"><label for="anythingElse">O que faria voce se sentir seguro(a) e confortavel em um ensaio? *</label><textarea id="anythingElse" required></textarea></div>
         <div class="field">
@@ -764,27 +746,24 @@
           review: "Please review the required fields and try again.",
           prefix: "Complete",
           interests: "Choose at least one project type.",
-          nudityComfortLevels: "Choose at least one option you are willing to do.",
           availability: "Choose at least one time of the week."
         },
         es: {
           review: "Revisa los campos obligatorios e inténtalo de nuevo.",
           prefix: "Completa",
           interests: "Elige al menos un tipo de proyecto.",
-          nudityComfortLevels: "Elige al menos una opción que aceptas hacer.",
           availability: "Elige al menos un horario de la semana."
         },
         pt: {
           review: "Revise os campos obrigatórios e tente de novo.",
           prefix: "Preencha",
           interests: "Escolha pelo menos um tipo de projeto.",
-          nudityComfortLevels: "Escolha pelo menos uma opção que você aceita fazer.",
           availability: "Escolha pelo menos um horário da semana."
         }
       };
       const copy = messages[lang.slice(0, 2)] || messages.en;
       const tips = [];
-      for (const name of ["interests", "nudityComfortLevels", "availability"]) {
+      for (const name of ["interests", "availability"]) {
         if (step.querySelector(`input[name='${name}']`) && !checkAtLeastOne(`input[name='${name}']`)) {
           tips.push(copy[name]);
         }
@@ -1087,7 +1066,7 @@
         comfortable_snapshots: "Yes",
         experience: checkedValues("input[name='experienceTypes']").join(", ") || "Nao especificado",
         interests: checkedValues("input[name='interests']"),
-        nudity_comfort_levels: checkedValues("input[name='nudityComfortLevels']"),
+        nudity_comfort_levels: [],
         comfort_level: "Nao especificado",
         avoid_concepts: "",
         hard_limits: "",
@@ -1165,11 +1144,6 @@
         validationTips.push("selecione pelo menos um interesse de projeto");
       }
 
-      if (!checkAtLeastOne("input[name='nudityComfortLevels']")) {
-        setError("nudityComfortError", "Selecione pelo menos um nivel de conforto.");
-        hasErrors = true;
-        validationTips.push("selecione pelo menos um nivel de conforto");
-      }
 
       if (!checkAtLeastOne("input[name='availability']")) {
         setError("availabilityError", "Selecione pelo menos uma opcao de disponibilidade.");
