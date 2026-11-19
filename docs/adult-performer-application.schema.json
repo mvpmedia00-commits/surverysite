@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mvpstats.xyz/docs/adult-performer-application.schema.json",
+  "title": "Adult performer application",
+  "description": "JSON body posted by adult-performer-application.html. No database table or API route is provisioned yet. The page posts this object to the SUBMIT_ENDPOINT constant in that file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "age",
+    "city",
+    "instagram",
+    "email",
+    "phone",
+    "experience_level",
+    "acts_performed",
+    "acts_wont_do",
+    "sti_tested_last_6_months",
+    "willing_to_test_before_booking",
+    "hard_soft_limits",
+    "soft_categories",
+    "hard_categories",
+    "explicit_paid_platform",
+    "availability_days",
+    "rate_range",
+    "travel_covered",
+    "overnight_multiday",
+    "own_wardrobe_toys_props",
+    "notes",
+    "headshot_url",
+    "full_body_front_url",
+    "full_body_rear_url",
+    "explicit_sample_urls",
+    "scene_video_link",
+    "consents"
+  ],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "age": { "type": "integer", "minimum": 18, "maximum": 120 },
+    "city": { "type": "string", "minLength": 1 },
+    "instagram": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "format": "email" },
+    "phone": { "type": "string" },
+    "experience_level": {
+      "type": "string",
+      "enum": ["None", "A few shoots", "Experienced", "Agency-represented"]
+    },
+    "acts_performed": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
+      }
+    },
+    "acts_wont_do": { "type": "string" },
+    "sti_tested_last_6_months": { "type": "string", "enum": ["Yes", "No"] },
+    "willing_to_test_before_booking": { "type": "string", "enum": ["Yes", "No"] },
+    "hard_soft_limits": { "type": "string", "minLength": 1 },
+    "soft_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Artistic nude", "Implied", "Lingerie", "Boudoir", "Bodypaint"]
+      }
+    },
+    "hard_categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP/Group", "POV", "Fetish"]
+      }
+    },
+    "explicit_paid_platform": {
+      "type": "string",
+      "enum": ["Yes", "Soft only", "Unsure"]
+    },
+    "availability_days": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["Weekdays", "Weeknights", "Weekends", "Flexible"]
+      }
+    },
+    "rate_range": {
+      "type": "string",
+      "enum": ["$100–$250", "$250–$400", "$400–$700", "$700–$1000", "$1000+", "Open to discussion"]
+    },
+    "travel_covered": { "type": "string", "enum": ["Yes", "No"] },
+    "overnight_multiday": { "type": "string", "enum": ["Yes", "No"] },
+    "own_wardrobe_toys_props": { "type": "string", "enum": ["Yes", "No"] },
+    "notes": { "type": "string" },
+    "headshot_url": { "type": "string" },
+    "full_body_front_url": { "type": "string" },
+    "full_body_rear_url": { "type": "string" },
+    "explicit_sample_urls": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "scene_video_link": { "type": "string" },
+    "consents": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "18-plus",
+          "adult-explicit-content",
+          "voluntary",
+          "can-decline",
+          "comp-usage-release",
+          "sti-disclosure",
+          "contact"
+        ]
+      }
+    }
+  }
+}
