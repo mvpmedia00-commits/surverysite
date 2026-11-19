@@ -22,7 +22,7 @@
     "hard_categories",
     "explicit_paid_platform",
     "availability_days",
-    "rate_range",
+    "pay_tier",
     "travel_covered",
     "overnight_multiday",
     "own_wardrobe_toys_props",
@@ -86,9 +86,10 @@
         "enum": ["Weekdays", "Weeknights", "Weekends", "Flexible"]
       }
     },
-    "rate_range": {
+    "pay_tier": {
       "type": "string",
-      "enum": ["$100–$250", "$250–$400", "$400–$700", "$700–$1000", "$1000+", "Open to discussion"]
+      "enum": ["Tier 1", "Tier 2", "Both"],
+      "description": "Tier 1 is COP 300.000 (about $75 USD) for a full nude 5-hour session. Tier 2 is COP 2.000.000 (about $500 USD) for a hardcore 16-hour session. USD is approximate at about 4,000 COP per dollar. The Spanish page shows Nivel 1, Nivel 2, and Ambos, and still stores these English values."
     },
     "travel_covered": { "type": "string", "enum": ["Yes", "No"] },
     "overnight_multiday": { "type": "string", "enum": ["Yes", "No"] },

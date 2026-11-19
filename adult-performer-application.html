@@ -21,6 +21,10 @@
     .sub-label { font-weight: 650; }
     .error { margin: 0 0 12px; color: #9e1b1b; font-weight: 650; }
     .error:empty { display: none; }
+    .pay-usd { font-size: 0.78em !important; font-weight: 500; }
+    .lang-switch { display: flex; gap: 14px; align-items: center; margin: 0 0 10px; }
+    .lang-switch a { color: var(--accent) !important; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+    .lang-switch a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
     .wizard-actions, .submit-row, .draft-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
     .photo-preview { display: none; width: min(100%, 280px); border-radius: 16px; margin-top: 8px; }
     .review-list { display: grid; gap: 12px; margin: 0; }
@@ -38,6 +42,10 @@
 <body>
   <main class="page">
     <header class="hero">
+      <nav class="lang-switch" aria-label="Language">
+        <a href="/adult-performer-application" aria-current="page" lang="en">EN</a>
+        <a href="/adult-performer-application-es" lang="es">ES</a>
+      </nav>
       <h1>Adult Performer Application</h1>
       <p>For adults 18 and older.</p>
       <p>Boundaries are reviewed privately and discussed before booking.</p>
@@ -195,16 +203,13 @@
           </div>
         </div>
         <div class="field">
-          <label for="rateRange">Rate range *</label>
-          <select id="rateRange" name="rateRange" required>
-            <option value="">Select one</option>
-            <option>$100–$250</option>
-            <option>$250–$400</option>
-            <option>$400–$700</option>
-            <option>$700–$1000</option>
-            <option>$1000+</option>
-            <option>Open to discussion</option>
-          </select>
+          <span class="sub-label">Which tier are you applying for? *</span>
+          <p class="field-hint">USD approximate at about 4,000 COP per dollar.</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="payTier" value="Tier 1" required><span>Tier 1 — COP 300.000 <span class="pay-usd">(≈ $75 USD)</span> — full nude, 5-hour session</span></label>
+            <label class="choice"><input type="radio" name="payTier" value="Tier 2"><span>Tier 2 — COP 2.000.000 <span class="pay-usd">(≈ $500 USD)</span> — hardcore, 16-hour session</span></label>
+            <label class="choice"><input type="radio" name="payTier" value="Both">Both</label>
+          </div>
         </div>
         <div class="field">
           <span class="sub-label">Travel covered? *</span>
@@ -392,7 +397,11 @@
         ["Hard categories", checkedValues("hardCategories").join(", ")],
         ["Explicit/paid-platform work", selectedRadio("explicitPaidPlatform")],
         ["Availability days", checkedValues("availabilityDays").join(", ")],
-        ["Rate range", valueOf("rateRange")],
+        ["Which tier are you applying for?", {
+          "Tier 1": "Tier 1 — COP 300.000 (≈ $75 USD) — full nude, 5-hour session",
+          "Tier 2": "Tier 2 — COP 2.000.000 (≈ $500 USD) — hardcore, 16-hour session",
+          "Both": "Both"
+        }[selectedRadio("payTier")] || ""],
         ["Travel covered", selectedRadio("travelCovered")],
         ["Overnight / multi-day", selectedRadio("overnightMultiday")],
         ["Own wardrobe, toys, or props", selectedRadio("ownWardrobe")],
@@ -456,8 +465,8 @@
         }
       }
       if (index === 3) {
-        if (!checkedValues("availabilityDays").length || !valueOf("rateRange") || !selectedRadio("travelCovered") || !selectedRadio("overnightMultiday") || !selectedRadio("ownWardrobe")) {
-          setError("availabilityError", "Choose availability days, a rate range, and Yes or No for travel, overnight work, and your own wardrobe.");
+        if (!checkedValues("availabilityDays").length || !selectedRadio("payTier") || !selectedRadio("travelCovered") || !selectedRadio("overnightMultiday") || !selectedRadio("ownWardrobe")) {
+          setError("availabilityError", "Choose availability days, a pay tier, and Yes or No for travel, overnight work, and your own wardrobe.");
           return false;
         }
       }
@@ -570,7 +579,7 @@
         hard_categories: checkedValues("hardCategories"),
         explicit_paid_platform: selectedRadio("explicitPaidPlatform"),
         availability_days: checkedValues("availabilityDays"),
-        rate_range: valueOf("rateRange"),
+        pay_tier: selectedRadio("payTier"),
         travel_covered: selectedRadio("travelCovered"),
         overnight_multiday: selectedRadio("overnightMultiday"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
