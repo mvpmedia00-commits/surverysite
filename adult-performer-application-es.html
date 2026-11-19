@@ -11,7 +11,9 @@
     .page { padding: 18px 0 48px; }
     .hero { margin-bottom: 16px; }
     .hero p { margin: 8px 0 0; }
-    .progress-panel { margin-bottom: 16px; padding: 16px; }
+    fieldset { margin: 0 0 18px; }
+    #autosaveStatus { display: block; margin: 0 0 14px; }
+    .submit-row button { width: 100%; }
     .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
     .progress-track { margin: 10px 0; }
     .field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; }
@@ -65,14 +67,7 @@
     </section>
 
     <form id="applicationForm" novalidate>
-      <div class="progress-panel" aria-live="polite">
-        <div class="progress-meta">
-          <span id="stepLabel">1 / 7</span>
-          <span id="autosaveStatus">Se guarda solo en este dispositivo</span>
-        </div>
-        <p class="step-title" id="stepTitle">1) Datos básicos</p>
-        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
-      </div>
+      <p class="status" id="autosaveStatus">Se guarda solo en este dispositivo</p>
 
       <fieldset>
         <legend>1) Datos básicos</legend>
@@ -106,7 +101,7 @@
         <p class="error" id="basicError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>2) Experiencia e historial</legend>
         <div class="field">
           <span class="sub-label">Nivel de experiencia *</span>
@@ -155,7 +150,7 @@
         <p class="error" id="experienceError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>3) Límites y trabajo que quieres</legend>
         <div class="field">
           <label for="hardSoftLimits">Lista de límites duros y suaves *</label>
@@ -196,7 +191,7 @@
         <p class="error" id="limitsError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>4) Disponibilidad y pago</legend>
         <div class="field">
           <span class="sub-label">Días disponibles *</span>
@@ -244,7 +239,7 @@
         <p class="error" id="availabilityError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>5) Fotos</legend>
         <p class="field-hint">Si pones Instagram, estas fotos son opcionales. Igual, una foto de la cara, una de cuerpo completo de frente y una de espalda ayudan para el casting. Cada imagen puede pesar hasta 8 MB.</p>
         <div class="field">
@@ -274,7 +269,7 @@
         <p class="error" id="photosError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>6) Consentimiento</legend>
         <div class="field">
           <span class="sub-label">Lista de consentimiento *</span>
@@ -292,18 +287,8 @@
         <p class="error" id="consentError"></p>
       </fieldset>
 
-      <fieldset hidden>
-        <legend>Revisión</legend>
-        <p class="field-hint">Revisa tus respuestas. No se envía nada hasta que tú envíes la solicitud.</p>
-        <dl class="review-list" id="reviewList"></dl>
-      </fieldset>
-
-      <div class="wizard-actions">
-        <button type="button" class="secondary" id="prevStepBtn">Atrás</button>
-        <button type="button" id="nextStepBtn">Continuar</button>
-      </div>
       <div class="submit-row">
-        <button type="submit" id="submitBtn" disabled hidden>Enviar solicitud</button>
+        <button type="submit" id="submitBtn" disabled>Enviar solicitud</button>
       </div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
     </form>
@@ -334,18 +319,10 @@
     ];
 
     const form = document.getElementById("applicationForm");
-    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
-    const prevStepBtn = document.getElementById("prevStepBtn");
-    const nextStepBtn = document.getElementById("nextStepBtn");
     const submitBtn = document.getElementById("submitBtn");
-    const stepLabel = document.getElementById("stepLabel");
-    const stepTitle = document.getElementById("stepTitle");
-    const progressFill = document.getElementById("progressFill");
     const autosaveStatus = document.getElementById("autosaveStatus");
     const submitStatus = document.getElementById("submitStatus");
     const draftPrompt = document.getElementById("draftPrompt");
-    const reviewList = document.getElementById("reviewList");
-    let currentStep = 0;
     let autosaveEnabled = false;
 
     const setError = (id, message) => {
@@ -374,14 +351,6 @@
       return element && element.files && element.files[0] ? element.files[0] : null;
     };
 
-    const showBlank = (value) => value ? value : "—";
-
-    const escapeHtml = (value) => String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-
     const needsTier2Consent = () => selectedRadio("payTier") === "Tier 2" || selectedRadio("payTier") === "Both";
 
     const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
@@ -399,68 +368,6 @@
     const updateSubmitState = () => {
       syncTier2Consent();
       submitBtn.disabled = !consentsComplete();
-    };
-
-    const choiceLabel = (element) => {
-      if (!element) return "";
-      const label = element.closest("label");
-      return label ? label.textContent.replace(/\s+/g, " ").trim() : element.value;
-    };
-
-    const selectedRadioLabel = (name) => choiceLabel(form.querySelector(`input[type="radio"][name="${name}"]:checked`));
-
-    const checkedLabels = (name) => Array.from(form.querySelectorAll(`input[type="checkbox"][name="${name}"]:checked`)).map(choiceLabel).join(", ");
-
-    const renderReview = () => {
-      const rows = [
-        ["Nombre", valueOf("name")],
-        ["Edad", valueOf("age")],
-        ["Ciudad", valueOf("city")],
-        ["Instagram", valueOf("instagram")],
-        ["Correo", valueOf("email")],
-        ["WhatsApp", valueOf("whatsapp")],
-        ["Nivel de experiencia", selectedRadioLabel("experienceLevel")],
-        ["Actos que ya has hecho en cámara", checkedLabels("actsPerformed")],
-        ["Actos que no vas a hacer", valueOf("actsWontDo")],
-        ["Prueba de ITS en los últimos 6 meses", selectedRadioLabel("stiTested")],
-        ["Prueba antes de agendar", selectedRadioLabel("willingToTest")],
-        ["Lista de límites duros y suaves", valueOf("hardSoftLimits")],
-        ["Categorías soft", checkedLabels("softCategories")],
-        ["Categorías hard", checkedLabels("hardCategories")],
-        ["Trabajo explícito o de plataforma de pago", selectedRadioLabel("explicitPaidPlatform")],
-        ["Días disponibles", checkedLabels("availabilityDays")],
-        ["¿A cuál nivel aplicas?", selectedRadioLabel("payTier")],
-        ["¿Te cubren el viaje?", selectedRadioLabel("travelCovered")],
-        ["Noche o varios días", selectedRadioLabel("overnightMultiday")],
-        ["Vestuario, juguetes o props", selectedRadioLabel("ownWardrobe")],
-        ["Notas", valueOf("notes")],
-        ["Foto de la cara", fileOf("headshot") ? fileOf("headshot").name : "No subiste foto"],
-        ["Cuerpo completo de frente", fileOf("fullBodyFront") ? fileOf("fullBodyFront").name : "No subiste foto"],
-        ["Cuerpo completo de espalda", fileOf("fullBodyRear") ? fileOf("fullBodyRear").name : "No subiste foto"],
-        ["Set de muestras explícitas", document.getElementById("explicitSamples").files.length
-          ? Array.from(document.getElementById("explicitSamples").files).map((file) => file.name).join(", ")
-          : "No subiste fotos"],
-        ["Enlace del video", valueOf("sceneVideoLink")],
-        ["Consentimiento", `${checkedValues("consent").length} de ${requiredConsentValues().length} casillas marcadas`]
-      ];
-      reviewList.innerHTML = rows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(showBlank(value))}</dd></div>`).join("");
-    };
-
-    const updateStep = () => {
-      fieldsets.forEach((fieldset, index) => {
-        fieldset.hidden = index !== currentStep;
-      });
-      const legend = fieldsets[currentStep].querySelector("legend");
-      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
-      stepTitle.textContent = legend ? legend.textContent.trim() : "";
-      progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
-      prevStepBtn.hidden = currentStep === 0;
-      const onReview = currentStep === fieldsets.length - 1;
-      nextStepBtn.hidden = onReview;
-      submitBtn.hidden = !onReview;
-      if (onReview) renderReview();
-      updateSubmitState();
-      submitStatus.textContent = "";
     };
 
     const imageError = (file, label) => {
@@ -525,7 +432,7 @@
     };
 
     const serializeDraft = () => {
-      const draft = { currentStep };
+      const draft = {};
       Array.from(form.elements).forEach((element) => {
         if (element.type === "file" || element.type === "submit" || element.type === "button") return;
         if (element.type === "checkbox") {
@@ -566,7 +473,7 @@
           if (radio) radio.checked = true;
         }
       });
-      currentStep = Math.min(Math.max(Number(draft.currentStep) || 0, 0), fieldsets.length - 1);
+      updateSubmitState();
       autosaveStatus.textContent = "Borrador recuperado";
     };
 
@@ -647,20 +554,6 @@
       });
     };
 
-    nextStepBtn.addEventListener("click", () => {
-      if (!validateStep(currentStep)) return;
-      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
-      updateStep();
-      saveDraft();
-    });
-
-    prevStepBtn.addEventListener("click", () => {
-      currentStep = Math.max(currentStep - 1, 0);
-      clearErrors();
-      updateStep();
-      saveDraft();
-    });
-
     document.getElementById("restoreDraftBtn").addEventListener("click", () => {
       try {
         restoreDraft();
@@ -669,7 +562,7 @@
       }
       draftPrompt.hidden = true;
       autosaveEnabled = true;
-      updateStep();
+      updateSubmitState();
     });
 
     document.getElementById("discardDraftBtn").addEventListener("click", () => {
@@ -688,20 +581,21 @@
       saveDraft();
     });
 
+    const sectionErrorIds = ["basicError", "experienceError", "limitsError", "availabilityError", "photosError", "consentError"];
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      for (let index = 0; index < fieldsets.length - 1; index += 1) {
+      for (let index = 0; index < sectionErrorIds.length; index += 1) {
         if (!validateStep(index)) {
-          currentStep = index;
-          updateStep();
+          const error = document.getElementById(sectionErrorIds[index]);
+          if (error) error.scrollIntoView({ behavior: "smooth", block: "center" });
           return;
         }
       }
       updateSubmitState();
       if (submitBtn.disabled) {
-        currentStep = 5;
-        updateStep();
         setError("consentError", "Marca todas las casillas de consentimiento antes de enviar.");
+        document.getElementById("consentError").scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
       if (!SUBMIT_ENDPOINT) {
@@ -743,7 +637,7 @@
       } else {
         autosaveEnabled = true;
       }
-      updateStep();
+      updateSubmitState();
     };
 
     const inviteGate = document.getElementById("inviteGate");

@@ -11,7 +11,9 @@
     .page { padding: 18px 0 48px; }
     .hero { margin-bottom: 16px; }
     .hero p { margin: 8px 0 0; }
-    .progress-panel { margin-bottom: 16px; padding: 16px; }
+    fieldset { margin: 0 0 18px; }
+    #autosaveStatus { display: block; margin: 0 0 14px; }
+    .submit-row button { width: 100%; }
     .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
     .progress-track { margin: 10px 0; }
     .field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; }
@@ -65,14 +67,7 @@
     </section>
 
     <form id="applicationForm" novalidate>
-      <div class="progress-panel" aria-live="polite">
-        <div class="progress-meta">
-          <span id="stepLabel">1 / 7</span>
-          <span id="autosaveStatus">Autosaves on this device</span>
-        </div>
-        <p class="step-title" id="stepTitle">1) Basic Info</p>
-        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
-      </div>
+      <p class="status" id="autosaveStatus">Autosaves on this device</p>
 
       <fieldset>
         <legend>1) Basic Info</legend>
@@ -106,7 +101,7 @@
         <p class="error" id="basicError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>2) Experience &amp; Act History</legend>
         <div class="field">
           <span class="sub-label">Experience level *</span>
@@ -155,7 +150,7 @@
         <p class="error" id="experienceError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>3) Limits &amp; Work Wanted</legend>
         <div class="field">
           <label for="hardSoftLimits">Hard/soft limit list *</label>
@@ -196,7 +191,7 @@
         <p class="error" id="limitsError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>4) Availability &amp; Pay</legend>
         <div class="field">
           <span class="sub-label">Availability days *</span>
@@ -244,7 +239,7 @@
         <p class="error" id="availabilityError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>5) Photos</legend>
         <p class="field-hint">If you add Instagram, these photos are optional. A headshot, a full-body front, and a full-body rear still help casting. Each image can be up to 8 MB.</p>
         <div class="field">
@@ -274,7 +269,7 @@
         <p class="error" id="photosError"></p>
       </fieldset>
 
-      <fieldset hidden>
+      <fieldset>
         <legend>6) Consent</legend>
         <div class="field">
           <span class="sub-label">Consent checklist *</span>
@@ -292,18 +287,8 @@
         <p class="error" id="consentError"></p>
       </fieldset>
 
-      <fieldset hidden>
-        <legend>Review</legend>
-        <p class="field-hint">Check your answers. Nothing is sent until you submit.</p>
-        <dl class="review-list" id="reviewList"></dl>
-      </fieldset>
-
-      <div class="wizard-actions">
-        <button type="button" class="secondary" id="prevStepBtn">Back</button>
-        <button type="button" id="nextStepBtn">Continue</button>
-      </div>
       <div class="submit-row">
-        <button type="submit" id="submitBtn" disabled hidden>Submit application</button>
+        <button type="submit" id="submitBtn" disabled>Submit application</button>
       </div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
     </form>
@@ -334,18 +319,10 @@
     ];
 
     const form = document.getElementById("applicationForm");
-    const fieldsets = Array.from(form.querySelectorAll("fieldset"));
-    const prevStepBtn = document.getElementById("prevStepBtn");
-    const nextStepBtn = document.getElementById("nextStepBtn");
     const submitBtn = document.getElementById("submitBtn");
-    const stepLabel = document.getElementById("stepLabel");
-    const stepTitle = document.getElementById("stepTitle");
-    const progressFill = document.getElementById("progressFill");
     const autosaveStatus = document.getElementById("autosaveStatus");
     const submitStatus = document.getElementById("submitStatus");
     const draftPrompt = document.getElementById("draftPrompt");
-    const reviewList = document.getElementById("reviewList");
-    let currentStep = 0;
     let autosaveEnabled = false;
 
     const setError = (id, message) => {
@@ -374,14 +351,6 @@
       return element && element.files && element.files[0] ? element.files[0] : null;
     };
 
-    const showBlank = (value) => value ? value : "—";
-
-    const escapeHtml = (value) => String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-
     const needsTier2Consent = () => selectedRadio("payTier") === "Tier 2" || selectedRadio("payTier") === "Both";
 
     const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
@@ -399,62 +368,6 @@
     const updateSubmitState = () => {
       syncTier2Consent();
       submitBtn.disabled = !consentsComplete();
-    };
-
-    const renderReview = () => {
-      const rows = [
-        ["Name", valueOf("name")],
-        ["Age", valueOf("age")],
-        ["City", valueOf("city")],
-        ["Instagram", valueOf("instagram")],
-        ["Email", valueOf("email")],
-        ["WhatsApp", valueOf("whatsapp")],
-        ["Experience level", selectedRadio("experienceLevel")],
-        ["Acts performed on camera", checkedValues("actsPerformed").join(", ")],
-        ["Acts you won't do", valueOf("actsWontDo")],
-        ["STI tested in the last 6 months", selectedRadio("stiTested")],
-        ["Willing to test before booking", selectedRadio("willingToTest")],
-        ["Hard/soft limit list", valueOf("hardSoftLimits")],
-        ["Soft categories", checkedValues("softCategories").join(", ")],
-        ["Hard categories", checkedValues("hardCategories").join(", ")],
-        ["Explicit/paid-platform work", selectedRadio("explicitPaidPlatform")],
-        ["Availability days", checkedValues("availabilityDays").join(", ")],
-        ["Which tier are you applying for?", {
-          "Tier 1": "Tier 1 — COP 300.000 (≈ $75 USD) — full nude, 5-hour session",
-          "Tier 2": "Tier 2 — COP 2.000.000 (≈ $500 USD) — hardcore, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom.",
-          "Both": "Both"
-        }[selectedRadio("payTier")] || ""],
-        ["Travel covered", selectedRadio("travelCovered")],
-        ["Overnight / multi-day", selectedRadio("overnightMultiday")],
-        ["Own wardrobe, toys, or props", selectedRadio("ownWardrobe")],
-        ["Notes", valueOf("notes")],
-        ["Headshot", fileOf("headshot") ? fileOf("headshot").name : "Not uploaded"],
-        ["Full body front", fileOf("fullBodyFront") ? fileOf("fullBodyFront").name : "Not uploaded"],
-        ["Full body rear", fileOf("fullBodyRear") ? fileOf("fullBodyRear").name : "Not uploaded"],
-        ["Explicit sample set", document.getElementById("explicitSamples").files.length
-          ? Array.from(document.getElementById("explicitSamples").files).map((file) => file.name).join(", ")
-          : "Not uploaded"],
-        ["Scene video link", valueOf("sceneVideoLink")],
-        ["Consent", `${checkedValues("consent").length} of ${requiredConsentValues().length} boxes ticked`]
-      ];
-      reviewList.innerHTML = rows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(showBlank(value))}</dd></div>`).join("");
-    };
-
-    const updateStep = () => {
-      fieldsets.forEach((fieldset, index) => {
-        fieldset.hidden = index !== currentStep;
-      });
-      const legend = fieldsets[currentStep].querySelector("legend");
-      stepLabel.textContent = `${currentStep + 1} / ${fieldsets.length}`;
-      stepTitle.textContent = legend ? legend.textContent.trim() : "";
-      progressFill.style.width = `${Math.round(((currentStep + 1) / fieldsets.length) * 100)}%`;
-      prevStepBtn.hidden = currentStep === 0;
-      const onReview = currentStep === fieldsets.length - 1;
-      nextStepBtn.hidden = onReview;
-      submitBtn.hidden = !onReview;
-      if (onReview) renderReview();
-      updateSubmitState();
-      submitStatus.textContent = "";
     };
 
     const imageError = (file, label) => {
@@ -519,7 +432,7 @@
     };
 
     const serializeDraft = () => {
-      const draft = { currentStep };
+      const draft = {};
       Array.from(form.elements).forEach((element) => {
         if (element.type === "file" || element.type === "submit" || element.type === "button") return;
         if (element.type === "checkbox") {
@@ -560,7 +473,7 @@
           if (radio) radio.checked = true;
         }
       });
-      currentStep = Math.min(Math.max(Number(draft.currentStep) || 0, 0), fieldsets.length - 1);
+      updateSubmitState();
       autosaveStatus.textContent = "Draft restored";
     };
 
@@ -641,20 +554,6 @@
       });
     };
 
-    nextStepBtn.addEventListener("click", () => {
-      if (!validateStep(currentStep)) return;
-      currentStep = Math.min(currentStep + 1, fieldsets.length - 1);
-      updateStep();
-      saveDraft();
-    });
-
-    prevStepBtn.addEventListener("click", () => {
-      currentStep = Math.max(currentStep - 1, 0);
-      clearErrors();
-      updateStep();
-      saveDraft();
-    });
-
     document.getElementById("restoreDraftBtn").addEventListener("click", () => {
       try {
         restoreDraft();
@@ -663,7 +562,7 @@
       }
       draftPrompt.hidden = true;
       autosaveEnabled = true;
-      updateStep();
+      updateSubmitState();
     });
 
     document.getElementById("discardDraftBtn").addEventListener("click", () => {
@@ -682,20 +581,21 @@
       saveDraft();
     });
 
+    const sectionErrorIds = ["basicError", "experienceError", "limitsError", "availabilityError", "photosError", "consentError"];
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      for (let index = 0; index < fieldsets.length - 1; index += 1) {
+      for (let index = 0; index < sectionErrorIds.length; index += 1) {
         if (!validateStep(index)) {
-          currentStep = index;
-          updateStep();
+          const error = document.getElementById(sectionErrorIds[index]);
+          if (error) error.scrollIntoView({ behavior: "smooth", block: "center" });
           return;
         }
       }
       updateSubmitState();
       if (submitBtn.disabled) {
-        currentStep = 5;
-        updateStep();
         setError("consentError", "Tick every consent box before you submit.");
+        document.getElementById("consentError").scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
       if (!SUBMIT_ENDPOINT) {
@@ -737,7 +637,7 @@
       } else {
         autosaveEnabled = true;
       }
-      updateStep();
+      updateSubmitState();
     };
 
     const inviteGate = document.getElementById("inviteGate");
