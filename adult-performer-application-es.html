@@ -37,6 +37,9 @@
     .photo-preview { display: none; width: min(100%, 220px); border-radius: 16px; margin-top: 8px; }
     .upload-progress { width: 100%; height: 8px; margin-top: 8px; }
     .details-optional { padding: 16px 18px; border-radius: 28px; border: 1px dashed rgba(122, 30, 66, 0.35); }
+    .audition-notice { margin: 0 0 16px; padding: 16px; border-radius: 20px; border: 2px solid #7a1e42; background: #fff4f6; }
+    .audition-notice p { margin: 0 0 12px; }
+    .audition-notice .choice { width: 100%; background: #fff; }
     .note { margin: 0 0 12px; }
     .privacy-note { margin: 0 0 16px; }
     .draft-prompt { margin: 0 0 16px; padding: 16px 18px; border-radius: 20px; border: 1px solid rgba(122, 30, 66, 0.2); background: #fffdfb; }
@@ -219,6 +222,14 @@
 
       <fieldset data-section data-label="Sección 4 de 6">
         <legend><span class="section-kicker">Sección 4 de 6</span> Pago</legend>
+        <div class="audition-notice">
+          <p><strong>Audición pagada obligatoria</strong> — $150.000 COP por una audición de 1 hora antes de cualquier reserva.</p>
+          <label class="choice">
+            <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
+            Entiendo que una audición pagada de 1 hora ($150.000 COP) es obligatoria antes de reservar.
+          </label>
+          <p class="error" id="auditionError"></p>
+        </div>
         <div class="field">
           <span class="sub-label">¿A cuál nivel aplicas? *</span>
           <label class="tier-card">
@@ -227,7 +238,7 @@
           </label>
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 2">
-            <span><strong>Nivel 2 — COP 2.000.000 <span class="pay-usd">(≈ US$500)</span></strong><p>Porno hardcore, 16 horas divididas en cuatro sesiones de 4 horas: video, actuación y sexo en cámara sin condón.</p></span>
+            <span><strong>Nivel 2 — $1.500.000 COP <span class="pay-usd">(≈ US$500)</span></strong><p>Porno hardcore, 16 horas divididas en cuatro sesiones de 4 horas: video, actuación y sexo en cámara sin condón.</p></span>
           </label>
           <div class="choices">
             <label class="choice"><input type="radio" name="tierChoice" value="Both">Ambos</label>
@@ -424,7 +435,7 @@
     };
 
     const validateForm = () => {
-      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "tierError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
+      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "auditionError", "tierError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
       let first = "";
       const fail = (id, message) => {
         setError(id, message);
@@ -439,6 +450,7 @@
       else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Escribe un correo válido.");
       if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Pon tu Instagram o sube al menos una foto.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Elige tu nivel de experiencia. Ninguna está bien si no has hecho este trabajo.");
+      if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Elige un nivel, Ambos, Abierto a conversar o Propongo mi tarifa.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
       if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "El set explícito puede tener hasta 8 imágenes.");
@@ -464,6 +476,7 @@
         Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
         Boolean(valueOf("instagram") || hasCastingPhoto()),
         Boolean(selectedRadio("experienceLevel")),
+        Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
         consentsComplete()
       ];
@@ -632,6 +645,7 @@
         availability_days: checkedValues("availabilityDays"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
+        audition_ack: document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
         travel_covered: selectedRadio("travelCovered"),
         overnight_multiday: selectedRadio("overnightMultiday"),

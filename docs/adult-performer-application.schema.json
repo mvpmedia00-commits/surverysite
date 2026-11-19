@@ -29,6 +29,7 @@
     "whatsapp",
     "tier_choice",
     "proposed_rate",
+    "audition_ack",
     "experience_level",
     "acts_performed",
     "acts_wont_do",
@@ -105,7 +106,12 @@
     "pay_tier": {
       "type": "string",
       "enum": ["", "Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1, Tier 2, or Both when that card is chosen. Empty when tier_choice is Open to discussion or Propose my rate."
+      "description": "Tier 1 is COP 300.000 (about US$75). Tier 2 is COP 1.500.000 (about US$500). Spanish shows Nivel 2 — $1.500.000 COP. Empty when tier_choice is Open to discussion or Propose my rate."
+    },
+    "audition_ack": {
+      "type": "boolean",
+      "const": true,
+      "description": "True when the applicant confirms a paid 1-hour audition (COP 150.000, paid to the performer) is required before booking. Spanish: audición de 1 hora, $150.000 COP."
     },
     "tier_choice": {
       "type": "string",
