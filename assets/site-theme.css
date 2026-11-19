@@ -480,6 +480,18 @@ button,
   display: none !important;
 }
 
+.quick-guide {
+  background: #fffdf8 !important;
+  color: #181714 !important;
+  border: 1px solid rgba(61, 53, 43, 0.22) !important;
+}
+
+.quick-guide h2,
+.quick-guide p,
+.quick-guide li {
+  color: #181714 !important;
+}
+
 @media (max-width: 760px) {
   .hero,
   .hero-copy,
@@ -547,5 +559,17 @@ button,
     --secondary-bg: rgba(0, 0, 0, 0.34);
     --button-bg: linear-gradient(135deg, #b33f2a, #8d2d1d);
     --button-shadow: 0 16px 28px rgba(179, 63, 42, 0.28);
+  }
+
+  .quick-guide {
+    background: #241f1b !important;
+    color: #f7eee4 !important;
+    border-color: rgba(247, 238, 228, 0.28) !important;
+  }
+
+  .quick-guide h2,
+  .quick-guide p,
+  .quick-guide li {
+    color: #f7eee4 !important;
   }
 }
