@@ -99,8 +99,8 @@
             <input id="email" name="email" type="email" autocomplete="email" required>
           </div>
           <div class="field">
-            <label for="phone">Teléfono (opcional)</label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel">
+            <label for="whatsapp">WhatsApp</label>
+            <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000">
           </div>
         </div>
         <p class="error" id="basicError"></p>
@@ -418,7 +418,7 @@
         ["Ciudad", valueOf("city")],
         ["Instagram", valueOf("instagram")],
         ["Correo", valueOf("email")],
-        ["Teléfono", valueOf("phone")],
+        ["WhatsApp", valueOf("whatsapp")],
         ["Nivel de experiencia", selectedRadioLabel("experienceLevel")],
         ["Actos que ya has hecho en cámara", checkedLabels("actsPerformed")],
         ["Actos que no vas a hacer", valueOf("actsWontDo")],
@@ -596,7 +596,7 @@
         city: valueOf("city"),
         instagram: valueOf("instagram"),
         email: valueOf("email"),
-        phone: valueOf("phone"),
+        whatsapp: valueOf("whatsapp"),
         experience_level: selectedRadio("experienceLevel"),
         acts_performed: checkedValues("actsPerformed"),
         acts_wont_do: valueOf("actsWontDo"),
