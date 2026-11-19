@@ -178,8 +178,9 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "GET") {
-      const auth = validateAdminRequest(req);
-      if (!auth.ok) return respond(res, auth.status, { error: auth.error });
+      // Auth is temporarily disabled at Matthew's request. To turn it back on:
+      // const auth = validateAdminRequest(req);
+      // if (!auth.ok) return respond(res, auth.status, { error: auth.error });
       return listInvites(res);
     }
 
@@ -190,8 +191,8 @@ export default async function handler(req, res) {
 
     const body = req.body || {};
     if (body.action) {
-      const auth = validateAdminRequest(req);
-      if (!auth.ok) return respond(res, auth.status, { error: auth.error });
+      // Auth is temporarily disabled at Matthew's request for create and block/unblock.
+      // To turn it back on, require validateAdminRequest(req) here again.
       if (body.action === "create") return createInvite(res, body);
       if (body.action === "set-blocked") return setBlocked(res, body);
       return respond(res, 400, { error: "Unknown action." });

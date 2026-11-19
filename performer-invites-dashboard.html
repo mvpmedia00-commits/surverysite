@@ -26,7 +26,8 @@
       <p>Create a private link for each person. A blocked link stops working immediately.</p>
     </header>
 
-    <section class="card" id="loginCard">
+    <!-- Auth is temporarily disabled at Matthew's request. Unhide this card and gate adminApp to turn sign-in back on. -->
+    <section class="card" id="loginCard" hidden>
       <form id="loginForm">
         <div class="field">
           <label for="password">Admin password</label>
@@ -37,7 +38,7 @@
       </form>
     </section>
 
-    <section id="adminApp" hidden>
+    <section id="adminApp">
       <form class="card" id="createForm">
         <h2>New invite</h2>
         <div class="field">
@@ -55,7 +56,6 @@
         <div class="row">
           <h2>Links</h2>
           <button type="button" class="secondary" id="refreshBtn">Refresh</button>
-          <button type="button" class="secondary" id="signOutBtn">Sign out</button>
         </div>
         <p class="status" id="listStatus" aria-live="polite"></p>
         <div id="inviteList"></div>
@@ -63,6 +63,7 @@
     </section>
   </main>
   <script>
+    // Auth is temporarily disabled at Matthew's request. The dashboard opens without a password.
     const TOKEN_KEY = "mvp-admin-session";
     const loginCard = document.getElementById("loginCard");
     const adminApp = document.getElementById("adminApp");
@@ -93,11 +94,6 @@
       const headers = { ...(options.headers || {}) };
       if (adminToken) headers.Authorization = `Bearer ${adminToken}`;
       const response = await fetch(url, { ...options, headers });
-      if (response.status === 401) {
-        adminToken = "";
-        sessionStorage.removeItem(TOKEN_KEY);
-        showLogin("Sign in again.");
-      }
       return response;
     };
 
@@ -193,11 +189,6 @@
     });
 
     document.getElementById("refreshBtn").addEventListener("click", loadInvites);
-    document.getElementById("signOutBtn").addEventListener("click", () => {
-      adminToken = "";
-      sessionStorage.removeItem(TOKEN_KEY);
-      showLogin("");
-    });
 
     inviteList.addEventListener("click", async (event) => {
       const copy = event.target.closest("[data-copy]");
@@ -229,10 +220,8 @@
       loadInvites();
     });
 
-    if (adminToken) {
-      showAdmin();
-      loadInvites();
-    }
+    showAdmin();
+    loadInvites();
   </script>
 </body>
 </html>
