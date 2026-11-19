@@ -4,39 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MVP Media Adult Performer Application</title>
-  <meta name="description" content="Apply for adult (18+) performer casting with MVP Media. Boundaries are reviewed privately and discussed before booking.">
+  <meta name="description" content="Apply for adult (18+) performer casting with MVP Media. Applications are reviewed privately.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="assets/site-theme.css">
   <style>
-    .page { padding: 18px 0 48px; }
+    .page { padding: 18px 0 56px; }
     .hero { margin-bottom: 16px; }
     .hero p { margin: 8px 0 0; }
-    fieldset { margin: 0 0 18px; }
-    #autosaveStatus { display: block; margin: 0 0 14px; }
-    .submit-row button { width: 100%; }
-    .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
-    .progress-track { margin: 10px 0; }
+    .scroll-progress { position: sticky; top: 0; z-index: 5; margin: 0 0 14px; padding: 8px 2px 10px; background: #fff7f4; }
+    .scroll-progress span { display: block; margin-bottom: 6px; font-size: 0.92rem; font-weight: 700; }
+    .scroll-track { height: 6px; border-radius: 999px; background: rgba(122, 30, 66, 0.16); overflow: hidden; }
+    .scroll-fill { height: 100%; width: 0; background: #7a1e42; }
+    fieldset, .details-optional { margin: 0 0 18px; }
+    .section-kicker { display: block; margin: 0 0 4px; font-size: 0.92rem; font-weight: 700; }
     .field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; }
     .grid.two { display: grid; gap: 12px; }
     .choices { display: flex; flex-wrap: wrap; gap: 8px; }
-    .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid rgba(122, 30, 66, 0.22); background: #fff; }
-    .choice input { min-height: 0 !important; width: 1.15rem; height: 1.15rem; margin-top: 3px; }
+    .choice, .tier-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid rgba(122, 30, 66, 0.22); background: #fff; min-height: 52px; }
+    .tier-card { display: grid; grid-template-columns: auto 1fr; gap: 12px; width: 100%; margin: 0 0 12px; padding: 16px; border-radius: 20px; white-space: normal; }
+    .tier-card p { margin: 6px 0 0; }
+    .choice input, .tier-card input { min-height: 0 !important; width: 1.25rem; height: 1.25rem; margin-top: 2px; }
+    .choice-none { border-width: 2px; }
     .sub-label { font-weight: 650; }
-    .error { margin: 0 0 12px; color: #9e1b1b; font-weight: 650; }
+    .error { margin: 0; color: #9e1b1b; font-weight: 650; }
     .error:empty { display: none; }
-    .pay-usd { font-size: 0.78em !important; font-weight: 500; }
+    .pay-usd { font-size: 0.85em !important; font-weight: 500; }
     .lang-switch { display: flex; gap: 14px; align-items: center; margin: 0 0 10px; }
     .lang-switch a { color: var(--accent) !important; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
     .lang-switch a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
-    .wizard-actions, .submit-row, .draft-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-    .photo-preview { display: none; width: min(100%, 280px); border-radius: 16px; margin-top: 8px; }
-    .review-list { display: grid; gap: 12px; margin: 0; }
-    .review-list div { padding-bottom: 10px; border-bottom: 1px solid rgba(122, 30, 66, 0.16); }
-    .review-list dt { font-weight: 700; }
-    .review-list dd { margin: 4px 0 0; }
+    .submit-row, .draft-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .submit-row button { width: 100%; }
+    .photo-preview { display: none; width: min(100%, 220px); border-radius: 16px; margin-top: 8px; }
+    .upload-progress { width: 100%; height: 8px; margin-top: 8px; }
+    .details-optional { padding: 16px 18px; border-radius: 28px; border: 1px dashed rgba(122, 30, 66, 0.35); }
+    .note { margin: 0 0 12px; }
+    .privacy-note { margin: 0 0 16px; }
     .draft-prompt { margin: 0 0 16px; padding: 16px 18px; border-radius: 20px; border: 1px solid rgba(122, 30, 66, 0.2); background: #fffdfb; }
-    button:disabled { opacity: 0.55; cursor: not-allowed; }
     .success { display: none; margin-top: 16px; padding: 22px 18px; }
+    button, .choice, .tier-card { touch-action: manipulation; }
     @media (min-width: 761px) {
       .grid.two { grid-template-columns: 1fr 1fr; }
     }
@@ -54,8 +59,8 @@
         <a href="/adult-performer-application-es" lang="es">ES</a>
       </nav>
       <h1>Adult Performer Application</h1>
-      <p>For adults 18 and older.</p>
-      <p>Boundaries are reviewed privately and discussed before booking.</p>
+      <p>MVP MEDIA casts adults 18+ for artistic nude, boudoir, and explicit paid-platform content.</p>
+      <p>We review every application privately and contact you on WhatsApp if there is a fit.</p>
     </header>
 
     <section class="draft-prompt" id="draftPrompt" hidden>
@@ -67,54 +72,97 @@
     </section>
 
     <form id="applicationForm" novalidate>
+      <div class="scroll-progress">
+        <span id="sectionNow">Section 1 of 6</span>
+        <div class="scroll-track" aria-hidden="true"><div class="scroll-fill" id="scrollFill"></div></div>
+      </div>
       <p class="status" id="autosaveStatus">Autosaves on this device</p>
 
-      <fieldset>
-        <legend>1) Basic Info</legend>
+      <fieldset data-section data-label="Section 1 of 6">
+        <legend><span class="section-kicker">Section 1 of 6</span> Basic info</legend>
         <div class="grid two">
           <div class="field">
             <label for="name">Name *</label>
-            <input id="name" name="name" autocomplete="name" required>
+            <input id="name" name="name" autocomplete="name">
+            <p class="error" id="nameError"></p>
           </div>
           <div class="field">
             <label for="age">Age *</label>
-            <input id="age" name="age" type="number" inputmode="numeric" min="18" max="120" required>
-            <p class="field-hint">You must be 18 or older.</p>
+            <input id="age" name="age" type="number" inputmode="numeric" min="18" max="120">
+            <p class="error" id="ageError"></p>
           </div>
           <div class="field">
             <label for="city">City *</label>
-            <input id="city" name="city" autocomplete="address-level2" required>
-          </div>
-          <div class="field">
-            <label for="instagram">Instagram *</label>
-            <input id="instagram" name="instagram" placeholder="@username" autocomplete="off" required>
-          </div>
-          <div class="field">
-            <label for="email">Email *</label>
-            <input id="email" name="email" type="email" autocomplete="email" required>
+            <input id="city" name="city" autocomplete="address-level2">
+            <p class="error" id="cityError"></p>
           </div>
           <div class="field">
             <label for="whatsapp">WhatsApp</label>
             <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000">
+            <p class="field-hint">WhatsApp or email: add at least one.</p>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@email.com">
+            <p class="error" id="contactError"></p>
+          </div>
+          <div class="field">
+            <label for="instagram">Instagram</label>
+            <input id="instagram" name="instagram" placeholder="@username" autocomplete="off">
+            <p class="field-hint">Instagram or at least one photo. You do not need both.</p>
+            <p class="error" id="instagramError"></p>
           </div>
         </div>
-        <p class="error" id="basicError"></p>
       </fieldset>
 
-      <fieldset>
-        <legend>2) Experience &amp; Act History</legend>
+      <fieldset data-section data-label="Section 2 of 6">
+        <legend><span class="section-kicker">Section 2 of 6</span> Experience</legend>
         <div class="field">
           <span class="sub-label">Experience level *</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="experienceLevel" value="None" required>None</label>
+            <label class="choice choice-none"><input type="radio" name="experienceLevel" value="None">None — I have not done this work</label>
             <label class="choice"><input type="radio" name="experienceLevel" value="A few shoots">A few shoots</label>
             <label class="choice"><input type="radio" name="experienceLevel" value="Experienced">Experienced</label>
             <label class="choice"><input type="radio" name="experienceLevel" value="Agency-represented">Agency-represented</label>
           </div>
+          <p class="error" id="experienceError"></p>
         </div>
         <div class="field">
+          <span class="sub-label">STI tested in the last 6 months?</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="stiTested" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="stiTested" value="No">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="sub-label">Willing to test before booking?</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="willingToTest" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="willingToTest" value="No">No</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset data-section data-label="Section 3 of 6">
+        <legend><span class="section-kicker">Section 3 of 6</span> Work you want</legend>
+        <div class="field">
+          <span class="sub-label">Are you applying for explicit/paid-platform work?</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Soft only">Soft only</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Unsure">Unsure</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <section class="details-optional" aria-labelledby="detailsTitle">
+        <h2 id="detailsTitle">Details (optional)</h2>
+        <details class="note">
+          <summary>About limits</summary>
+          <p>Optional. Write only what you want reviewed privately.</p>
+        </details>
+        <div class="field">
           <span class="sub-label">Acts performed on camera</span>
-          <p class="field-hint">Select every act you have already performed on camera.</p>
           <div class="choices">
             <label class="choice"><input type="checkbox" name="actsPerformed" value="Solo">Solo</label>
             <label class="choice"><input type="checkbox" name="actsPerformed" value="Toy">Toy</label>
@@ -134,28 +182,8 @@
           <textarea id="actsWontDo" name="actsWontDo"></textarea>
         </div>
         <div class="field">
-          <span class="sub-label">STI tested in the last 6 months? *</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="stiTested" value="Yes" required>Yes</label>
-            <label class="choice"><input type="radio" name="stiTested" value="No">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <span class="sub-label">Willing to test before booking? *</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="willingToTest" value="Yes" required>Yes</label>
-            <label class="choice"><input type="radio" name="willingToTest" value="No">No</label>
-          </div>
-        </div>
-        <p class="error" id="experienceError"></p>
-      </fieldset>
-
-      <fieldset>
-        <legend>3) Limits &amp; Work Wanted</legend>
-        <div class="field">
-          <label for="hardSoftLimits">Hard/soft limit list *</label>
-          <textarea id="hardSoftLimits" name="hardSoftLimits" required></textarea>
-          <p class="field-hint">Write the limits you want reviewed before anyone discusses a booking. Write None if you have nothing to add.</p>
+          <label for="hardSoftLimits">Hard/soft limit list</label>
+          <textarea id="hardSoftLimits" name="hardSoftLimits"></textarea>
         </div>
         <div class="field">
           <span class="sub-label">Soft categories</span>
@@ -181,20 +209,44 @@
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Are you applying for explicit/paid-platform work? *</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes" required>Yes</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Soft only">Soft only</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Unsure">Unsure</label>
-          </div>
+          <label for="explicitSamples">Explicit sample set</label>
+          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
+          <p class="field-hint">Optional. Up to 8 images, 8 MB each.</p>
+          <div id="samplePreview"></div>
+          <p class="error" id="samplesError"></p>
         </div>
-        <p class="error" id="limitsError"></p>
-      </fieldset>
+      </section>
 
-      <fieldset>
-        <legend>4) Availability &amp; Pay</legend>
+      <fieldset data-section data-label="Section 4 of 6">
+        <legend><span class="section-kicker">Section 4 of 6</span> Pay</legend>
         <div class="field">
-          <span class="sub-label">Availability days *</span>
+          <span class="sub-label">Which tier are you applying for? *</span>
+          <label class="tier-card">
+            <input type="radio" name="tierChoice" value="Tier 1">
+            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$75)</span></strong><p>Full nude, one 5-hour session.</p></span>
+          </label>
+          <label class="tier-card">
+            <input type="radio" name="tierChoice" value="Tier 2">
+            <span><strong>Tier 2 — COP 2.000.000 <span class="pay-usd">(≈ US$500)</span></strong><p>Hardcore, 16 hours split into four 4-hour sessions: video, acting, sex on camera without a condom.</p></span>
+          </label>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="tierChoice" value="Both">Both</label>
+            <label class="choice"><input type="radio" name="tierChoice" value="Open to discussion">Open to discussion</label>
+            <label class="choice"><input type="radio" name="tierChoice" value="Propose my rate">Propose my rate</label>
+          </div>
+          <p class="field-hint">Travel, lodging and wardrobe are discussed before booking.</p>
+          <details class="note">
+            <summary>About these tiers</summary>
+            <p>USD amounts are approximate at about 4,000 COP per dollar. Tier 1 is one 5-hour full nude session. Tier 2 is 16 hours split into four 4-hour sessions.</p>
+          </details>
+          <div class="field" id="proposedRateField" hidden>
+            <label for="proposedRate">Your rate</label>
+            <input id="proposedRate" name="proposedRate" placeholder="Write the rate you want">
+          </div>
+          <p class="error" id="tierError"></p>
+        </div>
+        <div class="field">
+          <span class="sub-label">Availability days</span>
           <div class="choices">
             <label class="choice"><input type="checkbox" name="availabilityDays" value="Weekdays">Weekdays</label>
             <label class="choice"><input type="checkbox" name="availabilityDays" value="Weeknights">Weeknights</label>
@@ -203,32 +255,23 @@
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Which tier are you applying for? *</span>
-          <p class="field-hint">USD approximate at about 4,000 COP per dollar.</p>
+          <span class="sub-label">Travel covered?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="payTier" value="Tier 1" required><span>Tier 1 — COP 300.000 <span class="pay-usd">(≈ $75 USD)</span> — full nude, 5-hour session</span></label>
-            <label class="choice"><input type="radio" name="payTier" value="Tier 2"><span>Tier 2 — COP 2.000.000 <span class="pay-usd">(≈ $500 USD)</span> — hardcore, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom.</span></label>
-            <label class="choice"><input type="radio" name="payTier" value="Both">Both</label>
-          </div>
-        </div>
-        <div class="field">
-          <span class="sub-label">Travel covered? *</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="travelCovered" value="Yes" required>Yes</label>
+            <label class="choice"><input type="radio" name="travelCovered" value="Yes">Yes</label>
             <label class="choice"><input type="radio" name="travelCovered" value="No">No</label>
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Overnight / multi-day? *</span>
+          <span class="sub-label">Overnight / multi-day?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes" required>Yes</label>
+            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes">Yes</label>
             <label class="choice"><input type="radio" name="overnightMultiday" value="No">No</label>
           </div>
         </div>
         <div class="field">
-          <span class="sub-label">Own wardrobe, toys, or props? *</span>
+          <span class="sub-label">Own wardrobe, toys, or props?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="ownWardrobe" value="Yes" required>Yes</label>
+            <label class="choice"><input type="radio" name="ownWardrobe" value="Yes">Yes</label>
             <label class="choice"><input type="radio" name="ownWardrobe" value="No">No</label>
           </div>
         </div>
@@ -236,41 +279,44 @@
           <label for="notes">Notes</label>
           <textarea id="notes" name="notes"></textarea>
         </div>
-        <p class="error" id="availabilityError"></p>
       </fieldset>
 
-      <fieldset>
-        <legend>5) Photos</legend>
-        <p class="field-hint">If you add Instagram, these photos are optional. A headshot, a full-body front, and a full-body rear still help casting. Each image can be up to 8 MB.</p>
+      <fieldset data-section data-label="Section 5 of 6">
+        <legend><span class="section-kicker">Section 5 of 6</span> Photos</legend>
+        <p class="privacy-note">Photos and health/STI info are used only for casting, stored securely, never shared publicly without your written agreement, and you can request deletion at any time via WhatsApp or email.</p>
+        <p class="field-hint">Add Instagram or at least one photo. Each image can be up to 8 MB.</p>
         <div class="field">
           <label for="headshot">Headshot</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
           <img class="photo-preview" id="headshotPreview" alt="">
+          <p class="status" id="headshotStatus"></p>
+          <progress class="upload-progress" id="headshotProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
           <label for="fullBodyFront">Full body front</label>
           <input id="fullBodyFront" name="fullBodyFront" type="file" accept="image/*">
           <img class="photo-preview" id="fullBodyFrontPreview" alt="">
+          <p class="status" id="fullBodyFrontStatus"></p>
+          <progress class="upload-progress" id="fullBodyFrontProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
           <label for="fullBodyRear">Full body rear</label>
           <input id="fullBodyRear" name="fullBodyRear" type="file" accept="image/*">
           <img class="photo-preview" id="fullBodyRearPreview" alt="">
+          <p class="status" id="fullBodyRearStatus"></p>
+          <progress class="upload-progress" id="fullBodyRearProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
-          <label for="explicitSamples">Explicit sample set (optional)</label>
-          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
-          <p class="field-hint">You can choose more than one image. Up to 8 files, 8 MB each.</p>
-        </div>
-        <div class="field">
-          <label for="sceneVideoLink">Scene video link (optional)</label>
+          <label for="sceneVideoLink">Scene video link</label>
           <input id="sceneVideoLink" name="sceneVideoLink" type="url" placeholder="https://">
+          <p class="error" id="videoError"></p>
         </div>
         <p class="error" id="photosError"></p>
       </fieldset>
 
-      <fieldset>
-        <legend>6) Consent</legend>
+      <fieldset data-section data-label="Section 6 of 6">
+        <legend><span class="section-kicker">Section 6 of 6</span> Consent</legend>
+        <p class="privacy-note">Photos and health/STI info are used only for casting, stored securely, never shared publicly without your written agreement, and you can request deletion at any time via WhatsApp or email.</p>
         <div class="field">
           <span class="sub-label">Consent checklist *</span>
           <div class="choices">
@@ -283,19 +329,19 @@
             <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to be contacted by MVP Media.</label>
             <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">I understand Tier 2 includes sex on camera without a condom and agree to current STI testing before booking.</label>
           </div>
+          <p class="error" id="consentError"></p>
         </div>
-        <p class="error" id="consentError"></p>
       </fieldset>
 
       <div class="submit-row">
-        <button type="submit" id="submitBtn" disabled>Submit application</button>
+        <button type="submit" id="submitBtn">Submit application</button>
       </div>
       <p class="status" id="submitStatus" aria-live="polite"></p>
     </form>
 
     <section class="success" id="successMessage" aria-live="polite">
       <h2>Application received</h2>
-      <p>Thank you. Your boundaries will be reviewed privately before anyone discusses a booking.</p>
+      <p>Thank you. We review your boundaries privately. If there is a fit, we contact you on WhatsApp.</p>
     </section>
     </div>
   </main>
@@ -311,30 +357,21 @@
     const AUTOSAVE_KEY = "mvp-adult-performer-application-draft";
     const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
     const MAX_SAMPLE_FILES = 8;
-    const CONSENT_VALUES = [
-      "18-plus",
-      "adult-explicit-content",
-      "voluntary",
-      "can-decline",
-      "comp-usage-release",
-      "sti-disclosure",
-      "contact"
-    ];
+    const CONSENT_VALUES = ["18-plus", "adult-explicit-content", "voluntary", "can-decline", "comp-usage-release", "sti-disclosure", "contact"];
+    const TIER_PAY = ["Tier 1", "Tier 2", "Both"];
 
     const form = document.getElementById("applicationForm");
     const submitBtn = document.getElementById("submitBtn");
     const autosaveStatus = document.getElementById("autosaveStatus");
     const submitStatus = document.getElementById("submitStatus");
     const draftPrompt = document.getElementById("draftPrompt");
+    const sectionNow = document.getElementById("sectionNow");
+    const scrollFill = document.getElementById("scrollFill");
     let autosaveEnabled = false;
 
     const setError = (id, message) => {
       const element = document.getElementById(id);
       if (element) element.textContent = message || "";
-    };
-
-    const clearErrors = () => {
-      ["basicError", "experienceError", "limitsError", "availabilityError", "photosError", "consentError"].forEach((id) => setError(id, ""));
     };
 
     const valueOf = (id) => {
@@ -354,7 +391,9 @@
       return element && element.files && element.files[0] ? element.files[0] : null;
     };
 
-    const needsTier2Consent = () => selectedRadio("payTier") === "Tier 2" || selectedRadio("payTier") === "Both";
+    const hasCastingPhoto = () => Boolean(fileOf("headshot") || fileOf("fullBodyFront") || fileOf("fullBodyRear") || (document.getElementById("explicitSamples").files || []).length);
+
+    const needsTier2Consent = () => selectedRadio("tierChoice") === "Tier 2" || selectedRadio("tierChoice") === "Both";
 
     const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
 
@@ -366,72 +405,82 @@
       const show = needsTier2Consent();
       if (choice) choice.hidden = !show;
       if (input && !show) input.checked = false;
+      const rateField = document.getElementById("proposedRateField");
+      const proposing = selectedRadio("tierChoice") === "Propose my rate";
+      if (rateField) rateField.hidden = !proposing;
+      if (!proposing) {
+        const rate = document.getElementById("proposedRate");
+        if (rate) rate.value = "";
+      }
     };
 
-    const updateSubmitState = () => {
-      syncTier2Consent();
-      submitBtn.disabled = !consentsComplete();
-    };
+    const emailLooksValid = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-    const imageError = (file, label) => {
+    const imageProblem = (file, label) => {
       if (!file) return "";
       if (!file.type.startsWith("image/")) return `${label} must be an image.`;
       if (file.size > MAX_PHOTO_BYTES) return `${label} must be 8 MB or smaller.`;
       return "";
     };
 
-    const validateStep = (index) => {
-      clearErrors();
-      if (index === 0) {
-        const age = Number(valueOf("age"));
-        const email = document.getElementById("email");
-        if (!valueOf("name") || !valueOf("city") || !valueOf("instagram") || !valueOf("age") || !email.checkValidity() || !Number.isFinite(age) || age < 18) {
-          setError("basicError", "Complete name, age 18 or older, city, Instagram, and a valid email.");
-          return false;
-        }
-      }
-      if (index === 1) {
-        if (!selectedRadio("experienceLevel") || !selectedRadio("stiTested") || !selectedRadio("willingToTest")) {
-          setError("experienceError", "Choose an experience level, and answer both STI testing questions.");
-          return false;
-        }
-      }
-      if (index === 2) {
-        if (!valueOf("hardSoftLimits") || !selectedRadio("explicitPaidPlatform")) {
-          setError("limitsError", "Write your hard/soft limit list, and choose whether you are applying for explicit/paid-platform work.");
-          return false;
-        }
-      }
-      if (index === 3) {
-        if (!checkedValues("availabilityDays").length || !selectedRadio("payTier") || !selectedRadio("travelCovered") || !selectedRadio("overnightMultiday") || !selectedRadio("ownWardrobe")) {
-          setError("availabilityError", "Choose availability days, a pay tier, and Yes or No for travel, overnight work, and your own wardrobe.");
-          return false;
-        }
-      }
-      if (index === 4) {
-        const problems = [
-          imageError(fileOf("headshot"), "Headshot"),
-          imageError(fileOf("fullBodyFront"), "Full body front"),
-          imageError(fileOf("fullBodyRear"), "Full body rear")
-        ].filter(Boolean);
-        const samples = Array.from(document.getElementById("explicitSamples").files || []);
-        if (samples.length > MAX_SAMPLE_FILES) problems.push("Keep the explicit sample set to 8 images or fewer.");
-        samples.forEach((file, fileIndex) => {
-          const message = imageError(file, `Sample ${fileIndex + 1}`);
-          if (message) problems.push(message);
-        });
-        const video = document.getElementById("sceneVideoLink");
-        if (valueOf("sceneVideoLink") && !video.checkValidity()) problems.push("Scene video link must be a web address, starting with https://.");
-        if (problems.length) {
-          setError("photosError", problems[0]);
-          return false;
-        }
-      }
-      if (index === 5 && !consentsComplete()) {
-        setError("consentError", "Tick every consent box before you continue.");
-        return false;
-      }
-      return true;
+    const validateForm = () => {
+      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "tierError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
+      let first = "";
+      const fail = (id, message) => {
+        setError(id, message);
+        if (!first) first = id;
+      };
+      if (!valueOf("name")) fail("nameError", "Enter your name.");
+      const age = Number(valueOf("age"));
+      if (!valueOf("age")) fail("ageError", "Enter your age.");
+      else if (!Number.isFinite(age) || age < 18) fail("ageError", "You must be 18 or older.");
+      if (!valueOf("city")) fail("cityError", "Enter your city.");
+      if (!valueOf("whatsapp") && !valueOf("email")) fail("contactError", "Add a WhatsApp number or an email.");
+      else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
+      if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Add Instagram or at least one photo.");
+      if (!selectedRadio("experienceLevel")) fail("experienceError", "Choose an experience level. None is fine if you have not done this work.");
+      if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier, Both, Open to discussion, or Propose my rate.");
+      const samples = Array.from(document.getElementById("explicitSamples").files || []);
+      if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "Keep the explicit sample set to 8 images or fewer.");
+      samples.forEach((file, index) => {
+        const message = imageProblem(file, `Sample ${index + 1}`);
+        if (message) fail("samplesError", message);
+      });
+      ["headshot", "fullBodyFront", "fullBodyRear"].forEach((id) => {
+        const message = imageProblem(fileOf(id), id === "headshot" ? "Headshot" : id === "fullBodyFront" ? "Full body front" : "Full body rear");
+        if (message) fail("photosError", message);
+      });
+      const video = document.getElementById("sceneVideoLink");
+      if (valueOf("sceneVideoLink") && video && !video.checkValidity()) fail("videoError", "Scene video link must start with https://.");
+      if (!consentsComplete()) fail("consentError", "Tick every consent box. The Tier 2 box is required when you choose Tier 2 or Both.");
+      return first;
+    };
+
+    const completionRatio = () => {
+      const checks = [
+        Boolean(valueOf("name")),
+        Number(valueOf("age")) >= 18,
+        Boolean(valueOf("city")),
+        Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
+        Boolean(valueOf("instagram") || hasCastingPhoto()),
+        Boolean(selectedRadio("experienceLevel")),
+        Boolean(selectedRadio("tierChoice")),
+        consentsComplete()
+      ];
+      return checks.filter(Boolean).length / checks.length;
+    };
+
+    const updateProgress = () => {
+      const nodes = Array.from(document.querySelectorAll("[data-section]"));
+      let current = nodes[0];
+      nodes.forEach((node) => {
+        if (node.getBoundingClientRect().top <= 90) current = node;
+      });
+      if (current) sectionNow.textContent = current.dataset.label;
+      const formTop = form.getBoundingClientRect().top + window.scrollY;
+      const distance = Math.max(form.offsetHeight - window.innerHeight, 1);
+      const scrolled = Math.min(1, Math.max(0, (window.scrollY - formTop) / distance));
+      scrollFill.style.width = `${Math.round(Math.max(scrolled, completionRatio()) * 100)}%`;
     };
 
     const serializeDraft = () => {
@@ -476,30 +525,94 @@
           if (radio) radio.checked = true;
         }
       });
-      updateSubmitState();
+      syncTier2Consent();
       autosaveStatus.textContent = "Draft restored";
     };
 
     const sanitizeFileName = (name) => String(name || "photo").toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "photo";
 
-    const uploadPhoto = async (file, folder) => {
+    const uploadPhoto = (file, folder, progress) => new Promise((resolve, reject) => {
       const body = new FormData();
       body.append("file", file);
       body.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
       body.append("folder", `mvp-applications/${folder}`);
       body.append("public_id", `${Date.now()}-${sanitizeFileName(file.name)}`);
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-        method: "POST",
-        body
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+      xhr.upload.onprogress = (event) => {
+        if (!progress || !event.lengthComputable) return;
+        progress.hidden = false;
+        progress.value = Math.round((event.loaded / event.total) * 100);
+      };
+      xhr.onload = () => {
+        if (xhr.status < 200 || xhr.status >= 300) {
+          reject(new Error("Photo upload failed"));
+          return;
+        }
+        try {
+          const result = JSON.parse(xhr.responseText);
+          if (!result.secure_url) reject(new Error("Photo upload failed"));
+          else resolve(result.secure_url);
+        } catch (error) {
+          reject(new Error("Photo upload failed"));
+        }
+      };
+      xhr.onerror = () => reject(new Error("Photo upload failed"));
+      xhr.send(body);
+    });
+
+    const setPhotoFeedback = (inputId, previewId, statusId) => {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      const status = document.getElementById(statusId);
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        const problem = imageProblem(file, "This photo");
+        if (!file || problem) {
+          preview.removeAttribute("src");
+          preview.style.display = "none";
+          status.textContent = problem || "";
+          if (problem) input.value = "";
+          updateProgress();
+          return;
+        }
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+        status.textContent = "Photo selected.";
+        updateProgress();
       });
-      if (!response.ok) throw new Error("Photo upload failed");
-      const result = await response.json();
-      if (!result || !result.secure_url) throw new Error("Photo upload failed");
-      return result.secure_url;
+    };
+
+    const renderSamples = () => {
+      const box = document.getElementById("samplePreview");
+      box.innerHTML = "";
+      Array.from(document.getElementById("explicitSamples").files || []).forEach((file) => {
+        const row = document.createElement("div");
+        row.className = "field";
+        const img = document.createElement("img");
+        img.className = "photo-preview";
+        img.alt = "";
+        if (file.type.startsWith("image/")) {
+          img.src = URL.createObjectURL(file);
+          img.style.display = "block";
+        }
+        const name = document.createElement("p");
+        name.className = "status";
+        name.textContent = file.name;
+        const progress = document.createElement("progress");
+        progress.className = "upload-progress";
+        progress.max = 100;
+        progress.value = 0;
+        progress.hidden = true;
+        row.append(img, name, progress);
+        box.appendChild(row);
+      });
     };
 
     const buildPayload = async () => {
+      const tierChoice = selectedRadio("tierChoice");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
+      const sampleProgress = Array.from(document.querySelectorAll("#samplePreview progress"));
       const payload = {
         name: valueOf("name"),
         age: Number(valueOf("age")),
@@ -517,7 +630,9 @@
         hard_categories: checkedValues("hardCategories"),
         explicit_paid_platform: selectedRadio("explicitPaidPlatform"),
         availability_days: checkedValues("availabilityDays"),
-        pay_tier: selectedRadio("payTier"),
+        pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
+        tier_choice: tierChoice,
+        proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
         travel_covered: selectedRadio("travelCovered"),
         overnight_multiday: selectedRadio("overnightMultiday"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
@@ -529,33 +644,29 @@
         scene_video_link: valueOf("sceneVideoLink"),
         consents: checkedValues("consent")
       };
-      if (fileOf("headshot")) payload.headshot_url = await uploadPhoto(fileOf("headshot"), "adult-performer-headshot");
-      if (fileOf("fullBodyFront")) payload.full_body_front_url = await uploadPhoto(fileOf("fullBodyFront"), "adult-performer-full-body-front");
-      if (fileOf("fullBodyRear")) payload.full_body_rear_url = await uploadPhoto(fileOf("fullBodyRear"), "adult-performer-full-body-rear");
-      for (const file of samples) {
-        payload.explicit_sample_urls.push(await uploadPhoto(file, "adult-performer-explicit-sample"));
+      const uploads = [
+        ["headshot", "adult-performer-headshot", "headshotProgress", "headshotStatus"],
+        ["fullBodyFront", "adult-performer-full-body-front", "fullBodyFrontProgress", "fullBodyFrontStatus"],
+        ["fullBodyRear", "adult-performer-full-body-rear", "fullBodyRearProgress", "fullBodyRearStatus"]
+      ];
+      for (const [id, folder, progressId, statusId] of uploads) {
+        const file = fileOf(id);
+        if (!file) continue;
+        document.getElementById(statusId).textContent = "Uploading…";
+        payload[id === "headshot" ? "headshot_url" : id === "fullBodyFront" ? "full_body_front_url" : "full_body_rear_url"] = await uploadPhoto(file, folder, document.getElementById(progressId));
+        document.getElementById(statusId).textContent = "Uploaded.";
+      }
+      for (let index = 0; index < samples.length; index += 1) {
+        const url = await uploadPhoto(samples[index], "adult-performer-explicit-sample", sampleProgress[index]);
+        payload.explicit_sample_urls.push(url);
       }
       return payload;
     };
 
-    const setupPreview = (inputId, previewId) => {
-      const input = document.getElementById(inputId);
-      const preview = document.getElementById(previewId);
-      input.addEventListener("change", () => {
-        const file = input.files && input.files[0];
-        const problem = imageError(file, "This photo");
-        if (!file || problem) {
-          if (problem) setError("photosError", problem);
-          preview.removeAttribute("src");
-          preview.style.display = "none";
-          if (problem) input.value = "";
-          return;
-        }
-        setError("photosError", "");
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
-      });
-    };
+    document.getElementById("explicitSamples").addEventListener("change", renderSamples);
+    setPhotoFeedback("headshot", "headshotPreview", "headshotStatus");
+    setPhotoFeedback("fullBodyFront", "fullBodyFrontPreview", "fullBodyFrontStatus");
+    setPhotoFeedback("fullBodyRear", "fullBodyRearPreview", "fullBodyRearStatus");
 
     document.getElementById("restoreDraftBtn").addEventListener("click", () => {
       try {
@@ -565,7 +676,7 @@
       }
       draftPrompt.hidden = true;
       autosaveEnabled = true;
-      updateSubmitState();
+      updateProgress();
     });
 
     document.getElementById("discardDraftBtn").addEventListener("click", () => {
@@ -576,29 +687,23 @@
     });
 
     form.addEventListener("input", () => {
-      updateSubmitState();
+      syncTier2Consent();
+      updateProgress();
       saveDraft();
     });
     form.addEventListener("change", () => {
-      updateSubmitState();
+      syncTier2Consent();
+      updateProgress();
       saveDraft();
     });
-
-    const sectionErrorIds = ["basicError", "experienceError", "limitsError", "availabilityError", "photosError", "consentError"];
+    window.addEventListener("scroll", updateProgress, { passive: true });
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      for (let index = 0; index < sectionErrorIds.length; index += 1) {
-        if (!validateStep(index)) {
-          const error = document.getElementById(sectionErrorIds[index]);
-          if (error) error.scrollIntoView({ behavior: "smooth", block: "center" });
-          return;
-        }
-      }
-      updateSubmitState();
-      if (submitBtn.disabled) {
-        setError("consentError", "Tick every consent box before you submit.");
-        document.getElementById("consentError").scrollIntoView({ behavior: "smooth", block: "center" });
+      const firstError = validateForm();
+      if (firstError) {
+        const error = document.getElementById(firstError);
+        if (error) error.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
       if (!SUBMIT_ENDPOINT) {
@@ -618,9 +723,10 @@
         localStorage.removeItem(AUTOSAVE_KEY);
         form.hidden = true;
         document.getElementById("successMessage").style.display = "block";
+        document.getElementById("successMessage").scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
         submitStatus.textContent = "Could not submit. Check your photos and try again.";
-        updateSubmitState();
+        submitBtn.disabled = false;
       }
     });
 
@@ -631,16 +737,14 @@
         if (invite) url.searchParams.set("invite", invite);
         link.setAttribute("href", `${url.pathname}${url.search}`);
       });
-      setupPreview("headshot", "headshotPreview");
-      setupPreview("fullBodyFront", "fullBodyFrontPreview");
-      setupPreview("fullBodyRear", "fullBodyRearPreview");
       if (localStorage.getItem(AUTOSAVE_KEY)) {
         draftPrompt.hidden = false;
         autosaveStatus.textContent = "A draft is saved on this device";
       } else {
         autosaveEnabled = true;
       }
-      updateSubmitState();
+      syncTier2Consent();
+      updateProgress();
     };
 
     const inviteGate = document.getElementById("inviteGate");
