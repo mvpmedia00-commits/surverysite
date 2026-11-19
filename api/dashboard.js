@@ -103,6 +103,98 @@ const withModelTrackFields = (row) => ({
   regular_availability: row.regular_availability || extractLegacyField(row.anything_else, "Regular availability") || ""
 });
 
+const foldAnswer = (value) => String(value ?? "")
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/\s+/g, " ")
+  .trim();
+
+const answerAliases = {
+  hear_about: {
+    Indeed: ["indeed", "en efecto"],
+    Instagram: ["instagram"],
+    Facebook: ["facebook"],
+    Referral: ["referral", "referido", "recomendacion"],
+    Friend: ["friend", "amigo"],
+    Website: ["website", "sitio web"],
+    Other: ["other", "otro"]
+  },
+  experience: {
+    Never: ["never", "nunca"],
+    Beginner: ["beginner", "principiante"],
+    "Some Experience": ["some experience", "algo de experiencia"],
+    Experienced: ["experienced", "experimentado", "con experiencia"]
+  },
+  comfort_level: {
+    "Not Comfortable": ["not comfortable", "no comoda/o", "no comodo", "no comoda", "no me siento comodo", "no me resulta comodo"],
+    Maybe: ["maybe", "tal vez"],
+    Comfortable: ["comfortable", "comoda/o", "comodo", "comoda", "me siento comodo", "me resulta comodo"]
+  },
+  frequency: {
+    Weekly: ["weekly", "semanal", "semanalmente"],
+    "Bi-Weekly": ["bi-weekly", "biweekly", "quincenal"],
+    Monthly: ["monthly", "mensual", "menstrual"],
+    Occasionally: ["occasionally", "ocasionalmente", "de vez en cuando"]
+  },
+  comp_interest: {
+    "Paid Shoots": ["paid shoots", "sesiones pagadas", "sesiones fotograficas remuneradas"],
+    "Portfolio Building": ["portfolio building", "construir portafolio", "armar portafolio"],
+    Both: ["both", "ambas", "ambos"]
+  },
+  expected_comp: {
+    "Under $50": ["under $50", "menos de $50"],
+    "$50-$100": ["$50-$100"],
+    "$100-$200": ["$100-$200"],
+    "$200+": ["$200+", "mas de $200"]
+  },
+  travel_distance: {
+    "5 km": ["5 km"],
+    "10 km": ["10 km"],
+    "25 km": ["25 km"],
+    "50 km": ["50 km"],
+    "100 km+": ["100 km+", "mas de 100 km", "100+ km"]
+  },
+  regular_availability: {
+    Occasionally: ["occasionally", "de vez en cuando", "ocasionalmente"],
+    "1-2 days per week": ["1-2 days per week", "1 o 2 dias por semana", "1-2 dias por semana"],
+    "3-4 days per week": ["3-4 days per week", "3 o 4 dias por semana", "3-4 dias por semana"],
+    "5+ days per week": ["5+ days per week", "5 dias o mas por semana", "5+ dias por semana"],
+    "Availability varies": ["availability varies", "mi disponibilidad varia", "la disponibilidad varia"]
+  }
+};
+
+const aliasLookup = Object.fromEntries(Object.entries(answerAliases).map(([field, groups]) => {
+  const lookup = {};
+  for (const [canonical, aliases] of Object.entries(groups)) {
+    for (const alias of aliases) {
+      lookup[foldAnswer(alias)] = canonical;
+    }
+  }
+  return [field, lookup];
+}));
+
+export const canonicalizeAnswer = (field, value) => {
+  if (value === null || value === undefined || value === "") {
+    return value;
+  }
+  const lookup = aliasLookup[field];
+  if (!lookup) {
+    return value;
+  }
+  return lookup[foldAnswer(value)] || value;
+};
+
+const canonicalizeApplicationRow = (row) => {
+  const next = { ...row };
+  for (const field of Object.keys(aliasLookup)) {
+    if (Object.prototype.hasOwnProperty.call(next, field)) {
+      next[field] = canonicalizeAnswer(field, next[field]);
+    }
+  }
+  return next;
+};
+
 export default async function handler(req, res) {
   try {
     if (req.method === "OPTIONS") {
@@ -166,7 +258,7 @@ export default async function handler(req, res) {
     }
 
     const rows = await response.json();
-    const enrichedRows = rows.map(withModelTrackFields);
+    const enrichedRows = rows.map(withModelTrackFields).map(canonicalizeApplicationRow);
 
     const eventsResponse = await fetch(`${cfg.supabaseUrl}/rest/v1/application_events?select=event_type,language&form_type=eq.main&order=created_at.desc`, {
       headers: {
