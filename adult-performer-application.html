@@ -249,7 +249,7 @@
           <p class="error" id="samplesError"></p>
         </div>
         <div class="field">
-          <label for="headshot">Headshot</label>
+          <label for="headshot">Simple face image</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
           <img class="photo-preview" id="headshotPreview" alt="">
           <p class="status" id="headshotStatus"></p>
@@ -263,9 +263,8 @@
           <progress class="upload-progress" id="fullBodyFrontProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
-          <label for="sceneVideoLink">Scene video link</label>
-          <input id="sceneVideoLink" name="sceneVideoLink" type="url" placeholder="https://">
-          <p class="error" id="videoError"></p>
+          <label for="sceneVideoLink">Links to shared content or profiles (optional)</label>
+          <input id="sceneVideoLink" name="sceneVideoLink" type="text" inputmode="url" autocomplete="off">
         </div>
         <p class="error" id="photosError"></p>
       </fieldset>
@@ -376,7 +375,7 @@
     };
 
     const validateForm = () => {
-      ["nameError", "ageError", "cityError", "whatsappError", "contactError", "experienceError", "auditionError", "tierError", "availabilityError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
+      ["nameError", "ageError", "cityError", "whatsappError", "contactError", "experienceError", "auditionError", "tierError", "availabilityError", "photosError", "samplesError", "consentError"].forEach((id) => setError(id, ""));
       let first = "";
       const fail = (id, message) => {
         setError(id, message);
@@ -400,11 +399,9 @@
         if (message) fail("samplesError", message);
       });
       ["headshot", "fullBodyFront"].forEach((id) => {
-        const message = imageProblem(fileOf(id), id === "headshot" ? "Headshot" : "Full body front");
+        const message = imageProblem(fileOf(id), id === "headshot" ? "Simple face image" : "Full body front");
         if (message) fail("photosError", message);
       });
-      const video = document.getElementById("sceneVideoLink");
-      if (valueOf("sceneVideoLink") && video && !video.checkValidity()) fail("videoError", "Scene video link must start with https://.");
       if (!consentsComplete()) fail("consentError", "Tick every consent box. The Tier 2 box is required when you choose Tier 2 or Both.");
       return first;
     };
