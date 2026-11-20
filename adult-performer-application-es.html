@@ -152,13 +152,13 @@
         <legend><span class="section-kicker">Sección 3 de 6</span> Pago</legend>
         <div class="field">
           <span class="sub-label">¿A cuál nivel aplicas? *</span>
-          <p class="field-hint">Todos los niveles son para contenido de OnlyFans.</p>
+          <p class="field-hint">Todos los niveles son para contenido de webcam.</p>
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 1">
-            <span><strong>Nivel 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Programa de modelaje en desnudo</strong><p>Unas 5 horas. Solo modelaje desnudo, sin actuar en cámara. Poses, luz y tomas de concepto para portafolio e imágenes editoriales. Con dirección y pausas. Puedes parar cuando quieras.</p></span>
+            <span><strong>Nivel 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Programa de modelaje en desnudo</strong><p>Unas 5 horas. Solo modelaje desnudo. Poses, luz y tomas de concepto para portafolio e imágenes editoriales. Con dirección y pausas. Puedes parar cuando quieras.</p></span>
           </label>
         </div>
-        <div class="audition-notice">
+        <div class="audition-notice" id="auditionNotice" hidden>
           <p><strong>Audición pagada obligatoria</strong> — $200.000 COP, 1 hora, antes de reservar.</p>
           <label class="choice">
             <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
@@ -414,6 +414,11 @@
       const show = needsTier2Consent();
       if (choice) choice.hidden = !show;
       if (input && !show) input.checked = false;
+      const audition = document.getElementById("auditionNotice");
+      const auditionAck = document.getElementById("auditionAck");
+      if (audition) audition.hidden = !show;
+      if (auditionAck && !show) auditionAck.checked = false;
+      if (!show) setError("auditionError", "");
       const rateField = document.getElementById("proposedRateField");
       const proposing = selectedRadio("tierChoice") === "Propose my rate";
       if (rateField) rateField.hidden = !proposing;
@@ -448,7 +453,7 @@
       else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Escribe un correo válido.");
       if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Pon tu Instagram o sube al menos una foto.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Elige tu nivel de experiencia. Ninguna está bien si no has hecho este trabajo.");
-      if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
+      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Elige un nivel, Ambos, Abierto a conversar o Propongo mi tarifa.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Elige al menos un tipo de disponibilidad.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
@@ -475,7 +480,7 @@
         Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
         Boolean(valueOf("instagram") || hasCastingPhoto()),
         Boolean(selectedRadio("experienceLevel")),
-        Boolean(document.getElementById("auditionAck").checked),
+        !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
         checkedValues("availabilityTypes").length > 0,
         consentsComplete()
@@ -643,7 +648,7 @@
         availability_types: checkedValues("availabilityTypes"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
-        audition_ack: document.getElementById("auditionAck").checked,
+        audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
         travel_covered: selectedRadio("travelCovered"),
         overnight_multiday: selectedRadio("overnightMultiday"),

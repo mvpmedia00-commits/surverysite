@@ -152,13 +152,13 @@
         <legend><span class="section-kicker">Section 3 of 6</span> Pay</legend>
         <div class="field">
           <span class="sub-label">Which tier are you applying for? *</span>
-          <p class="field-hint">All tiers are for OnlyFans content.</p>
+          <p class="field-hint">All tiers are for webcam content.</p>
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 1">
-            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Nude Modeling Program</strong><p>~5 hours. Nude modeling only, no performing on camera. Posing, lighting, and concept shoots for portfolio and editorial images. Directed, with breaks. You can stop anytime.</p></span>
+            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Nude Modeling Program</strong><p>About 5 hours. Nude modeling only. Posing, lighting, and concept shoots for portfolio and editorial images. Directed, with breaks. You can stop anytime.</p></span>
           </label>
         </div>
-        <div class="audition-notice">
+        <div class="audition-notice" id="auditionNotice" hidden>
           <p><strong>Paid audition required</strong> — COP 200.000, 1 hour, before any booking.</p>
           <label class="choice">
             <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
@@ -181,7 +181,7 @@
           <p class="field-hint">Travel, lodging and wardrobe are discussed before booking.</p>
           <details class="note">
             <summary>About these tiers</summary>
-            <p>USD amounts are approximate. Tier 1 is ~5 hours. Tier 2 is 16 hours in four 4-hour sessions.</p>
+            <p>USD amounts are approximate. Tier 1 is about 5 hours. Tier 2 is 16 hours in four 4-hour sessions.</p>
           </details>
           <div class="field" id="proposedRateField" hidden>
             <label for="proposedRate">Your rate</label>
@@ -414,6 +414,11 @@
       const show = needsTier2Consent();
       if (choice) choice.hidden = !show;
       if (input && !show) input.checked = false;
+      const audition = document.getElementById("auditionNotice");
+      const auditionAck = document.getElementById("auditionAck");
+      if (audition) audition.hidden = !show;
+      if (auditionAck && !show) auditionAck.checked = false;
+      if (!show) setError("auditionError", "");
       const rateField = document.getElementById("proposedRateField");
       const proposing = selectedRadio("tierChoice") === "Propose my rate";
       if (rateField) rateField.hidden = !proposing;
@@ -448,7 +453,7 @@
       else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
       if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Add Instagram or at least one photo.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Choose an experience level. None is fine if you have not done this work.");
-      if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
+      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier, Both, Open to discussion, or Propose my rate.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Pick at least one availability type.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
@@ -475,7 +480,7 @@
         Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
         Boolean(valueOf("instagram") || hasCastingPhoto()),
         Boolean(selectedRadio("experienceLevel")),
-        Boolean(document.getElementById("auditionAck").checked),
+        !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
         checkedValues("availabilityTypes").length > 0,
         consentsComplete()
@@ -643,7 +648,7 @@
         availability_types: checkedValues("availabilityTypes"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
-        audition_ack: document.getElementById("auditionAck").checked,
+        audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
         travel_covered: selectedRadio("travelCovered"),
         overnight_multiday: selectedRadio("overnightMultiday"),
