@@ -39,7 +39,7 @@
     "soft_categories",
     "hard_categories",
     "explicit_paid_platform",
-    "availability_days",
+    "availability_types",
     "pay_tier",
     "travel_covered",
     "overnight_multiday",
@@ -95,13 +95,15 @@
       "type": "string",
       "enum": ["", "Yes", "Soft only", "Unsure"]
     },
-    "availability_days": {
+    "availability_types": {
       "type": "array",
+      "minItems": 1,
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "enum": ["Weekdays", "Weeknights", "Weekends", "Flexible"]
-      }
+        "enum": ["Overnight", "All day", "After work"]
+      },
+      "description": "English stored values. Spanish labels are Toda la noche, Todo el día, and Después del trabajo."
     },
     "pay_tier": {
       "type": "string",

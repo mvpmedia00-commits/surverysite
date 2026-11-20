@@ -257,13 +257,13 @@
           <p class="error" id="tierError"></p>
         </div>
         <div class="field">
-          <span class="sub-label">Días disponibles</span>
+          <span class="sub-label">Tipos de disponibilidad *</span>
           <div class="choices">
-            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weekdays">Entre semana</label>
-            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weeknights">Noches entre semana</label>
-            <label class="choice"><input type="checkbox" name="availabilityDays" value="Weekends">Fines de semana</label>
-            <label class="choice"><input type="checkbox" name="availabilityDays" value="Flexible">Horario flexible</label>
+            <label class="choice"><input type="checkbox" name="availabilityTypes" value="Overnight">Toda la noche</label>
+            <label class="choice"><input type="checkbox" name="availabilityTypes" value="All day">Todo el día</label>
+            <label class="choice"><input type="checkbox" name="availabilityTypes" value="After work">Después del trabajo</label>
           </div>
+          <p class="error" id="availabilityError"></p>
         </div>
         <div class="field">
           <span class="sub-label">¿Te cubren el viaje?</span>
@@ -435,7 +435,7 @@
     };
 
     const validateForm = () => {
-      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "auditionError", "tierError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
+      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "auditionError", "tierError", "availabilityError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
       let first = "";
       const fail = (id, message) => {
         setError(id, message);
@@ -452,6 +452,7 @@
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Elige tu nivel de experiencia. Ninguna está bien si no has hecho este trabajo.");
       if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Elige un nivel, Ambos, Abierto a conversar o Propongo mi tarifa.");
+      if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Elige al menos un tipo de disponibilidad.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
       if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "El set explícito puede tener hasta 8 imágenes.");
       samples.forEach((file, index) => {
@@ -478,6 +479,7 @@
         Boolean(selectedRadio("experienceLevel")),
         Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
+        checkedValues("availabilityTypes").length > 0,
         consentsComplete()
       ];
       return checks.filter(Boolean).length / checks.length;
@@ -642,7 +644,7 @@
         soft_categories: checkedValues("softCategories"),
         hard_categories: checkedValues("hardCategories"),
         explicit_paid_platform: selectedRadio("explicitPaidPlatform"),
-        availability_days: checkedValues("availabilityDays"),
+        availability_types: checkedValues("availabilityTypes"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
         audition_ack: document.getElementById("auditionAck").checked,
