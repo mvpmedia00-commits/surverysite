@@ -34,8 +34,6 @@
     "acts_performed",
     "sti_tested_last_6_months",
     "willing_to_test_before_booking",
-    "soft_categories",
-    "hard_categories",
     "explicit_paid_platform",
     "availability_types",
     "pay_tier",
@@ -44,7 +42,6 @@
     "notes",
     "headshot_url",
     "full_body_front_url",
-    "full_body_rear_url",
     "explicit_sample_urls",
     "scene_video_link",
     "consents"
@@ -65,27 +62,12 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
-      }
+        "enum": ["Solo", "Toy", "Girl on Girl", "Boy on Girl", "Anal", "2 girls one guy", "Fetish/BDSM", "Other"]
+      },
+      "description": "English stored values. Spanish labels are Solo, Juguete, Chica con chica, Chico con chica, Anal, 2 chicas y un chico, Fetiche/BDSM, and Otro."
     },
     "sti_tested_last_6_months": { "type": "string", "enum": ["", "Yes", "No"] },
     "willing_to_test_before_booking": { "type": "string", "enum": ["", "Yes", "No"] },
-    "soft_categories": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "enum": ["Artistic nude", "Implied", "Lingerie", "Boudoir", "Bodypaint"]
-      }
-    },
-    "hard_categories": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
-      }
-    },
     "explicit_paid_platform": {
       "type": "string",
       "enum": ["", "Yes", "No", "Audition first"],
@@ -122,14 +104,14 @@
     },
     "own_wardrobe_toys_props": { "type": "string", "enum": ["", "Yes", "No"] },
     "notes": { "type": "string" },
-    "headshot_url": { "type": "string" },
+    "headshot_url": { "type": "string", "description": "Simple face image. Spanish label: Foto simple de la cara. Empty when none is uploaded." },
     "full_body_front_url": { "type": "string" },
-    "full_body_rear_url": { "type": "string" },
     "explicit_sample_urls": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "description": "Optional. The field label is Lingerie images or personal content (optional). Spanish: Imágenes en lencería o contenido personal (opcional). Empty when none are uploaded."
     },
-    "scene_video_link": { "type": "string" },
+    "scene_video_link": { "type": "string", "description": "Optional. The field label is Links to shared content or profiles (optional). Spanish: Enlaces a contenido compartido o perfiles (opcional). Empty is accepted. Any text is stored; there is no URL check." },
     "consents": {
       "type": "array",
       "minItems": 7,
