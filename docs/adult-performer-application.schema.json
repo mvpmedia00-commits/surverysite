@@ -42,7 +42,6 @@
     "notes",
     "headshot_url",
     "full_body_front_url",
-    "full_body_rear_url",
     "explicit_sample_urls",
     "scene_video_link",
     "consents"
@@ -107,7 +106,6 @@
     "notes": { "type": "string" },
     "headshot_url": { "type": "string" },
     "full_body_front_url": { "type": "string" },
-    "full_body_rear_url": { "type": "string" },
     "explicit_sample_urls": {
       "type": "array",
       "items": { "type": "string" },

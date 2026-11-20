@@ -263,13 +263,6 @@
           <progress class="upload-progress" id="fullBodyFrontProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
-          <label for="fullBodyRear">Full body rear</label>
-          <input id="fullBodyRear" name="fullBodyRear" type="file" accept="image/*">
-          <img class="photo-preview" id="fullBodyRearPreview" alt="">
-          <p class="status" id="fullBodyRearStatus"></p>
-          <progress class="upload-progress" id="fullBodyRearProgress" max="100" value="0" hidden></progress>
-        </div>
-        <div class="field">
           <label for="sceneVideoLink">Scene video link</label>
           <input id="sceneVideoLink" name="sceneVideoLink" type="url" placeholder="https://">
           <p class="error" id="videoError"></p>
@@ -406,8 +399,8 @@
         const message = imageProblem(file, `Image ${index + 1}`);
         if (message) fail("samplesError", message);
       });
-      ["headshot", "fullBodyFront", "fullBodyRear"].forEach((id) => {
-        const message = imageProblem(fileOf(id), id === "headshot" ? "Headshot" : id === "fullBodyFront" ? "Full body front" : "Full body rear");
+      ["headshot", "fullBodyFront"].forEach((id) => {
+        const message = imageProblem(fileOf(id), id === "headshot" ? "Headshot" : "Full body front");
         if (message) fail("photosError", message);
       });
       const video = document.getElementById("sceneVideoLink");
@@ -595,21 +588,19 @@
         notes: valueOf("notes"),
         headshot_url: "",
         full_body_front_url: "",
-        full_body_rear_url: "",
         explicit_sample_urls: [],
         scene_video_link: valueOf("sceneVideoLink"),
         consents: checkedValues("consent")
       };
       const uploads = [
         ["headshot", "adult-performer-headshot", "headshotProgress", "headshotStatus"],
-        ["fullBodyFront", "adult-performer-full-body-front", "fullBodyFrontProgress", "fullBodyFrontStatus"],
-        ["fullBodyRear", "adult-performer-full-body-rear", "fullBodyRearProgress", "fullBodyRearStatus"]
+        ["fullBodyFront", "adult-performer-full-body-front", "fullBodyFrontProgress", "fullBodyFrontStatus"]
       ];
       for (const [id, folder, progressId, statusId] of uploads) {
         const file = fileOf(id);
         if (!file) continue;
         document.getElementById(statusId).textContent = "Uploading…";
-        payload[id === "headshot" ? "headshot_url" : id === "fullBodyFront" ? "full_body_front_url" : "full_body_rear_url"] = await uploadPhoto(file, folder, document.getElementById(progressId));
+        payload[id === "headshot" ? "headshot_url" : "full_body_front_url"] = await uploadPhoto(file, folder, document.getElementById(progressId));
         document.getElementById(statusId).textContent = "Uploaded.";
       }
       for (let index = 0; index < samples.length; index += 1) {
@@ -622,7 +613,6 @@
     document.getElementById("explicitSamples").addEventListener("change", renderSamples);
     setPhotoFeedback("headshot", "headshotPreview", "headshotStatus");
     setPhotoFeedback("fullBodyFront", "fullBodyFrontPreview", "fullBodyFrontStatus");
-    setPhotoFeedback("fullBodyRear", "fullBodyRearPreview", "fullBodyRearStatus");
 
     document.getElementById("restoreDraftBtn").addEventListener("click", () => {
       try {
