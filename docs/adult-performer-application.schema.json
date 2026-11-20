@@ -8,8 +8,10 @@
   "allOf": [
     {
       "if": {
-        "properties": { "pay_tier": { "enum": ["Tier 2", "Both"] } },
-        "required": ["pay_tier"]
+        "anyOf": [
+          { "properties": { "pay_tier": { "enum": ["Tier 2", "Both"] } }, "required": ["pay_tier"] },
+          { "properties": { "tier_choice": { "enum": ["Tier 2", "Both"] } }, "required": ["tier_choice"] }
+        ]
       },
       "then": {
         "properties": {
@@ -25,6 +27,9 @@
     "instagram",
     "email",
     "whatsapp",
+    "tier_choice",
+    "proposed_rate",
+    "audition_ack",
     "experience_level",
     "acts_performed",
     "acts_wont_do",
@@ -34,7 +39,7 @@
     "soft_categories",
     "hard_categories",
     "explicit_paid_platform",
-    "availability_days",
+    "availability_types",
     "pay_tier",
     "travel_covered",
     "overnight_multiday",
@@ -51,9 +56,9 @@
     "name": { "type": "string", "minLength": 1 },
     "age": { "type": "integer", "minimum": 18, "maximum": 120 },
     "city": { "type": "string", "minLength": 1 },
-    "instagram": { "type": "string", "minLength": 1 },
-    "email": { "type": "string", "format": "email" },
-    "whatsapp": { "type": "string", "description": "Optional WhatsApp number. Empty when the applicant leaves it blank." },
+    "instagram": { "type": "string", "description": "Optional when at least one photo is included." },
+    "email": { "type": "string", "description": "Optional when WhatsApp is included. Empty or a valid email." },
+    "whatsapp": { "type": "string", "description": "Optional when email is included." },
     "experience_level": {
       "type": "string",
       "enum": ["None", "A few shoots", "Experienced", "Agency-represented"]
@@ -67,9 +72,9 @@
       }
     },
     "acts_wont_do": { "type": "string" },
-    "sti_tested_last_6_months": { "type": "string", "enum": ["Yes", "No"] },
-    "willing_to_test_before_booking": { "type": "string", "enum": ["Yes", "No"] },
-    "hard_soft_limits": { "type": "string", "minLength": 1 },
+    "sti_tested_last_6_months": { "type": "string", "enum": ["", "Yes", "No"] },
+    "willing_to_test_before_booking": { "type": "string", "enum": ["", "Yes", "No"] },
+    "hard_soft_limits": { "type": "string" },
     "soft_categories": {
       "type": "array",
       "uniqueItems": true,
@@ -88,25 +93,37 @@
     },
     "explicit_paid_platform": {
       "type": "string",
-      "enum": ["Yes", "Soft only", "Unsure"]
+      "enum": ["", "Yes", "Soft only", "Unsure"]
     },
-    "availability_days": {
+    "availability_types": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "enum": ["Weekdays", "Weeknights", "Weekends", "Flexible"]
-      }
+        "enum": ["Overnight", "All day", "After work"]
+      },
+      "description": "English stored values. Spanish labels are Toda la noche, Todo el día, and Después del trabajo."
     },
     "pay_tier": {
       "type": "string",
-      "enum": ["Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1 is COP 300.000 (about $75 USD) for a full nude 5-hour session. Tier 2 is COP 2.000.000 (about $500 USD) for hardcore work, 16 hours split into four 4-hour sessions: video, acting, and sex on camera without a condom. USD is approximate at about 4,000 COP per dollar. The Spanish page shows Nivel 1, Nivel 2, and Ambos, and still stores these English values."
+      "enum": ["", "Tier 1", "Tier 2", "Both"],
+      "description": "Tier 1 is COP 300.000 (about US$75). Tier 2 is COP 1.500.000 (about US$500). Spanish shows Nivel 2 — $1.500.000 COP. Empty when tier_choice is Open to discussion or Propose my rate."
     },
-    "travel_covered": { "type": "string", "enum": ["Yes", "No"] },
-    "overnight_multiday": { "type": "string", "enum": ["Yes", "No"] },
-    "own_wardrobe_toys_props": { "type": "string", "enum": ["Yes", "No"] },
+    "audition_ack": {
+      "type": "boolean",
+      "const": true,
+      "description": "True when the applicant confirms a paid 1-hour audition (COP 150.000, paid to the performer) is required before booking. Spanish: audición de 1 hora, $150.000 COP."
+    },
+    "tier_choice": {
+      "type": "string",
+      "enum": ["Tier 1", "Tier 2", "Both", "Open to discussion", "Propose my rate"],
+      "description": "English stored value. Spanish shows Nivel 1, Nivel 2, Ambos, Abierto a conversar, and Propongo mi tarifa."
+    },
+    "proposed_rate": { "type": "string", "description": "Optional text. Used when tier_choice is Propose my rate." },
+    "travel_covered": { "type": "string", "enum": ["", "Yes", "No"] },
+    "overnight_multiday": { "type": "string", "enum": ["", "Yes", "No"] },
+    "own_wardrobe_toys_props": { "type": "string", "enum": ["", "Yes", "No"] },
     "notes": { "type": "string" },
     "headshot_url": { "type": "string" },
     "full_body_front_url": { "type": "string" },
