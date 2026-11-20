@@ -29,7 +29,6 @@
     "email",
     "whatsapp",
     "tier_choice",
-    "proposed_rate",
     "audition_ack",
     "experience_level",
     "acts_performed",
@@ -54,9 +53,9 @@
     "name": { "type": "string", "minLength": 1 },
     "age": { "type": "integer", "minimum": 18, "maximum": 120 },
     "city": { "type": "string", "minLength": 1 },
-    "instagram": { "type": "string", "description": "Optional when at least one photo is included." },
-    "email": { "type": "string", "description": "Optional when WhatsApp is included. Empty or a valid email." },
-    "whatsapp": { "type": "string", "description": "Optional when email is included." },
+    "instagram": { "type": "string", "description": "Optional handle. The field label is Instagram or TikTok (optional). Spanish label: Instagram o TikTok (opcional). Stored in instagram." },
+    "email": { "type": "string", "description": "Optional. Empty or a valid email." },
+    "whatsapp": { "type": "string", "minLength": 1, "description": "Required WhatsApp number." },
     "experience_level": {
       "type": "string",
       "enum": ["None", "A few shoots", "Experienced", "Agency-represented"]
@@ -105,7 +104,7 @@
     "pay_tier": {
       "type": "string",
       "enum": ["", "Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1 is the Nude Modeling Program: COP 300.000 (about US$100), about 5 hours, nude modeling only. Tier 2 is COP 1.500.000 (about US$500). Listed amounts are base pay and can go up before the shoot by written agreement. Taxi is paid for all tiers and the audition. Spanish shows Nivel 1 — COP 300.000: Programa de modelaje en desnudo, and Nivel 2 — $1.500.000 COP. Empty when tier_choice is Open to discussion or Propose my rate."
+      "description": "Tier 1 is the Nude Modeling Program: COP 300.000 (about US$100), about 5 hours, nude modeling only. Tier 2 is COP 1.500.000 (about US$500): full opportunity, 2 days, 16 hours in four 4-hour sessions. Empty when tier_choice is Open to discussion."
     },
     "audition_ack": {
       "type": "boolean",
@@ -113,10 +112,9 @@
     },
     "tier_choice": {
       "type": "string",
-      "enum": ["Tier 1", "Tier 2", "Both", "Open to discussion", "Propose my rate"],
-      "description": "English stored value. Spanish shows Nivel 1, Nivel 2, Ambos, Abierto a conversar, and Propongo mi tarifa."
+      "enum": ["Tier 1", "Tier 2", "Both", "Open to discussion"],
+      "description": "English stored value from the tier dropdown. Spanish shows Nivel 1, Nivel 2, Ambos, and Abierto a conversar."
     },
-    "proposed_rate": { "type": "string", "description": "Optional text. Used when tier_choice is Propose my rate." },
     "willing_travel_resort": {
       "type": "string",
       "enum": ["", "Yes", "No"],
