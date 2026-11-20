@@ -302,7 +302,7 @@
   </main>
 
   <script>
-    const SUBMIT_ENDPOINT = "";
+    const SUBMIT_ENDPOINT = "/api/submit-performer";
     // Invite gate is temporarily off at Matthew's request so the plain URL shows the form.
     // Set REQUIRE_INVITE to true to require a valid ?invite= token again.
     const REQUIRE_INVITE = false;
@@ -657,6 +657,9 @@
       submitStatus.textContent = "Subiendo fotos y enviando tu solicitud...";
       try {
         const payload = await buildPayload();
+        payload.lang = document.documentElement.lang === "es" ? "es" : "en";
+        const submittedInvite = new URLSearchParams(window.location.search).get("invite") || "";
+        payload.invite_token = /^[A-Za-z0-9_-]{20,128}$/.test(submittedInvite) ? submittedInvite : "";
         const response = await fetch(SUBMIT_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
