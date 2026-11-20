@@ -32,10 +32,8 @@
     "audition_ack",
     "experience_level",
     "acts_performed",
-    "acts_wont_do",
     "sti_tested_last_6_months",
     "willing_to_test_before_booking",
-    "hard_soft_limits",
     "soft_categories",
     "hard_categories",
     "explicit_paid_platform",
@@ -71,10 +69,8 @@
         "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
       }
     },
-    "acts_wont_do": { "type": "string" },
     "sti_tested_last_6_months": { "type": "string", "enum": ["", "Yes", "No"] },
     "willing_to_test_before_booking": { "type": "string", "enum": ["", "Yes", "No"] },
-    "hard_soft_limits": { "type": "string" },
     "soft_categories": {
       "type": "array",
       "uniqueItems": true,
