@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>MVP Media</title>
+  <meta name="description" content="Choose a language.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="assets/site-theme.css">
+  <style>
+    .chooser {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 24px 0;
+    }
+    .chooser-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 0;
+    }
+    h1.brand {
+      margin: 0 0 10px !important;
+      font-size: 0.95rem !important;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      line-height: 1.2 !important;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    a.lang-choice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 72px;
+      padding: 18px 22px;
+      border-radius: 999px;
+      font-size: 1.35rem !important;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      background: linear-gradient(135deg, #b54270, #7a1e42) !important;
+      box-shadow: 0 12px 24px rgba(122, 30, 66, 0.22);
+      touch-action: manipulation;
+    }
+  </style>
+  <link rel="stylesheet" href="assets/performer-force-light.css">
+</head>
+<body>
+  <main class="page chooser">
+    <section class="hero chooser-card">
+      <h1 class="brand">MVP MEDIA</h1>
+      <a class="lang-choice" href="/adult-performer-application" lang="en">English</a>
+      <a class="lang-choice" href="/adult-performer-application-es" lang="es">Español</a>
+    </section>
+  </main>
+  <script>
+    const search = window.location.search;
+    if (search) {
+      document.querySelectorAll("a.lang-choice").forEach((link) => {
+        link.search = search;
+      });
+    }
+  </script>
+</body>
+</html>
