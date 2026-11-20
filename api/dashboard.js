@@ -1,3 +1,5 @@
+import { bunnyRefsIn, deleteStorageObject, getBunnyConfig, getStorageObject, isSafeStoragePath } from "../lib/bunny-storage.js";
+
 const respond = (res, status, payload) => {
   res.status(status).setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
@@ -249,24 +251,85 @@ const loadPerformerApplications = async (cfg) => {
 
 const PERFORMER_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+const queryValue = (req, name) => {
+  if (req.query && req.query[name]) return String(req.query[name]);
+  if (!req.url) return "";
+  try {
+    return new URL(req.url, "http://localhost").searchParams.get(name) || "";
+  } catch {
+    return "";
+  }
+};
+
 const performerIdFrom = (req) => {
   const fromBody = req.body && typeof req.body === "object" ? req.body.id : "";
-  let fromQuery = "";
-  if (req.query && req.query.id) fromQuery = req.query.id;
-  if (!fromQuery && req.url) {
-    try {
-      fromQuery = new URL(req.url, "http://localhost").searchParams.get("id") || "";
-    } catch {
-      fromQuery = "";
+  return String(fromBody || queryValue(req, "id") || "").trim();
+};
+
+const proxyPerformerPhoto = async (res, rawPath) => {
+  const path = isSafeStoragePath(rawPath);
+  const finish = (status, payload, extraHeaders = {}) => {
+    res.status(status);
+    res.setHeader("Cache-Control", "private, no-store");
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    Object.entries(extraHeaders).forEach(([key, value]) => res.setHeader(key, value));
+    if (Buffer.isBuffer(payload)) {
+      res.end(payload);
+      return;
     }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(payload));
+  };
+  if (!path) return finish(400, { error: "Invalid photo." });
+  const storage = getBunnyConfig();
+  if (storage.error) return finish(503, { error: storage.error });
+  const response = await getStorageObject(storage, path);
+  if (!response.ok) {
+    await response.arrayBuffer().catch(() => null);
+    return finish(response.status === 404 ? 404 : 502, { error: "Photo could not be loaded." });
   }
-  return String(fromBody || fromQuery || "").trim();
+  const bytes = Buffer.from(await response.arrayBuffer());
+  const type = String(response.headers.get("content-type") || "");
+  return finish(200, bytes, {
+    "Content-Type": type.startsWith("image/") ? type : "application/octet-stream",
+    "Content-Length": String(bytes.length)
+  });
 };
 
 const deletePerformerApplication = async (req, res, cfg) => {
   const id = performerIdFrom(req);
   if (!PERFORMER_ID.test(id)) {
     return respond(res, 400, { error: "Invalid id." });
+  }
+
+  const existing = await fetch(`${cfg.supabaseUrl}/rest/v1/performer_applications?id=eq.${encodeURIComponent(id)}&select=id,payload`, {
+    headers: {
+      apikey: cfg.supabaseKey,
+      Authorization: `Bearer ${cfg.supabaseKey}`,
+      Accept: "application/json",
+      "Accept-Profile": "public"
+    }
+  });
+  if (!existing.ok) {
+    await existing.text();
+    return respond(res, 500, { error: "Could not delete the application." });
+  }
+  let rows = [];
+  try {
+    rows = await existing.json();
+  } catch {
+    rows = [];
+  }
+  const row = Array.isArray(rows) ? rows[0] : null;
+  if (!row) return respond(res, 404, { error: "Application was not found." });
+  const paths = bunnyRefsIn(row.payload);
+  if (paths.length) {
+    const storage = getBunnyConfig();
+    if (storage.error) return respond(res, 503, { error: storage.error });
+    for (const path of paths) {
+      const removed = await deleteStorageObject(storage, path);
+      if (!removed) return respond(res, 500, { error: "Could not delete the photo." });
+    }
   }
 
   const response = await fetch(`${cfg.supabaseUrl}/rest/v1/performer_applications?id=eq.${encodeURIComponent(id)}`, {
@@ -305,6 +368,10 @@ export default async function handler(req, res) {
     if (req.method !== "GET" && req.method !== "PATCH" && req.method !== "DELETE") {
       res.setHeader("Allow", "GET, PATCH, DELETE, OPTIONS");
       return respond(res, 405, { error: "Method not allowed" });
+    }
+
+    if (req.method === "GET" && queryValue(req, "photo")) {
+      return proxyPerformerPhoto(res, queryValue(req, "photo"));
     }
 
     const cfg = getSupabaseConfig();

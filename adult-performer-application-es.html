@@ -240,24 +240,24 @@
       <fieldset data-section data-label="Sección 4 de 5">
         <legend><span class="section-kicker">Sección 4 de 5</span> Fotos</legend>
         <p class="privacy-note">Fotos e info de ITS: solo para el casting, guardadas de forma segura, sin uso público sin acuerdo escrito, y se borran si lo pides.</p>
-        <p class="field-hint">Hasta 8 MB cada una.</p>
+        <p class="field-hint">Hasta 10 MB cada una. JPG, PNG, WEBP o HEIC.</p>
         <div class="field">
           <label for="explicitSamples">Imágenes en lencería o contenido personal (opcional)</label>
-          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
-          <p class="field-hint">Hasta 8 imágenes, de 8 MB cada una.</p>
+          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif" multiple>
+          <p class="field-hint">Hasta 8 imágenes, de 10 MB cada una.</p>
           <div id="samplePreview"></div>
           <p class="error" id="samplesError"></p>
         </div>
         <div class="field">
           <label for="headshot">Foto simple de la cara</label>
-          <input id="headshot" name="headshot" type="file" accept="image/*">
+          <input id="headshot" name="headshot" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif">
           <img class="photo-preview" id="headshotPreview" alt="">
           <p class="status" id="headshotStatus"></p>
           <progress class="upload-progress" id="headshotProgress" max="100" value="0" hidden></progress>
         </div>
         <div class="field">
           <label for="fullBodyFront">Cuerpo completo de frente</label>
-          <input id="fullBodyFront" name="fullBodyFront" type="file" accept="image/*">
+          <input id="fullBodyFront" name="fullBodyFront" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif">
           <img class="photo-preview" id="fullBodyFrontPreview" alt="">
           <p class="status" id="fullBodyFrontStatus"></p>
           <progress class="upload-progress" id="fullBodyFrontProgress" max="100" value="0" hidden></progress>
@@ -307,10 +307,9 @@
     // Set REQUIRE_INVITE to true to require a valid ?invite= token again.
     const REQUIRE_INVITE = false;
 
-    const CLOUDINARY_CLOUD_NAME = "dale5sd8p";
-    const CLOUDINARY_UPLOAD_PRESET = "jobstats";
     const AUTOSAVE_KEY = "mvp-adult-performer-application-draft-es";
-    const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+    const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+    const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
     const MAX_SAMPLE_FILES = 8;
     const CONSENT_VALUES = ["18-plus", "adult-explicit-content", "voluntary", "can-decline", "comp-usage-release", "sti-disclosure", "contact"];
     const TIER_PAY = ["Tier 1", "Tier 2", "Both"];
@@ -367,10 +366,16 @@
 
     const emailLooksValid = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+    const imageFileOk = (file) => {
+      const type = String(file.type || "").toLowerCase();
+      const name = String(file.name || "").toLowerCase();
+      return ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"].includes(type) || /\.(jpe?g|png|webp|heic|heif)$/.test(name);
+    };
+
     const imageProblem = (file, label) => {
       if (!file) return "";
-      if (!file.type.startsWith("image/")) return `${label} tiene que ser una imagen.`;
-      if (file.size > MAX_PHOTO_BYTES) return `${label} tiene que pesar 8 MB o menos.`;
+      if (!imageFileOk(file)) return `${label} tiene que ser JPG, PNG, WEBP o HEIC.`;
+      if (file.size > MAX_PHOTO_BYTES) return `${label} tiene que pesar 10 MB o menos.`;
       return "";
     };
 
@@ -480,37 +485,75 @@
       autosaveStatus.textContent = "Borrador recuperado";
     };
 
-    const sanitizeFileName = (name) => String(name || "photo").toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "photo";
-
-    const uploadPhoto = (file, folder, progress) => new Promise((resolve, reject) => {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-      body.append("folder", `mvp-applications/${folder}`);
-      body.append("public_id", `${Date.now()}-${sanitizeFileName(file.name)}`);
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
-      xhr.upload.onprogress = (event) => {
-        if (!progress || !event.lengthComputable) return;
-        progress.hidden = false;
-        progress.value = Math.round((event.loaded / event.total) * 100);
-      };
-      xhr.onload = () => {
-        if (xhr.status < 200 || xhr.status >= 300) {
-          reject(new Error("No se pudo subir la foto"));
+    const preparePhoto = (file) => new Promise((resolve, reject) => {
+      const couldNotPrepare = () => reject(new Error("No se pudo preparar esta foto."));
+      const tooLarge = () => reject(new Error("Esta foto es demasiado grande para enviarla."));
+      const objectUrl = URL.createObjectURL(file);
+      const image = new Image();
+      image.onload = () => {
+        const edge = Math.max(image.naturalWidth || 1, image.naturalHeight || 1);
+        const scale = Math.min(1, 2000 / edge);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round((image.naturalWidth || 1) * scale));
+        canvas.height = Math.max(1, Math.round((image.naturalHeight || 1) * scale));
+        const context = canvas.getContext("2d");
+        if (!context) {
+          URL.revokeObjectURL(objectUrl);
+          couldNotPrepare();
           return;
         }
-        try {
-          const result = JSON.parse(xhr.responseText);
-          if (!result.secure_url) reject(new Error("No se pudo subir la foto"));
-          else resolve(result.secure_url);
-        } catch (error) {
-          reject(new Error("No se pudo subir la foto"));
-        }
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const qualities = [0.85, 0.7, 0.55];
+        const encode = (index) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              URL.revokeObjectURL(objectUrl);
+              couldNotPrepare();
+              return;
+            }
+            if (blob.size > MAX_UPLOAD_BYTES && index < qualities.length - 1) {
+              encode(index + 1);
+              return;
+            }
+            URL.revokeObjectURL(objectUrl);
+            if (blob.size > MAX_UPLOAD_BYTES) tooLarge();
+            else resolve(blob);
+          }, "image/jpeg", qualities[index]);
+        };
+        encode(0);
       };
-      xhr.onerror = () => reject(new Error("No se pudo subir la foto"));
-      xhr.send(body);
+      image.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        const heic = /heic|heif/i.test(file.type) || /\.hei[cf]$/i.test(file.name);
+        if (heic && file.size <= MAX_UPLOAD_BYTES) resolve(file);
+        else if (heic) tooLarge();
+        else couldNotPrepare();
+      };
+      image.src = objectUrl;
     });
+
+    const uploadPhoto = async (file, progress) => {
+      const prepared = await preparePhoto(file);
+      const responseText = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/submit-performer?upload=1");
+        xhr.setRequestHeader("Content-Type", prepared.type || "image/jpeg");
+        xhr.upload.onprogress = (event) => {
+          if (!progress || !event.lengthComputable) return;
+          progress.hidden = false;
+          progress.value = Math.round((event.loaded / event.total) * 100);
+        };
+        xhr.onload = () => {
+          if (xhr.status < 200 || xhr.status >= 300) reject(new Error("No se pudo subir la foto"));
+          else resolve(xhr.responseText);
+        };
+        xhr.onerror = () => reject(new Error("No se pudo subir la foto"));
+        xhr.send(prepared);
+      });
+      const result = JSON.parse(responseText);
+      if (!result.ref) throw new Error("No se pudo subir la foto");
+      return result.ref;
+    };
 
     const setPhotoFeedback = (inputId, previewId, statusId) => {
       const input = document.getElementById(inputId);
@@ -590,18 +633,18 @@
         consents: checkedValues("consent")
       };
       const uploads = [
-        ["headshot", "adult-performer-headshot", "headshotProgress", "headshotStatus"],
-        ["fullBodyFront", "adult-performer-full-body-front", "fullBodyFrontProgress", "fullBodyFrontStatus"]
+        ["headshot", "headshotProgress", "headshotStatus"],
+        ["fullBodyFront", "fullBodyFrontProgress", "fullBodyFrontStatus"]
       ];
-      for (const [id, folder, progressId, statusId] of uploads) {
+      for (const [id, progressId, statusId] of uploads) {
         const file = fileOf(id);
         if (!file) continue;
         document.getElementById(statusId).textContent = "Subiendo…";
-        payload[id === "headshot" ? "headshot_url" : "full_body_front_url"] = await uploadPhoto(file, folder, document.getElementById(progressId));
+        payload[id === "headshot" ? "headshot_url" : "full_body_front_url"] = await uploadPhoto(file, document.getElementById(progressId));
         document.getElementById(statusId).textContent = "Subida.";
       }
       for (let index = 0; index < samples.length; index += 1) {
-        const url = await uploadPhoto(samples[index], "adult-performer-explicit-sample", sampleProgress[index]);
+        const url = await uploadPhoto(samples[index], sampleProgress[index]);
         payload.explicit_sample_urls.push(url);
       }
       return payload;
@@ -671,7 +714,8 @@
         document.getElementById("successMessage").style.display = "block";
         document.getElementById("successMessage").scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
-        submitStatus.textContent = "No se pudo enviar. Revisa tus fotos e inténtalo de nuevo.";
+        const known = ["No se pudo preparar esta foto.", "Esta foto es demasiado grande para enviarla.", "No se pudo subir la foto"];
+        submitStatus.textContent = known.includes(error && error.message) ? error.message : "No se pudo enviar. Revisa tus fotos e inténtalo de nuevo.";
         submitBtn.disabled = false;
       }
     });

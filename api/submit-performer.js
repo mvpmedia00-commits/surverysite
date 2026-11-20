@@ -1,4 +1,5 @@
 import { getSupabaseConfig } from "./_supabase.js";
+import { getBunnyConfig, isSafeStoragePath, newStoragePath, putStorageObject, sniffImage } from "../lib/bunny-storage.js";
 
 const MAX_BODY_BYTES = 64 * 1024;
 const SETUP_MESSAGE = "Performer application table is not set up yet. Run supabase/migrations/20261120_performer_applications.sql in the Supabase SQL editor, then reload the API schema.";
@@ -31,12 +32,16 @@ const limited = (value, max) => {
 
 const oneOf = (value, allowed) => allowed.includes(value);
 
-const httpsUrl = (value, max) => {
+const storedPhoto = (value, max) => {
   const cleaned = text(value);
   if (!cleaned) return "";
   if (cleaned.length > max) return null;
-  if (!/^https:\/\/\S+$/i.test(cleaned)) return null;
-  return cleaned;
+  if (/^https:\/\/\S+$/i.test(cleaned)) return cleaned;
+  if (cleaned.startsWith("bunny:")) {
+    const path = isSafeStoragePath(cleaned.slice("bunny:".length));
+    return path ? `bunny:${path}` : null;
+  }
+  return null;
 };
 
 const tablesMissing = (status, detail) => {
@@ -118,16 +123,16 @@ const validate = (body) => {
   if (notes == null) return "Questions are too long.";
   if (sceneVideo == null) return "Shared content links are too long.";
 
-  const headshot = httpsUrl(body.headshot_url, 2000);
-  const fullBody = httpsUrl(body.full_body_front_url, 2000);
-  if (headshot == null || fullBody == null) return "Photo links must be empty or https URLs.";
+  const headshot = storedPhoto(body.headshot_url, 2000);
+  const fullBody = storedPhoto(body.full_body_front_url, 2000);
+  if (headshot == null || fullBody == null) return "Photos must be empty, an https link, or a stored photo.";
 
   const samples = Array.isArray(body.explicit_sample_urls) ? body.explicit_sample_urls : null;
-  if (!samples || samples.length > 8) return "Sample images must be a list of at most 8 links.";
+  if (!samples || samples.length > 8) return "Sample images must be a list of at most 8 photos.";
   const sampleUrls = [];
   for (const sample of samples) {
-    const url = httpsUrl(sample, 2000);
-    if (url == null || !url) return "Sample image links must be https URLs.";
+    const url = storedPhoto(sample, 2000);
+    if (url == null || !url) return "Each sample image must be an https link or a stored photo.";
     sampleUrls.push(url);
   }
 
@@ -172,6 +177,53 @@ const validate = (body) => {
   };
 };
 
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
+const isPhotoUpload = (req) => {
+  const type = String(req.headers["content-type"] || "").toLowerCase();
+  return type.startsWith("image/") || String(req.url || "").includes("upload=1");
+};
+
+const readUpload = async (req) => {
+  const declared = Number(req.headers["content-length"] || 0);
+  if (declared > MAX_UPLOAD_BYTES) return { error: "too-large" };
+  if (Buffer.isBuffer(req.body)) return req.body.length > MAX_UPLOAD_BYTES ? { error: "too-large" } : { bytes: req.body };
+  if (req.body instanceof Uint8Array) {
+    const bytes = Buffer.from(req.body);
+    return bytes.length > MAX_UPLOAD_BYTES ? { error: "too-large" } : { bytes };
+  }
+  if (typeof req.body === "string") {
+    const bytes = Buffer.from(req.body, "latin1");
+    return bytes.length > MAX_UPLOAD_BYTES ? { error: "too-large" } : { bytes };
+  }
+  if (req.body && typeof req.body === "object") return { error: "not-image" };
+  const chunks = [];
+  let size = 0;
+  if (req[Symbol.asyncIterator]) {
+    for await (const chunk of req) {
+      const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      size += bytes.length;
+      if (size > MAX_UPLOAD_BYTES) return { error: "too-large" };
+      chunks.push(bytes);
+    }
+  }
+  return { bytes: Buffer.concat(chunks) };
+};
+
+const handlePhotoUpload = async (req, res) => {
+  const upload = await readUpload(req);
+  if (upload.error === "too-large") return respond(res, 413, { error: "Photo is too large." });
+  const bytes = upload.bytes || Buffer.alloc(0);
+  const sniffed = sniffImage(bytes);
+  if (!sniffed) return respond(res, 400, { error: "Photo must be a JPG, PNG, WEBP, or HEIC." });
+  const storage = getBunnyConfig();
+  if (storage.error) return respond(res, 503, { error: storage.error });
+  const path = newStoragePath(sniffed.ext);
+  const saved = await putStorageObject(storage, path, bytes, sniffed.type);
+  if (!saved) return respond(res, 500, { error: "Photo could not be stored." });
+  return respond(res, 200, { ok: true, ref: `bunny:${path}` });
+};
+
 const insertApplication = async (cfg, row) => {
   const response = await fetch(`${cfg.supabaseUrl}/rest/v1/performer_applications`, {
     method: "POST",
@@ -206,6 +258,8 @@ export default async function handler(req, res) {
       res.setHeader("Allow", "POST, OPTIONS, GET");
       return respond(res, 405, { error: "Method not allowed" });
     }
+
+    if (isPhotoUpload(req)) return handlePhotoUpload(req, res);
 
     if (bodyTooLarge(req)) {
       return respond(res, 413, { error: "Application is too large." });

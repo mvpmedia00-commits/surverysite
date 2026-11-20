@@ -104,12 +104,12 @@
     },
     "own_wardrobe_toys_props": { "type": "string", "enum": ["", "Yes", "No"] },
     "notes": { "type": "string" },
-    "headshot_url": { "type": "string", "description": "Simple face image. Spanish label: Foto simple de la cara. Empty when none is uploaded." },
-    "full_body_front_url": { "type": "string" },
+    "headshot_url": { "type": "string", "description": "Simple face image. Spanish label: Foto simple de la cara. Empty, an https URL, or bunny:performers/YYYY-MM/<uuid>.<ext>." },
+    "full_body_front_url": { "type": "string", "description": "Empty, an https URL, or bunny:performers/YYYY-MM/<uuid>.<ext>." },
     "explicit_sample_urls": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Optional. The field label is Lingerie images or personal content (optional). Spanish: Imágenes en lencería o contenido personal (opcional). Empty when none are uploaded."
+      "description": "Optional. Each item is an https URL or bunny:performers/YYYY-MM/<uuid>.<ext>. Spanish label: Imágenes en lencería o contenido personal (opcional)."
     },
     "scene_video_link": { "type": "string", "description": "Optional. The field label is Links to shared content or profiles (optional). Spanish: Enlaces a contenido compartido o perfiles (opcional). Empty is accepted. Any text is stored; there is no URL check." },
     "lang": { "type": "string", "enum": ["en", "es"], "description": "Page language added at submit time. Stored with the application." },

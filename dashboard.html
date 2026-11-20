@@ -493,6 +493,7 @@
     .performer-table th { font-size: 0.82rem; color: var(--muted); }
     .performer-payload { margin-top: 8px; display: grid; gap: 8px; }
     .performer-payload a { color: var(--accent); word-break: break-all; }
+    .performer-thumb { display: block; width: min(160px, 100%); height: auto; margin: 0 0 6px; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
     .performer-field { margin: 0; }
     .performer-field dt { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
     .performer-field dd { margin: 2px 0 0; word-break: break-word; }
@@ -925,11 +926,27 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;");
 
+    const mediaSrc = (value) => {
+      const text = String(value ?? "").trim();
+      if (text.startsWith("bunny:")) {
+        const path = text.slice("bunny:".length);
+        if (!path.startsWith("performers/") || path.includes("..") || path.includes("\\")) return "";
+        return `/api/dashboard?photo=${encodeURIComponent(path)}`;
+      }
+      if (/^https:\/\/\S+$/i.test(text) && (/\.(jpg|jpeg|png|webp|heic)(\?|$)/i.test(text) || /\/image\/upload\//i.test(text))) return text;
+      return "";
+    };
+
     const urlMarkup = (value) => {
       const text = String(value ?? "").trim();
-      if (!/^https:\/\/\S+$/i.test(text)) return escapeHtml(value ?? "");
-      const safe = escapeHtml(text);
-      return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+      const src = mediaSrc(text);
+      if (/^https:\/\/\S+$/i.test(text) && !src) {
+        const safe = escapeHtml(text);
+        return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+      }
+      if (!src) return escapeHtml(value ?? "");
+      const safe = escapeHtml(src);
+      return `<a href="${safe}" target="_blank" rel="noopener noreferrer"><img class="performer-thumb" src="${safe}" alt="">${escapeHtml(text)}</a>`;
     };
 
     const payloadLabel = (key) => String(key || "").replaceAll("_", " ");
