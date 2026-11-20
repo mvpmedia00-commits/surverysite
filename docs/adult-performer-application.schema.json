@@ -105,7 +105,7 @@
     "pay_tier": {
       "type": "string",
       "enum": ["", "Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1 is the Nude Modeling Program: COP 300.000 (about US$75) for a professional nude and artistic-nude photo session of about 5 hours, with no sex on camera. Tier 2 is COP 1.500.000 (about US$500). Listed amounts are base pay and can go up before the shoot by written agreement. Taxi is paid for all tiers and the audition. Spanish shows Nivel 1 — COP 300.000: Programa de modelaje en desnudo, and Nivel 2 — $1.500.000 COP. Empty when tier_choice is Open to discussion or Propose my rate."
+      "description": "Tier 1 is the Nude Modeling Program: COP 300.000 (about US$100) for a professional nude and artistic-nude photo session of about 5 hours, with no sex on camera. Tier 2 is COP 1.500.000 (about US$500). Listed amounts are base pay and can go up before the shoot by written agreement. Taxi is paid for all tiers and the audition. Spanish shows Nivel 1 — COP 300.000: Programa de modelaje en desnudo, and Nivel 2 — $1.500.000 COP. Empty when tier_choice is Open to discussion or Propose my rate."
     },
     "audition_ack": {
       "type": "boolean",
