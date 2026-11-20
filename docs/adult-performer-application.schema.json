@@ -34,8 +34,6 @@
     "acts_performed",
     "sti_tested_last_6_months",
     "willing_to_test_before_booking",
-    "soft_categories",
-    "hard_categories",
     "explicit_paid_platform",
     "availability_types",
     "pay_tier",
@@ -65,27 +63,12 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
-      }
+        "enum": ["Solo", "Toy", "Girl on Girl", "Boy on Girl", "Anal", "2 girls one guy", "Fetish/BDSM", "Other"]
+      },
+      "description": "English stored values. Spanish labels are Solo, Juguete, Chica con chica, Chico con chica, Anal, 2 chicas y un chico, Fetiche/BDSM, and Otro."
     },
     "sti_tested_last_6_months": { "type": "string", "enum": ["", "Yes", "No"] },
     "willing_to_test_before_booking": { "type": "string", "enum": ["", "Yes", "No"] },
-    "soft_categories": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "enum": ["Artistic nude", "Implied", "Lingerie", "Boudoir", "Bodypaint"]
-      }
-    },
-    "hard_categories": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
-      }
-    },
     "explicit_paid_platform": {
       "type": "string",
       "enum": ["", "Yes", "No", "Audition first"],
