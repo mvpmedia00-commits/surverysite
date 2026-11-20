@@ -944,12 +944,27 @@
         const safe = escapeHtml(text);
         return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
       }
-      if (!src) return escapeHtml(value ?? "");
+      if (!src) return escapeHtml(visiblePayloadValue(value));
       const safe = escapeHtml(src);
       return `<a href="${safe}" target="_blank" rel="noopener noreferrer"><img class="performer-thumb" src="${safe}" alt="">${escapeHtml(text)}</a>`;
     };
 
-    const payloadLabel = (key) => String(key || "").replaceAll("_", " ");
+    const visiblePayloadValue = (value) => {
+      const labels = {
+        "sti-disclosure": "STD health test disclosure",
+        "tier2-unprotected-sti": "Tier 2 current STD health test"
+      };
+      const text = String(value ?? "");
+      return Object.prototype.hasOwnProperty.call(labels, text) ? labels[text] : text;
+    };
+
+    const payloadLabel = (key) => {
+      const labels = {
+        sti_tested_last_6_months: "STD health test in the last 6 months"
+      };
+      if (Object.prototype.hasOwnProperty.call(labels, key)) return labels[key];
+      return String(key || "").replaceAll("_", " ");
+    };
 
     const payloadMarkup = (value) => {
       if (Array.isArray(value)) {
