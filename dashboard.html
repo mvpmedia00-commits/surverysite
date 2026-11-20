@@ -481,6 +481,31 @@
     }
   </style>
   <link rel="stylesheet" href="assets/site-theme.css">
+  <style>
+    .performer-section h2 { margin: 0 0 12px; font-size: 1.35rem; }
+    .performer-kpis { margin-bottom: 14px; }
+    .performer-empty { margin: 0; color: var(--muted); }
+    .performer-scroll { overflow-x: auto; }
+    .performer-table { width: 100%; border-collapse: collapse; }
+    .performer-table th,
+    .performer-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .performer-table th { font-size: 0.82rem; color: var(--muted); }
+    .performer-payload { margin-top: 8px; display: grid; gap: 8px; }
+    .performer-payload a { color: var(--accent); word-break: break-all; }
+    .performer-field { margin: 0; }
+    .performer-field dt { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+    .performer-field dd { margin: 2px 0 0; word-break: break-word; }
+    @media (max-width: 700px) {
+      .performer-table thead { display: none; }
+      .performer-table,
+      .performer-table tbody,
+      .performer-table tr,
+      .performer-table td { display: block; width: 100%; }
+      .performer-table tr { border: 1px solid var(--line); border-radius: 12px; margin: 0 0 10px; padding: 8px; background: #fff; }
+      .performer-table td { border: 0; padding: 6px 4px; }
+      .performer-table td::before { content: attr(data-label); display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+    }
+  </style>
 </head>
 <body>
   <main class="wrap">
@@ -556,6 +581,12 @@
         </div>
       </div>
       <div class="candidate-list" id="candidateList"></div>
+    </section>
+
+    <section class="card performer-section" id="performerSection">
+      <h2>Performer applications</h2>
+      <div class="kpis performer-kpis" id="performerKpis"></div>
+      <div id="performerList"></div>
     </section>
 
     <section class="charts">
@@ -873,6 +904,103 @@
       }
     };
 
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+
+    const urlMarkup = (value) => {
+      const text = String(value ?? "").trim();
+      if (!/^https:\/\/\S+$/i.test(text)) return escapeHtml(value ?? "");
+      const safe = escapeHtml(text);
+      return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+    };
+
+    const payloadLabel = (key) => String(key || "").replaceAll("_", " ");
+
+    const payloadMarkup = (value) => {
+      if (Array.isArray(value)) {
+        if (!value.length) return "<p class=\"performer-field\">None</p>";
+        return `<ul>${value.map((item) => `<li>${payloadMarkup(item)}</li>`).join("")}</ul>`;
+      }
+      if (value && typeof value === "object") {
+        const entries = Object.entries(value);
+        if (!entries.length) return "<p class=\"performer-field\">None</p>";
+        return `<div class="performer-payload">${entries.map(([key, item]) => `<dl class="performer-field"><dt>${escapeHtml(payloadLabel(key))}</dt><dd>${payloadMarkup(item)}</dd></dl>`).join("")}</div>`;
+      }
+      return urlMarkup(value);
+    };
+
+    const chicagoTime = (value) => {
+      const date = new Date(value);
+      if (!value || Number.isNaN(date.getTime())) return "—";
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        timeZoneName: "short"
+      }).format(date);
+    };
+
+    const renderPerformerApplications = (summary) => {
+      const data = summary || { total: 0, byTier: {}, byLang: { EN: 0, ES: 0 }, applications: [] };
+      const byLang = data.byLang || {};
+      const tierEntries = Object.entries(data.byTier || {}).sort((a, b) => a[0].localeCompare(b[0]));
+      const kpis = document.getElementById("performerKpis");
+      const list = document.getElementById("performerList");
+      const tierCards = tierEntries.length
+        ? tierEntries.map(([tier, count]) => `<div class="kpi"><p class="kpi-label">${escapeHtml(tier)}</p><p class="kpi-value">${count}</p></div>`).join("")
+        : `<div class="kpi"><p class="kpi-label">By tier</p><p class="kpi-value">0</p></div>`;
+      kpis.innerHTML = `
+        <div class="kpi"><p class="kpi-label">Total</p><p class="kpi-value">${Number(data.total) || 0}</p></div>
+        ${tierCards}
+        <div class="kpi"><p class="kpi-label">EN</p><p class="kpi-value">${Number(byLang.EN) || 0}</p></div>
+        <div class="kpi"><p class="kpi-label">ES</p><p class="kpi-value">${Number(byLang.ES) || 0}</p></div>
+      `;
+      const applications = Array.isArray(data.applications) ? data.applications : [];
+      if (!applications.length) {
+        list.innerHTML = `<p class="performer-empty">No performer applications yet.</p>`;
+        return;
+      }
+      const rows = applications.map((application) => `
+        <tr>
+          <td data-label="Submitted">${escapeHtml(chicagoTime(application.created_at))}</td>
+          <td data-label="Name">${escapeHtml(application.name || "—")}</td>
+          <td data-label="WhatsApp">${escapeHtml(application.whatsapp || "—")}</td>
+          <td data-label="Tier">${escapeHtml(application.tier || "—")}</td>
+          <td data-label="Lang">${escapeHtml(application.lang || "—")}</td>
+        </tr>
+        <tr>
+          <td colspan="5" data-label="Details">
+            <details>
+              <summary>View application</summary>
+              ${payloadMarkup(application.payload || {})}
+            </details>
+          </td>
+        </tr>
+      `).join("");
+      list.innerHTML = `
+        <div class="performer-scroll">
+          <table class="performer-table">
+            <thead>
+              <tr>
+                <th>Submitted</th>
+                <th>Name</th>
+                <th>WhatsApp</th>
+                <th>Tier</th>
+                <th>Lang</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    };
+
     const renderDashboard = (data) => {
       const tracking = data.tracking || {};
       const languageSelections = tracking.languageSelections || {};
@@ -973,6 +1101,7 @@
         }
       }));
 
+      renderPerformerApplications(data.performerApplications);
       state.candidates = data.candidates || [];
       document.getElementById("status").textContent = `Dashboard updated. ${state.candidates.length} applicant${state.candidates.length === 1 ? "" : "s"} returned.`;
       addOptions("filterExperience", [...new Set(state.candidates.map((candidate) => candidate.experience))]);
