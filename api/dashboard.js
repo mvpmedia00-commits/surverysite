@@ -247,21 +247,73 @@ const loadPerformerApplications = async (cfg) => {
   return { total: applications.length, byTier, byLang, applications };
 };
 
+const PERFORMER_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const performerIdFrom = (req) => {
+  const fromBody = req.body && typeof req.body === "object" ? req.body.id : "";
+  let fromQuery = "";
+  if (req.query && req.query.id) fromQuery = req.query.id;
+  if (!fromQuery && req.url) {
+    try {
+      fromQuery = new URL(req.url, "http://localhost").searchParams.get("id") || "";
+    } catch {
+      fromQuery = "";
+    }
+  }
+  return String(fromBody || fromQuery || "").trim();
+};
+
+const deletePerformerApplication = async (req, res, cfg) => {
+  const id = performerIdFrom(req);
+  if (!PERFORMER_ID.test(id)) {
+    return respond(res, 400, { error: "Invalid id." });
+  }
+
+  const response = await fetch(`${cfg.supabaseUrl}/rest/v1/performer_applications?id=eq.${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: {
+      apikey: cfg.supabaseKey,
+      Authorization: `Bearer ${cfg.supabaseKey}`,
+      "Content-Profile": "public",
+      "Accept-Profile": "public",
+      Prefer: "return=representation"
+    }
+  });
+  const detail = await response.text();
+  if (!response.ok) {
+    return respond(res, 500, { error: "Could not delete the application." });
+  }
+  let deleted = [];
+  try {
+    deleted = JSON.parse(detail);
+  } catch {
+    deleted = [];
+  }
+  if (!Array.isArray(deleted) || !deleted.length) {
+    return respond(res, 404, { error: "Application was not found." });
+  }
+  return respond(res, 200, { ok: true, id });
+};
+
 export default async function handler(req, res) {
   try {
     if (req.method === "OPTIONS") {
-      res.setHeader("Allow", "GET, PATCH, OPTIONS");
+      res.setHeader("Allow", "GET, PATCH, DELETE, OPTIONS");
       return res.status(204).end();
     }
 
-    if (req.method !== "GET" && req.method !== "PATCH") {
-      res.setHeader("Allow", "GET, PATCH, OPTIONS");
+    if (req.method !== "GET" && req.method !== "PATCH" && req.method !== "DELETE") {
+      res.setHeader("Allow", "GET, PATCH, DELETE, OPTIONS");
       return respond(res, 405, { error: "Method not allowed" });
     }
 
     const cfg = getSupabaseConfig();
     if (cfg.error) {
       return respond(res, 500, { error: cfg.error });
+    }
+
+    if (req.method === "DELETE") {
+      return deletePerformerApplication(req, res, cfg);
     }
 
     if (req.method === "PATCH") {
