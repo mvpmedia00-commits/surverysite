@@ -160,10 +160,6 @@
 
       <section class="details-optional" aria-labelledby="detailsTitle">
         <h2 id="detailsTitle">Details (optional)</h2>
-        <details class="note">
-          <summary>About limits</summary>
-          <p>Optional. Write only what you want reviewed privately.</p>
-        </details>
         <div class="field">
           <span class="sub-label">Acts performed on camera</span>
           <div class="choices">
@@ -179,14 +175,6 @@
             <label class="choice"><input type="checkbox" name="actsPerformed" value="Fetish/BDSM">Fetish/BDSM</label>
             <label class="choice"><input type="checkbox" name="actsPerformed" value="Other">Other</label>
           </div>
-        </div>
-        <div class="field">
-          <label for="actsWontDo">Acts you won't do</label>
-          <textarea id="actsWontDo" name="actsWontDo"></textarea>
-        </div>
-        <div class="field">
-          <label for="hardSoftLimits">Hard/soft limit list</label>
-          <textarea id="hardSoftLimits" name="hardSoftLimits"></textarea>
         </div>
         <div class="field">
           <span class="sub-label">Soft categories</span>
@@ -637,10 +625,8 @@
         whatsapp: valueOf("whatsapp"),
         experience_level: selectedRadio("experienceLevel"),
         acts_performed: checkedValues("actsPerformed"),
-        acts_wont_do: valueOf("actsWontDo"),
         sti_tested_last_6_months: selectedRadio("stiTested"),
         willing_to_test_before_booking: selectedRadio("willingToTest"),
-        hard_soft_limits: valueOf("hardSoftLimits"),
         soft_categories: checkedValues("softCategories"),
         hard_categories: checkedValues("hardCategories"),
         explicit_paid_platform: selectedRadio("explicitPaidPlatform"),
