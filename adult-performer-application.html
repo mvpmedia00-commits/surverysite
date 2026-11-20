@@ -23,7 +23,9 @@
     .choices { display: flex; flex-wrap: wrap; gap: 8px; }
     .choice, .tier-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid rgba(122, 30, 66, 0.22); background: #fff; min-height: 52px; }
     .tier-card { display: grid; grid-template-columns: auto 1fr; gap: 12px; width: 100%; margin: 0 0 12px; padding: 16px; border-radius: 20px; white-space: normal; }
-    .tier-card p { margin: 6px 0 0; }
+    .tier-card p, .tier-summary p { margin: 6px 0 0; }
+    .tier-summary { display: block; width: 100%; margin: 0 0 12px; padding: 16px; border-radius: 20px; border: 1px solid rgba(122, 30, 66, 0.22); background: #fff; color: #2c1a22; }
+    .tier-summary strong { color: #7a1e42; }
     .choice input, .tier-card input { min-height: 0 !important; width: 1.25rem; height: 1.25rem; margin-top: 2px; }
     .choice-none { border-width: 2px; }
     .sub-label { font-weight: 650; }
@@ -151,29 +153,32 @@
         <div class="field">
           <span class="sub-label">Which tier are you applying for? *</span>
           <p class="field-hint">All tiers are for webcam content.</p>
-          <label class="tier-card">
-            <input type="radio" name="tierChoice" value="Tier 1">
-            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Nude Modeling Program</strong><p>About 5 hours. Nude modeling only. Posing, lighting, and concept shoots for portfolio and editorial images. Directed, with breaks. You can stop anytime.</p></span>
-          </label>
+          <div class="tier-summary">
+            <strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Nude Modeling Program</strong>
+            <p>About 5 hours. Nude modeling only. Posing, lighting, and concept shoots for portfolio and editorial images. Directed, with breaks. You can stop anytime.</p>
+          </div>
+          <div class="tier-summary">
+            <strong>Tier 2 — COP 1.500.000 <span class="pay-usd">(≈ US$500)</span></strong>
+            <p>Full opportunity. 2 days, 16 hours in four 4-hour sessions: video, acting, performing pornography on camera.</p>
+          </div>
+          <select id="tierChoice" name="tierChoice">
+            <option value="" selected>Choose a tier</option>
+            <option value="Tier 1">Tier 1</option>
+            <option value="Tier 2">Tier 2</option>
+            <option value="Both">Both</option>
+            <option value="Open to discussion">Open to discussion</option>
+          </select>
+          <p class="error" id="tierError"></p>
         </div>
         <div class="audition-notice" id="auditionNotice" hidden>
           <p><strong>Paid audition required</strong> — COP 200.000, 1 hour, before any booking.</p>
           <label class="choice">
             <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
-            I understand a paid 1-hour audition (COP 200.000) is required before booking.
+            I understand a paid 1-hour audition (COP 200.000) is requested before booking.
           </label>
           <p class="error" id="auditionError"></p>
         </div>
         <div class="field">
-          <label class="tier-card">
-            <input type="radio" name="tierChoice" value="Tier 2">
-            <span><strong>Tier 2 — COP 1.500.000 <span class="pay-usd">(≈ US$500)</span></strong><p>Hardcore. 16 hours in four 4-hour sessions: video, acting, performing on camera.</p></span>
-          </label>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="tierChoice" value="Both">Both</label>
-            <label class="choice"><input type="radio" name="tierChoice" value="Open to discussion">Open to discussion</label>
-            <label class="choice"><input type="radio" name="tierChoice" value="Propose my rate">Propose my rate</label>
-          </div>
           <p class="field-hint">Listed pay is the base. It can go up with scope, extra hours, or usage, and is agreed in writing.</p>
           <p class="field-hint">Taxi is paid for all tiers and the audition.</p>
           <p class="field-hint">Travel, lodging and wardrobe are discussed before booking.</p>
@@ -181,11 +186,6 @@
             <summary>About these tiers</summary>
             <p>USD amounts are approximate. Tier 1 is about 5 hours. Tier 2 is 16 hours in four 4-hour sessions.</p>
           </details>
-          <div class="field" id="proposedRateField" hidden>
-            <label for="proposedRate">Your rate</label>
-            <input id="proposedRate" name="proposedRate" placeholder="Write the rate you want">
-          </div>
-          <p class="error" id="tierError"></p>
         </div>
         <div class="field">
           <span class="sub-label">Availability types *</span>
@@ -391,7 +391,9 @@
       return element && element.files && element.files[0] ? element.files[0] : null;
     };
 
-    const needsTier2Consent = () => selectedRadio("tierChoice") === "Tier 2" || selectedRadio("tierChoice") === "Both";
+    const tierChoiceValue = () => valueOf("tierChoice");
+
+    const needsTier2Consent = () => tierChoiceValue() === "Tier 2" || tierChoiceValue() === "Both";
 
     const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
 
@@ -408,13 +410,6 @@
       if (audition) audition.hidden = !show;
       if (auditionAck && !show) auditionAck.checked = false;
       if (!show) setError("auditionError", "");
-      const rateField = document.getElementById("proposedRateField");
-      const proposing = selectedRadio("tierChoice") === "Propose my rate";
-      if (rateField) rateField.hidden = !proposing;
-      if (!proposing) {
-        const rate = document.getElementById("proposedRate");
-        if (rate) rate.value = "";
-      }
     };
 
     const emailLooksValid = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -441,8 +436,8 @@
       if (!valueOf("whatsapp")) fail("whatsappError", "Enter your WhatsApp number.");
       if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Choose an experience level. None is fine if you have not done this work.");
-      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
-      if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier, Both, Open to discussion, or Propose my rate.");
+      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is requested before booking.");
+      if (!tierChoiceValue()) fail("tierError", "Choose a tier.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Pick at least one availability type.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
       if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "Keep the explicit sample set to 8 images or fewer.");
@@ -468,7 +463,7 @@
         Boolean(valueOf("whatsapp")),
         Boolean(selectedRadio("experienceLevel")),
         !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
-        Boolean(selectedRadio("tierChoice")),
+        Boolean(tierChoiceValue()),
         checkedValues("availabilityTypes").length > 0,
         consentsComplete()
       ];
@@ -615,7 +610,7 @@
     };
 
     const buildPayload = async () => {
-      const tierChoice = selectedRadio("tierChoice");
+      const tierChoice = tierChoiceValue();
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
       const sampleProgress = Array.from(document.querySelectorAll("#samplePreview progress"));
       const payload = {
@@ -636,7 +631,6 @@
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
         audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
-        proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
         willing_travel_resort: selectedRadio("willingTravelResort"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
         notes: valueOf("notes"),
