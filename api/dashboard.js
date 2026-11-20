@@ -195,6 +195,58 @@ const canonicalizeApplicationRow = (row) => {
   return next;
 };
 
+const emptyPerformerApplications = () => ({
+  total: 0,
+  byTier: {},
+  byLang: { EN: 0, ES: 0 },
+  applications: []
+});
+
+const performerLangLabel = (value) => {
+  const lang = String(value || "").trim().toLowerCase();
+  if (lang === "en") return "EN";
+  if (lang === "es") return "ES";
+  return lang ? lang.toUpperCase() : "";
+};
+
+const loadPerformerApplications = async (cfg) => {
+  const response = await fetch(`${cfg.supabaseUrl}/rest/v1/performer_applications?select=id,created_at,name,whatsapp,tier,lang,payload&order=created_at.desc`, {
+    headers: {
+      apikey: cfg.supabaseKey,
+      Authorization: `Bearer ${cfg.supabaseKey}`,
+      "Accept-Profile": "public",
+      "Range-Unit": "items",
+      Range: "0-999999"
+    }
+  });
+
+  if (!response.ok) {
+    await response.text();
+    return emptyPerformerApplications();
+  }
+
+  const rows = await response.json();
+  const applications = (Array.isArray(rows) ? rows : []).map((row) => ({
+    id: row.id || "",
+    created_at: row.created_at || "",
+    name: row.name || "",
+    whatsapp: row.whatsapp || "",
+    tier: row.tier || "",
+    lang: performerLangLabel(row.lang),
+    payload: row.payload && typeof row.payload === "object" && !Array.isArray(row.payload) ? row.payload : {}
+  }));
+  const byTier = {};
+  const byLang = { EN: 0, ES: 0 };
+  applications.forEach((application) => {
+    const tier = application.tier || "Not set";
+    byTier[tier] = (byTier[tier] || 0) + 1;
+    if (application.lang === "EN" || application.lang === "ES") {
+      byLang[application.lang] += 1;
+    }
+  });
+  return { total: applications.length, byTier, byLang, applications };
+};
+
 export default async function handler(req, res) {
   try {
     if (req.method === "OPTIONS") {
@@ -291,6 +343,13 @@ export default async function handler(req, res) {
         full_body_url: toPhotoUrl(cfg.supabaseUrl, row.full_body_filename)
       }));
 
+    let performerApplications = emptyPerformerApplications();
+    try {
+      performerApplications = await loadPerformerApplications(cfg);
+    } catch {
+      performerApplications = emptyPerformerApplications();
+    }
+
     return respond(res, 200, {
       totalApplications: analyticsRows.length,
       bySource: countBy(analyticsRows, "hear_about"),
@@ -305,7 +364,8 @@ export default async function handler(req, res) {
       trendByMonth: monthlyTrend(analyticsRows),
       tracking: summarizeEvents(eventRows),
       candidates,
-      recentPhotos
+      recentPhotos,
+      performerApplications
     });
   } catch (error) {
     return respond(res, 500, {
