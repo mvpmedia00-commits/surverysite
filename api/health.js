@@ -1,3 +1,5 @@
+import { getSupabaseConfig } from "./_supabase.js";
+
 const respond = (res, status, payload) => {
   res.status(status).setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(payload));
@@ -39,7 +41,8 @@ export default async function handler(req, res) {
     ["dashboard-artistic-nude", "./dashboard-artistic-nude.js"],
     ["dashboard-application-events", "./dashboard-application-events.js"],
     ["admin-login", "./admin-login.js"],
-    ["performer-invite", "./performer-invite.js"]
+    ["performer-invite", "./performer-invite.js"],
+    ["submit-performer", "./submit-performer.js"]
   ];
 
   for (const [name, path] of targets) {
@@ -61,9 +64,16 @@ export default async function handler(req, res) {
     checks.push(result);
   }
 
+  const config = getSupabaseConfig();
   return respond(res, 200, {
     ok: true,
     runtime: process.version,
+    supabase: {
+      hasError: Boolean(config.error),
+      error: config.error || null,
+      hasUrl: Boolean(config.supabaseUrl),
+      hasKey: Boolean(config.supabaseKey)
+    },
     checks
   });
 }
