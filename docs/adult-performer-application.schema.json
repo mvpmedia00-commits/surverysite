@@ -86,7 +86,7 @@
     "pay_tier": {
       "type": "string",
       "enum": ["", "Tier 1", "Tier 2", "Both"],
-      "description": "Tier 1 is the Nude Modeling Program: about COP 300.000. The card description is only About 3 to 4 hours. Spanish: Unas 3 a 4 horas. No USD amount is shown on the Tier 1 card. Tier 2 is COP 1.500.000 (about US$500): full opportunity, 2 days, 16 hours in four 4-hour sessions. Empty when tier_choice is Open to discussion."
+      "description": "Tier 1 is about COP 300.000. The card title is Tier 1 — about COP 300.000. Spanish title: Nivel 1 — unos COP 300.000. The card description is only About 3 to 4 hours. Spanish: Unas 3 a 4 horas. No USD amount is shown on the Tier 1 card. Tier 2 is COP 1.500.000 (about US$500): full opportunity, 2 days, 16 hours in four 4-hour sessions. Empty when tier_choice is Open to discussion."
     },
     "audition_ack": {
       "type": "boolean",
