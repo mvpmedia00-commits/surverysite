@@ -102,9 +102,9 @@
             <p class="error" id="cityError"></p>
           </div>
           <div class="field">
-            <label for="whatsapp">WhatsApp</label>
+            <label for="whatsapp">WhatsApp *</label>
             <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000">
-            <p class="field-hint">WhatsApp or email: add at least one.</p>
+            <p class="error" id="whatsappError"></p>
           </div>
           <div class="field">
             <label for="email">Email</label>
@@ -112,10 +112,8 @@
             <p class="error" id="contactError"></p>
           </div>
           <div class="field">
-            <label for="instagram">Instagram</label>
+            <label for="instagram">Instagram or TikTok (optional)</label>
             <input id="instagram" name="instagram" placeholder="@username" autocomplete="off">
-            <p class="field-hint">Or one photo. You do not need both.</p>
-            <p class="error" id="instagramError"></p>
           </div>
         </div>
       </fieldset>
@@ -286,7 +284,7 @@
       <fieldset data-section data-label="Section 5 of 6">
         <legend><span class="section-kicker">Section 5 of 6</span> Photos</legend>
         <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
-        <p class="field-hint">Or one photo. Up to 8 MB each.</p>
+        <p class="field-hint">Up to 8 MB each.</p>
         <div class="field">
           <label for="headshot">Headshot</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
@@ -393,8 +391,6 @@
       return element && element.files && element.files[0] ? element.files[0] : null;
     };
 
-    const hasCastingPhoto = () => Boolean(fileOf("headshot") || fileOf("fullBodyFront") || fileOf("fullBodyRear") || (document.getElementById("explicitSamples").files || []).length);
-
     const needsTier2Consent = () => selectedRadio("tierChoice") === "Tier 2" || selectedRadio("tierChoice") === "Both";
 
     const requiredConsentValues = () => needsTier2Consent() ? [...CONSENT_VALUES, "tier2-unprotected-sti"] : CONSENT_VALUES.slice();
@@ -431,7 +427,7 @@
     };
 
     const validateForm = () => {
-      ["nameError", "ageError", "cityError", "contactError", "instagramError", "experienceError", "auditionError", "tierError", "availabilityError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
+      ["nameError", "ageError", "cityError", "whatsappError", "contactError", "experienceError", "auditionError", "tierError", "availabilityError", "photosError", "samplesError", "videoError", "consentError"].forEach((id) => setError(id, ""));
       let first = "";
       const fail = (id, message) => {
         setError(id, message);
@@ -442,9 +438,8 @@
       if (!valueOf("age")) fail("ageError", "Enter your age.");
       else if (!Number.isFinite(age) || age < 18) fail("ageError", "You must be 18 or older.");
       if (!valueOf("city")) fail("cityError", "Enter your city.");
-      if (!valueOf("whatsapp") && !valueOf("email")) fail("contactError", "Add a WhatsApp number or an email.");
-      else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
-      if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Add Instagram or at least one photo.");
+      if (!valueOf("whatsapp")) fail("whatsappError", "Enter your WhatsApp number.");
+      if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Choose an experience level. None is fine if you have not done this work.");
       if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier, Both, Open to discussion, or Propose my rate.");
@@ -470,8 +465,7 @@
         Boolean(valueOf("name")),
         Number(valueOf("age")) >= 18,
         Boolean(valueOf("city")),
-        Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
-        Boolean(valueOf("instagram") || hasCastingPhoto()),
+        Boolean(valueOf("whatsapp")),
         Boolean(selectedRadio("experienceLevel")),
         !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),

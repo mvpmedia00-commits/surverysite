@@ -54,9 +54,9 @@
     "name": { "type": "string", "minLength": 1 },
     "age": { "type": "integer", "minimum": 18, "maximum": 120 },
     "city": { "type": "string", "minLength": 1 },
-    "instagram": { "type": "string", "description": "Optional when at least one photo is included." },
-    "email": { "type": "string", "description": "Optional when WhatsApp is included. Empty or a valid email." },
-    "whatsapp": { "type": "string", "description": "Optional when email is included." },
+    "instagram": { "type": "string", "description": "Optional handle. The field label is Instagram or TikTok (optional). Spanish label: Instagram o TikTok (opcional). Stored in instagram." },
+    "email": { "type": "string", "description": "Optional. Empty or a valid email." },
+    "whatsapp": { "type": "string", "minLength": 1, "description": "Required WhatsApp number." },
     "experience_level": {
       "type": "string",
       "enum": ["None", "A few shoots", "Experienced", "Agency-represented"]
