@@ -235,19 +235,19 @@
             <label class="choice"><input type="checkbox" name="actsPerformed" value="Other">Other</label>
           </div>
         </div>
-        <div class="field">
-          <label for="explicitSamples">Explicit sample set</label>
-          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
-          <p class="field-hint">Optional. Up to 8 images, 8 MB each.</p>
-          <div id="samplePreview"></div>
-          <p class="error" id="samplesError"></p>
-        </div>
       </section>
 
       <fieldset data-section data-label="Section 4 of 5">
         <legend><span class="section-kicker">Section 4 of 5</span> Photos</legend>
         <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
         <p class="field-hint">Up to 8 MB each.</p>
+        <div class="field">
+          <label for="explicitSamples">Lingerie images or personal content (optional)</label>
+          <input id="explicitSamples" name="explicitSamples" type="file" accept="image/*" multiple>
+          <p class="field-hint">Up to 8 images, 8 MB each.</p>
+          <div id="samplePreview"></div>
+          <p class="error" id="samplesError"></p>
+        </div>
         <div class="field">
           <label for="headshot">Headshot</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
@@ -401,9 +401,9 @@
       if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Pick at least one availability type.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
-      if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "Keep the explicit sample set to 8 images or fewer.");
+      if (samples.length > MAX_SAMPLE_FILES) fail("samplesError", "Up to 8 images.");
       samples.forEach((file, index) => {
-        const message = imageProblem(file, `Sample ${index + 1}`);
+        const message = imageProblem(file, `Image ${index + 1}`);
         if (message) fail("samplesError", message);
       });
       ["headshot", "fullBodyFront", "fullBodyRear"].forEach((id) => {

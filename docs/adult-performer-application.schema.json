@@ -110,7 +110,8 @@
     "full_body_rear_url": { "type": "string" },
     "explicit_sample_urls": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "description": "Optional. The field label is Lingerie images or personal content (optional). Spanish: Imágenes en lencería o contenido personal (opcional). Empty when none are uploaded."
     },
     "scene_video_link": { "type": "string" },
     "consents": {
