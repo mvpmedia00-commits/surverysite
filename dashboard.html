@@ -482,6 +482,7 @@
   </style>
   <link rel="stylesheet" href="assets/site-theme.css">
   <style>
+    #performerSection { scroll-margin-top: 16px; }
     .performer-section h2 { margin: 0 0 12px; font-size: 1.35rem; }
     .performer-kpis { margin-bottom: 14px; }
     .performer-empty { margin: 0; color: var(--muted); }
@@ -495,6 +496,19 @@
     .performer-field { margin: 0; }
     .performer-field dt { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
     .performer-field dd { margin: 2px 0 0; word-break: break-word; }
+    button.delete-performer {
+      border: 1px solid #efc1c1 !important;
+      border-radius: 9px !important;
+      background: #fff4f4 !important;
+      color: #8f2e2e !important;
+      -webkit-text-fill-color: #8f2e2e !important;
+      font: inherit;
+      font-size: 0.88rem !important;
+      font-weight: 700;
+      padding: 7px 12px !important;
+      min-height: 0 !important;
+      cursor: pointer;
+    }
     @media (max-width: 700px) {
       .performer-table thead { display: none; }
       .performer-table,
@@ -516,7 +530,14 @@
         <a class="nav-btn" href="/artist-dashboard.html">Open Artist Dashboard</a>
         <a class="nav-btn" href="/artistic-nude-dashboard.html">Open Artistic Nude Dashboard</a>
         <a class="nav-btn" href="/application-events-dashboard.html">Open Application Events Dashboard</a>
+        <a class="nav-btn" href="#performerSection">Performer applications</a>
       </div>
+    </section>
+
+    <section class="card performer-section" id="performerSection">
+      <h2>Performer applications</h2>
+      <div class="kpis performer-kpis" id="performerKpis"></div>
+      <div id="performerList"></div>
     </section>
 
     <section class="card">
@@ -581,12 +602,6 @@
         </div>
       </div>
       <div class="candidate-list" id="candidateList"></div>
-    </section>
-
-    <section class="card performer-section" id="performerSection">
-      <h2>Performer applications</h2>
-      <div class="kpis performer-kpis" id="performerKpis"></div>
-      <div id="performerList"></div>
     </section>
 
     <section class="charts">
@@ -973,9 +988,10 @@
           <td data-label="WhatsApp">${escapeHtml(application.whatsapp || "—")}</td>
           <td data-label="Tier">${escapeHtml(application.tier || "—")}</td>
           <td data-label="Lang">${escapeHtml(application.lang || "—")}</td>
+          <td data-label="Delete"><button type="button" class="delete-performer" data-id="${escapeHtml(application.id)}">Delete</button></td>
         </tr>
         <tr>
-          <td colspan="5" data-label="Details">
+          <td colspan="6" data-label="Details">
             <details>
               <summary>View application</summary>
               ${payloadMarkup(application.payload || {})}
@@ -993,6 +1009,7 @@
                 <th>WhatsApp</th>
                 <th>Tier</th>
                 <th>Lang</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -1000,6 +1017,42 @@
         </div>
       `;
     };
+
+    const recountPerformerApplications = (applications) => {
+      const byTier = {};
+      const byLang = { EN: 0, ES: 0 };
+      applications.forEach((application) => {
+        const tier = application.tier || "Not set";
+        byTier[tier] = (byTier[tier] || 0) + 1;
+        if (application.lang === "EN" || application.lang === "ES") byLang[application.lang] += 1;
+      });
+      return { total: applications.length, byTier, byLang, applications };
+    };
+
+    document.getElementById("performerList").addEventListener("click", async (event) => {
+      const button = event.target.closest("button.delete-performer");
+      if (!button) return;
+      const id = button.dataset.id || "";
+      if (!window.confirm("Delete this application? This cannot be undone.")) return;
+      button.disabled = true;
+      try {
+        const response = await fetch(`/api/dashboard?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || "Could not delete the application.");
+        }
+        const current = (state.dashboard && state.dashboard.performerApplications) || { applications: [] };
+        const applications = (current.applications || []).filter((application) => application.id !== id);
+        const next = recountPerformerApplications(applications);
+        if (state.dashboard) state.dashboard.performerApplications = next;
+        renderPerformerApplications(next);
+      } catch (error) {
+        button.disabled = false;
+        document.getElementById("status").textContent = error && error.message
+          ? error.message
+          : "Could not delete the application.";
+      }
+    });
 
     const renderDashboard = (data) => {
       const tracking = data.tracking || {};
