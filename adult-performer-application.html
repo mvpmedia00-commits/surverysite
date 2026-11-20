@@ -79,13 +79,21 @@
 
     <form id="applicationForm" novalidate>
       <div class="scroll-progress">
-        <span id="sectionNow">Section 1 of 6</span>
+        <span id="sectionNow">Section 1 of 5</span>
         <div class="scroll-track" aria-hidden="true"><div class="scroll-fill" id="scrollFill"></div></div>
       </div>
       <p class="status" id="autosaveStatus">Autosaves on this device</p>
 
-      <fieldset data-section data-label="Section 1 of 6">
-        <legend><span class="section-kicker">Section 1 of 6</span> Basic info</legend>
+      <fieldset data-section data-label="Section 1 of 5">
+        <legend><span class="section-kicker">Section 1 of 5</span> Basic info</legend>
+        <div class="field">
+          <span class="sub-label">You understand you are applying for explicit/paid-platform work?</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="No">No</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Audition first">Audition first</label>
+          </div>
+        </div>
         <div class="grid two">
           <div class="field">
             <label for="name">Name *</label>
@@ -119,8 +127,8 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Section 2 of 6">
-        <legend><span class="section-kicker">Section 2 of 6</span> Experience</legend>
+      <fieldset data-section data-label="Section 2 of 5">
+        <legend><span class="section-kicker">Section 2 of 5</span> Experience</legend>
         <div class="field">
           <span class="sub-label">Experience level *</span>
           <div class="choices">
@@ -147,8 +155,8 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Section 3 of 6">
-        <legend><span class="section-kicker">Section 3 of 6</span> Pay</legend>
+      <fieldset data-section data-label="Section 3 of 5">
+        <legend><span class="section-kicker">Section 3 of 5</span> Pay</legend>
         <div class="field">
           <span class="sub-label">Which tier are you applying for? *</span>
           <p class="field-hint">All tiers are for webcam content.</p>
@@ -212,18 +220,6 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Section 4 of 6">
-        <legend><span class="section-kicker">Section 4 of 6</span> Understand the work</legend>
-        <div class="field">
-          <span class="sub-label">You understand you are applying for explicit/paid-platform work?</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes">Yes</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="No">No</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Audition first">Audition first</label>
-          </div>
-        </div>
-      </fieldset>
-
       <section class="details-optional" aria-labelledby="detailsTitle">
         <h2 id="detailsTitle">Details (optional)</h2>
         <div class="field">
@@ -277,8 +273,8 @@
         </div>
       </section>
 
-      <fieldset data-section data-label="Section 5 of 6">
-        <legend><span class="section-kicker">Section 5 of 6</span> Photos</legend>
+      <fieldset data-section data-label="Section 4 of 5">
+        <legend><span class="section-kicker">Section 4 of 5</span> Photos</legend>
         <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
         <p class="field-hint">Up to 8 MB each.</p>
         <div class="field">
@@ -310,8 +306,8 @@
         <p class="error" id="photosError"></p>
       </fieldset>
 
-      <fieldset data-section data-label="Section 6 of 6">
-        <legend><span class="section-kicker">Section 6 of 6</span> Consent</legend>
+      <fieldset data-section data-label="Section 5 of 5">
+        <legend><span class="section-kicker">Section 5 of 5</span> Consent</legend>
         <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
         <div class="field">
           <span class="sub-label">Consent checklist *</span>

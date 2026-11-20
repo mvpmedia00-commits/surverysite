@@ -79,13 +79,21 @@
 
     <form id="applicationForm" novalidate>
       <div class="scroll-progress">
-        <span id="sectionNow">Sección 1 de 6</span>
+        <span id="sectionNow">Sección 1 de 5</span>
         <div class="scroll-track" aria-hidden="true"><div class="scroll-fill" id="scrollFill"></div></div>
       </div>
       <p class="status" id="autosaveStatus">Se guarda solo en este dispositivo</p>
 
-      <fieldset data-section data-label="Sección 1 de 6">
-        <legend><span class="section-kicker">Sección 1 de 6</span> Datos básicos</legend>
+      <fieldset data-section data-label="Sección 1 de 5">
+        <legend><span class="section-kicker">Sección 1 de 5</span> Datos básicos</legend>
+        <div class="field">
+          <span class="sub-label">¿Entiendes que estás aplicando para trabajo explícito / de plataformas de pago?</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes">Sí</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="No">No</label>
+            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Audition first">Primero la audición</label>
+          </div>
+        </div>
         <div class="grid two">
           <div class="field">
             <label for="name">Nombre *</label>
@@ -119,8 +127,8 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Sección 2 de 6">
-        <legend><span class="section-kicker">Sección 2 de 6</span> Experiencia</legend>
+      <fieldset data-section data-label="Sección 2 de 5">
+        <legend><span class="section-kicker">Sección 2 de 5</span> Experiencia</legend>
         <div class="field">
           <span class="sub-label">Nivel de experiencia *</span>
           <div class="choices">
@@ -147,8 +155,8 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Sección 3 de 6">
-        <legend><span class="section-kicker">Sección 3 de 6</span> Pago</legend>
+      <fieldset data-section data-label="Sección 3 de 5">
+        <legend><span class="section-kicker">Sección 3 de 5</span> Pago</legend>
         <div class="field">
           <span class="sub-label">¿A cuál nivel aplicas? *</span>
           <p class="field-hint">Todos los niveles son para contenido de webcam.</p>
@@ -212,18 +220,6 @@
         </div>
       </fieldset>
 
-      <fieldset data-section data-label="Sección 4 de 6">
-        <legend><span class="section-kicker">Sección 4 de 6</span> Entiende el trabajo</legend>
-        <div class="field">
-          <span class="sub-label">¿Entiendes que estás aplicando para trabajo explícito / de plataformas de pago?</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="No">No</label>
-            <label class="choice"><input type="radio" name="explicitPaidPlatform" value="Audition first">Primero la audición</label>
-          </div>
-        </div>
-      </fieldset>
-
       <section class="details-optional" aria-labelledby="detailsTitle">
         <h2 id="detailsTitle">Detalles (opcional)</h2>
         <div class="field">
@@ -277,8 +273,8 @@
         </div>
       </section>
 
-      <fieldset data-section data-label="Sección 5 de 6">
-        <legend><span class="section-kicker">Sección 5 de 6</span> Fotos</legend>
+      <fieldset data-section data-label="Sección 4 de 5">
+        <legend><span class="section-kicker">Sección 4 de 5</span> Fotos</legend>
         <p class="privacy-note">Fotos e info de ITS: solo para el casting, guardadas de forma segura, sin uso público sin acuerdo escrito, y se borran si lo pides.</p>
         <p class="field-hint">Hasta 8 MB cada una.</p>
         <div class="field">
@@ -310,8 +306,8 @@
         <p class="error" id="photosError"></p>
       </fieldset>
 
-      <fieldset data-section data-label="Sección 6 de 6">
-        <legend><span class="section-kicker">Sección 6 de 6</span> Consentimiento</legend>
+      <fieldset data-section data-label="Sección 5 de 5">
+        <legend><span class="section-kicker">Sección 5 de 5</span> Consentimiento</legend>
         <p class="privacy-note">Fotos e info de ITS: solo para el casting, guardadas de forma segura, sin uso público sin acuerdo escrito, y se borran si lo pides.</p>
         <div class="field">
           <span class="sub-label">Lista de consentimiento *</span>
