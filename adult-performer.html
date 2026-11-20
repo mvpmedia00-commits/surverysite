@@ -5,60 +5,247 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
   <title>MVP Media</title>
-  <meta name="description" content="Choose a language.">
+  <meta name="description" content="Private casting application. Aplicación privada de casting.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="assets/site-theme.css">
+  <link rel="stylesheet" href="assets/performer-force-light.css">
   <style>
-    .chooser {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body.gate {
+      min-height: 100%;
+    }
+
+    body.gate {
+      margin: 0;
       min-height: 100vh;
+      min-height: 100dvh;
+      color: #2c1a22 !important;
+      background:
+        radial-gradient(ellipse 70% 48% at 12% 8%, rgba(248, 213, 227, 0.95), transparent 62%),
+        radial-gradient(ellipse 55% 42% at 92% 88%, rgba(196, 107, 74, 0.28), transparent 58%),
+        radial-gradient(ellipse 42% 36% at 78% 12%, rgba(141, 106, 168, 0.2), transparent 60%),
+        linear-gradient(165deg, #fff8f6 0%, #fde7ef 46%, #f7efe8 100%) !important;
+    }
+
+    .veil {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(36px);
+    }
+
+    .orb-a {
+      width: 46vw;
+      height: 46vw;
+      max-width: 320px;
+      max-height: 320px;
+      left: -8vw;
+      top: 8vh;
+      background: rgba(181, 66, 112, 0.28);
+    }
+
+    .orb-b {
+      width: 54vw;
+      height: 54vw;
+      max-width: 380px;
+      max-height: 380px;
+      right: -12vw;
+      bottom: 4vh;
+      background: rgba(248, 213, 227, 0.9);
+    }
+
+    .gate-page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 28px 18px;
       display: flex;
       align-items: center;
-      padding: 24px 0;
     }
-    .chooser-card {
+
+    .gate-card {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      max-width: 100%;
       margin: 0;
+      padding: 36px 20px 26px;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 253, 251, 0.78);
+      box-shadow: 0 28px 70px rgba(122, 30, 66, 0.14);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
-    h1.brand {
-      margin: 0 0 10px !important;
-      font-size: 0.95rem !important;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      line-height: 1.2 !important;
+
+    .mark {
+      margin: 0 !important;
+      color: #7a1e42 !important;
+      font-family: Fraunces, "Times New Roman", serif !important;
+      font-size: clamp(1.85rem, 8.4vw, 2.7rem) !important;
+      font-weight: 560 !important;
+      letter-spacing: 0.16em !important;
+      line-height: 1.05 !important;
       text-align: center;
       text-transform: uppercase;
     }
+
+    .rule {
+      width: 46px;
+      height: 1px;
+      margin: 16px auto 14px;
+      background: linear-gradient(90deg, transparent, #c46b4a, transparent);
+    }
+
+    .tagline {
+      margin: 0 !important;
+      color: #5c3e4a !important;
+      font-family: Outfit, "Segoe UI", sans-serif !important;
+      font-size: 0.98rem !important;
+      font-weight: 500;
+      line-height: 1.45 !important;
+      text-align: center;
+    }
+
+    .tagline + .tagline {
+      margin-top: 2px !important;
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      margin: 26px 0 0;
+    }
+
     a.lang-choice {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
       width: 100%;
-      min-height: 72px;
-      padding: 18px 22px;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 76px;
+      padding: 14px 16px;
       border-radius: 999px;
-      font-size: 1.35rem !important;
-      font-weight: 700;
-      line-height: 1.2;
-      text-align: center;
       text-decoration: none !important;
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
       background: linear-gradient(135deg, #b54270, #7a1e42) !important;
-      box-shadow: 0 12px 24px rgba(122, 30, 66, 0.22);
+      box-shadow: 0 14px 28px rgba(122, 30, 66, 0.2);
       touch-action: manipulation;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    a.lang-choice:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(122, 30, 66, 0.26);
+    }
+
+    a.lang-choice:active {
+      transform: translateY(1px) scale(0.985);
+      box-shadow: 0 8px 16px rgba(122, 30, 66, 0.18);
+    }
+
+    a.lang-choice:focus-visible {
+      outline: 3px solid rgba(122, 30, 66, 0.45);
+      outline-offset: 3px;
+    }
+
+    .choice-title {
+      font-family: Fraunces, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 560;
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+    }
+
+    .choice-sub {
+      font-family: Outfit, "Segoe UI", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.86);
+      -webkit-text-fill-color: rgba(255, 255, 255, 0.86);
+    }
+
+    .fine {
+      margin: 22px 0 0 !important;
+      color: #6e4c59 !important;
+      font-family: Outfit, "Segoe UI", sans-serif !important;
+      font-size: 0.78rem !important;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      line-height: 1.45 !important;
+      text-align: center;
+    }
+
+    .fine + .fine {
+      margin-top: 2px !important;
+    }
+
+    @media (min-width: 720px) {
+      .gate-page {
+        padding: 48px 24px;
+      }
+
+      .gate-card {
+        padding: 48px 36px 32px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      a.lang-choice,
+      a.lang-choice:hover,
+      a.lang-choice:active {
+        transition: none;
+        transform: none;
+      }
     }
   </style>
-  <link rel="stylesheet" href="assets/performer-force-light.css">
 </head>
-<body>
-  <main class="page chooser">
-    <section class="hero chooser-card">
-      <h1 class="brand">MVP MEDIA</h1>
-      <a class="lang-choice" href="/adult-performer-application" lang="en">English</a>
-      <a class="lang-choice" href="/adult-performer-application-es" lang="es">Español</a>
+<body class="gate">
+  <div class="veil" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+  </div>
+  <main class="gate-page">
+    <section class="gate-card">
+      <h1 class="mark">MVP MEDIA</h1>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="tagline">Private casting application</p>
+      <p class="tagline" lang="es">Aplicación privada de casting</p>
+      <div class="choices">
+        <a class="lang-choice" href="/adult-performer-application" lang="en">
+          <span class="choice-title">English</span>
+          <span class="choice-sub">Continue in English</span>
+        </a>
+        <a class="lang-choice" href="/adult-performer-application-es" lang="es">
+          <span class="choice-title">Español</span>
+          <span class="choice-sub">Continuar en español</span>
+        </a>
+      </div>
+      <p class="fine">18+ only · Invite only</p>
+      <p class="fine" lang="es">Solo mayores de 18 · Solo con invitación</p>
     </section>
   </main>
   <script>
