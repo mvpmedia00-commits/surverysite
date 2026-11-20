@@ -199,17 +199,10 @@
           <p class="error" id="availabilityError"></p>
         </div>
         <div class="field">
-          <span class="sub-label">¿Te cubren el viaje?</span>
+          <span class="sub-label">¿Dispuesta/o a viajar a un resort?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="travelCovered" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="travelCovered" value="No">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <span class="sub-label">¿Puedes hacer noche o varios días?</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="overnightMultiday" value="No">No</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="Yes">Sí</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="No">No</label>
           </div>
         </div>
         <div class="field">
@@ -220,8 +213,8 @@
           </div>
         </div>
         <div class="field">
-          <label for="notes">Notas</label>
-          <textarea id="notes" name="notes"></textarea>
+          <label for="notes">Preguntas</label>
+          <textarea id="notes" name="notes" placeholder="¿Alguna pregunta para nosotros?"></textarea>
         </div>
       </fieldset>
 
@@ -650,8 +643,7 @@
         tier_choice: tierChoice,
         audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
-        travel_covered: selectedRadio("travelCovered"),
-        overnight_multiday: selectedRadio("overnightMultiday"),
+        willing_travel_resort: selectedRadio("willingTravelResort"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
         notes: valueOf("notes"),
         headshot_url: "",

@@ -40,8 +40,7 @@
     "explicit_paid_platform",
     "availability_types",
     "pay_tier",
-    "travel_covered",
-    "overnight_multiday",
+    "willing_travel_resort",
     "own_wardrobe_toys_props",
     "notes",
     "headshot_url",
@@ -118,8 +117,11 @@
       "description": "English stored value. Spanish shows Nivel 1, Nivel 2, Ambos, Abierto a conversar, and Propongo mi tarifa."
     },
     "proposed_rate": { "type": "string", "description": "Optional text. Used when tier_choice is Propose my rate." },
-    "travel_covered": { "type": "string", "enum": ["", "Yes", "No"] },
-    "overnight_multiday": { "type": "string", "enum": ["", "Yes", "No"] },
+    "willing_travel_resort": {
+      "type": "string",
+      "enum": ["", "Yes", "No"],
+      "description": "Yes or No. Spanish label: ¿Dispuesta/o a viajar a un resort?"
+    },
     "own_wardrobe_toys_props": { "type": "string", "enum": ["", "Yes", "No"] },
     "notes": { "type": "string" },
     "headshot_url": { "type": "string" },
