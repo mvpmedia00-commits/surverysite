@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
   <title>MVP Media Adult Performer Application</title>
   <meta name="description" content="Apply for adult (18+) performer casting with MVP Media. Applications are reviewed privately.">
   <meta name="robots" content="noindex, nofollow">
@@ -49,6 +50,7 @@
       .grid.two { grid-template-columns: 1fr 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="assets/performer-force-light.css">
 </head>
 <body>
   <main class="page">
@@ -62,8 +64,8 @@
         <a href="/adult-performer-application-es" lang="es">ES</a>
       </nav>
       <h1>Adult Performer Application</h1>
-      <p>MVP MEDIA casts adults 18+ for artistic nude, boudoir, and explicit paid-platform content.</p>
-      <p>We review every application privately and contact you on WhatsApp if there is a fit.</p>
+      <p>MVP MEDIA casts adults 18+ for artistic nude, boudoir, and explicit paid-platform work.</p>
+      <p>We review privately and WhatsApp you if there is a fit.</p>
     </header>
 
     <section class="draft-prompt" id="draftPrompt" hidden>
@@ -112,7 +114,7 @@
           <div class="field">
             <label for="instagram">Instagram</label>
             <input id="instagram" name="instagram" placeholder="@username" autocomplete="off">
-            <p class="field-hint">Instagram or at least one photo. You do not need both.</p>
+            <p class="field-hint">Or one photo. You do not need both.</p>
             <p class="error" id="instagramError"></p>
           </div>
         </div>
@@ -150,13 +152,14 @@
         <legend><span class="section-kicker">Section 3 of 6</span> Pay</legend>
         <div class="field">
           <span class="sub-label">Which tier are you applying for? *</span>
+          <p class="field-hint">All tiers are for webcam content.</p>
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 1">
-            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$75)</span>: Nude Modeling Program</strong><p>A professional nude and artistic-nude photo session, about 5 hours, with no sex on camera. Includes posing, lighting and concept shoots for portfolio and editorial-style images. Direction throughout, breaks as needed, and you can stop at any time.</p></span>
+            <span><strong>Tier 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Nude Modeling Program</strong><p>About 5 hours. Nude modeling only. Posing, lighting, and concept shoots for portfolio and editorial images. Directed, with breaks. You can stop anytime.</p></span>
           </label>
         </div>
-        <div class="audition-notice">
-          <p><strong>Paid audition required</strong> — COP 200.000 for a 1-hour audition before any booking.</p>
+        <div class="audition-notice" id="auditionNotice" hidden>
+          <p><strong>Paid audition required</strong> — COP 200.000, 1 hour, before any booking.</p>
           <label class="choice">
             <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
             I understand a paid 1-hour audition (COP 200.000) is required before booking.
@@ -166,19 +169,19 @@
         <div class="field">
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 2">
-            <span><strong>Tier 2 — COP 1.500.000 <span class="pay-usd">(≈ US$500)</span></strong><p>Hardcore, 16 hours split into four 4-hour sessions: video, acting, sex on camera without a condom.</p></span>
+            <span><strong>Tier 2 — COP 1.500.000 <span class="pay-usd">(≈ US$500)</span></strong><p>Hardcore. 16 hours in four 4-hour sessions: video, acting, performing on camera.</p></span>
           </label>
           <div class="choices">
             <label class="choice"><input type="radio" name="tierChoice" value="Both">Both</label>
             <label class="choice"><input type="radio" name="tierChoice" value="Open to discussion">Open to discussion</label>
             <label class="choice"><input type="radio" name="tierChoice" value="Propose my rate">Propose my rate</label>
           </div>
-          <p class="field-hint">Listed pay is the base pay for each tier. Final pay can go up with scope, extra hours or usage, and is agreed in writing before the shoot.</p>
+          <p class="field-hint">Listed pay is the base. It can go up with scope, extra hours, or usage, and is agreed in writing.</p>
           <p class="field-hint">Taxi is paid for all tiers and the audition.</p>
           <p class="field-hint">Travel, lodging and wardrobe are discussed before booking.</p>
           <details class="note">
             <summary>About these tiers</summary>
-            <p>USD amounts are approximate at about 4,000 COP per dollar. Tier 1 is one 5-hour full nude session. Tier 2 is 16 hours split into four 4-hour sessions.</p>
+            <p>USD amounts are approximate. Tier 1 is about 5 hours. Tier 2 is 16 hours in four 4-hour sessions.</p>
           </details>
           <div class="field" id="proposedRateField" hidden>
             <label for="proposedRate">Your rate</label>
@@ -196,17 +199,10 @@
           <p class="error" id="availabilityError"></p>
         </div>
         <div class="field">
-          <span class="sub-label">Travel covered?</span>
+          <span class="sub-label">Willing to travel to a resort?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="travelCovered" value="Yes">Yes</label>
-            <label class="choice"><input type="radio" name="travelCovered" value="No">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <span class="sub-label">Overnight / multi-day?</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes">Yes</label>
-            <label class="choice"><input type="radio" name="overnightMultiday" value="No">No</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="Yes">Yes</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="No">No</label>
           </div>
         </div>
         <div class="field">
@@ -217,8 +213,8 @@
           </div>
         </div>
         <div class="field">
-          <label for="notes">Notes</label>
-          <textarea id="notes" name="notes"></textarea>
+          <label for="notes">Questions</label>
+          <textarea id="notes" name="notes" placeholder="Any questions for us?"></textarea>
         </div>
       </fieldset>
 
@@ -289,8 +285,8 @@
 
       <fieldset data-section data-label="Section 5 of 6">
         <legend><span class="section-kicker">Section 5 of 6</span> Photos</legend>
-        <p class="privacy-note">Photos and health/STI info are used only for casting, stored securely, never shared publicly without your written agreement, and you can request deletion at any time via WhatsApp or email.</p>
-        <p class="field-hint">Add Instagram or at least one photo. Each image can be up to 8 MB.</p>
+        <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
+        <p class="field-hint">Or one photo. Up to 8 MB each.</p>
         <div class="field">
           <label for="headshot">Headshot</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
@@ -322,7 +318,7 @@
 
       <fieldset data-section data-label="Section 6 of 6">
         <legend><span class="section-kicker">Section 6 of 6</span> Consent</legend>
-        <p class="privacy-note">Photos and health/STI info are used only for casting, stored securely, never shared publicly without your written agreement, and you can request deletion at any time via WhatsApp or email.</p>
+        <p class="privacy-note">Photos and STI info: casting only, stored securely, never public without written agreement, deleted on request.</p>
         <div class="field">
           <span class="sub-label">Consent checklist *</span>
           <div class="choices">
@@ -333,7 +329,7 @@
             <label class="choice"><input type="checkbox" name="consent" value="comp-usage-release">I understand compensation, usage, and release terms are agreed in advance, including paid-platform distribution.</label>
             <label class="choice"><input type="checkbox" name="consent" value="sti-disclosure">I agree to STI disclosure to partners.</label>
             <label class="choice"><input type="checkbox" name="consent" value="contact">I consent to be contacted by MVP Media.</label>
-            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">I understand Tier 2 includes sex on camera without a condom and agree to current STI testing before booking.</label>
+            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">I understand Tier 2 includes performing on camera and agree to current STI testing before booking.</label>
           </div>
           <p class="error" id="consentError"></p>
         </div>
@@ -347,7 +343,7 @@
 
     <section class="success" id="successMessage" aria-live="polite">
       <h2>Application received</h2>
-      <p>Thank you. We review your boundaries privately. If there is a fit, we contact you on WhatsApp.</p>
+      <p>Received. We review privately and WhatsApp you if there is a fit.</p>
     </section>
     </div>
   </main>
@@ -411,6 +407,11 @@
       const show = needsTier2Consent();
       if (choice) choice.hidden = !show;
       if (input && !show) input.checked = false;
+      const audition = document.getElementById("auditionNotice");
+      const auditionAck = document.getElementById("auditionAck");
+      if (audition) audition.hidden = !show;
+      if (auditionAck && !show) auditionAck.checked = false;
+      if (!show) setError("auditionError", "");
       const rateField = document.getElementById("proposedRateField");
       const proposing = selectedRadio("tierChoice") === "Propose my rate";
       if (rateField) rateField.hidden = !proposing;
@@ -445,7 +446,7 @@
       else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Enter a valid email.");
       if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Add Instagram or at least one photo.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Choose an experience level. None is fine if you have not done this work.");
-      if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
+      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirm the paid 1-hour audition is required before booking.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Choose a tier, Both, Open to discussion, or Propose my rate.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Pick at least one availability type.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
@@ -472,7 +473,7 @@
         Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
         Boolean(valueOf("instagram") || hasCastingPhoto()),
         Boolean(selectedRadio("experienceLevel")),
-        Boolean(document.getElementById("auditionAck").checked),
+        !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
         checkedValues("availabilityTypes").length > 0,
         consentsComplete()
@@ -640,10 +641,9 @@
         availability_types: checkedValues("availabilityTypes"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
-        audition_ack: document.getElementById("auditionAck").checked,
+        audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
-        travel_covered: selectedRadio("travelCovered"),
-        overnight_multiday: selectedRadio("overnightMultiday"),
+        willing_travel_resort: selectedRadio("willingTravelResort"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
         notes: valueOf("notes"),
         headshot_url: "",

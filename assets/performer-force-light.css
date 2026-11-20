@@ -1,0 +1,176 @@
+/* Keep performer pages on the light palette. The shared theme's dark
+   variables turn text light while these pages paint light cards. */
+html {
+  color-scheme: light !important;
+}
+
+:root {
+  color-scheme: light !important;
+  --bg: #fff7f4 !important;
+  --panel: rgba(255, 252, 251, 0.94) !important;
+  --panel-2: rgba(255, 255, 255, 0.8) !important;
+  --text: #2c1a22 !important;
+  --muted: #5c3e4a !important;
+  --accent: #7a1e42 !important;
+  --accent-2: #c46b4a !important;
+  --accent-3: #8d6aa8 !important;
+  --accent-cool: #7a1e42 !important;
+  --green: #7a1e42 !important;
+  --ink: #2c1a22 !important;
+  --line: rgba(122, 30, 66, 0.16) !important;
+  --ok: #1f7a45 !important;
+  --error: #9e1b1b !important;
+  --shadow: 0 18px 40px rgba(122, 30, 66, 0.1) !important;
+  --page-bg: linear-gradient(180deg, #fff8f6 0%, #fde7ef 48%, #f7efe8 100%) !important;
+  --surface-bg: linear-gradient(160deg, #fffdfb 0%, #fff5f8 100%) !important;
+  --hero-bg: linear-gradient(145deg, #fffdfb 0%, #ffe8f0 55%, #f6e7f8 100%) !important;
+  --soft-accent-bg: #f8d5e3 !important;
+  --soft-accent-border: rgba(122, 30, 66, 0.28) !important;
+  --field-bg: #ffffff !important;
+  --field-focus-bg: #ffffff !important;
+  --field-border: rgba(122, 30, 66, 0.28) !important;
+  --field-focus-ring: rgba(155, 44, 85, 0.28) !important;
+  --label: #2c1a22 !important;
+  --media-bg: #ffffff !important;
+  --media-border: rgba(122, 30, 66, 0.2) !important;
+  --secondary-bg: #ffffff !important;
+  --button-bg: linear-gradient(135deg, #b54270, #7a1e42) !important;
+  --button-shadow: 0 12px 24px rgba(122, 30, 66, 0.22) !important;
+}
+
+html,
+body {
+  color: #2c1a22 !important;
+  background: #fff7f4 !important;
+  background-image: linear-gradient(180deg, #fff8f6 0%, #fde7ef 48%, #f7efe8 100%) !important;
+}
+
+body,
+.page,
+.hero,
+.card,
+form,
+fieldset,
+.details-optional,
+.draft-prompt,
+.scroll-progress,
+.audition-notice,
+.success,
+.invite,
+.note,
+.privacy-note,
+.field-hint,
+.status,
+p,
+li,
+label,
+.sub-label,
+legend,
+summary,
+.choice,
+.tier-card,
+.tier-card p,
+.section-kicker {
+  color: #2c1a22 !important;
+}
+
+h1,
+h2,
+h3,
+legend,
+.section-kicker,
+.tier-card strong,
+.audition-notice strong,
+.choice strong {
+  color: #7a1e42 !important;
+}
+
+.hero,
+.card,
+form,
+fieldset,
+.details-optional,
+.success,
+.invite {
+  background: #fffdfb !important;
+  border-color: rgba(122, 30, 66, 0.16) !important;
+}
+
+.scroll-progress,
+.draft-prompt,
+.audition-notice {
+  background: #fff4f6 !important;
+  color: #2c1a22 !important;
+}
+
+.choice,
+.tier-card,
+.audition-notice .choice {
+  background: #ffffff !important;
+  color: #2c1a22 !important;
+  border-color: rgba(122, 30, 66, 0.22) !important;
+}
+
+.choice:has(input:checked),
+.tier-card:has(input:checked) {
+  background: #f8d5e3 !important;
+  color: #2c1a22 !important;
+  border-color: #9b2c55 !important;
+}
+
+input,
+select,
+textarea,
+input:focus,
+select:focus,
+textarea:focus {
+  color: #2c1a22 !important;
+  -webkit-text-fill-color: #2c1a22 !important;
+  background: #ffffff !important;
+  border-color: rgba(122, 30, 66, 0.28) !important;
+  caret-color: #2c1a22;
+  color-scheme: light !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6e4c59 !important;
+  -webkit-text-fill-color: #6e4c59 !important;
+  opacity: 1 !important;
+}
+
+select option {
+  color: #2c1a22;
+  background: #ffffff;
+}
+
+.field-hint,
+.privacy-note,
+.meta,
+.status {
+  color: #5c3e4a !important;
+}
+
+.error {
+  color: #9e1b1b !important;
+}
+
+button,
+.btn {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: linear-gradient(135deg, #b54270, #7a1e42) !important;
+  border-color: transparent !important;
+}
+
+button.secondary,
+.btn-secondary {
+  color: #7a1e42 !important;
+  -webkit-text-fill-color: #7a1e42 !important;
+  background: #ffffff !important;
+  border-color: rgba(122, 30, 66, 0.28) !important;
+}
+
+.lang-switch a {
+  color: #7a1e42 !important;
+}

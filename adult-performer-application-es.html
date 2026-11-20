@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
   <title>MVP Media Solicitud para performer adulto</title>
   <meta name="description" content="Solicitud de casting para personas adultas (18+) de MVP Media. Las solicitudes se revisan en privado.">
   <meta name="robots" content="noindex, nofollow">
@@ -49,6 +50,7 @@
       .grid.two { grid-template-columns: 1fr 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="assets/performer-force-light.css">
 </head>
 <body>
   <main class="page">
@@ -62,8 +64,8 @@
         <a href="/adult-performer-application-es" aria-current="page" lang="es">ES</a>
       </nav>
       <h1>Solicitud para performer adulto</h1>
-      <p>MVP MEDIA convoca a personas adultas de 18 años o más para desnudo artístico, boudoir y contenido explícito de plataformas de pago.</p>
-      <p>Revisamos cada solicitud en privado y te escribimos por WhatsApp si hay un encaje.</p>
+      <p>MVP MEDIA convoca a adultos de 18+ para desnudo artístico, boudoir y contenido explícito de pago.</p>
+      <p>Revisamos en privado y te escribimos por WhatsApp si hay encaje.</p>
     </header>
 
     <section class="draft-prompt" id="draftPrompt" hidden>
@@ -112,7 +114,7 @@
           <div class="field">
             <label for="instagram">Instagram</label>
             <input id="instagram" name="instagram" placeholder="@username" autocomplete="off">
-            <p class="field-hint">Instagram o al menos una foto. No necesitas los dos.</p>
+            <p class="field-hint">O una foto. No necesitas los dos.</p>
             <p class="error" id="instagramError"></p>
           </div>
         </div>
@@ -150,13 +152,14 @@
         <legend><span class="section-kicker">Sección 3 de 6</span> Pago</legend>
         <div class="field">
           <span class="sub-label">¿A cuál nivel aplicas? *</span>
+          <p class="field-hint">Todos los niveles son para contenido de webcam.</p>
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 1">
-            <span><strong>Nivel 1 — COP 300.000 <span class="pay-usd">(≈ US$75)</span>: Programa de modelaje en desnudo</strong><p>Una sesión profesional de fotos de desnudo y desnudo artístico, de unas 5 horas, sin sexo en cámara. Incluye poses, iluminación y tomas de concepto para portafolio e imágenes con estilo editorial. Hay dirección durante toda la sesión, pausas cuando las necesites, y puedes parar en cualquier momento.</p></span>
+            <span><strong>Nivel 1 — COP 300.000 <span class="pay-usd">(≈ US$100)</span>: Programa de modelaje en desnudo</strong><p>Unas 5 horas. Solo modelaje desnudo. Poses, luz y tomas de concepto para portafolio e imágenes editoriales. Con dirección y pausas. Puedes parar cuando quieras.</p></span>
           </label>
         </div>
-        <div class="audition-notice">
-          <p><strong>Audición pagada obligatoria</strong> — $200.000 COP por una audición de 1 hora antes de cualquier reserva.</p>
+        <div class="audition-notice" id="auditionNotice" hidden>
+          <p><strong>Audición pagada obligatoria</strong> — $200.000 COP, 1 hora, antes de reservar.</p>
           <label class="choice">
             <input type="checkbox" id="auditionAck" name="auditionAck" value="yes">
             Entiendo que una audición pagada de 1 hora ($200.000 COP) es obligatoria antes de reservar.
@@ -166,19 +169,19 @@
         <div class="field">
           <label class="tier-card">
             <input type="radio" name="tierChoice" value="Tier 2">
-            <span><strong>Nivel 2 — $1.500.000 COP <span class="pay-usd">(≈ US$500)</span></strong><p>Porno hardcore, 16 horas divididas en cuatro sesiones de 4 horas: video, actuación y sexo en cámara sin condón.</p></span>
+            <span><strong>Nivel 2 — $1.500.000 COP <span class="pay-usd">(≈ US$500)</span></strong><p>Porno hardcore. 16 horas en cuatro sesiones de 4 horas: video, actuación, actuar en cámara.</p></span>
           </label>
           <div class="choices">
             <label class="choice"><input type="radio" name="tierChoice" value="Both">Ambos</label>
             <label class="choice"><input type="radio" name="tierChoice" value="Open to discussion">Abierto a conversar</label>
             <label class="choice"><input type="radio" name="tierChoice" value="Propose my rate">Propongo mi tarifa</label>
           </div>
-          <p class="field-hint">El pago que aparece es la base de cada nivel. El pago final puede subir por el alcance, las horas extra o el uso, y se acuerda por escrito antes de la sesión.</p>
+          <p class="field-hint">El pago listado es la base. Puede subir por alcance, horas o uso, y se acuerda por escrito.</p>
           <p class="field-hint">El taxi está pagado en todos los niveles y en la audición.</p>
-          <p class="field-hint">El viaje, el alojamiento y el vestuario se hablan antes de reservar.</p>
+          <p class="field-hint">Viaje, alojamiento y vestuario se hablan antes de reservar.</p>
           <details class="note">
             <summary>Sobre estos niveles</summary>
-            <p>Los valores en USD son aproximados, a unos 4.000 COP por dólar. El nivel 1 es una sesión de desnudo total de 5 horas. El nivel 2 son 16 horas divididas en cuatro sesiones de 4 horas.</p>
+            <p>Los montos en USD son aproximados. Nivel 1: unas 5 horas. Nivel 2: 16 horas en cuatro sesiones de 4 horas.</p>
           </details>
           <div class="field" id="proposedRateField" hidden>
             <label for="proposedRate">Tu tarifa</label>
@@ -196,17 +199,10 @@
           <p class="error" id="availabilityError"></p>
         </div>
         <div class="field">
-          <span class="sub-label">¿Te cubren el viaje?</span>
+          <span class="sub-label">¿Dispuesta/o a viajar a un resort?</span>
           <div class="choices">
-            <label class="choice"><input type="radio" name="travelCovered" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="travelCovered" value="No">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <span class="sub-label">¿Puedes hacer noche o varios días?</span>
-          <div class="choices">
-            <label class="choice"><input type="radio" name="overnightMultiday" value="Yes">Sí</label>
-            <label class="choice"><input type="radio" name="overnightMultiday" value="No">No</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="Yes">Sí</label>
+            <label class="choice"><input type="radio" name="willingTravelResort" value="No">No</label>
           </div>
         </div>
         <div class="field">
@@ -217,8 +213,8 @@
           </div>
         </div>
         <div class="field">
-          <label for="notes">Notas</label>
-          <textarea id="notes" name="notes"></textarea>
+          <label for="notes">Preguntas</label>
+          <textarea id="notes" name="notes" placeholder="¿Alguna pregunta para nosotros?"></textarea>
         </div>
       </fieldset>
 
@@ -289,8 +285,8 @@
 
       <fieldset data-section data-label="Sección 5 de 6">
         <legend><span class="section-kicker">Sección 5 de 6</span> Fotos</legend>
-        <p class="privacy-note">Las fotos y la información de salud o ITS se usan solo para el casting, se guardan de forma segura, no se comparten en público sin tu acuerdo por escrito, y puedes pedir que las eliminemos en cualquier momento por WhatsApp o correo.</p>
-        <p class="field-hint">Agrega Instagram o al menos una foto. Cada imagen puede pesar hasta 8 MB.</p>
+        <p class="privacy-note">Fotos e info de ITS: solo para el casting, guardadas de forma segura, sin uso público sin acuerdo escrito, y se borran si lo pides.</p>
+        <p class="field-hint">O una foto. Hasta 8 MB cada una.</p>
         <div class="field">
           <label for="headshot">Foto de la cara</label>
           <input id="headshot" name="headshot" type="file" accept="image/*">
@@ -322,7 +318,7 @@
 
       <fieldset data-section data-label="Sección 6 de 6">
         <legend><span class="section-kicker">Sección 6 de 6</span> Consentimiento</legend>
-        <p class="privacy-note">Las fotos y la información de salud o ITS se usan solo para el casting, se guardan de forma segura, no se comparten en público sin tu acuerdo por escrito, y puedes pedir que las eliminemos en cualquier momento por WhatsApp o correo.</p>
+        <p class="privacy-note">Fotos e info de ITS: solo para el casting, guardadas de forma segura, sin uso público sin acuerdo escrito, y se borran si lo pides.</p>
         <div class="field">
           <span class="sub-label">Lista de consentimiento *</span>
           <div class="choices">
@@ -333,7 +329,7 @@
             <label class="choice"><input type="checkbox" name="consent" value="comp-usage-release">Entiendo que la compensación, el uso y la cesión se acuerdan antes, incluso la distribución en plataformas de pago.</label>
             <label class="choice"><input type="checkbox" name="consent" value="sti-disclosure">Acepto contarle mis ITS a las personas con las que trabaje.</label>
             <label class="choice"><input type="checkbox" name="consent" value="contact">Acepto que MVP Media me contacte.</label>
-            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">Entiendo que el Nivel 2 incluye sexo en cámara sin condón y acepto hacerme pruebas de ITS recientes antes de la reserva.</label>
+            <label class="choice" id="tier2ConsentChoice" hidden><input type="checkbox" name="consent" id="tier2Consent" value="tier2-unprotected-sti">Entiendo que el Nivel 2 incluye actuar en cámara y acepto hacerme pruebas de ITS recientes antes de la reserva.</label>
           </div>
           <p class="error" id="consentError"></p>
         </div>
@@ -347,7 +343,7 @@
 
     <section class="success" id="successMessage" aria-live="polite">
       <h2>Recibimos tu solicitud</h2>
-      <p>Gracias. Revisamos tus límites en privado. Si hay un encaje, te escribimos por WhatsApp.</p>
+      <p>Recibida. Revisamos en privado y te escribimos por WhatsApp si hay encaje.</p>
     </section>
     </div>
   </main>
@@ -411,6 +407,11 @@
       const show = needsTier2Consent();
       if (choice) choice.hidden = !show;
       if (input && !show) input.checked = false;
+      const audition = document.getElementById("auditionNotice");
+      const auditionAck = document.getElementById("auditionAck");
+      if (audition) audition.hidden = !show;
+      if (auditionAck && !show) auditionAck.checked = false;
+      if (!show) setError("auditionError", "");
       const rateField = document.getElementById("proposedRateField");
       const proposing = selectedRadio("tierChoice") === "Propose my rate";
       if (rateField) rateField.hidden = !proposing;
@@ -445,7 +446,7 @@
       else if (valueOf("email") && !emailLooksValid(valueOf("email"))) fail("contactError", "Escribe un correo válido.");
       if (!valueOf("instagram") && !hasCastingPhoto()) fail("instagramError", "Pon tu Instagram o sube al menos una foto.");
       if (!selectedRadio("experienceLevel")) fail("experienceError", "Elige tu nivel de experiencia. Ninguna está bien si no has hecho este trabajo.");
-      if (!document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
+      if (needsTier2Consent() && !document.getElementById("auditionAck").checked) fail("auditionError", "Confirma que la audición pagada de 1 hora es obligatoria antes de reservar.");
       if (!selectedRadio("tierChoice")) fail("tierError", "Elige un nivel, Ambos, Abierto a conversar o Propongo mi tarifa.");
       if (!checkedValues("availabilityTypes").length) fail("availabilityError", "Elige al menos un tipo de disponibilidad.");
       const samples = Array.from(document.getElementById("explicitSamples").files || []);
@@ -472,7 +473,7 @@
         Boolean(valueOf("whatsapp") || (valueOf("email") && emailLooksValid(valueOf("email")))),
         Boolean(valueOf("instagram") || hasCastingPhoto()),
         Boolean(selectedRadio("experienceLevel")),
-        Boolean(document.getElementById("auditionAck").checked),
+        !needsTier2Consent() || Boolean(document.getElementById("auditionAck").checked),
         Boolean(selectedRadio("tierChoice")),
         checkedValues("availabilityTypes").length > 0,
         consentsComplete()
@@ -640,10 +641,9 @@
         availability_types: checkedValues("availabilityTypes"),
         pay_tier: TIER_PAY.includes(tierChoice) ? tierChoice : "",
         tier_choice: tierChoice,
-        audition_ack: document.getElementById("auditionAck").checked,
+        audition_ack: needsTier2Consent() && document.getElementById("auditionAck").checked,
         proposed_rate: tierChoice === "Propose my rate" ? valueOf("proposedRate") : "",
-        travel_covered: selectedRadio("travelCovered"),
-        overnight_multiday: selectedRadio("overnightMultiday"),
+        willing_travel_resort: selectedRadio("willingTravelResort"),
         own_wardrobe_toys_props: selectedRadio("ownWardrobe"),
         notes: valueOf("notes"),
         headshot_url: "",
