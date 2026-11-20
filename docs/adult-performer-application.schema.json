@@ -84,12 +84,13 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP/Group", "POV", "Fetish"]
+        "enum": ["Solo", "Toy", "GG", "BG", "Anal", "DP", "Group", "POV", "Strap-on", "Fetish/BDSM", "Other"]
       }
     },
     "explicit_paid_platform": {
       "type": "string",
-      "enum": ["", "Yes", "Soft only", "Unsure"]
+      "enum": ["", "Yes", "No", "Audition first"],
+      "description": "English stored values. Spanish labels are Sí, No, and Primero la audición."
     },
     "availability_types": {
       "type": "array",
@@ -109,7 +110,7 @@
     "audition_ack": {
       "type": "boolean",
       "const": true,
-      "description": "True when the applicant confirms a paid 1-hour audition (COP 150.000, paid to the performer) is required before booking. Spanish: audición de 1 hora, $150.000 COP."
+      "description": "True when the applicant confirms a paid 1-hour audition (COP 200.000, paid to the performer) is required before booking. Spanish: audición de 1 hora, $200.000 COP."
     },
     "tier_choice": {
       "type": "string",
