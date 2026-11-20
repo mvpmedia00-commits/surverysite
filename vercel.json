@@ -58,6 +58,14 @@
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
     {
+      "source": "/adult-performer",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/adult-performer.html",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
       "source": "/performer-invites-dashboard",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
